@@ -46,7 +46,7 @@ function genericDefault(itemName, defaultValue){
   }
 function genericSet(itemName, newValue){
   if(platform=="android"){
-    localStorage.setItem(itemName, defaultValue);
+    localStorage.setItem(itemName, newValue);
     }
   }
 function genericGet(itemName){
@@ -922,6 +922,8 @@ function init(){
   filePath= '' + path+'sounds';
   if(platform=="local"){filePath="sounds";}   
   if(platform=="web"){filePath="sounds";}   
+  genericDefault("sfxOn", "true");
+  genericDefault("musicOn", "true");
   initSound();
   setupNav();
   setGeometry();
