@@ -86,14 +86,12 @@ function closeInfo(){
   }
 function transmitBgMusicState(){
   dbuga("transmitBgMusicState()");
-  /*
+  
   if(genericGet("musicOn") == "true"){
-    //window.location.hash="#"+"action=soundManager|channel=1|file=sounds/measure_loop_inst.mp3|loop=true|r="+rn;
-    comQueue.push("action=manageSound|channel=0|mode=play");
+    loopStart("measure_loop_inst");
     }
   else{
-    //window.location.hash="#"+"action=soundManager|channel=1|file=sounds/silence.wav|loop=false|r="+rn;
-    comQueue.push("action=manageSound|channel=0|mode=pause");
+    loopStop("measure_loop_inst");
     }
   comTick();
   */
@@ -383,7 +381,7 @@ function handleUiEvent(e){
     else{
       genericSet("sfxOn","true");
       document.getElementById('Sfx_label').style.opacity="1";
-      //playSound("trainstart");
+      oneShot("trainstart");
       }
     }
 
@@ -942,7 +940,7 @@ function init(){
   }
 var soundObject={};
 function initSound(){
-  dbuga('initSound()');
+  //dbuga('initSound()');
   loopLoad("measure_loop_inst");
   oneShotLoad("laytrack");
   oneShotLoad("carstart");
@@ -1088,7 +1086,7 @@ function buildObject(type,color,dir,x,y, barrels){
 function randomTileGroup(color, fields, barrels){
   var fails=0;
   posObject=viableRandomPosition();
-  dbuga(posObject.success+" "+posObject.x+" "+posObject.y);
+  //dbuga(posObject.success+" "+posObject.x+" "+posObject.y);
   if(posObject.success==true){
     var buildItem=new Object();
     buildItem.type="dest";
@@ -1729,7 +1727,7 @@ function trainAction(trainNum){
         document.getElementById(thisCarDiv).style.display="block"; 
         document.getElementById(thisCarDiv).setAttribute("class", "transit");
         document.getElementById(thisCarDiv).style.opacity="1"; 
-        playSound("carstart");
+        oneShot("carstart");
         }
       }
 
