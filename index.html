@@ -3,23 +3,27 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1">
+<meta name = "apple-mobile-web-app-capable" content = "yes">
 <script type="text/javascript" src="done.js?18"></script>
 <link rel="stylesheet" type="text/css" href="reset-min.css">
 <link rel="stylesheet" type="text/css" href="interface.css?1">
 <link rel="stylesheet" type="text/css" href="nav.css">
+<script src="phonegap.js"></script>
 <script src="nav.js"></script>
 
+<script type="text/javascript" src="howler.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 var comQueue=new Array();
 
 var cellSize=96;
 var cellSizeHalf=48;
 var cellsAcross=8;
+var cellsDown=8;
 
 
 var infoUp=false;
-var musicOn=true;
-var sfxOn=true;
+////var musicOn=true;
+////var sfxOn=true;
 function comTick(){
   return false;
   if(comQueue.length >0){
@@ -33,6 +37,25 @@ function comTick(){
   comQueue=new Array();
   }
 
+function genericDefault(itemName, defaultValue){
+  if(platform=="android"){
+    if (localStorage.getItem(itemName) === null) {
+      localStorage.setItem(itemName, defaultValue);
+      }
+    }
+  }
+function genericSet(itemName, newValue){
+  if(platform=="android"){
+    localStorage.setItem(itemName, defaultValue);
+    }
+  }
+function genericGet(itemName){
+  var value="notSet";
+  if(platform=="android"){
+    value=localStorage.getItem(itemName);
+    }
+  return value;
+  }
 
 
 function rnd(range){
@@ -62,7 +85,9 @@ function closeInfo(){
   infoUp=false;
   }
 function transmitBgMusicState(){
-  if(musicOn == true){
+  dbuga("transmitBgMusicState()");
+  /*
+  if(genericGet("musicOn") == "true"){
     //window.location.hash="#"+"action=soundManager|channel=1|file=sounds/measure_loop_inst.mp3|loop=true|r="+rn;
     comQueue.push("action=manageSound|channel=0|mode=play");
     }
@@ -71,25 +96,257 @@ function transmitBgMusicState(){
     comQueue.push("action=manageSound|channel=0|mode=pause");
     }
   comTick();
+  */
+  }
+var soundCount=0;
+var soundRefByName={};
+function oneShot(soundName){
+  //dbuga("oneShot("+soundName+")");
+  if(persistenceObject.music=="on"){
+    if(platform=="android"){
+      if(soundRefByName.hasOwnProperty(soundName)){
+        //dbuga(' - extant '+soundName);
+        //soundRefByName[soundName].stop();
+        soundRefByName[soundName].play();
+        //dbuga(' - played');
+        }
+      else{
+        var newSound = new Media(filePath+"/"+soundName+".mp3");
+        soundRefByName[soundName]=newSound;
+        //dbuga('new Media '+soundName);
+        }
+      }
+    if((platform=="web")||(platform=="local")){
+      if(soundRefByName.hasOwnProperty(soundName)){
+        //dbuga(' - extant '+soundName);
+        //soundRefByName[soundName].stop();
+        soundRefByName[soundName].play();
+        //dbuga(' - played');
+        }
+      else{
+        var newSound = new Howl({
+          urls: [filePath+"/"+soundName+".mp3"],
+          autoplay: true,
+          loop: false,
+          volume: 0.5,
+          onend: function() {
+            //alert('Finished!');
+            }
+          });
+        soundRefByName[soundName]=newSound;
+        //dbuga('new howl '+soundName);
+ 
+        }  
+      }  
+    if(platform=="dreamfreeze"){
+      if(soundRefByName.hasOwnProperty(soundName)){
+        var soundChannel=soundRefByName[soundName];
+        comQueue.push("action=manageSound|channel="+soundChannel+"|mode=play");
+        comTick();
+        }
+      }
+    }  
+  }
+function loopStart(soundName){
+  //dbuga("loopStart("+soundName+") "+platform);
+  if(persistenceObject.music=="on"){
+    if(platform=="android"){
+      //dbuga('BOOYA!');
+      if(soundRefByName.hasOwnProperty(soundName)){
+        soundRefByName[soundName].play();
+        }
+      }
+    if((platform=="web")||(platform=="local")){
+      if(soundRefByName.hasOwnProperty(soundName)){
+        //dbuga('openedWithStupidLoop: '+ openedWithStupidLoop);
+        if(openedWithStupidLoop==false){
+          //dbuga(' - extant '+soundName);
+          soundRefByName[soundName].stop();
+          soundRefByName[soundName].play();
+          //dbuga(' - played');
+          }
+        }
+      else{
+        var newSound = new Howl({
+          urls: [filePath+"/"+soundName+".mp3"],
+          autoplay: true,
+          loop: true,
+          volume: 0.5,
+          onend: function() {
+            //alert('Finished!');
+            }
+          });
+        soundRefByName[soundName]=newSound;
+        //dbuga('new howl '+soundName);
+ 
+        }  
+      }  
+    if(platform=="dreamfreeze"){
+      if(soundRefByName.hasOwnProperty(soundName)){
+        var soundChannel=soundRefByName[soundName];
+        //dbuga("loopStart() "+soundChannel+" : "+soundName);
+        
+        comQueue.push("action=manageSound|channel="+soundChannel+"|loop=true|starttime=0|mode=play");
+        comTick();
+        }
+      }
+    }  
   }
 
-var soundChannel=2;
-function playSound(theSound){
-  //dbug(sfxOn);
-  if((sfxOn == true)&&(paused==false)){
-    soundChannel=0;
-    if(theSound=="laytrack"){soundChannel=1;}
-    if(theSound=="carstart"){soundChannel=2;}
-    if(theSound=="carstop"){soundChannel=3;}
-    if(theSound=="trainstart"){soundChannel=4;}
-    if(theSound=="trainpause"){soundChannel=5;}
-    if(theSound=="applause"){soundChannel=6;}
-    
-    if(soundChannel != 0){
-      //window.location.hash="#"+"action=soundManager|channel="+soundChannel+"|file=sounds/"+theSound+".wav|loop=false";
-      comQueue.push("action=manageSound|channel="+soundChannel+"|mode=play");
+function statusCallback(theStatus){
+  var statusArray=['MEDIA_NONE', 'MEDIA_STARTING', 'MEDIA_RUNNING', 'MEDIA_PAUSED', 'MEDIA_STOPPED'];
+  //dbuga('media status '+statusArray[theStatus]);
+  if(soundRefByName.hasOwnProperty("musicloop")){
+    var loopRef=soundRefByName["musicloop"];
+    loopRef.getCurrentPosition(
+        // success callback
+        function (position) {
+            if (position > -1) {
+                //dbuga((position) + " sec");
+            if((ladCount>0)&&(theStatus==4)&&(position<.01)){loopStart("musicloop");}//loop hack for bullshit media
+            }
+        },
+        // error callback
+        function (e) {
+            //dbuga("Error getting pos=" + e);
+        }
+    );
+    }
+  }
+function errorCallback(er){
+  //dbuga("media error "+JSON.stringify(er))
+  }
+function successCallback(evt){
+  //dbuga("HEY ": + JSON.stringify(evt));
+  //singMedia.play();
+  }
+
+
+function oneShotLoad(soundName){
+  if(platform=="android"){
+    var newSound = new Media(filePath+"/"+soundName+".mp3");
+    soundRefByName[soundName]=newSound;
+    //dbuga('new Media '+soundName);
+    }
+  if((platform=="web")||(platform=="local")){
+    if(soundRefByName.hasOwnProperty(soundName)){
+      //dbuga('extant');
+      }
+    else{
+      //dbuga('new howl');
+      var newSound = new Howl({
+        urls: [filePath+"/"+soundName+".mp3"],
+        autoplay: false,
+        loop: false,
+        volume: 0.5,
+        onend: function() {
+          //alert('Finished!');
+          }
+        });
+      soundRefByName[soundName]=newSound;
+      }  
+    }  
+  if(platform=="dreamfreeze"){
+    if(soundRefByName.hasOwnProperty(soundName)){
+      }
+    else{
+      var soundChannel=soundCount;
+      var soundFile="sounds/"+soundName+".mp3";
+      comQueue.push("action=manageSound|file="+soundFile+"|channel="+soundChannel+"|mode=prepare");
+      soundRefByName[soundName]=soundChannel;
+      //dbuga("soundChannel: "+soundChannel+" soundName:"+soundName);
+      soundCount++;
+      }  
+    comTick();
+    }
+  }
+function loopStop(soundName){
+  if(platform=="android"){
+    //dbuga('ANDROID loopStop');
+    if(soundRefByName.hasOwnProperty(soundName)){
+      //dbuga('extant '+soundName);
+      //dbuga('stop andriod');
+      soundRefByName[soundName].stop();
+      }  
+    }
+  if((platform=="web")||(platform=="local")){
+    openedWithStupidLoop=false;
+    if(soundRefByName.hasOwnProperty(soundName)){
+      //dbuga('extant '+soundName);
+      //dbuga('stop howl');
+      soundRefByName[soundName].stop();
+      }  
+    else{
+      //dbuga('non-extant '+soundName);
+      }
+    }  
+  if(platform=="dreamfreeze"){
+    if(soundRefByName.hasOwnProperty(soundName)){
+      var soundChannel=soundRefByName[soundName];
+      comQueue.push("action=manageSound|channel="+soundChannel+"|mode=pause");
       comTick();
       }
+    }
+
+  }
+var persistenceObject={"music":"on", "sfx":"on"};
+function loopLoad(soundName){
+  if(platform=="android"){
+    if(soundRefByName.hasOwnProperty(soundName)){
+      //dbuga(' - extant '+soundName);
+      //soundRefByName[soundName].stop();
+      soundRefByName[soundName].play();
+      //dbuga(' - played');
+      }
+    else{
+      var newSound = new Media(filePath+"/"+soundName+".mp3", successCallback, errorCallback, statusCallback);
+      soundRefByName[soundName]=newSound;
+      //dbuga('new Media '+soundName);
+      }
+    }
+  if((platform=="web")||(platform=="local")){
+    if(soundRefByName.hasOwnProperty(soundName)){
+      //dbuga(' - extant: '+ soundName);
+      }
+    else{
+      var shallAutoplay=false;
+      if(persistenceObject.music=="on"){
+        shallAutoplay=true;
+        openedWithStupidLoop=true;
+        }
+      //dbuga(' - new Howl: '+ soundName);
+      var newSound = new Howl({
+        urls: [filePath+"/"+soundName+".mp3"],
+        autoplay: shallAutoplay,
+        loop: true,
+        volume: 0.5,
+        onend: function() {
+          //alert('Finished!');
+          }
+        });
+      soundRefByName[soundName]=newSound;
+      }  
+    }  
+  if(platform=="dreamfreeze"){
+    if(soundRefByName.hasOwnProperty(soundName)){
+      }
+    else{
+      var soundChannel=soundCount;
+      var soundFile="sounds/"+soundName+".mp3";
+      comQueue.push("action=manageSound|file="+soundFile+"|channel="+soundChannel+"|mode=prepare|loop=true");
+      soundRefByName[soundName]=soundChannel;
+      //dbuga("soundChannel: "+soundChannel+" soundName:"+soundName);
+      soundCount++;
+      }  
+    comTick();
+    }  
+  }
+
+
+function playSound(theSound){
+  //dbug(sfxOn);
+  if((genericGet("sfxOn") == "true")&&(paused==false)){
+    oneShot(theSound);
     }
   }
 function resetUndoLabel(){
@@ -108,23 +365,23 @@ function undo(){
 function handleUiEvent(e){
   target=e.touches[0].target.id;
   if(target == "Music_touch"){
-    if(musicOn == true){
-      musicOn=false;
+    if(genericGet("musicOn") == "true"){
+      genericSet("musicOn", "false");
       document.getElementById('Music_label').style.opacity=".5";
       }
     else{
-      musicOn=true;
+      genericSet("musicOn", "true");
       document.getElementById('Music_label').style.opacity="1";
       }
     transmitBgMusicState();
     }
   if (target == "Sfx_touch"){
-    if(sfxOn == true){
-      sfxOn=false;
+    if(genericGet("sfxOn") == "true"){
+      genericSet("sfxOn","false");
       document.getElementById('Sfx_label').style.opacity=".5";
       }
     else{
-      sfxOn=true;
+      genericSet("sfxOn","true");
       document.getElementById('Sfx_label').style.opacity="1";
       //playSound("trainstart");
       }
@@ -269,7 +526,7 @@ function rebuildTracks(){
   //eraseGridData
   tilesByGridXY=new Array();
   for (x=0; x<cellsAcross; x++){
-    for (y=0; y<cellsAcross; y++){
+    for (y=0; y<cellsDown; y++){
       gridXY="grid_"+x+"_"+y;
       tilesByGridXY[gridXY]=new Array();
       }
@@ -318,20 +575,12 @@ function setupClasses(){
 
 
 
-/*
-    document.getElementById('gridHolder').style.top="3px";
-    document.getElementById('gridHolder').style.left="3px";
-    document.getElementById('trainHolder').style.top="3px";
-    document.getElementById('trainHolder').style.left="3px";
-*/
   if(tablet){
     document.getElementById('buttonHolder7').style.display="block";
     document.getElementById('buttonHolder8').style.display="block";
     }
 
-
-
-  var uiTop=cellsAcross*cellSize;
+  var uiTop=cellsDown*cellSize;
   var uiHeight=2*cellSize;
 
   addStyle('#arrowCircle', 'position:absolute; left:' + p*12 + 'px; top:' + p*12 + 'px; border-color:#DA251C;  border-style:solid; border-width:' + p*12 + 'px;  width:' + p*40 + 'px;  height:' + p*40 + 'px; -webkit-border-radius:' + p*48 + 'px;');
@@ -390,6 +639,11 @@ function setupClasses(){
   addStyle('.T6', 'top:' + p*576 + 'px;');
   addStyle('.L7', 'left:' + p*672 + 'px;');
   addStyle('.T7', 'top:' + p*672 + 'px;');
+  addStyle('.T8', 'top:' + p*768 + 'px;');
+  addStyle('.T9', 'top:' + p*864 + 'px;');
+  addStyle('.T10', 'top:' + p*960 + 'px;');
+  addStyle('.T11', 'top:' + p*1056 + 'px;');
+  addStyle('.T12', 'top:' + p*1152 + 'px;');
 
 
   addStyle('.tbLeft', 'top:' + p*0 + 'px; left:' + p*38 + 'px; width:' + p*10 + 'px; height:' + p*94 + 'px; border-left:' + p*2 + 'px #888  solid; position:absolute;');
@@ -457,7 +711,7 @@ function setupGridData(){
   //alert('setupGridData()');
   tilesByGridXY=new Array();
   for (x=0; x<cellsAcross; x++){
-    for (y=0; y<cellsAcross; y++){
+    for (y=0; y<cellsDown; y++){
       gridXY="grid_"+x+"_"+y;
       tilesByGridXY[gridXY]=new Array();
       }
@@ -469,7 +723,7 @@ function fillBgCanvas(){
   bgContext.strokeStyle = "rgb(220, 220, 220)";
   radius=20*cellSize/96;
   for (x=0; x<cellsAcross; x++){
-    for (y=0; y<cellsAcross; y++){
+    for (y=0; y<cellsDown; y++){
       roundRect(bgContext, x*cellSize, y*cellSize, cellSize, cellSize, radius, false, true);
       }
     }
@@ -588,8 +842,8 @@ function createCanvasTrack(theType, cellX, cellY){
   trackContext.stroke();
   }
 function setupCanvas(){
-  htmlBlock="<canvas id=\"backgroundCanvas\" width=\""+boardWidth+"\" height=\""+boardWidth+"\" style=\"position:absolute; \"></canvas>";
-  htmlBlock+="<canvas id=\"trackCanvas\" width=\""+boardWidth+"\" height=\""+boardWidth+"\" style=\"position:absolute;\"></canvas>";
+  htmlBlock="<canvas id=\"backgroundCanvas\" width=\""+boardWidth+"\" height=\""+boardHeight+"\" style=\"position:absolute; \"></canvas>";
+  htmlBlock+="<canvas id=\"trackCanvas\" width=\""+boardWidth+"\" height=\""+boardHeight+"\" style=\"position:absolute;\"></canvas>";
   document.getElementById('canvasHolder').innerHTML=htmlBlock;
   bgContext = document.getElementById("backgroundCanvas").getContext("2d");
   trackContext = document.getElementById("trackCanvas").getContext("2d");
@@ -608,7 +862,6 @@ var boardHeight=100;
 var boardWidth=100;
 var topPad=0;
 var leftPad=0;
-var gameAspect=3/4;
 var tablet=false;
 var wrapper;
 function setGeometry(){
@@ -619,29 +872,20 @@ function setGeometry(){
   var screenAspect=screenWidth/screenHeight;
   if(screenWidth<=540){
     tablet=false;
-    gameAspect=3/4;
-    cellsAcross=6;  // 6/8
+    cellsAcross=6;
     }
   else{
     tablet=true;
-    gameAspect=4/5;
-    cellsAcross=8;  // 8/10
+    cellsAcross=8;  
     }
-
-  if(screenAspect>gameAspect){
-    boardHeight=screenHeight;
-    boardWidth=boardHeight*gameAspect;
-    }
-  else{
-    boardWidth=screenWidth;
-    boardHeight=screenWidth/gameAspect;
-    }
-  cellSize=boardWidth/cellsAcross;
-  leftPad=(screenWidth-boardWidth)/2;
-  topPad=(screenHeight-boardHeight)/2-44;
-  if(topPad<0){topPad=0;}
+  cellSize=screenWidth/cellsAcross;
+  cellsDown=Math.floor((screenHeight-44-cellSize/3)/cellSize)-1;
+  boardWidth=screenWidth;
+  boardHeight=cellsDown*cellSize;
+  wrapperHeight=(cellsDown+1.5)*cellSize;
+  dbug(cellsDown);
   wrapper.style.width=boardWidth+"px";
-  wrapper.style.height=boardHeight+"px";
+  wrapper.style.height=wrapperHeight+"px";
   wrapper.style.left=leftPad+"px";
   wrapper.style.top=topPad+"px";
 
@@ -662,11 +906,26 @@ function setGeometry(){
   resetBoardTimersObjects();
   rebuildSequence();
   }
-
+var platform="unknown";
+var filePath="";
 function init(){
+  var wLoc=""+window.location+"";
+  if(wLoc.indexOf("file:///")==0){
+    platform="local";
+    if(wLoc.indexOf("file:///var/mobile")==0){platform="dreamfreeze";}
+    if(wLoc.indexOf("file:///android_asset")==0){platform="android";}
+    }
+  if(wLoc.indexOf("http://")==0){platform="web";}
+  //should be good for android and iOS
+  var path = window.location.pathname;
+  path = path.substr( path, path.length - 10 );
+  filePath= '' + path+'sounds';
+  if(platform=="local"){filePath="sounds";}   
+  if(platform=="web"){filePath="sounds";}   
+  initSound();
   setupNav();
   setGeometry();
-
+/*
   comQueue.push("action=manageSound|channel=0|mode=prepare|file=sounds/measure_loop_inst.mp3|loop=true");
   comQueue.push("action=manageSound|channel=1|mode=prepare|file=sounds/laytrack.wav|loop=false");
   comQueue.push("action=manageSound|channel=2|mode=prepare|file=sounds/carstart.wav|loop=false");
@@ -674,12 +933,23 @@ function init(){
   comQueue.push("action=manageSound|channel=4|mode=prepare|file=sounds/trainstart.wav|loop=false");
   comQueue.push("action=manageSound|channel=5|mode=prepare|file=sounds/trainpause.wav|loop=false");
   comQueue.push("action=manageSound|channel=6|mode=prepare|file=sounds/applause.wav|loop=false");
-
   comTick();
-  destTimer=window.setInterval(destTick, "1000");
+*/
   transmitBgMusicState();
-
+  destTimer=window.setInterval(destTick, "1000");
   }
+var soundObject={};
+function initSound(){
+  dbuga('initSound()');
+  loopLoad("measure_loop_inst");
+  oneShotLoad("laytrack");
+  oneShotLoad("carstart");
+  oneShotLoad("carstop");
+  oneShotLoad("trainstart");
+  oneShotLoad("trainpause");
+  oneShotLoad("applause");
+  }
+
 function setupNav(){
   var navDivRef=createNavDiv();
   screenLayout(navDivRef);
@@ -816,6 +1086,7 @@ function buildObject(type,color,dir,x,y, barrels){
 function randomTileGroup(color, fields, barrels){
   var fails=0;
   posObject=viableRandomPosition();
+  dbuga(posObject.success+" "+posObject.x+" "+posObject.y);
   if(posObject.success==true){
     var buildItem=new Object();
     buildItem.type="dest";
@@ -889,7 +1160,7 @@ function viableRandomPosition(){
   unreservedCells=new Array();
   promotedCells=new Array();
   for (x=0; x<cellsAcross; x++){
-    for (y=0; y<cellsAcross; y++){
+    for (y=0; y<cellsDown; y++){
       testCell="grid_"+x+"_"+y;
       if(fullCellGlom.indexOf(testCell)==-1){
         unreservedCells.push(testCell);
@@ -939,7 +1210,7 @@ function viableRandomPosition(){
     if((nextX<0)||(nextX>=cellsAcross)){
       thisFail=true;
       }
-    if((nextY<0)||(nextY>=cellsAcross)){
+    if((nextY<0)||(nextY>=cellsDown)){
       thisFail=true;
       }
  
@@ -963,14 +1234,14 @@ function viableRandomPosition(){
       // setup quad switches 0=right 1=down 2=left 3=up
       for (var tx=0; tx<cellsAcross; tx++){
         var col=[];
-        for (var ty=0; ty<cellsAcross; ty++){
+        for (var ty=0; ty<cellsDown; ty++){
           var cell=[false,false,false,false];
           if(ty==0){cell[3]=true;}
           else{
             var testId="grid_"+tx+"_"+(ty-1);
             if(tilesByGridXY[testId].length>0){cell[3]=true;}
             }
-          if(ty==cellsAcross-1){cell[1]=true;}
+          if(ty==cellsDown-1){cell[1]=true;}
           else{
             var testId="grid_"+tx+"_"+(ty+1);
             if(tilesByGridXY[testId].length>0){cell[1]=true;}
@@ -994,7 +1265,7 @@ function viableRandomPosition(){
       if(x>0){edgesBarredXY[x-1][y][0]=true;}
       if(x<cellsAcross-1){edgesBarredXY[x+1][y][2]=true;}
       if(y>0){edgesBarredXY[x][y-1][1]=true;}
-      if(y<cellsAcross-1){edgesBarredXY[x][y+1][3]=true;}
+      if(y<cellsDown-1){edgesBarredXY[x][y+1][3]=true;}
       var walkX=x+xDeltaByDir[dir];
       var walkY=y+yDeltaByDir[dir];
       var walkDir=dir;
@@ -1528,12 +1799,15 @@ function transformLater(laterCarId){
   document.getElementById("car"+laterCarId).style.webkitTransform=carData[laterCarId].transformCache;
   }
 function mouseLevel(){
+  if(platform=="android"){
+    return false;
+    }
   resetBoardTimersObjects();
   buildSequence=new Array();
   var fails=0;
-  fails+=addColor(2,4);
-  fails+=addColor(2,4);
-  fails+=addColor(2,4);
+  fails+=addColor(3,4);
+  fails+=addColor(3,4);
+  fails+=addColor(3,4);
   if(fails>0){
     dbuga("retrying from scratch fails "+fails);
     mouseLevel();
@@ -1542,7 +1816,7 @@ function mouseLevel(){
       // test edges barred
       trackContext.fillStyle="red";
       for (var tx=0; tx<cellsAcross; tx++){
-        for (var ty=0; ty<cellsAcross; ty++){
+        for (var ty=0; ty<cellsDown; ty++){
           for(var td=0; td<4; td++){
             if(edgesBarredXY[tx][ty][td]){
               var tdeg=td*90;
@@ -1560,7 +1834,7 @@ function mouseLevel(){
   }
 </script>
 </head>
-<body onload="init();" ontouchstart="touchStart(event);" ontouchmove="touchMove(event);" ontouchend="touchEnd(event);" ontouchcancel="touchCancel(event);" style="background-color:#3FB3A0; width:100%; height:100%;">
+<body onload="init();" onmousedown="dbug(''); mouseLevel();" ontouchstart="touchStart(event);" ontouchmove="touchMove(event);" ontouchend="touchEnd(event);" ontouchcancel="touchCancel(event);" style="background-color:#3FB3A0; width:100%; height:100%;">
 <div id="wrapper" style="display:block; position:absolute; top:0px; left:100px; overflow:hidden; background-color:white;">
 
 <div id="sources" style="display:none;">
