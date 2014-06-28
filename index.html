@@ -925,7 +925,7 @@ function populateButtons(){
       boost=1;
       }
 
-  for (var b=0;b<cellsAcross; b++){
+  for (var b=0;b<cellsAcross-1; b++){
     var thisBoost=boost;
     if((b<4)||(b>5)){thisBoost=0;}
     var bString='<div class="buttonBackground buttonChildren"></div><div class="buttonChildren">';
@@ -934,13 +934,13 @@ function populateButtons(){
       for(var t=0; t<=levelData[b][c]+thisBoost; t++){
         bString+='<div class="dark'+color+' tiny"></div>';
         }
-      for(var t=levelData[b][c]+thisBoost; t<5; t++){
+      for(var t=levelData[b][c]+thisBoost; t<3; t++){
         bString+='<div class="tiny"></div>';
         }
       }
     bString+='</div><div class="buttonChildren" id="level'+(b+1)+'Button" ></div>';
 
-    document.getElementById("buttonHolder"+(b+1)).innerHTML=bString;
+    document.getElementById("buttonHolder"+(b+2)).innerHTML=bString;
     }
   }
 
