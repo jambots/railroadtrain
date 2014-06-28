@@ -446,9 +446,9 @@ function handleUiEvent(e){
         fails+=addColor(1,4);
         }
       if (target == "level2Button"){
-        fails+=addColor(1+boost,4);
-        fails+=addColor(1+boost,4);
-        fails+=addColor(1+boost,4);
+        fails+=addColor(1,4);
+        fails+=addColor(1,4);
+        fails+=addColor(1,4);
         }
       if (target == "level3Button"){
         fails+=addColor(3,4);
@@ -466,10 +466,10 @@ function handleUiEvent(e){
         fails+=addColor(1+boost,4);
         }
       if (target == "level6Button"){
-        fails+=addColor(2+boost,4);
-        fails+=addColor(2+boost,4);
-        fails+=addColor(2+boost,4);
-        fails+=addColor(2+boost,4);
+        fails+=addColor(2,4);
+        fails+=addColor(2,4);
+        fails+=addColor(2,4);
+        fails+=addColor(2,4);
         }
       if (target == "level7Button"){
         fails+=addColor(3,4);
@@ -917,7 +917,7 @@ var filePath="";
 function debugStorage(){
   //dbuga("musicOn:"+localStorage.getItem("musicOn")+" sfxOn:"+localStorage.getItem("sfxOn"));
   }
-var levelData=[[1,1],[1,1,1],[3,3],[2,2,2],[1,1,1,1],[2,2,2,2][3,3,3,3]];
+var levelData=[[1,1],[1,1,1],[3,3],[2,2,2],[1,1,1,1],[2,2,2,2],[3,3,3,3]];
 var colorByNum=["orange","black","blue","green"];
 function populateButtons(){
     var boost=0;
@@ -926,6 +926,8 @@ function populateButtons(){
       }
 
   for (var b=0;b<cellsAcross; b++){
+    var thisBoost=boost;
+    if((b<4)||(b>5)){thisBoost=0;}
     var bString='<div class="buttonBackground buttonChildren"></div><div class="buttonChildren">';
     for(var c=0;c<levelData[b].length;c++){
       var color=colorByNum[c];
@@ -1783,7 +1785,7 @@ function trainAction(trainNum){
         document.getElementById(thisCarDiv).style.display="block"; 
         document.getElementById(thisCarDiv).setAttribute("class", "transit");
         document.getElementById(thisCarDiv).style.opacity="1"; 
-        oneShot("carstart");
+        playSound("carstart");
         }
       }
 
@@ -1957,15 +1959,25 @@ function mouseLevel(){
   <div id="progressMask" style=""></div>
   <div id="buttons" >
     <div id="buttonHolder1">
+      <div class="buttonBackground buttonChildren"></div>
+      <div class="buttonChildren" style="">
+        <div id="arrowCircle" style="margin-left:2px; margin-top:2px;"></div>
+        <div id="arrowPoint" style="margin-left:2px; margin-top:2px;"></div>
+      </div>
+      <div class="buttonChildren" id="retryButton"></div>
     </div>
+
     <div id="buttonHolder2">
     </div>
+
     <div id="buttonHolder3">
     </div>
+
     <div id="buttonHolder4">
     </div>
     <div id="buttonHolder5">
     </div>
+
     <div id="buttonHolder6">
     </div>
 
