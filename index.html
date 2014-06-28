@@ -63,13 +63,16 @@ function rnd(range){
   }
 var paused=false;
 function pauseGame(){
+  dbuga("pauseGame()");
   paused=true;
+  loopStop("measure_loop_inst");
   // called by shell
   return true;
   }
 function resumeGame(){
   // called by shell
   //requestPersistenceData();
+  dbuga("resumeGame()");
   paused=false;
   transmitBgMusicState();
   return true;
@@ -910,6 +913,8 @@ function debugStorage(){
   dbuga("musicOn:"+localStorage.getItem("musicOn")+" sfxOn:"+localStorage.getItem("sfxOn"));
   }
 function init(){
+  document.addEventListener("pause", pauseGame, false);
+  document.addEventListener("deviceready", resumeGame, false);
   debugStorage(); 
   var wLoc=""+window.location+"";
   if(wLoc.indexOf("file:///")==0){
@@ -924,12 +929,29 @@ function init(){
   filePath= '' + path+'sounds';
   if(platform=="local"){filePath="sounds";}   
   if(platform=="web"){filePath="sounds";} 
-  dbug(JSON.stringify(localStorage));  
+  //dbug(JSON.stringify(localStorage));  
   genericDefault("sfxOn", "true");
   genericDefault("musicOn", "true");
   debugStorage();
+
+
+
   initSound();
   setupNav();
+
+  if(genericGet("musicOn") == "true"){
+    document.getElementById('Music_label').style.opacity=".5";
+    }
+  else{
+    document.getElementById('Music_label').style.opacity="1";
+    }
+  if(genericGet("sfxOn") == "true"){
+    document.getElementById('Sfx_label').style.opacity=".5";
+    }
+  else{
+    document.getElementById('Sfx_label').style.opacity="1";
+    }
+ 
   setGeometry();
 /*
   comQueue.push("action=manageSound|channel=0|mode=prepare|file=sounds/measure_loop_inst.mp3|loop=true");
