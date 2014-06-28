@@ -154,7 +154,7 @@ function getTransformString(x,y,deg, dir){
 function makeGrid(){
   // obsolete
   for (x=0; x<cellsAcross; x++){
-    for (y=0; y<cellsAcross; y++){
+    for (y=0; y<cellsDown; y++){
       var newdiv = document.createElement('div');
       newdiv.innerHTML = "<div id=\"grid_"+x+"_"+y+"\" class=\"tile L"+x+" T"+y+"\"></div>";
       document.getElementById('gridHolder').appendChild(newdiv);
@@ -343,7 +343,7 @@ function handleEvent(e){
     }
 
   if (typ == "touchmove"){
-    if (xydir.y>=cellsAcross){
+    if (xydir.y>=cellsDown){
       // out of bounds
       typ="outofbounds";
       lastSquare="";
@@ -431,7 +431,7 @@ function handleEvent(e){
     }
   if(typ=="touchend"){
     hidePretracks();
-    if(squareY<cellsAcross){
+    if(squareY<cellsDown){
       xyOff(squareX, squareY);
       }
     lastSquare="";
@@ -516,7 +516,7 @@ function hidePretracks(){
 function isSourceInDir(xx,yy,d){
   useD=reverseObject[d];
   cellIsSource=false;
-  if((xx>-1)&&(xx<cellsAcross)&&(yy>-1)&&(yy<cellsAcross)){
+  if((xx>-1)&&(xx<cellsAcross)&&(yy>-1)&&(yy<cellsDown)){
     testCell="grid_"+xx+"_"+yy;
     //var cn=document.getElementById(testCell).childNodes;
     var cn=tilesByGridXY[testCell];
@@ -532,7 +532,7 @@ function isSourceInDir(xx,yy,d){
   }
 function isTiled(x,y){
   tiled=false;
-  if((x<0)||(x>=cellsAcross)||(y<0)||(y>=cellsAcross)||(isNaN(x))){
+  if((x<0)||(x>=cellsAcross)||(y<0)||(y>=cellsDown)||(isNaN(x))){
     //out of bounds, call it tiled
     //dbuga('<br>out of bounds, call it tiled'+x+" "+y);
  
