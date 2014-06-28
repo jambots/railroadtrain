@@ -879,8 +879,8 @@ function setGeometry(){
     tablet=true;
     cellsAcross=8;  
     }
-  cellSize=screenWidth/cellsAcross;
-  cellsDown=Math.floor((screenHeight-44-cellSize/3)/cellSize)-1;
+  cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
+  cellsDown=Math.floor((screenHeight-44-cellSize/6)/cellSize)-1;
   boardWidth=screenWidth;
   boardHeight=cellsDown*cellSize;
   wrapperHeight=(cellsDown+1.5)*cellSize;
