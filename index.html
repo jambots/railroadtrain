@@ -460,10 +460,10 @@ function handleUiEvent(e){
         fails+=addColor(2+boost,4);
         }
       if (target == "level5Button"){
-        fails+=addColor(1+boost,4);
-        fails+=addColor(1+boost,4);
-        fails+=addColor(1+boost,4);
-        fails+=addColor(1+boost,4);
+        fails+=addColor(2+boost,4);
+        fails+=addColor(2+boost,4);
+        fails+=addColor(2+boost,4);
+        fails+=addColor(2+boost,4);
         }
       if (target == "level6Button"){
         fails+=addColor(2,4);
@@ -931,7 +931,7 @@ function populateButtons(){
     var bString='<div class="buttonBackground buttonChildren"></div><div class="buttonChildren">';
     for(var c=0;c<levelData[b].length;c++){
       var color=colorByNum[c];
-      for(var t=0; t<=levelData[b][c]+boost; t++){
+      for(var t=0; t<=levelData[b][c]+thisBoost; t++){
         bString+='<div class="dark'+color+' tiny"></div>';
         }
       }
