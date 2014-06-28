@@ -86,14 +86,14 @@ function closeInfo(){
   }
 function transmitBgMusicState(){
   dbuga("transmitBgMusicState()");
-  
+  debugStorage();
   if(genericGet("musicOn") == "true"){
     loopStart("measure_loop_inst");
     }
   else{
     loopStop("measure_loop_inst");
     }
-  comTick();
+  
   
   }
 var soundCount=0;
@@ -906,7 +906,11 @@ function setGeometry(){
   }
 var platform="unknown";
 var filePath="";
+function debugStorage(){
+  dbuga("musicOn:"+localStorage.getItem("musicOn")+" sfxOn:"+localStorage.getItem("sfxOn"));
+  }
 function init(){
+  debugStorage(); 
   var wLoc=""+window.location+"";
   if(wLoc.indexOf("file:///")==0){
     platform="local";
@@ -919,9 +923,11 @@ function init(){
   path = path.substr( path, path.length - 10 );
   filePath= '' + path+'sounds';
   if(platform=="local"){filePath="sounds";}   
-  if(platform=="web"){filePath="sounds";}   
+  if(platform=="web"){filePath="sounds";} 
+  dbug(JSON.stringify(localStorage));  
   genericDefault("sfxOn", "true");
   genericDefault("musicOn", "true");
+  debugStorage();
   initSound();
   setupNav();
   setGeometry();
