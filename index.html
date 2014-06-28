@@ -440,42 +440,16 @@ function handleUiEvent(e){
       
       resetBoardTimersObjects();
       buildSequence=new Array();
-
-      if (target == "level1Button"){
-        fails+=addColor(1,4);
-        fails+=addColor(1,4);
-        }
-      if (target == "level2Button"){
-        fails+=addColor(1,4);
-        fails+=addColor(1,4);
-        fails+=addColor(1,4);
-        }
-      if (target == "level3Button"){
-        fails+=addColor(3,4);
-        fails+=addColor(3,4);
-        }
-      if (target == "level4Button"){
-        fails+=addColor(2+boost,4);
-        fails+=addColor(2+boost,4);
-        fails+=addColor(2+boost,4);
-        }
-      if (target == "level5Button"){
-        fails+=addColor(1+boost,4);
-        fails+=addColor(1+boost,4);
-        fails+=addColor(1+boost,4);
-        fails+=addColor(1+boost,4);
-        }
-      if (target == "level6Button"){
-        fails+=addColor(2,4);
-        fails+=addColor(2,4);
-        fails+=addColor(2,4);
-        fails+=addColor(2,4);
-        }
-      if (target == "level7Button"){
-        fails+=addColor(3,4);
-        fails+=addColor(3,4);
-        fails+=addColor(3,4);
-        fails+=addColor(3,4);
+      var thisData=[];
+      if (target == "level1Button"){thisData=levelData[0];}
+      if (target == "level2Button"){thisData=levelData[1];}
+      if (target == "level3Button"){thisData=levelData[2];}
+      if (target == "level4Button"){thisData=levelData[3];}
+      if (target == "level5Button"){thisData=levelData[4];}
+      if (target == "level6Button"){thisData=levelData[5];}
+      if (target == "level7Button"){thisData=levelData[6];}
+      for (var c=0; c<thisData.length; c++){
+        fails+=addColor(thisData[c],4);
         }
       }
     }
@@ -917,24 +891,22 @@ var filePath="";
 function debugStorage(){
   //dbuga("musicOn:"+localStorage.getItem("musicOn")+" sfxOn:"+localStorage.getItem("sfxOn"));
   }
-var levelData=[[1,1],[1,1,1],[3,3],[2,2,2],[1,1,1,1],[2,2,2,2],[3,3,3,3]];
+var levelData=[];
 var colorByNum=["orange","black","blue","green"];
 function populateButtons(){
-    var boost=0;
-    if(cellsDown>cellsAcross){
-      boost=1;
-      }
+  levelData=[[1,1],[1,1,1],[3,3],[2,2,2],[1,1,1,1],[2,2,2,2],[3,3,3,3]];
+  if(cellsDown>cellsAcross){
+    levelData=[[1,1],[1,1,1],[3,3],[3,3,3],[2,2,2,2],[2,2,2,2],[3,3,3,3]];
+    }
 
   for (var b=0;b<cellsAcross-1; b++){
-    var thisBoost=boost;
-    if((b<4)||(b>5)){thisBoost=0;}
     var bString='<div class="buttonBackground buttonChildren"></div><div class="buttonChildren">';
     for(var c=0;c<levelData[b].length;c++){
       var color=colorByNum[c];
-      for(var t=0; t<=levelData[b][c]+thisBoost; t++){
+      for(var t=0; t<=levelData[b][c]; t++){
         bString+='<div class="dark'+color+' tiny"></div>';
         }
-      for(var t=levelData[b][c]+thisBoost; t<3; t++){
+      for(var t=levelData[b][c]; t<3; t++){
         bString+='<div class="tiny"></div>';
         }
       }
