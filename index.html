@@ -460,10 +460,10 @@ function handleUiEvent(e){
         fails+=addColor(2+boost,4);
         }
       if (target == "level5Button"){
-        fails+=addColor(3,4);
-        fails+=addColor(3,4);
-        fails+=addColor(3,4);
-        fails+=addColor(3,4);
+        fails+=addColor(1+boost,4);
+        fails+=addColor(1+boost,4);
+        fails+=addColor(1+boost,4);
+        fails+=addColor(1+boost,4);
         }
       if (target == "level6Button"){
         fails+=addColor(2+boost,4);
@@ -917,6 +917,28 @@ var filePath="";
 function debugStorage(){
   //dbuga("musicOn:"+localStorage.getItem("musicOn")+" sfxOn:"+localStorage.getItem("sfxOn"));
   }
+var levelData=[[1,1],[1,1,1],[3,3],[2,2,2],[1,1,1,1],[2,2,2,2][3,3,3,3]];
+var colorByNum=["orange","black","blue","green"];
+function populateButtons(){
+    var boost=0;
+    if(cellsDown>cellsAcross){
+      boost=cellsDown-cellsAcross;
+      }
+
+  for (var b=0;b<cellsAcross; b++){
+    var bString='<div class="buttonBackground buttonChildren"></div><div class="buttonChildren">';
+    for(var c=0;c<levelData[b].length;c++){
+      var color=colorByNum[c];
+      for(var t=0; t<=levelData[b][c]+boost; t++){
+        bString+='<div class="dark'+color+' tiny"></div>';
+        }
+      }
+    bString+='</div><div class="buttonChildren" id="level'+(b+1)+'Button" ></div>';
+
+    document.getElementById("buttonHolder"+(b+1)).innerHTML=bString;
+    }
+  }
+
 function init(){
   document.addEventListener("pause", pauseGame, false);
   document.addEventListener("resume", resumeGame, false);
@@ -958,6 +980,7 @@ function init(){
     }
  
   setGeometry();
+  populateButtons();
 /*
   comQueue.push("action=manageSound|channel=0|mode=prepare|file=sounds/measure_loop_inst.mp3|loop=true");
   comQueue.push("action=manageSound|channel=1|mode=prepare|file=sounds/laytrack.wav|loop=false");
@@ -1934,79 +1957,21 @@ function mouseLevel(){
   <div id="progressMask" style=""></div>
   <div id="buttons" >
     <div id="buttonHolder1">
-      <div class="buttonBackground buttonChildren"></div>
-      <div class="buttonChildren" style="">
-        <div id="arrowCircle" style="margin-left:2px; margin-top:2px;"></div>
-        <div id="arrowPoint" style="margin-left:2px; margin-top:2px;"></div>
-      </div>
-      <div class="buttonChildren" id="retryButton"></div>
     </div>
-
     <div id="buttonHolder2">
-      <div class="buttonBackground buttonChildren"></div>
-      <div class="buttonChildren" >
-        <div class="darkorange tiny"></div><div class="darkorange tiny"></div><div class="tiny"></div><div class="tiny"></div>
-        <div class="darkblack tiny"></div><div class="darkblack tiny"></div>
-      </div>
-      <div class="buttonChildren" id="level1Button" ></div>
     </div>
     <div id="buttonHolder3">
-      <div class="buttonBackground buttonChildren"></div>
-      <div class="buttonChildren" >
-        <div class="darkorange tiny"></div><div class="darkorange tiny"></div><div class="tiny"></div><div class="tiny"></div>
-        <div class="darkblack tiny"></div><div class="darkblack tiny"></div><div class="tiny"></div><div class="tiny"></div>
-        <div class="darkblue tiny"></div><div class="darkblue tiny"></div><div class="tiny"></div><div class="tiny"></div>
-      </div>
-      <div class="buttonChildren" id="level2Button" ></div>
     </div>
     <div id="buttonHolder4">
-      <div class="buttonBackground buttonChildren"></div>
-      <div class="buttonChildren">
-        <div class="darkorange tiny"></div><div class="darkorange tiny"></div><div class="darkorange tiny"></div><div class="darkorange tiny"></div>
-        <div class="darkblack tiny"></div><div class="darkblack tiny"></div><div class="darkblack tiny"></div><div class="darkblack tiny"></div>
-      </div>
-      <div class="buttonChildren" id="level3Button" ></div>
     </div>
     <div id="buttonHolder5">
-      <div class="buttonBackground buttonChildren"></div>
-      <div class="buttonChildren">
-        <div class="darkorange tiny"></div><div class="darkorange tiny"></div><div class="darkorange tiny"></div><div class="tiny"></div>
-        <div class="darkblack tiny"></div><div class="darkblack tiny"></div><div class="darkblack tiny"></div><div class="tiny"></div>
-        <div class="darkblue tiny"></div><div class="darkblue tiny"></div><div class="darkblue tiny"></div><div class="tiny"></div>
-      </div>
-      <div class="buttonChildren" id="level4Button" ></div>
     </div>
-
     <div id="buttonHolder6">
-      <div class="buttonBackground buttonChildren"></div>
-      <div class="buttonChildren">
-        <div class="darkorange tiny"></div><div class="darkorange tiny"></div><div class="tiny"></div><div class="tiny"></div>
-        <div class="darkblack tiny"></div><div class="darkblack tiny"></div><div class="tiny"></div><div class="tiny"></div>
-        <div class="darkblue tiny"></div><div class="darkblue tiny"></div><div class="tiny"></div><div class="tiny"></div>
-        <div class="darkgreen tiny"></div><div class="darkgreen tiny"></div><div class="tiny"></div><div class="tiny"></div>
-      </div>
-      <div class="buttonChildren" id="level5Button" ></div>
     </div>
 
     <div id="buttonHolder7" style="display:none;">
-      <div class="buttonBackground buttonChildren"></div>
-      <div class="buttonChildren">
-        <div class="darkorange tiny"></div><div class="darkorange tiny"></div><div class="darkorange tiny"></div><div class="tiny"></div>
-        <div class="darkblack tiny"></div><div class="darkblack tiny"></div><div class="darkblack tiny"></div><div class="tiny"></div>
-        <div class="darkblue tiny"></div><div class="darkblue tiny"></div><div class="darkblue tiny"></div><div class="tiny"></div>
-        <div class="darkgreen tiny"></div><div class="darkgreen tiny"></div><div class="darkgreen tiny"></div><div class="tiny"></div>
-      </div>
-      <div class="buttonChildren" id="level6Button" ></div>
     </div>
     <div id="buttonHolder8" style="display:none;">
-      <div class="buttonBackground buttonChildren"></div>
-      <div class="buttonChildren">
-        <div class="darkorange tiny"></div><div class="darkorange tiny"></div><div class="darkorange tiny"></div><div class="darkorange tiny"></div>
-        <div class="darkblack tiny"></div><div class="darkblack tiny"></div><div class="darkblack tiny"></div><div class="darkblack tiny"></div>
-        <div class="darkblue tiny"></div><div class="darkblue tiny"></div><div class="darkblue tiny"></div><div class="darkblue tiny"></div>
-        <div class="darkgreen tiny"></div><div class="darkgreen tiny"></div><div class="darkgreen tiny"></div><div class="darkgreen tiny"></div>
-      </div>
-      <div class="buttonChildren" id="level7Button" ></div>
     </div>
   </div>
 </div>
