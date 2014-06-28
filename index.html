@@ -430,9 +430,14 @@ function handleUiEvent(e){
   if(target.indexOf("level")==0){
     //dbug('target '+target);
     var fails=-1;
+    var boost=0;
+    if(cellsDown>cellsAcross){
+      boost=cellsDown-cellsAcross;
+      }
     while(fails!=0){
-      //dbuga("retrying from scratch fails "+fails);
+      dbuga("retrying from scratch fails "+fails);
       fails=0;
+      
       resetBoardTimersObjects();
       buildSequence=new Array();
 
@@ -441,18 +446,18 @@ function handleUiEvent(e){
         fails+=addColor(1,4);
         }
       if (target == "level2Button"){
-        fails+=addColor(1,4);
-        fails+=addColor(1,4);
-        fails+=addColor(1,4);
+        fails+=addColor(1+boost,4);
+        fails+=addColor(1+boost,4);
+        fails+=addColor(1+boost,4);
         }
       if (target == "level3Button"){
         fails+=addColor(3,4);
         fails+=addColor(3,4);
         }
       if (target == "level4Button"){
-        fails+=addColor(2,4);
-        fails+=addColor(2,4);
-        fails+=addColor(2,4);
+        fails+=addColor(2+boost,4);
+        fails+=addColor(2+boost,4);
+        fails+=addColor(2+boost,4);
         }
       if (target == "level5Button"){
         fails+=addColor(3,4);
@@ -461,10 +466,10 @@ function handleUiEvent(e){
         fails+=addColor(3,4);
         }
       if (target == "level6Button"){
-        fails+=addColor(2,4);
-        fails+=addColor(2,4);
-        fails+=addColor(2,4);
-        fails+=addColor(2,4);
+        fails+=addColor(2+boost,4);
+        fails+=addColor(2+boost,4);
+        fails+=addColor(2+boost,4);
+        fails+=addColor(2+boost,4);
         }
       if (target == "level7Button"){
         fails+=addColor(3,4);
@@ -884,7 +889,7 @@ function setGeometry(){
   boardWidth=screenWidth;
   boardHeight=cellsDown*cellSize;
   wrapperHeight=(cellsDown+1.5)*cellSize;
-  dbug(cellsDown);
+  //dbug(cellsDown);
   wrapper.style.width=boardWidth+"px";
   wrapper.style.height=wrapperHeight+"px";
   wrapper.style.left=leftPad+"px";
@@ -910,7 +915,7 @@ function setGeometry(){
 var platform="unknown";
 var filePath="";
 function debugStorage(){
-  dbuga("musicOn:"+localStorage.getItem("musicOn")+" sfxOn:"+localStorage.getItem("sfxOn"));
+  //dbuga("musicOn:"+localStorage.getItem("musicOn")+" sfxOn:"+localStorage.getItem("sfxOn"));
   }
 function init(){
   document.addEventListener("pause", pauseGame, false);
@@ -1183,7 +1188,7 @@ function viableRandomPosition(){
   
   var allow=false;
   var failCount=0;
-  var failLimit=900;
+  var failLimit=50;
   var thisObject=new Object();
   unreservedCells=new Array();
   promotedCells=new Array();
