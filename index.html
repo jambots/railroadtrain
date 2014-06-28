@@ -914,7 +914,7 @@ function debugStorage(){
   }
 function init(){
   document.addEventListener("pause", pauseGame, false);
-  document.addEventListener("deviceready", resumeGame, false);
+  document.addEventListener("resume", resumeGame, false);
   debugStorage(); 
   var wLoc=""+window.location+"";
   if(wLoc.indexOf("file:///")==0){
@@ -940,16 +940,16 @@ function init(){
   setupNav();
 
   if(genericGet("musicOn") == "true"){
-    document.getElementById('Music_label').style.opacity=".5";
-    }
-  else{
     document.getElementById('Music_label').style.opacity="1";
     }
+  else{
+    document.getElementById('Music_label').style.opacity=".5";
+    }
   if(genericGet("sfxOn") == "true"){
-    document.getElementById('Sfx_label').style.opacity=".5";
+    document.getElementById('Sfx_label').style.opacity="1";
     }
   else{
-    document.getElementById('Sfx_label').style.opacity="1";
+    document.getElementById('Sfx_label').style.opacity=".5";
     }
  
   setGeometry();
