@@ -63,7 +63,7 @@ function rnd(range){
   }
 var paused=false;
 function pauseGame(){
-  dbuga("pauseGame()");
+  //dbuga("pauseGame()");
   paused=true;
   loopStop("measure_loop_inst");
   // called by shell
@@ -72,7 +72,7 @@ function pauseGame(){
 function resumeGame(){
   // called by shell
   //requestPersistenceData();
-  dbuga("resumeGame()");
+  //dbuga("resumeGame()");
   paused=false;
   transmitBgMusicState();
   return true;
@@ -88,7 +88,7 @@ function closeInfo(){
   infoUp=false;
   }
 function transmitBgMusicState(){
-  dbuga("transmitBgMusicState()");
+  //dbuga("transmitBgMusicState()");
   debugStorage();
   if(genericGet("musicOn") == "true"){
     loopStart("measure_loop_inst");
@@ -435,7 +435,7 @@ function handleUiEvent(e){
       boost=1;//cellsDown-cellsAcross;
       }
     while(fails!=0){
-      dbuga("retrying from scratch fails "+fails);
+      //dbuga("retrying from scratch fails "+fails);
       fails=0;
       
       resetBoardTimersObjects();
@@ -1842,7 +1842,7 @@ function mouseLevel(){
   fails+=addColor(3,4);
   fails+=addColor(3,4);
   if(fails>0){
-    dbuga("retrying from scratch fails "+fails);
+    //dbuga("retrying from scratch fails "+fails);
     mouseLevel();
     }
 /*

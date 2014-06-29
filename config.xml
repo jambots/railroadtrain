@@ -16,7 +16,7 @@
 </gap:config-file>
 <preference name="fullscreen" value="true" />
 <preference name="orientation" value="portrait" />
-<gap:splash src="splash.png" />
+<gap:splash src="railroad_train.png" />
 <gap:plugin name="org.apache.cordova.media" version="0.2.8" />
 <gap:plugin name="org.apache.cordova.network-information" />
 <access origin="*" />
@@ -24,6 +24,6 @@
 <feature name="http://api.phonegap.com/1.0/network"/>
 <feature name="http://api.phonegap.com/1.0/media"/>
 -->
-<icon src="icon.png" />
+<icon src="railroad_train.png" />
 <gap:plugin name="com.phonegap.plugins.childbrowser" />
 </widget>
