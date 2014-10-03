@@ -3,11 +3,11 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id        = "com.jambots.railroadtrain"
-        versionCode="1" 
-        version   = "1.6">
+        versionCode="2" 
+        version   = "1.7">
 
     <!-- versionCode is optional and Android only -->
-
+<preference name="phonegap-version" value="3.6.3" />
     <name>Railroad Train</name>
     <description>Railroad Train is a casual puzzle game with multiple trains and track drawing.</description>
 <gap:platform name="android" />
@@ -16,6 +16,7 @@
 </gap:config-file>
 <preference name="fullscreen" value="true" />
 <preference name="orientation" value="portrait" />
+<preference name="permissions" value="none"/>
 <gap:splash src="railroad_train.png" />
 <gap:plugin name="org.apache.cordova.media" version="0.2.8" />
 <gap:plugin name="org.apache.cordova.network-information" />
