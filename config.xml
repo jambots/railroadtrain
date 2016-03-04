@@ -7,9 +7,10 @@
         version   = "2.01">
 
     <!-- versionCode is optional and Android only -->
-<preference name="phonegap-version" value="3.6.3" />
+<preference name="phonegap-version" value="cli-5.2.0" />
     <name>Railroad Train</name>
     <description>Railroad Train is a casual puzzle game with multiple trains and track drawing.</description>
+<gap:platform name="ios" />
 <gap:platform name="android" />
 <gap:config-file platform="android" parent="/manifest/application">
     <activity android:launchMode="singleInstance" />
