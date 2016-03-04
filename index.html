@@ -962,7 +962,7 @@ function changeGeometry(){
   viewportWidth = window.innerWidth;
   viewportHeight = window.innerHeight;
   viewportAspect=viewportWidth/viewportHeight;
-  dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
+  dbug("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
   changeView();
   }
 
@@ -1024,7 +1024,7 @@ More specifically, if the screen height of a device is between 400 and 720, an a
   }
 
 var colorsCanv;
-var bannerEnabled=true;
+var bannerEnabled=false;
 var levelsCanv;
 var levelsUp=false;
 var menuCanv;

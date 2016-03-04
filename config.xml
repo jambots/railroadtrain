@@ -86,6 +86,7 @@
 
 
 
-
+<!--
 <gap:plugin name="com.phonegap.plugins.childbrowser" />
+-->
 </widget>
