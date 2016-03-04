@@ -16,7 +16,7 @@
     <activity android:launchMode="singleInstance" />
 </gap:config-file>
 <preference name="fullscreen" value="true" />
-<preference name="orientation" value="portrait" />
+<preference name="orientation" value="default" />
 <gap:splash src="railroad_train.png" />
 <gap:plugin name="org.apache.cordova.media" version="0.2.8" />
 <gap:plugin name="org.apache.cordova.network-information" />
