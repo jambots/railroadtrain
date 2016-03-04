@@ -1,0 +1,328 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+<script src="jquerymin.js"></script>
+
+<script type="text/javascript">
+// var rgbArray=[[63,179,160],[60,116,107],[118,197,240],[0,91,161],[241,163,52],[218,37,28],[100,100,100],[40,40,40]];
+var imageIdArray=["boxside","boxtop","boxend", "enginefloor", "engineroof", "enginenose", "enginecab", "enginestarinner", "enginestarouter", "engineportinner", "engineportouter"];
+
+//var imageIdArray=["boxside","boxtop", "boxend"];
+var rgbArray=[[63,179,160],[0,91,161],[218,37,28],[30,30,30],[127,127,127]];
+var colorArray=["green", "blue", "orange", "black", "grey"];
+var atColor=-1;
+var atImage=0;
+var currentSourceRef;
+var currentAlphaRef;
+function init(){
+  renderTick();
+  }
+function renderTick(){
+  var imageId=imageIdArray[atImage];
+  dbuga("imageId:"+imageId+" atColor:"+atColor);
+  if(atColor==-1){
+    // make trans
+    var imageRef=document.getElementById(imageId);
+    var sourceRef=returnCanvas(imageRef.width, imageRef.height);
+    imageCanvas(sourceRef,imageRef);
+    var alphaRef=returnCanvas(sourceRef.width, sourceRef.height);
+
+
+    transifyCanvas(alphaRef, sourceRef);
+    document.body.appendChild(alphaRef);
+    currentSourceRef=sourceRef;
+    currentAlphaRef=alphaRef;
+    saveCanvas(alphaRef, imageId, "trans")
+
+    }
+  else{
+    // colorize
+    var colored=returnCanvas(currentSourceRef.width, currentSourceRef.height);
+    document.body.appendChild(colored);
+    colorizeCanvas(colored, currentAlphaRef, currentSourceRef, rgbArray[atColor]);
+    saveCanvas(colored, imageId, colorArray[atColor])
+
+    }
+  atColor++;
+  if(atColor>= rgbArray.length){
+    atColor=-1;
+    atImage++;
+    }
+
+  }
+
+/*
+  var alphaSourceRef=document.getElementById(imageId);
+  var alphaRef=returnCanvas(alphaSourceRef.width, alphaSourceRef.height);
+  transifyCanvas(alphaRef, alphaSourceRef);
+  document.body.appendChild(alphaRef);
+  saveCanvas(alphaRef, imageId, "trans")
+
+  var textureSourceRef=document.getElementById('boxside');
+  var textureRef=returnCanvas(textureSourceRef.width, textureSourceRef.height);
+  transifyCanvas(textureRef, textureSourceRef);
+  document.body.appendChild(textureRef);
+
+  //make flat
+  var flatSourceRef=document.getElementById('bears');
+  var flatRef=returnCanvas(textureSourceRef.width, textureSourceRef.height);
+  document.body.appendChild(flatRef);
+  placeWithin(flatRef, flatSourceRef); 
+  var flatOutputRef=returnCanvas(textureSourceRef.width, textureSourceRef.height);
+  document.body.appendChild(flatOutputRef);
+  colorizeCanvas(flatOutputRef, textureRef, alphaRef, [127,127,127]);
+  overlayCanvas(flatOutputRef, flatRef);
+
+ //make logo source
+  var logoSourceRef=document.getElementById('jambots');
+  var logoRef=returnCanvas(textureSourceRef.width, textureSourceRef.height);
+  document.body.appendChild(logoRef);
+  placeWithin(logoRef, logoSourceRef);
+  //blackToTrans(logoRef);
+  
+  //make texture logo
+  var logoTextureRef=returnCanvas(textureSourceRef.width, textureSourceRef.height);
+  document.body.appendChild(logoTextureRef);
+  colorizeCanvas(logoTextureRef, textureRef, alphaRef, [127,127,127]);
+  overlayCanvas(logoTextureRef, logoRef);
+  trimBox(logoTextureRef);  
+  blackToTrans(logoTextureRef);
+  
+  var pixieGreenRef=returnCanvas(textureSourceRef.width, textureSourceRef.height);
+  document.body.appendChild(pixieGreenRef);
+  colorizeCanvas(pixieGreenRef, textureRef, alphaRef, rgbArray[0]);
+  imageCanvas(pixieGreenRef, logoTextureRef);
+
+  var pixieBlueRef=returnCanvas(textureSourceRef.width, textureSourceRef.height);
+  document.body.appendChild(pixieBlueRef);
+  colorizeCanvas(pixieBlueRef, textureRef, alphaRef, rgbArray[1]);
+  imageCanvas(pixieBlueRef, logoTextureRef);
+
+  var pixieRedRef=returnCanvas(textureSourceRef.width, textureSourceRef.height);
+  document.body.appendChild(pixieRedRef);
+  colorizeCanvas(pixieRedRef, textureRef, alphaRef, rgbArray[2]);
+  imageCanvas(pixieRedRef, logoTextureRef);
+
+  var pixieBlackRef=returnCanvas(textureSourceRef.width, textureSourceRef.height);
+  document.body.appendChild(pixieBlackRef);
+  colorizeCanvas(pixieBlackRef, textureRef, alphaRef, rgbArray[3]);
+  imageCanvas(pixieBlackRef, logoTextureRef);
+
+  //overlayCanvas(outputRef, transRef);
+  //overlayCanvas(outputRef, transRef);
+*/
+
+function trimBox(canv){
+
+  var g=Math.floor(canv.width/24);
+  var ctx=canv.getContext('2d');
+  ctx.clearRect(0,0,g*24,g);
+  ctx.clearRect(0,0,g,g*8);
+  ctx.clearRect(0,g*7,g*24,g);
+  ctx.clearRect(g*23,0,g,g*8);
+  dbuga(g);
+  }
+function returnCanvas(w,h){
+  var canvas=document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  return canvas;
+  }
+function transifyCanvas(transCanvas, sourceRef){
+  var transCtx = transCanvas.getContext("2d");
+
+  transCtx.drawImage(sourceRef, 0, 0);
+  var image = transCtx.getImageData(0, 0, sourceRef.width, sourceRef.height);
+  var imageData = image.data
+  var length = imageData.length;
+  var mostSatPixel=-1;
+  var mostSatFrac=0;
+  var mostSatAvg=0;
+  var leastSatPixel=-1;
+  var leastSatFrac=1;
+  var leastSatAvg=0;
+
+  for(var i=0; i < length; i+=4){
+    var r=imageData[i];
+    var g=imageData[i+1];
+    var b=imageData[i+2];
+    var a=imageData[i+3];
+    var avg=(r+g+b)/3;
+    var rg=Math.abs(r-g);
+    var gb=Math.abs(g-b);
+    var br=Math.abs(b-r);
+    var sat=(rg+gb+br)/510; // 0-1
+    if(sat>mostSatFrac){
+      mostSatPixel=i;
+      mostSatFrac=sat;
+      mostSatAvg=avg;
+    }
+    if(sat<leastSatFrac){
+      leastSatPixel=i;
+      leastSatFrac=sat;
+      leastSatAvg=avg;
+    }
+  }
+
+  for(var i=0; i < length; i+=4){
+    var r=imageData[i];
+    var g=imageData[i+1];
+    var b=imageData[i+2];
+    var a=imageData[i+3];
+    var avg=(r+g+b)/3;
+    var rg=Math.abs(r-g);
+    var gb=Math.abs(g-b);
+    var br=Math.abs(b-r);
+    var sat=(rg+gb+br)/510; // 0-1
+
+    var alpha=a-((sat)*(255));
+    if(alpha<0){alpha=0;}
+    avg=Math.floor((avg+0)/1);
+    imageData[i]=avg;
+    imageData[i+1]=avg;
+    imageData[i+2]=avg;
+    imageData[i+3]=Math.floor(alpha);
+
+  }
+  image.data = imageData;
+  transCtx.putImageData(image, 0, 0);
+}
+function blackToTrans(transCanvas){
+  var transCtx = transCanvas.getContext("2d");
+  var image = transCtx.getImageData(0, 0, transCanvas.width, transCanvas.height);
+  var imageData = image.data
+  var length = imageData.length;
+
+
+  var transStart=72;
+  var transLimit=64;
+
+  var transRange=transStart-transLimit;
+  for(var i=0; i < length; i+=4){
+    var r=imageData[i];
+    var g=imageData[i+1];
+    var b=imageData[i+2];
+    var a=imageData[i+3];
+    var avg=(r+g+b)/3;
+
+    var rg=Math.abs(r-g);
+    var gb=Math.abs(g-b);
+    var br=Math.abs(b-r);
+    var sat=(rg+gb+br)/510; // 0-1
+    var alpha=Math.floor((avg-transLimit)*transRange);
+    
+    if(alpha<0){alpha=0;}
+    if(alpha>255){alpha=255;}
+    else{
+      imageData[i+3]=Math.floor(alpha);
+      }
+    }
+  image.data = imageData;
+  transCtx.putImageData(image, 0, 0);
+  }
+
+function colorizeCanvas(colorizedCanvas, transRef, shapeRef, rgb){
+  var r=rgb[0];
+  var g=rgb[1];
+  var b=rgb[2];
+
+  var colorizedCtx=colorizedCanvas.getContext('2d');
+  colorizedCtx.drawImage(transRef, 0, 0);
+
+  var transCtx=transRef.getContext('2d');
+  var shapeCtx=shapeRef.getContext('2d');
+  
+  var image = colorizedCtx.getImageData(0, 0, transRef.width, transRef.height);
+  var shape = shapeCtx.getImageData(0, 0, transRef.width, transRef.height);
+  var shapeData = shape.data
+  var imageData = image.data
+  var length = imageData.length;
+
+  for(var i=0; i < length; i+=4){
+    var a=shapeData[i+3];
+    if(a>10){
+      imageData[i]=r;
+      imageData[i+1]=g;
+      imageData[i+2]=b;
+      imageData[i+3]=255;
+    }
+    else{
+      imageData[i]=r;
+      imageData[i+1]=g;
+      imageData[i+2]=b;
+      imageData[i+3]=Math.floor(255*a/4);
+    }
+  }
+  image.data = imageData;
+  colorizedCtx.putImageData(image, 0, 0);
+  colorizedCtx.drawImage(transRef, 0, 0);
+}
+function imageCanvas(canvasRef, imageRef){
+  var ctx=canvasRef.getContext("2d");
+  ctx.drawImage(imageRef, 0, 0);
+  } 
+function overlayCanvas(canvasRef, imageRef){
+  var ctx=canvasRef.getContext("2d");
+  ctx.globalCompositeOperation = "overlay";
+  ctx.drawImage(imageRef, 0, 0);
+  } 
+function multiplyCanvas(canvasRef, imageRef){
+  var ctx=canvasRef.getContext("2d");
+  ctx.globalCompositeOperation = "multiply";
+  ctx.drawImage(imageRef, 0, 0);
+  } 
+function placeWithin(canvasRef, imageRef){
+  var g= canvasRef.width/24;
+  var ctx=canvasRef.getContext("2d");
+  ctx.drawImage(imageRef, g,g, g*22,g*6);
+  } 
+
+function saveCanvas(canvasRef, name, path){
+  var data = canvasRef.toDataURL();
+  $.post("upload.php", {
+    imageData : data,
+    fileName : name,
+    folder : path
+    }, function(data) {
+  //dbuga('saved');
+  if(atImage<imageIdArray.length){
+    window.setTimeout("renderTick()",5000);
+    }
+  });
+}
+
+function dbuga(theString){
+  document.getElementById('debugDiv').style.display="block";
+  document.getElementById('debugDiv').innerHTML+="<br />"+theString;
+}
+
+function dbug(theString){
+  document.getElementById('debugDiv').style.display="block";
+  document.getElementById('debugDiv').innerHTML=theString;
+}
+
+</script>
+</head>
+<body onload="init();" style="background-color:#fff;">
+
+<!--
+<img src="jambots.jpg" id="jambots"  style="display:none;" />
+<img src="pixiedust.jpg" id="pixiedust"  style="display:none;" />
+<img src="bears.jpg" id="bears" width=800 height=200  style="display:none;" />
+-->
+<img src="sprites/source/boxside.png" id="boxside"  style="display:none;" />
+<img src="sprites/source/boxend.png" id="boxend"  style="display:none;" />
+<img src="sprites/source/boxtop.png" id="boxtop" style="display:none;" />
+<img src="sprites/source/engineportinner.png" id="engineportinner" style="display:none;" />
+<img src="sprites/source/engineportouter.png" id="engineportouter" style="display:none;" />
+<img src="sprites/source/enginestarinner.png" id="enginestarinner" style="display:none;" />
+<img src="sprites/source/enginestarouter.png" id="enginestarouter" style="display:none;" />
+<img src="sprites/source/enginefloor.png" id="enginefloor" style="display:none;" />
+<img src="sprites/source/engineroof.png" id="engineroof" style="display:none;" />
+<img src="sprites/source/enginenose.png" id="enginenose" style="display:none;" />
+<img src="sprites/source/enginecab.png" id="enginecab" style="display:none;" />
+<div id="debugDiv" style="position:absolute;"></div>
+</body>
+</html>

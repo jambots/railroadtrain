@@ -3,8 +3,8 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id        = "com.jambots.railroadtrain"
-        versionCode="3" 
-        version   = "1.71">
+        versionCode="4" 
+        version   = "2.01">
 
     <!-- versionCode is optional and Android only -->
 <preference name="phonegap-version" value="3.6.3" />
@@ -19,6 +19,8 @@
 <gap:splash src="railroad_train.png" />
 <gap:plugin name="org.apache.cordova.media" version="0.2.8" />
 <gap:plugin name="org.apache.cordova.network-information" />
+<gap:plugin name="com.modaltech.cordova.plugin.canvascamera" version="1.0" />
+
 <access origin="*" />
 <!--
 <feature name="http://api.phonegap.com/1.0/network"/>
