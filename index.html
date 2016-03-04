@@ -962,7 +962,7 @@ function changeGeometry(){
   viewportWidth = window.innerWidth;
   viewportHeight = window.innerHeight;
   viewportAspect=viewportWidth/viewportHeight;
-  //dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
+  dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
   changeView();
   }
 
@@ -1092,9 +1092,9 @@ function initGeometry(){
     }
   document.getElementById('debugDiv').style.width=screenWidth+"px";
   
-  //dbuga("initGeometry screen: "+screenWidth+" x "+screenHeight+" ");
-  //dbuga("initGeometry viewport: "+ viewportWidth+" x "+ viewportHeight+" "+viewportAspect);
-  //dbuga("initGeometry blingHeight: "+blingHeight);
+  dbuga("initGeometry screen: "+screenWidth+" x "+screenHeight+" ");
+  dbuga("initGeometry viewport: "+ viewportWidth+" x "+ viewportHeight+" "+viewportAspect);
+  dbuga("initGeometry blingHeight: "+blingHeight);
 
   adGeometry();
   boardGeometry();
@@ -1127,11 +1127,11 @@ function boardGeometry(){
   cubeSize=cellSize*shrink;
   cellsDown=Math.floor((portraitScreenHeight-44+13-adHeight)/cellSize);
   totalCells=cellsAcross*cellsDown;
-  //dbuga("cellsAcross="+cellsAcross);
+  dbuga("cellsAcross="+cellsAcross);
 
-  //dbuga("cellsDown="+cellsDown);
-  //dbuga("totalCells="+ totalCells);
-  //dbuga("space="+(screenHeight-cellsDown*cellSize-44-adHeight));
+  dbuga("cellsDown="+cellsDown);
+  dbuga("totalCells="+ totalCells);
+  dbuga("space="+(screenHeight-cellsDown*cellSize-44-adHeight));
 
   boardWidth=screenWidth;
   boardHeight=cellsDown*cellSize;
@@ -1140,7 +1140,7 @@ function boardGeometry(){
   canvasWidth=boardWidth;
   canvasHeight=boardHeight;
   //wrapperHeight=(cellsDown+1.5)*cellSize;
-  //dbug(cellsDown);
+  dbuga("cellsDown="+cellsDown);
   wrapper.style.width=boardWidth+"px";
   wrapper.style.height=canvasHeight+"px";
   wrapper.style.left=leftPad+"px";
