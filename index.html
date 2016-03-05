@@ -962,7 +962,7 @@ function changeGeometry(){
   viewportWidth = window.innerWidth;
   viewportHeight = window.innerHeight;
   viewportAspect=viewportWidth/viewportHeight;
-  dbug("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
+  //dbug("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
   changeView();
   }
 
@@ -1054,8 +1054,8 @@ function initGeometry(){
     screenHeight = screen.width;
     //dbuga('Landroid so swap screen dimensions');
     }// screen width is consistent with iOS now, width < height
-  dbuga("screenWidth="+screenWidth);
-  dbuga("screenHeight="+screenHeight);
+  //dbuga("screenWidth="+screenWidth);
+  //dbuga("screenHeight="+screenHeight);
   if(viewportWidth>viewportHeight){// landscape
     blingHeight=screenWidth-viewportHeight;
     }
@@ -1093,9 +1093,9 @@ function initGeometry(){
     }
   document.getElementById('debugDiv').style.width=screenWidth+"px";
   
-  dbuga("initGeometry screen: "+screenWidth+" x "+screenHeight+" ");
-  dbuga("initGeometry viewport: "+ viewportWidth+" x "+ viewportHeight+" "+viewportAspect);
-  dbuga("initGeometry blingHeight: "+blingHeight);
+  //dbuga("initGeometry screen: "+screenWidth+" x "+screenHeight+" ");
+  //dbuga("initGeometry viewport: "+ viewportWidth+" x "+ viewportHeight+" "+viewportAspect);
+  //dbuga("initGeometry blingHeight: "+blingHeight);
 
   adGeometry();
   boardGeometry();
@@ -1128,11 +1128,11 @@ function boardGeometry(){
   cubeSize=cellSize*shrink;
   cellsDown=Math.floor((portraitScreenHeight-44+13-adHeight)/cellSize);
   totalCells=cellsAcross*cellsDown;
-  dbuga("cellsAcross="+cellsAcross);
+  //dbuga("cellsAcross="+cellsAcross);
 
-  dbuga("cellsDown="+cellsDown);
-  dbuga("totalCells="+ totalCells);
-  dbuga("space="+(screenHeight-cellsDown*cellSize-44-adHeight));
+  //dbuga("cellsDown="+cellsDown);
+  //dbuga("totalCells="+ totalCells);
+  //dbuga("space="+(screenHeight-cellsDown*cellSize-44-adHeight));
 
   boardWidth=screenWidth;
   boardHeight=cellsDown*cellSize;
@@ -1141,7 +1141,7 @@ function boardGeometry(){
   canvasWidth=boardWidth;
   canvasHeight=boardHeight;
   //wrapperHeight=(cellsDown+1.5)*cellSize;
-  dbuga("cellsDown="+cellsDown);
+  //dbuga("cellsDown="+cellsDown);
   wrapper.style.width=boardWidth+"px";
   wrapper.style.height=canvasHeight+"px";
   wrapper.style.left=leftPad+"px";
@@ -3264,6 +3264,7 @@ function handleEventLandscape(e){
               graphicsShooting=false;
               }
             else if(graphicsButton.buttonId=="Take"){
+              graphicsTake();
               graphicsShooting=false;
               }
             else if(graphicsButton.buttonId=="Transparent"){
@@ -3302,6 +3303,9 @@ function handleEventLandscape(e){
   if(e.type != "touchmove"){
     //dbuga(e.type+" cameraTilt:"+cameraTilt+" cameraRotationDegrees[focusTrain]:"+ cameraRotationDegrees[focusTrain]); 
     }
+  }
+function graphicsTake(){
+  dbuga('graphicsTake gscn'+  graphicsSelectedColorNum+' gsg='+graphicsSelectedGraphic);
   }
 function fixCamera(){
   transformString='';
@@ -3893,6 +3897,7 @@ var graphicsByColor={
   "blue":[{"imageId":"jambots", "blackTrans":true},{"imageId":"sms", "blackTrans":false},{"imageId":"blank", "blackTrans":true}],
   "green":[{"imageId":"sms", "blackTrans":false},{"imageId":"mrzeros", "blackTrans":false},{"imageId":"blank", "blackTrans":true}]
 }
+
 //graphicsByColor={"orange":[{"imageId":"bears", "blackTrans":false}], "black":[{"imageId":"bears", "blackTrans":false}], "blue":[{"imageId":"bears", "blackTrans":false}], "green":[{"imageId":"bears", "blackTrans":false}]};
 var atColor=0;
 var atGraphic=0;
@@ -3918,6 +3923,8 @@ function processGraphic(colorNum, graphicNum){
   var color=colorArray[colorNum];
   
   var imageId= graphicsByColor[color][graphicNum].imageId;
+  dbuga('processGraphic('+colorNum+', '+graphicNum+')'+);
+  
   var blackTrans= graphicsByColor[color][graphicNum].blackTrans;
   //dbuga("processGraphic "+colorNum+", "+graphicNum+" blackTrans="+blackTrans);
   var alphaSourceRef=imgRefs['boxsidesource'];
