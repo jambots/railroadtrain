@@ -3215,6 +3215,11 @@ var prevTouchY=0;
 var focusTrain=0;
 function startCamera(){
   cameraCanv.style.display="block";
+  cameraCanv.style.left=topPad+"px";
+  cameraCanv.style.top=leftPad+"px";
+  cameraCanv.width=100;//Math.floor(buttonWidth*3);
+  cameraCanv.height=100;//Math.floor(buttonWidth*3/4);
+
     var options = {
         quality: 75,
         destinationType: CanvasCamera.DestinationType.DATA_URL,
@@ -3222,11 +3227,11 @@ function startCamera(){
         width: 100,
         height: 100
     };
-    window.plugin.CanvasCamera.start(options);
+  window.plugin.CanvasCamera.start(options);
   }
 function stopCamera(){
   cameraCanv.style.display="none";
-
+  //window.plugin.CanvasCamera.stop();
   }
 function handleEventLandscape(e){
   if(e.touches.length>0){
@@ -4206,7 +4211,7 @@ function placeWithin(canvasRef, imageRef){
 <canvas id="menuCanvas" style="position:absolute;"></canvas>
 <canvas id="carsCanvas" style="position:absolute;"></canvas>
 <canvas id="graphicsCanvas" style="position:absolute;"></canvas>
-<canvas id="cameraCanvas" style="position:absolute;"></canvas>
+<canvas id="cameraCanvas" style="position:absolute;" width="100" height="100"></canvas>
 
 <div id="adHolder" style="opacity:.5; Zbackground-size:contain; background-repeat:no-repeat; background-position:50% 50%; position:absolute;"></div>
 
