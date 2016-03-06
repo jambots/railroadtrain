@@ -1648,6 +1648,11 @@ function init(){
 
   document.getElementsByTagName('head')[0].appendChild(style);
 
+  document.addEventListener('deviceready', function () {
+    
+    window.plugin.CanvasCamera.initialize(graphicsCanv);
+    }, false);
+  }
   //dbuga('start preloading');
   window.setTimeout('preloadTick()',10);
   } 
@@ -3259,6 +3264,16 @@ function handleEventLandscape(e){
             if(graphicsButton.buttonId=="Done"){openModal("cars");}
             else if(graphicsButton.buttonId=="Retake"){
               graphicsShooting=true;
+
+    var options = {
+        quality: 75,
+        destinationType: CanvasCamera.DestinationType.DATA_URL,
+        encodingType: CanvasCamera.EncodingType.JPEG,
+        width: 100,
+        height: 100
+    };
+    window.plugin.CanvasCamera.start(options);
+
               }
             else if(graphicsButton.buttonId=="Cancel"){
               graphicsShooting=false;
