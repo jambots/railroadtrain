@@ -3213,7 +3213,21 @@ combinedZoom =[75,25,0,100];
 var prevTouchX=0;
 var prevTouchY=0;
 var focusTrain=0;
+function startCamera(){
+  cameraCanv.style.display="block";
+    var options = {
+        quality: 75,
+        destinationType: CanvasCamera.DestinationType.DATA_URL,
+        encodingType: CanvasCamera.EncodingType.JPEG,
+        width: 100,
+        height: 100
+    };
+    window.plugin.CanvasCamera.start(options);
+  }
+function stopCamera(){
+  cameraCanv.style.display="none";
 
+  }
 function handleEventLandscape(e){
   if(e.touches.length>0){
     var t=e.touches[0];
@@ -3269,23 +3283,18 @@ function handleEventLandscape(e){
             if(graphicsButton.buttonId=="Done"){openModal("cars");}
             else if(graphicsButton.buttonId=="Retake"){
               graphicsShooting=true;
+              startCamera();
 
-    var options = {
-        quality: 75,
-        destinationType: CanvasCamera.DestinationType.DATA_URL,
-        encodingType: CanvasCamera.EncodingType.JPEG,
-        width: 800,
-        height: 200
-    };
-    window.plugin.CanvasCamera.start(options);
 
               }
             else if(graphicsButton.buttonId=="Cancel"){
               graphicsShooting=false;
+              stopCamera();
               }
             else if(graphicsButton.buttonId=="Take"){
               graphicsTake();
               graphicsShooting=false;
+              stopCamera();
               }
             else if(graphicsButton.buttonId=="Transparent"){
               graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=!(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans);
@@ -3943,7 +3952,7 @@ function processGraphic(colorNum, graphicNum){
   var color=colorArray[colorNum];
   
   var imageId= graphicsByColor[color][graphicNum].imageId;
-  dbuga('processGraphic('+colorNum+', '+graphicNum+')'+imageId);
+  //dbuga('processGraphic('+colorNum+', '+graphicNum+')'+imageId);
   
   var blackTrans= graphicsByColor[color][graphicNum].blackTrans;
   //dbuga("processGraphic "+colorNum+", "+graphicNum+" blackTrans="+blackTrans);
