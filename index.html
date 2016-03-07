@@ -1525,6 +1525,7 @@ function drawLevels(){
 
 var visHeight=100;
 function openModal(modal){
+  dbuga('closeModals openModals()')
   closeModals();
   camera.style.webkitFilter="blur(5px)";
   if(modal=="levels"){
@@ -1562,6 +1563,7 @@ function closeModals(){
   }
 function changeView(){
   //dbuga("changeView");
+  dbuga('closeModals changeView()')
   closeModals();
   if(viewportAspect>1){
     document.getElementById("navDiv").style.display="none";
