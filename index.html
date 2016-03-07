@@ -1272,7 +1272,7 @@ mp  70  77
 
 var graphicsSelectedColorNum=0;
 var graphicsSelectedGraphic=0;
-var graphicsShooting=false;
+var graphicsEditing=false;
 function openGraphics(carButton){
   graphicsSelectedColorNum=carButton.c;
   graphicsSelectedGraphic=carButton.g;
@@ -1281,6 +1281,7 @@ function openGraphics(carButton){
 }
 var graphicsButtons=[];
 function populateGraphics(){
+  dbuga('populateGraphics
   graphicsCanv.width=screenHeight;
   var graphicsCtx=graphicsCanv.getContext('2d');
   graphicsCtx.lineWidth=cellSize/16;
@@ -1295,13 +1296,14 @@ function populateGraphics(){
   graphicsButtons=[];
 
   
-  if(graphicsShooting==false){
+  if(graphicsEditing==false){
     graphicsButtons.push({"buttonId":"Done", "highlighted":false, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad,"r":leftPad+buttonWidth});
-    graphicsButtons.push({"buttonId":"Transparent", "highlighted":graphic.blackTrans, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad+buttonWidth,"r":leftPad+buttonWidth*2});
-    graphicsButtons.push({"buttonId":"Retake", "highlighted":false, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad+buttonWidth*2,"r":leftPad+buttonWidth*3});
+    graphicsButtons.push({"buttonId":"Camera", "highlighted":false, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad+buttonWidth*1,"r":leftPad+buttonWidth*3});
+    graphicsButtons.push({"buttonId":"Transparent", "highlighted":graphic.blackTrans, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad+buttonWidth*2,"r":leftPad+buttonWidth*2});
     }
   else{
-    graphicsButtons.push({"buttonId":"Take", "highlighted":true, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad+buttonWidth*2,"r":leftPad+buttonWidth*3});
+    graphicsButtons.push({"buttonId":"Save", "highlighted":true, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad+buttonWidth*2,"r":leftPad+buttonWidth*3});
+    graphicsButtons.push({"buttonId":"Retake", "highlighted":false, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad+buttonWidth,"r":leftPad+buttonWidth*2});
     graphicsButtons.push({"buttonId":"Cancel", "highlighted":false, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad+buttonWidth*0,"r":leftPad+buttonWidth*1});
     }
   
@@ -1561,7 +1563,7 @@ function closeModals(){
   graphicsCanv.style.left="-"+screenHeight+"px";
   graphicsUp=false;
   updateColorsCanv();
-  graphicsShooting=false;
+  graphicsEditing=false;
   camera.style.webkitFilter="none";
   }
 function changeView(){
@@ -3228,38 +3230,18 @@ function onSuccess(imageData) {
     image.src = "data:image/jpeg;base64," + imageData;
     }
 function cameraLoaded(){
+    graphicsEditing=true;
     var image = document.getElementById('cameraImg');
     
     dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
     processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
-    populateCars();
+    populateGraphics();
               
 }
 
 function onFail(message) {
-    alert('Failed because: ' + message);
-}
-function startCamera(){
-  cameraCanv.style.display="block";
-  cameraCanv.style.left=topPad+"px";
-  cameraCanv.style.top=leftPad+"px";
-  cameraCanv.style.backgroundColor="#888";
-  cameraCanv.width=100;//Math.floor(buttonWidth*3);
-  cameraCanv.height=100;//Math.floor(buttonWidth*3/4);
-/*
-    var options = {
-        quality: 75,
-        destinationType: CanvasCamera.DestinationType.DATA_URL,
-        encodingType: CanvasCamera.EncodingType.JPEG,
-        width: 100,
-        height: 100
-    };
-  window.plugin.CanvasCamera.start(options);
-*/
-  }
-function stopCamera(){
-  cameraCanv.style.display="none";
-  ////window.plugin.CanvasCamera.stop(); //never worked
+  graphicsEditing=false;
+  populateGraphics();
   }
 function handleEventLandscape(e){
   if(e.touches.length>0){
@@ -3313,28 +3295,30 @@ function handleEventLandscape(e){
         for (var gb=0; gb<graphicsButtons.length; gb++){
           var graphicsButton=graphicsButtons[gb];
           if((t.pageX> graphicsButton.l)&&(t.pageX<graphicsButton.r)&&(t.pageY-adHeight> graphicsButton.t)&&(t.pageY-adHeight<graphicsButton.b)){
-            if(graphicsButton.buttonId=="Done"){openModal("cars");}
-            else if(graphicsButton.buttonId=="Retake"){
-              graphicsShooting=true;
-              startCamera();
 
-
+            if(graphicsButton.buttonId=="Done"){
+              openModal("cars");
               }
-            else if(graphicsButton.buttonId=="Cancel"){
-              graphicsShooting=false;
-              stopCamera();
+            if(graphicsButton.buttonId=="Camera"){
+              graphicsTake();              
               }
-            else if(graphicsButton.buttonId=="Take"){
-              graphicsTake();
-              graphicsShooting=false;
-              ////stopCamera();
-              }
-            else if(graphicsButton.buttonId=="Transparent"){
- 
+            if(graphicsButton.buttonId=="Transparent"){
               graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=!(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans);
               processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
               populateCars();
               }
+            else if(graphicsButton.buttonId=="Save"){
+              graphicsEditing=false;
+              // move to storage, image for now
+              }
+            else if(graphicsButton.buttonId=="Cancel"){
+              graphicsEditing=false;
+              
+              }
+            else if(graphicsButton.buttonId=="Retake"){
+              graphicsTake();              
+              }
+
             found=true;
             }
           }
@@ -3577,6 +3561,7 @@ function createLevel(){
   }
 var colorsHeight=64;
 function updateColorsCanv(){
+  dbuga('updateColorsCanvas()');
   var h=colorsHeight;
   if(screenHeight<500){h=44;}
   colorsCanv.width=screenHeight;
@@ -3636,8 +3621,15 @@ function updateColorsCanv(){
       colorsCtx.fillText("to repaint", screenHeight/2,3*h/4);
       }
     else if(graphicsUp){
-      colorsCtx.fillText("", screenHeight/2,h/4);
-      colorsCtx.fillText("", screenHeight/2,3*h/4);
+      if(graphicsEditing){
+        colorsCtx.fillText("Pinch to", screenHeight/2,h/4);
+        colorsCtx.fillText("Pan and Zoom", screenHeight/2,3*h/4);
+        }
+      else{
+        colorsCtx.fillText("Modify", screenHeight/2,h/4);
+        colorsCtx.fillText("Boxcar", screenHeight/2,3*h/4);
+        }
+
       }  
     else{
       colorsCtx.fillText("Drag to zoom", screenHeight/2,h/4);
