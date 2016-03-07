@@ -1281,7 +1281,7 @@ function openGraphics(carButton){
 }
 var graphicsButtons=[];
 function populateGraphics(){
-  dbuga('populateGraphics
+  dbuga('populateGraphics');
   graphicsCanv.width=screenHeight;
   var graphicsCtx=graphicsCanv.getContext('2d');
   graphicsCtx.lineWidth=cellSize/16;
@@ -3307,15 +3307,15 @@ function handleEventLandscape(e){
               processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
               populateCars();
               }
-            else if(graphicsButton.buttonId=="Save"){
+            if(graphicsButton.buttonId=="Save"){
               graphicsEditing=false;
               // move to storage, image for now
               }
-            else if(graphicsButton.buttonId=="Cancel"){
+            if(graphicsButton.buttonId=="Cancel"){
               graphicsEditing=false;
               
               }
-            else if(graphicsButton.buttonId=="Retake"){
+            if(graphicsButton.buttonId=="Retake"){
               graphicsTake();              
               }
 
