@@ -3221,7 +3221,10 @@ var focusTrain=0;
 function onSuccess(imageData) {
     var image = document.getElementById('default0');
     image.src = "data:image/jpeg;base64," + imageData;
-    processGraphic(0,0); 
+    processGraphic(atColor, atGraphic); 
+    populateCars();
+    dbuga('image.offsetWidth: '+image.offsetWidth +' Height:'+image.offsetHeight);
+              
 }
 
 function onFail(message) {
@@ -3318,6 +3321,7 @@ function handleEventLandscape(e){
               ////stopCamera();
               }
             else if(graphicsButton.buttonId=="Transparent"){
+ 
               graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=!(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans);
               processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
               populateCars();
@@ -4252,18 +4256,18 @@ function placeWithin(canvasRef, imageRef){
 
   <div id="preload">
 
-<img src="default/default0.jpg" id="default0" width=800 height=200  style="display:none;" />
-<img src="default/default1.jpg" id="default1" width=800 height=200  style="display:none;" />
-<img src="default/default2.jpg" id="default2" width=800 height=200  style="display:none;" />
-<img src="default/default3.jpg" id="default3" width=800 height=200  style="display:none;" />
-<img src="default/default4.jpg" id="default4" width=800 height=200  style="display:none;" />
-<img src="default/default5.jpg" id="default5" width=800 height=200  style="display:none;" />
-<img src="default/default6.jpg" id="default6" width=800 height=200  style="display:none;" />
-<img src="default/default7.jpg" id="default7" width=800 height=200  style="display:none;" />
-<img src="default/default8.jpg" id="default8" width=800 height=200  style="display:none;" />
-<img src="default/default9.jpg" id="default9" width=800 height=200  style="display:none;" />
-<img src="default/default10.jpg" id="default10" width=800 height=200  style="display:none;" />
-<img src="default/default11.jpg" id="default11" width=800 height=200  style="display:none;" />
+<img src="default/default0.jpg" id="default0"   style="display:none;" />
+<img src="default/default1.jpg" id="default1"   style="display:none;" />
+<img src="default/default2.jpg" id="default2"   style="display:none;" />
+<img src="default/default3.jpg" id="default3"   style="display:none;" />
+<img src="default/default4.jpg" id="default4"   style="display:none;" />
+<img src="default/default5.jpg" id="default5"   style="display:none;" />
+<img src="default/default6.jpg" id="default6"   style="display:none;" />
+<img src="default/default7.jpg" id="default7"   style="display:none;" />
+<img src="default/default8.jpg" id="default8"   style="display:none;" />
+<img src="default/default9.jpg" id="default9"   style="display:none;" />
+<img src="default/default10.jpg" id="default10"   style="display:none;" />
+<img src="default/default11.jpg" id="default11"   style="display:none;" />
 
 <img src="sprites/tank/tankside.png" id="tanksideblack"  style="display:none;" />
 <img src="sprites/tank/tankend.png" id="tankendblack"  style="display:none;" />
