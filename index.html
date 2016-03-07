@@ -1337,10 +1337,13 @@ function populateGraphics(){
   var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
   graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
   graphicsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
+  cameraCanv.style.display="none";
+  /*
   cameraCanv.style.left=topPad+"px";
   cameraCanv.style.top=leftPad+"px";
   cameraCanv.width=Math.floor(buttonWidth*3);
   cameraCanv.height=Math.floor(buttonWidth*3/4);
+  */
   }
 var carsButtons=[];
 function populateCars(){
