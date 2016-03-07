@@ -1562,7 +1562,8 @@ function closeModals(){
   camera.style.webkitFilter="none";
   }
 function changeView(){
-  //dbuga("changeView");
+  dbuga("changeView shooting="+shooting);
+  if(shooting){return false;}
   dbuga('closeModals changeView()')
   closeModals();
   if(viewportAspect>1){
@@ -3215,7 +3216,14 @@ var prevTouchX=0;
 var prevTouchY=0;
 var focusTrain=0;
 
-
+var shooting=false;
+function graphicsTake(){
+  shooting=true;
+  dbuga('graphicsTake gscn'+  graphicsSelectedColorNum+' gsg='+graphicsSelectedGraphic);
+  navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+    destinationType: Camera.DestinationType.DATA_URL
+    });
+  }
 function onSuccess(imageData) {
     dbuga('success');
     var image = document.getElementById('cameraImg');
@@ -3224,18 +3232,21 @@ function onSuccess(imageData) {
       cameraLoaded();
       };
     image.src = "data:image/jpeg;base64," + imageData;
+    shooting=false;
     }
 function cameraLoaded(){
+    dbuga('cameraLoaded()');
     graphicsEditing=true;
     var image = document.getElementById('cameraImg');
     
     dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
     processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
     populateGraphics();
-              
-}
+    }
 
 function onFail(message) {
+  dbuga('onFail');
+  shooting=false;
   graphicsEditing=false;
   populateGraphics();
   }
@@ -3356,12 +3367,7 @@ function handleEventLandscape(e){
     //dbuga(e.type+" cameraTilt:"+cameraTilt+" cameraRotationDegrees[focusTrain]:"+ cameraRotationDegrees[focusTrain]); 
     }
   }
-function graphicsTake(){
-  dbuga('graphicsTake gscn'+  graphicsSelectedColorNum+' gsg='+graphicsSelectedGraphic);
-  navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-    destinationType: Camera.DestinationType.DATA_URL
-    });
-  }
+
 function fixCamera(){
   transformString='';
   transformString+='rotateX(0deg) ';
