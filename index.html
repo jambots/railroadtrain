@@ -3221,10 +3221,18 @@ var focusTrain=0;
 function onSuccess(imageData) {
     dbuga('success');
     var image = document.getElementById('cameraImg');
+    image.style.display="block";
+    image.onload=function(){
+      cameraLoaded();
+      };
     image.src = "data:image/jpeg;base64," + imageData;
-    processGraphic(atColor, atGraphic); 
+    }
+function cameraLoaded(){
+    var image = document.getElementById('cameraImg');
+    
+    dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
+    processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
     populateCars();
-    dbuga('image.offsetWidth: '+image.offsetWidth +' Height:'+image.offsetHeight);
               
 }
 
