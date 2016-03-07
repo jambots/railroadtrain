@@ -499,6 +499,7 @@ function handleUiEvent(e){
   //dbuga("handleUiEvent "+target);
   if(target == "level_touch"){
     if(levelsUp){
+      dbuga('closeModals levelsUp');
       closeModals();
       }
     else{
@@ -507,6 +508,7 @@ function handleUiEvent(e){
     }
   if(target == "menu_touch"){
     if(menuUp){
+      dbuga('closeModals menu_touch');
       closeModals();
       }
     else{
@@ -1298,14 +1300,14 @@ function populateGraphics(){
   var t=topPad+buttonHeight*3;
   var b=topPad+buttonHeight*4;
   if(graphicsEditing==false){
-    graphicsButtons.push({"buttonId":"Done", "highlighted":false, "l":leftPad+buttonWidth*0,"r":leftPad+buttonWidth*1", "t":t,"b":b});
+    graphicsButtons.push({"buttonId":"Done", "highlighted":false, "l":leftPad+buttonWidth*0,"r":leftPad+buttonWidth*1, "t":t,"b":b});
     graphicsButtons.push({"buttonId":"Camera", "highlighted":false,"l":leftPad+buttonWidth*1,"r":leftPad+buttonWidth*2, "t":t,"b":b});
     graphicsButtons.push({"buttonId":"Transparent", "highlighted":graphic.blackTrans,"l":leftPad+buttonWidth*2,"r":leftPad+buttonWidth*3, "t":t,"b":b});
     }
   else{
-    graphicsButtons.push({"buttonId":"Save", "highlighted":true"l":leftPad+buttonWidth*0,"r":leftPad+buttonWidth*1, "t":t,"b":b,});
-    graphicsButtons.push({"buttonId":"Retake", "highlighted":false, "l":leftPad+buttonWidth*1,"r":leftPad+buttonWidth*2, "t":t,"b":b,});
-    graphicsButtons.push({"buttonId":"Cancel", "highlighted":false, "l":leftPad+buttonWidth*2,"r":leftPad+buttonWidth*3, "t":t,"b":b,});
+    graphicsButtons.push({"buttonId":"Save", "highlighted":true, "l":leftPad+buttonWidth*0,"r":leftPad+buttonWidth*1, "t":t,"b":b});
+    graphicsButtons.push({"buttonId":"Retake", "highlighted":false, "l":leftPad+buttonWidth*1,"r":leftPad+buttonWidth*2, "t":t,"b":b});
+    graphicsButtons.push({"buttonId":"Cancel", "highlighted":false, "l":leftPad+buttonWidth*2,"r":leftPad+buttonWidth*3, "t":t,"b":b});
     }
   
 
@@ -1322,11 +1324,6 @@ function populateGraphics(){
     graphicsCtx.textBaseline="middle";
     graphicsCtx.fillText(graphicsButtons[gb].buttonId, cx,cy);
     }
-   
-
-
-
-
 
   var carButton={"buttonId":"car"}
   carButton.c=graphicsSelectedColorNum;
@@ -1341,12 +1338,7 @@ function populateGraphics(){
   graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
   graphicsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
   cameraCanv.style.display="none";
-  /*
-  cameraCanv.style.left=topPad+"px";
-  cameraCanv.style.top=leftPad+"px";
-  cameraCanv.width=Math.floor(buttonWidth*3);
-  cameraCanv.height=Math.floor(buttonWidth*3/4);
-  */
+
   }
 var carsButtons=[];
 function populateCars(){
@@ -1555,6 +1547,7 @@ function openModal(modal){
     }
   }
 function closeModals(){
+  dbuga('closeModals');
   levelsCanv.style.left="-"+screenWidth+"px";
   levelsUp=false;
   menuCanv.style.left="-"+screenWidth+"px";
@@ -3261,16 +3254,19 @@ function handleEventLandscape(e){
         var tryFocus=Math.floor((screenHeight-t.pageX)/colorsHeight);
         if(tryFocus<trainData.length){
           focusTrain=tryFocus;
+          dbuga('closeModals tryFocus<trainData.length');
           closeModals();
           updateColorsCanv();
           }
         if(t.pageX<colorsHeight){// x circle
+          dbuga('closeModals t.pageX<colorsHeight');
           closeModals();
           colorsUp=false;
           updateColorsCanv();
           }
         if((t.pageX>colorsHeight)&&(t.pageX<colorsHeight*4)){// car button
           if((carsUp)||(graphicsUp)){
+            dbuga('closeModals car button');
             closeModals();
             }
           else{
@@ -3289,7 +3285,10 @@ function handleEventLandscape(e){
             found=true;
             }
           }
-        if(found==false){closeModals();}
+        if(found==false){
+          dbuga('closeModals found==false');
+          closeModals();
+          }
         }
       else if(graphicsUp){
         var found=false;
@@ -3323,7 +3322,10 @@ function handleEventLandscape(e){
             found=true;
             }
           }
-        if(found==false){closeModals();}
+        if(found==false){
+          dbuga('closeModals found=false 2');
+          closeModals();
+          }
         else{populateGraphics();}
 
         }
@@ -3522,6 +3524,8 @@ function handleEventLevels(event){
           drawLevels();
           window.setTimeout("createLevel()",200);
           }
+       dbuga('closeModals handleEventLevels');
+
         closeModals();
         }
       }
