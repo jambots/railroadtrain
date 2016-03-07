@@ -1525,7 +1525,6 @@ function drawLevels(){
 
 var visHeight=100;
 function openModal(modal){
-  dbuga('closeModals openModals()')
   closeModals();
   camera.style.webkitFilter="blur(5px)";
   if(modal=="levels"){
@@ -1539,16 +1538,18 @@ function openModal(modal){
   if(modal=="cars"){
     carsCanv.style.left=0+"px";
     carsUp=true;
+    dbuga('openModals() updateColorsCanv')
     updateColorsCanv();
     }
   if(modal=="graphics"){
+    dbuga('openModals() updateColorsCanv')
     graphicsCanv.style.left=0+"px";
     graphicsUp=true;
     updateColorsCanv();
     }
   }
 function closeModals(){
-  dbuga('closeModals');
+  //dbuga('closeModals');
   levelsCanv.style.left="-"+screenWidth+"px";
   levelsUp=false;
   menuCanv.style.left="-"+screenWidth+"px";
@@ -1557,6 +1558,7 @@ function closeModals(){
   carsUp=false;
   graphicsCanv.style.left="-"+screenHeight+"px";
   graphicsUp=false;
+  dbuga('closeModals() updateColorsCanv')
   updateColorsCanv();
   graphicsEditing=false;
   camera.style.webkitFilter="none";
@@ -1570,6 +1572,7 @@ function changeView(){
     document.getElementById("navDiv").style.display="none";
     document.getElementById("uiHolder").style.display="none";
     document.getElementById("prerails").style.display="none";
+    dbuga('changeView() updateColorsCanv')
     updateColorsCanv();
     colorsCanv.style.display="block";
     visHeight=viewportHeight-adHeight;
@@ -3267,7 +3270,7 @@ function handleEventLandscape(e){
         var tryFocus=Math.floor((screenHeight-t.pageX)/colorsHeight);
         if(tryFocus<trainData.length){
           focusTrain=tryFocus;
-          dbuga('closeModals tryFocus<trainData.length');
+          dbuga('updateColorsCanv tryFocus<trainData.length');
           closeModals();
           updateColorsCanv();
           }
@@ -3574,7 +3577,7 @@ function createLevel(){
   }
 var colorsHeight=64;
 function updateColorsCanv(){
-  dbuga('updateColorsCanvas()');
+  dbuga('updateColorsCanv()');
   var h=colorsHeight;
   if(screenHeight<500){h=44;}
   colorsCanv.width=screenHeight;
