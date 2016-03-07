@@ -499,7 +499,7 @@ function handleUiEvent(e){
   //dbuga("handleUiEvent "+target);
   if(target == "level_touch"){
     if(levelsUp){
-      dbuga('closeModals levelsUp');
+      //dbuga('closeModals levelsUp');
       closeModals();
       }
     else{
@@ -508,7 +508,7 @@ function handleUiEvent(e){
     }
   if(target == "menu_touch"){
     if(menuUp){
-      dbuga('closeModals menu_touch');
+      //dbuga('closeModals menu_touch');
       closeModals();
       }
     else{
@@ -1538,11 +1538,11 @@ function openModal(modal){
   if(modal=="cars"){
     carsCanv.style.left=0+"px";
     carsUp=true;
-    dbuga('openModals() updateColorsCanv')
+    //dbuga('openModals() updateColorsCanv')
     updateColorsCanv();
     }
   if(modal=="graphics"){
-    dbuga('openModals() updateColorsCanv')
+    //dbuga('openModals() updateColorsCanv')
     graphicsCanv.style.left=0+"px";
     graphicsUp=true;
     updateColorsCanv();
@@ -1558,21 +1558,21 @@ function closeModals(){
   carsUp=false;
   graphicsCanv.style.left="-"+screenHeight+"px";
   graphicsUp=false;
-  dbuga('closeModals() updateColorsCanv')
+  //dbuga('closeModals() updateColorsCanv')
   updateColorsCanv();
   graphicsEditing=false;
   camera.style.webkitFilter="none";
   }
 function changeView(){
-  dbuga("changeView shooting="+shooting);
+  //dbuga("changeView shooting="+shooting);
   if(shooting){return false;}
-  dbuga('closeModals changeView()')
+  //dbuga('closeModals changeView()')
   closeModals();
   if(viewportAspect>1){
     document.getElementById("navDiv").style.display="none";
     document.getElementById("uiHolder").style.display="none";
     document.getElementById("prerails").style.display="none";
-    dbuga('changeView() updateColorsCanv')
+    //dbuga('changeView() updateColorsCanv')
     updateColorsCanv();
     colorsCanv.style.display="block";
     visHeight=viewportHeight-adHeight;
@@ -3270,19 +3270,19 @@ function handleEventLandscape(e){
         var tryFocus=Math.floor((screenHeight-t.pageX)/colorsHeight);
         if(tryFocus<trainData.length){
           focusTrain=tryFocus;
-          dbuga('updateColorsCanv tryFocus<trainData.length');
+          //dbuga('updateColorsCanv tryFocus<trainData.length');
           closeModals();
           updateColorsCanv();
           }
         if(t.pageX<colorsHeight){// x circle
-          dbuga('closeModals t.pageX<colorsHeight');
+          //dbuga('closeModals t.pageX<colorsHeight');
           closeModals();
           colorsUp=false;
           updateColorsCanv();
           }
         if((t.pageX>colorsHeight)&&(t.pageX<colorsHeight*4)){// car button
           if((carsUp)||(graphicsUp)){
-            dbuga('closeModals car button');
+            //dbuga('closeModals car button');
             closeModals();
             }
           else{
@@ -3302,7 +3302,7 @@ function handleEventLandscape(e){
             }
           }
         if(found==false){
-          dbuga('closeModals found==false');
+          //dbuga('closeModals found==false');
           closeModals();
           }
         }
@@ -3339,7 +3339,7 @@ function handleEventLandscape(e){
             }
           }
         if(found==false){
-          dbuga('closeModals found=false 2');
+          //dbuga('closeModals found=false 2');
           closeModals();
           }
         else{populateGraphics();}
@@ -3535,7 +3535,7 @@ function handleEventLevels(event){
           drawLevels();
           window.setTimeout("createLevel()",200);
           }
-       dbuga('closeModals handleEventLevels');
+       //dbuga('closeModals handleEventLevels');
 
         closeModals();
         }
@@ -3577,7 +3577,7 @@ function createLevel(){
   }
 var colorsHeight=64;
 function updateColorsCanv(){
-  dbuga('updateColorsCanv()');
+  //dbuga('updateColorsCanv()');
   var h=colorsHeight;
   if(screenHeight<500){h=44;}
   colorsCanv.width=screenHeight;
