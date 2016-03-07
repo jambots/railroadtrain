@@ -1295,16 +1295,17 @@ function populateGraphics(){
   var leftPad=(screenHeight-buttonWidth*3)/2;
   graphicsButtons=[];
 
-  
+  var t=topPad+buttonHeight*3;
+  var b=topPad+buttonHeight*4;
   if(graphicsEditing==false){
-    graphicsButtons.push({"buttonId":"Done", "highlighted":false, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad,"r":leftPad+buttonWidth});
-    graphicsButtons.push({"buttonId":"Camera", "highlighted":false, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad+buttonWidth*1,"r":leftPad+buttonWidth*3});
-    graphicsButtons.push({"buttonId":"Transparent", "highlighted":graphic.blackTrans, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad+buttonWidth*2,"r":leftPad+buttonWidth*2});
+    graphicsButtons.push({"buttonId":"Done", "highlighted":false, "l":leftPad+buttonWidth*0,"r":leftPad+buttonWidth*1", "t":t,"b":b});
+    graphicsButtons.push({"buttonId":"Camera", "highlighted":false,"l":leftPad+buttonWidth*1,"r":leftPad+buttonWidth*2, "t":t,"b":b});
+    graphicsButtons.push({"buttonId":"Transparent", "highlighted":graphic.blackTrans,"l":leftPad+buttonWidth*2,"r":leftPad+buttonWidth*3, "t":t,"b":b});
     }
   else{
-    graphicsButtons.push({"buttonId":"Save", "highlighted":true, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad+buttonWidth*2,"r":leftPad+buttonWidth*3});
-    graphicsButtons.push({"buttonId":"Retake", "highlighted":false, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad+buttonWidth,"r":leftPad+buttonWidth*2});
-    graphicsButtons.push({"buttonId":"Cancel", "highlighted":false, "t":topPad+buttonHeight*3,"b":topPad+buttonHeight*4,"l":leftPad+buttonWidth*0,"r":leftPad+buttonWidth*1});
+    graphicsButtons.push({"buttonId":"Save", "highlighted":true"l":leftPad+buttonWidth*0,"r":leftPad+buttonWidth*1, "t":t,"b":b,});
+    graphicsButtons.push({"buttonId":"Retake", "highlighted":false, "l":leftPad+buttonWidth*1,"r":leftPad+buttonWidth*2, "t":t,"b":b,});
+    graphicsButtons.push({"buttonId":"Cancel", "highlighted":false, "l":leftPad+buttonWidth*2,"r":leftPad+buttonWidth*3, "t":t,"b":b,});
     }
   
 
