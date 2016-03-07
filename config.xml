@@ -20,8 +20,11 @@
 <gap:splash src="railroad_train.png" />
 <gap:plugin name="org.apache.cordova.media" version="0.2.8" />
 <gap:plugin name="org.apache.cordova.network-information" />
+<!--
 <gap:plugin name="com.modaltech.cordova.plugin.canvascamera" version="1.0" />
+-->
 
+<plugin name="cordova-plugin-camera" spec="1.2.0" source="pgb" />
 <access origin="*" />
 <!--
 <feature name="http://api.phonegap.com/1.0/network"/>

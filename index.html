@@ -1655,7 +1655,7 @@ function init(){
 
   document.addEventListener('deviceready', function () {
     
-    window.plugin.CanvasCamera.initialize(cameraCanv);
+    ////window.plugin.CanvasCamera.initialize(cameraCanv);
     }, false);
 
   //dbuga('start preloading');
@@ -3213,13 +3213,25 @@ combinedZoom =[75,25,0,100];
 var prevTouchX=0;
 var prevTouchY=0;
 var focusTrain=0;
+
+
+function onSuccess(imageData) {
+    var image = document.getElementById('default0');
+    image.src = "data:image/jpeg;base64," + imageData;
+    processGraphic(0,0); 
+}
+
+function onFail(message) {
+    alert('Failed because: ' + message);
+}
 function startCamera(){
   cameraCanv.style.display="block";
   cameraCanv.style.left=topPad+"px";
   cameraCanv.style.top=leftPad+"px";
+  cameraCanv.style.backgroundColor="#888";
   cameraCanv.width=100;//Math.floor(buttonWidth*3);
   cameraCanv.height=100;//Math.floor(buttonWidth*3/4);
-
+/*
     var options = {
         quality: 75,
         destinationType: CanvasCamera.DestinationType.DATA_URL,
@@ -3228,10 +3240,11 @@ function startCamera(){
         height: 100
     };
   window.plugin.CanvasCamera.start(options);
+*/
   }
 function stopCamera(){
   cameraCanv.style.display="none";
-  //window.plugin.CanvasCamera.stop();
+  ////window.plugin.CanvasCamera.stop(); //never worked
   }
 function handleEventLandscape(e){
   if(e.touches.length>0){
@@ -3299,7 +3312,7 @@ function handleEventLandscape(e){
             else if(graphicsButton.buttonId=="Take"){
               graphicsTake();
               graphicsShooting=false;
-              stopCamera();
+              ////stopCamera();
               }
             else if(graphicsButton.buttonId=="Transparent"){
               graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=!(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans);
@@ -3340,6 +3353,9 @@ function handleEventLandscape(e){
   }
 function graphicsTake(){
   dbuga('graphicsTake gscn'+  graphicsSelectedColorNum+' gsg='+graphicsSelectedGraphic);
+  navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+    destinationType: Camera.DestinationType.DATA_URL
+    });
   }
 function fixCamera(){
   transformString='';
