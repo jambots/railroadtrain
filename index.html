@@ -3236,6 +3236,7 @@ function onSuccess(imageData) {
       };
     image.src = "data:image/jpeg;base64," + imageData;
     shooting=false;
+    updateColorsCanv();
     }
 var graphicsScale=1;
 var graphicsOffsetX=0;
@@ -3293,7 +3294,7 @@ function handleEventLandscape(e){
   if(e.touches.length>0){
     var t=e.touches[0];
     }
-  else{return false;}
+  //else{return false;}
   if(e.type=="touchstart"){
     if(t.pageY>landscapeScreenHeight-colorsHeight){ // touched in colors menu
       if(colorsUp==false){
@@ -3338,7 +3339,7 @@ function handleEventLandscape(e){
             }
           }
         if(found==false){
-          dbug('');
+          dbug('closeModals()');
           closeModals();
           }
         }
