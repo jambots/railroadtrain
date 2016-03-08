@@ -1283,7 +1283,7 @@ function openGraphics(carButton){
 }
 var graphicsButtons=[];
 function populateGraphics(){
-  dbuga('populateGraphics');
+  //dbuga('populateGraphics');
   graphicsCanv.width=screenHeight;
   var graphicsCtx=graphicsCanv.getContext('2d');
   graphicsCtx.lineWidth=cellSize/16;
@@ -3222,13 +3222,13 @@ var focusTrain=0;
 var shooting=false;
 function graphicsTake(){
   shooting=true;
-  dbuga('graphicsTake gscn'+  graphicsSelectedColorNum+' gsg='+graphicsSelectedGraphic);
+  //dbuga('graphicsTake gscn'+  graphicsSelectedColorNum+' gsg='+graphicsSelectedGraphic);
   navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
     destinationType: Camera.DestinationType.DATA_URL
     });
   }
 function onSuccess(imageData) {
-    dbuga('success');
+    //dbuga('success');
     var image = document.getElementById('cameraImg');
     image.style.display="block";
     image.onload=function(){
@@ -3241,11 +3241,11 @@ var graphicsScale=1;
 var graphicsOffsetX=0;
 var graphicsOffsetY=0;
 function cameraLoaded(){
-    dbuga('cameraLoaded()');
+    //dbuga('cameraLoaded()');
     graphicsEditing=true;
     var image = document.getElementById('cameraImg');
     graphicsScale=1;
-    dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
+    //dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
     previewCamera();
     //processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
     //populateGraphics();
@@ -3263,6 +3263,7 @@ function previewCamera(){
   var topPad=(landscapeScreenHeight-colorsHeight-adHeight-buttonHeight*4)/2;
   var leftPad=(screenHeight-buttonWidth*3)/2;  
   var carButton={"buttonId":"car"}
+
   carButton.sampleWidth=image.naturalWidth*graphicsScale;
   carButton.sampleHeight=carButton.sampleWidth/4;
   carButton.sampleTop=image.naturalHeight/2-carButton.sampleHeight/2+graphicsOffsetY;
@@ -3275,14 +3276,15 @@ function previewCamera(){
   carButton.t=topPad;
   carButton.b=topPad+buttonHeight*3;
   carButton.ref=image;
+  var carGrid=buttonWidth*3/60;
   var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
   graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
-  graphicsCtx.drawImage(carButton.ref, carButton.sampleLeft, carButton.sampleTop, carButton.sampleWidth, carButton.sampleHeight, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
+  graphicsCtx.drawImage(carButton.ref, carButton.sampleLeft, carButton.sampleTop, carButton.sampleWidth, carButton.sampleHeight, carButton.l+carGrid*3, carButton.t+carGrid*3, buttonWidth*3-carGrid*5, buttonHeight*3-carGrid*5);
   console.log(carButton);
   
   }
 function onFail(message) {
-  dbuga('onFail');
+  //dbuga('onFail');
   shooting=false;
   graphicsEditing=false;
   populateGraphics();
@@ -3374,7 +3376,14 @@ function handleEventLandscape(e){
           }
         if(found==false){
           //dbuga('closeModals found=false 2');
-          closeModals();
+          if(graphicsEditing==false){
+            closeModals(); 
+            }
+          else{
+            graphicsTouching=true;
+            graphicsEvent=e;
+            dbuga('graphics  touchstart! '+e.touches.length);
+            }
           }
         else{populateGraphics();}
 
@@ -3382,7 +3391,10 @@ function handleEventLandscape(e){
       }
     }
   if(e.type=="touchmove"){// still in handleLandscapeEvent
-    if((carsUp)||(graphicsUp)){
+    if(carsUp){
+      return false;
+      }
+    if((graphicsUp==true)&&(graphicsEditing==false)){
       return false;
       }
     if(t.pageY>landscapeScreenHeight-colorsHeight){
@@ -3390,20 +3402,33 @@ function handleEventLandscape(e){
         return false;
         }
       }
-    var deltaX=prevTouchX-t.pageX;
-    var deltaY=prevTouchY-(t.pageY-adHeight);
-    combinedZoom[focusTrain]-=deltaY/5;
-    if(t.pageY-adHeight>(canvasWidth/2)){cameraRotationDegrees[focusTrain]+=deltaX/2.5;}
-    else{cameraRotationDegrees[focusTrain]-=deltaX/15;}
-    if(combinedZoom[focusTrain]<0){combinedZoom[focusTrain]=0;}
-    if(combinedZoom[focusTrain]>100){combinedZoom[focusTrain]=100;}
+    if((graphicsUp)&&(graphicsTouching)){
+      graphicsEvent=e;
+      dbuga('graphics  touchmove! '+e.touches.length);
+      }
+    else{
+      //normal drag of pan zoom camera on table
+      var deltaX=prevTouchX-t.pageX;
+      var deltaY=prevTouchY-(t.pageY-adHeight);
+      combinedZoom[focusTrain]-=deltaY/5;
+      if(t.pageY-adHeight>(canvasWidth/2)){cameraRotationDegrees[focusTrain]+=deltaX/2.5;}
+      else{cameraRotationDegrees[focusTrain]-=deltaX/15;}
+      if(combinedZoom[focusTrain]<0){combinedZoom[focusTrain]=0;}
+      if(combinedZoom[focusTrain]>100){combinedZoom[focusTrain]=100;}
+      }
+    prevTouchX=t.pageX;
+    prevTouchY=t.pageY-adHeight;
     }
-  prevTouchX=t.pageX;
-  prevTouchY=t.pageY-adHeight;
-  if(e.type != "touchmove"){
-    //dbuga(e.type+" cameraTilt:"+cameraTilt+" cameraRotationDegrees[focusTrain]:"+ cameraRotationDegrees[focusTrain]); 
+  if(e.type == "touchend"){
+    if((graphicsUp)&&(graphicsTouching)){
+      graphicsEvent=e;
+      dbuga('graphics  touchend! '+e.touches.length);
+      }
     }
+  
   }
+var grapicsTouching=false;
+var graphicsEvent;
 
 function fixCamera(){
   transformString='';
