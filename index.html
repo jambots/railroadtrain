@@ -3250,6 +3250,8 @@ function cameraLoaded(){
     graphicsEditing=true;
     var image = document.getElementById('cameraImg');
     graphicsScale=1;
+    graphicsOffsetX=0;
+    graphicsOffsetY=0;
     //dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
     populateGraphics();
     previewGraphics();
@@ -3504,17 +3506,19 @@ function moveGraphics(){
   var deltaY=graphicsAtY-graphicsStartY;
   var deltaR=graphicsAtR-graphicsStartR;
 
-  graphicsScale=graphicsStartScale*(deltaR/screenWidth);
-  graphicsOffsetX=graphicsStartOffsetX+deltaX;
-  graphicsOffsetY=graphicsStartOffsetY+deltaY;
-
-  previewGraphics();
-
   dbuga('deltaX='+deltaX);
   dbuga('deltaY='+deltaY);
   dbuga('deltaR='+deltaR);
 
+  graphicsScale=graphicsStartScale*(deltaR/screenWidth);
+  dbuga('graphicsScale='+graphicsScale);
+  graphicsOffsetX=graphicsStartOffsetX+deltaX;
+  dbuga('graphicsOffsetX='+graphicsOffsetX);
+  graphicsOffsetY=graphicsStartOffsetY+deltaY;
+  dbuga('graphicsOffsetY='+graphicsOffsetY);
 
+  previewGraphics();
+  dbuga('completed moveGraphics');
   }
 function fixCamera(){
   transformString='';
