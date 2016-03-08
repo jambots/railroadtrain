@@ -1297,7 +1297,7 @@ function populateGraphics(){
   var leftPad=(screenHeight-buttonWidth*3)/2;
   graphicsButtons=[];
 
-  var t=topPad+buttonHeight*3;
+  var t=topPad+buttonHeight*3.5;
   var b=topPad+buttonHeight*4;
   if(graphicsEditing==false){
     graphicsButtons.push({"buttonId":"Done", "highlighted":false, "l":leftPad+buttonWidth*0,"r":leftPad+buttonWidth*1, "t":t,"b":b});
@@ -1333,7 +1333,7 @@ function populateGraphics(){
   carButton.t=topPad;
   carButton.b=topPad+buttonHeight*3;
   carButton.ref=graphic.ref;
-  graphicsButtons.push(carButton);
+  //graphicsButtons.push(carButton);
   var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
   graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
   graphicsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
@@ -2828,7 +2828,7 @@ function returnObjectInfo(theObject){
 function dbug(theString){
   
   document.getElementById("debugDiv").style.display="block";
-  document.getElementById("debugDiv").innerHTML=""+theString+"<br><br>";
+  document.getElementById("debugDiv").innerHTML=""+theString+"<br>";
   }
 function dbuga(theString){
   document.getElementById("debugDiv").style.display="block";  
@@ -3294,7 +3294,7 @@ function previewCamera(){
 
 function handleEventLandscape(e){
   dbug('handleEventLandscape '+e.type);
-  dbuga('graphicsUp:'+graphicsUp+' graphicsTouching:'+graphicsTouching);
+  dbuga('graphicsUp:'+graphicsUp+' graphicsEditing:'+graphicsEditing+' graphicsTouching:'+graphicsTouching);
   if(e.touches.length>0){
     var t=e.touches[0];
     }
@@ -3375,8 +3375,11 @@ function handleEventLandscape(e){
             if(graphicsButton.buttonId=="Retake"){
               graphicsTake();              
               }
-
             found=true;
+            if(graphicsButton.buttonId=="car"){
+              dbuga('car touchstart');
+              found=false;              
+              }
             }
           }
         if(found==false){
