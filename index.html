@@ -3386,23 +3386,12 @@ function handleEventLandscape(e){
             if(graphicsButton.buttonId=="Save"){
               graphicsEditing=false;
               // move to storage, image for now
-
-              var buttonWidth=cellSize*3;
-              var buttonHeight=cellSize*1;
-              var topPad=(landscapeScreenHeight-colorsHeight-adHeight-buttonHeight*4)/2;
-              var leftPad=(screenHeight-buttonWidth*3)/2;
-              var ctx=graphicsCanv.getContext('2d');
-              var carGrid=buttonWidth*3/60;
-              var imgData=ctx.getImageData(leftPad+carGrid*3, topPad+carGrid*3, buttonWidth*3-carGrid*5, buttonHeight*3-carGrid*5);
-              var imageId= graphicsByColor[graphicsSelectedColorNum][graphicsSelectedGraphic].imageId;
-              var image=document.getElementById(imageId);
-              image.src = "data:image/jpeg;base64," + imageData;
-              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
-              populateCars();
-
+              saveGraphic();
               }
             if(graphicsButton.buttonId=="Cancel"){
               graphicsEditing=false;
+              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
+              populateCars();
               
               }
             if(graphicsButton.buttonId=="Retake"){
@@ -3475,6 +3464,21 @@ function handleEventLandscape(e){
       }
     }
   
+  }
+function saveGraphic(){
+  var buttonWidth=cellSize*3;
+  var buttonHeight=cellSize*1;
+  var topPad=(landscapeScreenHeight-colorsHeight-adHeight-buttonHeight*4)/2;
+  var leftPad=(screenHeight-buttonWidth*3)/2;
+  var ctx=graphicsCanv.getContext('2d');
+  var carGrid=buttonWidth*3/60;
+  var imgData=ctx.getImageData(leftPad+carGrid*3, topPad+carGrid*3, buttonWidth*3-carGrid*5, buttonHeight*3-carGrid*5);
+  var imageId= graphicsByColor[graphicsSelectedColorNum][graphicsSelectedGraphic].imageId;
+  var image=document.getElementById(imageId);
+  image.src = "data:image/jpeg;base64," + imageData;
+  processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
+  populateCars();
+
   }
 var graphicsTouching=false;
 var graphicsEvent;
