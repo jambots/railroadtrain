@@ -3244,7 +3244,7 @@ function onSuccess(imageData) {
     image.src = "data:image/jpeg;base64," + imageData;
     shooting=false;
     }
-
+    
 function cameraLoaded(){
     //dbuga('cameraLoaded()');
     graphicsEditing=true;
@@ -3262,7 +3262,7 @@ function cameraLoaded(){
 
 function previewGraphics(){
   var image = document.getElementById('cameraImg');
-  var offsetMultiplier=graphicsScale*image.naturalWidth/800;
+  var offsetMultiplier=graphicsScale*image.naturalWidth/400;
   var graphicsCtx=graphicsCanv.getContext('2d');
   graphicsCtx.lineWidth=cellSize/16;
   var graphic=graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic];
@@ -3297,7 +3297,7 @@ function previewGraphics(){
   }
 function testImageSample(image, scale, offsetX, offsetY){
   if(scale<.1){return false;}
-  var offsetMultiplier=scale*image.naturalWidth/800;
+  var offsetMultiplier=scale*image.naturalWidth/400;
   var sampleWidth=image.naturalWidth*scale;
   var sampleHeight=sampleWidth/4; //800 x 200
   var sampleTop=image.naturalHeight/2-sampleHeight/2+offsetY*offsetMultiplier;
@@ -3309,9 +3309,11 @@ function testImageSample(image, scale, offsetX, offsetY){
   if(sampleTop+sampleHeight>=image.naturalHeight){return false;}
   return true;
   }
+
+
 function handleEventLandscape(e){
   dbug('handleEventLandscape '+e.type);
-  dbuga(''+graphicsUp+' '+graphicsEditing+' '+graphicsTouching);
+  //dbuga(''+graphicsUp+' '+graphicsEditing+' '+graphicsTouching);
   if(e.touches.length>0){
     var t=e.touches[0];
     }
@@ -3384,6 +3386,20 @@ function handleEventLandscape(e){
             if(graphicsButton.buttonId=="Save"){
               graphicsEditing=false;
               // move to storage, image for now
+
+              var buttonWidth=cellSize*3;
+              var buttonHeight=cellSize*1;
+              var topPad=(landscapeScreenHeight-colorsHeight-adHeight-buttonHeight*4)/2;
+              var leftPad=(screenHeight-buttonWidth*3)/2;
+              var ctx=graphicsCanv.getContext('2d');
+              var carGrid=buttonWidth*3/60;
+              var imgData=ctx.getImageData(leftPad+carGrid*3, topPad+carGrid*3, buttonWidth*3-carGrid*5, buttonHeight*3-carGrid*5);
+              var imageId= graphicsByColor[graphicsSelectedColorNum][graphicsSelectedGraphic].imageId;
+              var image=document.getElementById(imageId);
+              image.src = "data:image/jpeg;base64," + imageData;
+              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
+              populateCars();
+
               }
             if(graphicsButton.buttonId=="Cancel"){
               graphicsEditing=false;
@@ -3501,8 +3517,8 @@ function startMoveGraphics(){
   graphicsStartScale=graphicsScale;
   graphicsStartOffsetX=graphicsOffsetX;
   graphicsStartOffsetY=graphicsOffsetY;
-
   }
+
 function moveGraphics(){
   var sumX=0;
   var sumY=0;
@@ -3523,9 +3539,9 @@ function moveGraphics(){
   var deltaY=graphicsAtY-graphicsStartY;
   var deltaR=graphicsAtR-graphicsStartR;
 
-  dbuga('deltaX='+deltaX);
-  dbuga('deltaY='+deltaY);
-  dbuga('deltaR='+deltaR);
+  //dbuga('deltaX='+deltaX);
+  //dbuga('deltaY='+deltaY);
+  //dbuga('deltaR='+deltaR);
   var tryScale=graphicsStartScale-(deltaR/screenWidth);
   var tryX=graphicsStartOffsetX-deltaX;
   var tryY=graphicsStartOffsetY-deltaY;
@@ -3536,31 +3552,48 @@ function moveGraphics(){
     graphicsOffsetX=tryX;
     graphicsOffsetY=tryY;
     moved=true;
+    dbuga('all');
     }
   if(moved==false){
-    if(testImageSample(image, tryScale, graphicsOffsetX, graphicsOffsetY)){// just scale
-      graphicsScale=tryScale;
-      moved=true;
-      }
-    }
-  if(moved==false){
-    if(testImageSample(image, graphicsScale, tryX, graphicsOffsetY)){// just X
+    if(testImageSample(image, graphicsScale, tryX, tryY)){// omit scale
       graphicsOffsetX=tryX;
-      moved=true;
-      }
-    }
-  if(moved==false){
-    if(testImageSample(image, graphicsScale, graphicsOffsetX, tryY)){// just Y
       graphicsOffsetY=tryY;
       moved=true;
+
+      graphicsStartR=graphicsAtR;
+      graphicsStartScale=graphicsScale;
+
+      dbuga('omit Scale');
       }
     }
+  if(moved==false){
+    if(testImageSample(image, tryScale, graphicsOffsetX, tryY)){// omit X
+      graphicsScale=tryScale;
+      graphicsOffsetY=tryY;
 
-  dbuga('graphicsScale='+graphicsScale);
-  dbuga('graphicsOffsetX='+graphicsOffsetX);
-  dbuga('graphicsOffsetY='+graphicsOffsetY);
+      graphicsStartX=graphicsAtX;
+      graphicsStartOffsetX=graphicsOffsetX;
+      dbuga('omit X');
+      }
+    }
+  if(moved==false){
+    if(testImageSample(image, tryScale, tryX, graphicsOffsetY)){// omit Y
+      graphicsScale=tryScale;
+      graphicsOffsetX=tryX;
+      graphicsStartY=graphicsAtY;
+      graphicsStartOffsetY=graphicsOffsetY;      
+      moved=true;
+      dbuga('omit Y');
+      }
+    }
+  if(moved==false){
+    dbuga('no move');
+    }
+  //dbuga('graphicsScale='+graphicsScale);
+  //dbuga('graphicsOffsetX='+graphicsOffsetX);
+  //dbuga('graphicsOffsetY='+graphicsOffsetY);
   previewGraphics();
-  dbuga('completed moveGraphics');
+  //dbuga('completed moveGraphics');
   }
 function fixCamera(){
   transformString='';
