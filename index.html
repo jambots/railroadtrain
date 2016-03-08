@@ -3227,8 +3227,16 @@ function graphicsTake(){
     destinationType: Camera.DestinationType.DATA_URL
     });
   }
+function onFail(message) {
+  //dbuga('onFail');
+  shooting=false;
+  graphicsEditing=false;
+  populateGraphics();
+  }
 function onSuccess(imageData) {
     //dbuga('success');
+    populateGraphics();
+
     var image = document.getElementById('cameraImg');
     image.style.display="block";
     image.onload=function(){
@@ -3248,7 +3256,6 @@ function cameraLoaded(){
     //dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
     previewCamera();
     //processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
-    //populateGraphics();
     updateColorsCanv();
     }
 function previewCamera(){
@@ -3284,15 +3291,10 @@ function previewCamera(){
   console.log(carButton);
   
   }
-function onFail(message) {
-  //dbuga('onFail');
-  shooting=false;
-  graphicsEditing=false;
-  populateGraphics();
-  }
+
 function handleEventLandscape(e){
   dbuga('handleEventLandscape '+e.type);
-  dbuga('graphicsUp:'+graphicsUp+' grapicsTouching:'+grapicsTouching);
+  //dbuga('graphicsUp:'+graphicsUp+' graphicsTouching:'+graphicsTouching);
   if(e.touches.length>0){
     var t=e.touches[0];
     }
@@ -3430,7 +3432,7 @@ function handleEventLandscape(e){
     }
   
   }
-var grapicsTouching=false;
+var graphicsTouching=false;
 var graphicsEvent;
 
 function fixCamera(){
