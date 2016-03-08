@@ -3262,6 +3262,7 @@ function cameraLoaded(){
 
 function previewGraphics(){
   var image = document.getElementById('cameraImg');
+  var offsetMultiplier=graphicsScale*image.naturalWidth/800;
   var graphicsCtx=graphicsCanv.getContext('2d');
   graphicsCtx.lineWidth=cellSize/16;
   var graphic=graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic];
@@ -3276,8 +3277,8 @@ function previewGraphics(){
 
   carButton.sampleWidth=image.naturalWidth*graphicsScale;
   carButton.sampleHeight=carButton.sampleWidth/4;
-  carButton.sampleTop=image.naturalHeight/2-carButton.sampleHeight/2+graphicsOffsetY*graphicsScale;
-  carButton.sampleLeft=image.naturalWidth/2-carButton.sampleWidth/2+graphicsOffsetX*graphicsScale;
+  carButton.sampleTop=image.naturalHeight/2-carButton.sampleHeight/2+graphicsOffsetY*offsetMultiplier;
+  carButton.sampleLeft=image.naturalWidth/2-carButton.sampleWidth/2+graphicsOffsetX*offsetMultiplier;
 
   carButton.c=graphicsSelectedColorNum;
   carButton.g= graphicsSelectedGraphic;
@@ -3296,11 +3297,11 @@ function previewGraphics(){
   }
 function testImageSample(image, scale, offsetX, offsetY){
   if(scale<.1){return false;}
-
+  var offsetMultiplier=scale*image.naturalWidth/800;
   var sampleWidth=image.naturalWidth*scale;
   var sampleHeight=sampleWidth/4; //800 x 200
-  var sampleTop=image.naturalHeight/2-sampleHeight/2+offsetY*scale;
-  var sampleLeft=image.naturalWidth/2-sampleWidth/2+offsetX*scale;
+  var sampleTop=image.naturalHeight/2-sampleHeight/2+offsetY*offsetMultiplier;
+  var sampleLeft=image.naturalWidth/2-sampleWidth/2+offsetX*offsetMultiplier;
 
   if(sampleLeft<0){return false;}
   if(sampleLeft+sampleWidth>=image.naturalWidth){return false;}
@@ -3529,12 +3530,31 @@ function moveGraphics(){
   var tryX=graphicsStartOffsetX-deltaX;
   var tryY=graphicsStartOffsetY-deltaY;
   var image=document.getElementById('cameraImg');
-  if(testImageSample(image, tryScale, tryX, tryY)){
+  var moved=false;
+  if(testImageSample(image, tryScale, tryX, tryY)){// priority all
     graphicsScale=tryScale;
     graphicsOffsetX=tryX;
     graphicsOffsetY=tryY;
+    moved=true;
     }
-
+  if(moved==false){
+    if(testImageSample(image, tryScale, graphicsOffsetX, graphicsOffsetY)){// just scale
+      graphicsScale=tryScale;
+      moved=true;
+      }
+    }
+  if(moved==false){
+    if(testImageSample(image, graphicsScale, tryX, graphicsOffsetY)){// just X
+      graphicsOffsetX=tryX;
+      moved=true;
+      }
+    }
+  if(moved==false){
+    if(testImageSample(image, graphicsScale, graphicsOffsetX, tryY)){// just Y
+      graphicsOffsetY=tryY;
+      moved=true;
+      }
+    }
 
   dbuga('graphicsScale='+graphicsScale);
   dbuga('graphicsOffsetX='+graphicsOffsetX);
