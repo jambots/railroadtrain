@@ -3249,7 +3249,7 @@ function cameraLoaded(){
     //dbuga('cameraLoaded()');
     graphicsEditing=true;
     var image = document.getElementById('cameraImg');
-    graphicsScale=1;
+    graphicsScale=1.25;
     graphicsOffsetX=0;
     graphicsOffsetY=0;
     //dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
@@ -3510,7 +3510,7 @@ function moveGraphics(){
   dbuga('deltaY='+deltaY);
   dbuga('deltaR='+deltaR);
 
-  graphicsScale=graphicsStartScale*(deltaR/screenWidth);
+  graphicsScale=graphicsStartScale+(deltaR/screenWidth);
   dbuga('graphicsScale='+graphicsScale);
   graphicsOffsetX=graphicsStartOffsetX+deltaX;
   dbuga('graphicsOffsetX='+graphicsOffsetX);
