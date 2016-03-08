@@ -3258,6 +3258,8 @@ function cameraLoaded(){
     //processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
     updateColorsCanv();
     }
+
+
 function previewGraphics(){
   var image = document.getElementById('cameraImg');
   var graphicsCtx=graphicsCanv.getContext('2d');
@@ -3274,8 +3276,8 @@ function previewGraphics(){
 
   carButton.sampleWidth=image.naturalWidth*graphicsScale;
   carButton.sampleHeight=carButton.sampleWidth/4;
-  carButton.sampleTop=image.naturalHeight/2-carButton.sampleHeight/2+graphicsOffsetY;
-  carButton.sampleLeft=image.naturalWidth/2-carButton.sampleWidth/2+graphicsOffsetX;
+  carButton.sampleTop=image.naturalHeight/2-carButton.sampleHeight/2+graphicsOffsetY*graphicsScale;
+  carButton.sampleLeft=image.naturalWidth/2-carButton.sampleWidth/2+graphicsOffsetX*graphicsScale;
 
   carButton.c=graphicsSelectedColorNum;
   carButton.g= graphicsSelectedGraphic;
@@ -3293,10 +3295,12 @@ function previewGraphics(){
   
   }
 function testImageSample(image, scale, offsetX, offsetY){
+  if(scale<.1){return false;}
+
   var sampleWidth=image.naturalWidth*scale;
   var sampleHeight=sampleWidth/4; //800 x 200
-  var sampleTop=image.naturalHeight/2-sampleHeight/2+offsetY;
-  var sampleLeft=image.naturalWidth/2-sampleWidth/2+offsetX;
+  var sampleTop=image.naturalHeight/2-sampleHeight/2+offsetY*scale;
+  var sampleLeft=image.naturalWidth/2-sampleWidth/2+offsetX*scale;
 
   if(sampleLeft<0){return false;}
   if(sampleLeft+sampleWidth>=image.naturalWidth){return false;}
