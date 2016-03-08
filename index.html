@@ -1337,7 +1337,7 @@ function populateGraphics(){
   var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
   graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
   graphicsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
-  cameraCanv.style.display="none";
+  //cameraCanv.style.display="none";
 
   }
 var carsButtons=[];
@@ -3237,16 +3237,39 @@ function onSuccess(imageData) {
     image.src = "data:image/jpeg;base64," + imageData;
     shooting=false;
     }
+var graphicsScale=1;
+var graphicsOffsetX=0;
+var graphicsOffsetY=0;
 function cameraLoaded(){
     dbuga('cameraLoaded()');
     graphicsEditing=true;
     var image = document.getElementById('cameraImg');
-    
+    cameraScale=800/image.naturalWidth;
     dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
-    processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
-    populateGraphics();
+    previewCamera();
+    //processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
+    //populateGraphics();
     }
+function previewCamera(){
+  var image = document.getElementById('cameraImg');
+  
+  var sampleWidth=image.naturalWidth*graphicsScale;
+  var sampleHeight=sampleWidth/4;
+  var sampleTop=image.naturalHeight/2-sampleHeight/2+graphicsOffsetY;
+  var sampleLeft=image.naturalWidth/2-sampleWidth/2+graphicsOffsetX;
 
+  var carButton={"buttonId":"car"}
+  carButton.c=graphicsSelectedColorNum;
+  carButton.g= graphicsSelectedGraphic;
+  carButton.l=leftPad;
+  carButton.r=leftPad+buttonWidth*3;
+  carButton.t=topPad;
+  carButton.b=topPad+buttonHeight*3;
+  carButton.ref=image;
+  var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
+  graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
+  graphicsCtx.drawImage(carButton.ref, sampleLeft, sampleTop, sampleWidth, sampleHeight, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
+  }
 function onFail(message) {
   dbuga('onFail');
   shooting=false;
