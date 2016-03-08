@@ -3244,9 +3244,7 @@ function onSuccess(imageData) {
     image.src = "data:image/jpeg;base64," + imageData;
     shooting=false;
     }
-var graphicsScale=1;
-var graphicsOffsetX=0;
-var graphicsOffsetY=0;
+
 function cameraLoaded(){
     //dbuga('cameraLoaded()');
     graphicsEditing=true;
@@ -3254,11 +3252,11 @@ function cameraLoaded(){
     graphicsScale=1;
     //dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
     populateGraphics();
-    previewCamera();
+    previewGraphics();
     //processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
     updateColorsCanv();
     }
-function previewCamera(){
+function previewGraphics(){
   var image = document.getElementById('cameraImg');
   var graphicsCtx=graphicsCanv.getContext('2d');
   graphicsCtx.lineWidth=cellSize/16;
@@ -3453,6 +3451,13 @@ var graphicsAtX;
 var graphicsAtY;
 var graphicsAtR;
 
+var graphicsStartScale=1;
+var graphicsStartOffsetX=0;
+var graphicsStartOffsetY=0;
+var graphicsScale=1;
+var graphicsOffsetX=0;
+var graphicsOffsetY=0;
+
 function startMoveGraphics(){
   var sumX=0;
   var sumY=0;
@@ -3461,7 +3466,7 @@ function startMoveGraphics(){
     sumY+=graphicsEvent.touches[t].pageY;
     }
   graphicsAtX=sumX/graphicsEvent.touches.length;
-  graphicsAtY=sumX/graphicsEvent.touches.length;
+  graphicsAtY=sumY/graphicsEvent.touches.length;
   var sumR=0;
   for (var t=0; t<graphicsEvent.touches.length; t++){
     var deltaX=graphicsEvent.touches[t].pageX-graphicsAtX;
@@ -3473,6 +3478,11 @@ function startMoveGraphics(){
   graphicsStartX=graphicsAtX;
   graphicsStartY=graphicsAtY;
   graphicsStartR=graphicsAtR;
+
+  graphicsStartScale=graphicsScale;
+  graphicsStartOffsetX=graphicsOffsetX;
+  graphicsStartOffsetY=graphicsOffsetY;
+
   }
 function moveGraphics(){
   var sumX=0;
@@ -3482,7 +3492,7 @@ function moveGraphics(){
     sumY+=graphicsEvent.touches[t].pageY;
     }
   graphicsAtX=sumX/graphicsEvent.touches.length;
-  graphicsAtY=sumX/graphicsEvent.touches.length;
+  graphicsAtY=sumY/graphicsEvent.touches.length;
   var sumR=0;
   for (var t=0; t<graphicsEvent.touches.length; t++){
     var deltaX=graphicsEvent.touches[t].pageX-graphicsAtX;
@@ -3493,9 +3503,18 @@ function moveGraphics(){
   var deltaX=graphicsAtX-graphicsStartX;
   var deltaY=graphicsAtY-graphicsStartY;
   var deltaR=graphicsAtR-graphicsStartR;
+
+  graphicsScale=graphicsStartScale*(deltaR/screenWidth);
+  graphicsOffsetX=graphicsStartOffsetX+deltaX;
+  graphicsOffsetY=graphicsStartOffsetY+deltaY;
+
+  previewGraphics();
+
   dbuga('deltaX='+deltaX);
   dbuga('deltaY='+deltaY);
   dbuga('deltaR='+deltaR);
+
+
   }
 function fixCamera(){
   transformString='';
