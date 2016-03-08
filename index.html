@@ -3293,8 +3293,8 @@ function previewCamera(){
   }
 
 function handleEventLandscape(e){
-  //dbuga('handleEventLandscape '+e.type);
-  //dbuga('graphicsUp:'+graphicsUp+' graphicsTouching:'+graphicsTouching);
+  dbug('handleEventLandscape '+e.type);
+  dbuga('graphicsUp:'+graphicsUp+' graphicsTouching:'+graphicsTouching);
   if(e.touches.length>0){
     var t=e.touches[0];
     }
@@ -3395,7 +3395,7 @@ function handleEventLandscape(e){
         }
       }
     }
-  if(e.type=="touchmove"){// still in handleLandscapeEvent
+  if(e.type=="touchmove"){// still in handleEventLandscape
     if(carsUp){
       return false;
       }
