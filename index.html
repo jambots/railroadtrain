@@ -3249,7 +3249,7 @@ function cameraLoaded(){
     //dbuga('cameraLoaded()');
     graphicsEditing=true;
     var image = document.getElementById('cameraImg');
-    graphicsScale=1.25;
+    graphicsScale=.9;
     graphicsOffsetX=0;
     graphicsOffsetY=0;
     //dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
@@ -3285,13 +3285,25 @@ function previewGraphics(){
   carButton.b=topPad+buttonHeight*3;
   carButton.ref=image;
   var carGrid=buttonWidth*3/60;
+
   var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
   graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
   graphicsCtx.drawImage(carButton.ref, carButton.sampleLeft, carButton.sampleTop, carButton.sampleWidth, carButton.sampleHeight, carButton.l+carGrid*3, carButton.t+carGrid*3, buttonWidth*3-carGrid*5, buttonHeight*3-carGrid*5);
   console.log(carButton);
   
   }
+function testImageSample(image, scale, offsetX, offsetY){
+  var sampleWidth=image.naturalWidth*graphicsScale;
+  var sampleHeight=carButton.sampleWidth/4; //800 x 200
+  var sampleTop=image.naturalHeight/2-carButton.sampleHeight/2+graphicsOffsetY;
+  var sampleLeft=image.naturalWidth/2-carButton.sampleWidth/2+graphicsOffsetX;
 
+  if(sampleLeft<0){return false;}
+  if(sampleLeft+sampleWidth>=image.naturalWidth){return false;}
+  if(sampleTop<0){return false;}
+  if(sampleTop+sampleHeight>=image.naturalHeight){return false;}
+  return true;
+  }
 function handleEventLandscape(e){
   dbug('handleEventLandscape '+e.type);
   dbuga(''+graphicsUp+' '+graphicsEditing+' '+graphicsTouching);
@@ -3509,14 +3521,20 @@ function moveGraphics(){
   dbuga('deltaX='+deltaX);
   dbuga('deltaY='+deltaY);
   dbuga('deltaR='+deltaR);
+  var tryScale=graphicsStartScale+(deltaR/screenWidth);
+  var tryX=graphicsStartOffsetX+deltaX;
+  var tryY=graphicsStartOffsetY+deltaY;
+  var image=document.getElementById('cameraImg');
+  if(testImageSample(image, tryScale, tryX, tryY)){
+    graphicsScale=tryScale;
+    graphicsOffsetX=tryX;
+    graphicsOffsetY=tryY;
+    }
 
-  graphicsScale=graphicsStartScale+(deltaR/screenWidth);
+
   dbuga('graphicsScale='+graphicsScale);
-  graphicsOffsetX=graphicsStartOffsetX+deltaX;
   dbuga('graphicsOffsetX='+graphicsOffsetX);
-  graphicsOffsetY=graphicsStartOffsetY+deltaY;
   dbuga('graphicsOffsetY='+graphicsOffsetY);
-
   previewGraphics();
   dbuga('completed moveGraphics');
   }
