@@ -3264,6 +3264,7 @@ function cameraLoaded(){
 function postviewGraphics(){
   cameraCanv.width=800;
   cameraCanv.height=200;
+  cameraCanv.style.display="none";
   var image = document.getElementById('cameraImg');
   var offsetMultiplier=graphicsScale*image.naturalWidth/400;
   var graphicsCtx=graphicsCanv.getContext('2d');
@@ -3515,10 +3516,10 @@ function saveGraphics(){
   
   image.src = dataURL;
   processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
-  populateGraphics();
+  
   populateCars();
   updateColorsCanv();
-
+populateGraphics();
   }
 var graphicsTouching=false;
 var graphicsEvent;
