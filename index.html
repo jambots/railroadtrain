@@ -3354,7 +3354,11 @@ function handleEventLandscape(e){
   if(e.touches.length>0){
     var t=e.touches[0];
     }
-  //else{return false;}
+  else{
+    if(graphicsEditing==false){
+      return false;
+      }
+    }
   if(e.type=="touchstart"){
     if(t.pageY>landscapeScreenHeight-colorsHeight){ // touched in colors menu
       if(colorsUp==false){
@@ -3388,7 +3392,7 @@ function handleEventLandscape(e){
           }
         }
       }
-    else{ // touch start above colors 
+    else{ // touch start above colors menu
       if(carsUp){
         var found=false;
         for (var cb=0; cb<carsButtons.length; cb++){
@@ -3456,8 +3460,13 @@ function handleEventLandscape(e){
         else{populateGraphics();}
 
         }
+      else{// normal landscape start pan zoom
+        prevTouchX=t.pageX;
+        prevTouchY=t.pageY-adHeight;
+        }    
       }
     }
+  //end of touchstarts
   if(e.type=="touchmove"){// still in handleEventLandscape
     if(carsUp){
       return false;
