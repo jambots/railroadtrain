@@ -3260,6 +3260,41 @@ function cameraLoaded(){
     }
 
 
+function postviewGraphics(){
+  cameraCanv.width=800;
+  cameraCanv.height=200;
+  var image = document.getElementById('cameraImg');
+  var offsetMultiplier=graphicsScale*image.naturalWidth/400;
+  var graphicsCtx=graphicsCanv.getContext('2d');
+  graphicsCtx.lineWidth=cellSize/16;
+  var graphic=graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic];
+
+  var buttonWidth=cellSize*3;
+  var buttonHeight=cellSize*1;
+  var radius=cellSize/8;
+  var pad=cellSize/10;
+  var topPad=(landscapeScreenHeight-colorsHeight-adHeight-buttonHeight*4)/2;
+  var leftPad=(screenHeight-buttonWidth*3)/2;  
+  var carButton={"buttonId":"car"}
+
+  carButton.sampleWidth=image.naturalWidth*graphicsScale;
+  carButton.sampleHeight=carButton.sampleWidth/4;
+  carButton.sampleTop=image.naturalHeight/2-carButton.sampleHeight/2+graphicsOffsetY*offsetMultiplier;
+  carButton.sampleLeft=image.naturalWidth/2-carButton.sampleWidth/2+graphicsOffsetX*offsetMultiplier;
+
+  carButton.c=graphicsSelectedColorNum;
+  carButton.g= graphicsSelectedGraphic;
+  carButton.l=leftPad;
+  carButton.r=leftPad+buttonWidth*3;
+  carButton.t=topPad;
+  carButton.b=topPad+buttonHeight*3;
+  carButton.ref=image;
+  var carGrid=buttonWidth*3/60;
+  var cameraCtx=cameraCanv.getContext('2d');
+  cameraCtx.drawImage(carButton.ref, carButton.sampleLeft, carButton.sampleTop, carButton.sampleWidth, carButton.sampleHeight, 0,0,800,200);
+  //console.log(carButton);
+  
+  }
 function previewGraphics(){
   var image = document.getElementById('cameraImg');
   var offsetMultiplier=graphicsScale*image.naturalWidth/400;
@@ -3460,24 +3495,27 @@ function handleEventLandscape(e){
         }
       else{
         graphicsTouching=false;
+
+        postviewGraphics();
         }
       }
     }
   
   }
+function encode(data){
+  var str = String.fromCharCode.apply(null,data);
+  return btoa(str).replace(/.{76}(?=.)/g,'$&\n');
+  }
 function saveGraphic(){
-  var buttonWidth=cellSize*3;
-  var buttonHeight=cellSize*1;
-  var topPad=(landscapeScreenHeight-colorsHeight-adHeight-buttonHeight*4)/2;
-  var leftPad=(screenHeight-buttonWidth*3)/2;
-  var ctx=graphicsCanv.getContext('2d');
-  var carGrid=buttonWidth*3/60;
-  var imgData=ctx.getImageData(leftPad+carGrid*3, topPad+carGrid*3, buttonWidth*3-carGrid*5, buttonHeight*3-carGrid*5);
-  var imageId= graphicsByColor[graphicsSelectedColorNum][graphicsSelectedGraphic].imageId;
+  var cameraCtx=cameraCanv.getContext('2d');
+  var dataURL = cameraCanv.toDataURL();
+  var imageId= graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].imageId;
   var image=document.getElementById(imageId);
-  image.src = "data:image/jpeg;base64," + imageData;
+  
+  image.src = dataURL;
   processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
   populateCars();
+  updateColorsCanv();
 
   }
 var graphicsTouching=false;
