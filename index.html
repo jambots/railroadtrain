@@ -3255,6 +3255,7 @@ function cameraLoaded(){
     //dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
     populateGraphics();
     previewGraphics();
+    postviewGraphics();
     //processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
     updateColorsCanv();
     }
@@ -3421,7 +3422,7 @@ function handleEventLandscape(e){
             if(graphicsButton.buttonId=="Save"){
               graphicsEditing=false;
               // move to storage, image for now
-              saveGraphic();
+              saveGraphics();
               }
             if(graphicsButton.buttonId=="Cancel"){
               graphicsEditing=false;
@@ -3506,7 +3507,7 @@ function encode(data){
   var str = String.fromCharCode.apply(null,data);
   return btoa(str).replace(/.{76}(?=.)/g,'$&\n');
   }
-function saveGraphic(){
+function saveGraphics(){
   var cameraCtx=cameraCanv.getContext('2d');
   var dataURL = cameraCanv.toDataURL();
   var imageId= graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].imageId;
@@ -3514,6 +3515,7 @@ function saveGraphic(){
   
   image.src = dataURL;
   processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
+  populateGraphics();
   populateCars();
   updateColorsCanv();
 
