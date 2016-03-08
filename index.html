@@ -3236,7 +3236,6 @@ function onSuccess(imageData) {
       };
     image.src = "data:image/jpeg;base64," + imageData;
     shooting=false;
-    updateColorsCanv();
     }
 var graphicsScale=1;
 var graphicsOffsetX=0;
@@ -3250,6 +3249,7 @@ function cameraLoaded(){
     previewCamera();
     //processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
     //populateGraphics();
+    updateColorsCanv();
     }
 function previewCamera(){
   var image = document.getElementById('cameraImg');
@@ -3291,6 +3291,8 @@ function onFail(message) {
   populateGraphics();
   }
 function handleEventLandscape(e){
+  dbuga('handleEventLandscape '+e.type);
+  dbuga('graphicsUp:'+graphicsUp+' grapicsTouching:'+grapicsTouching);
   if(e.touches.length>0){
     var t=e.touches[0];
     }
