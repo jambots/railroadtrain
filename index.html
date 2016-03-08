@@ -3244,7 +3244,7 @@ function cameraLoaded(){
     dbuga('cameraLoaded()');
     graphicsEditing=true;
     var image = document.getElementById('cameraImg');
-    cameraScale=800/image.naturalWidth;
+    graphicsScale=1;
     dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
     previewCamera();
     //processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
@@ -3252,13 +3252,22 @@ function cameraLoaded(){
     }
 function previewCamera(){
   var image = document.getElementById('cameraImg');
-  
-  var sampleWidth=image.naturalWidth*graphicsScale;
-  var sampleHeight=sampleWidth/4;
-  var sampleTop=image.naturalHeight/2-sampleHeight/2+graphicsOffsetY;
-  var sampleLeft=image.naturalWidth/2-sampleWidth/2+graphicsOffsetX;
+  var graphicsCtx=graphicsCanv.getContext('2d');
+  graphicsCtx.lineWidth=cellSize/16;
+  var graphic=graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic];
 
+  var buttonWidth=cellSize*3;
+  var buttonHeight=cellSize*1;
+  var radius=cellSize/8;
+  var pad=cellSize/10;
+  var topPad=(landscapeScreenHeight-colorsHeight-adHeight-buttonHeight*4)/2;
+  var leftPad=(screenHeight-buttonWidth*3)/2;  
   var carButton={"buttonId":"car"}
+  carButton.sampleWidth=image.naturalWidth*graphicsScale;
+  carButton.sampleHeight=carButton.sampleWidth/4;
+  carButton.sampleTop=image.naturalHeight/2-carButton.sampleHeight/2+graphicsOffsetY;
+  carButton.sampleLeft=image.naturalWidth/2-carButton.sampleWidth/2+graphicsOffsetX;
+
   carButton.c=graphicsSelectedColorNum;
   carButton.g= graphicsSelectedGraphic;
   carButton.l=leftPad;
@@ -3268,7 +3277,9 @@ function previewCamera(){
   carButton.ref=image;
   var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
   graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
-  graphicsCtx.drawImage(carButton.ref, sampleLeft, sampleTop, sampleWidth, sampleHeight, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
+  graphicsCtx.drawImage(carButton.ref, carButton.sampleLeft, carButton.sampleTop, carButton.sampleWidth, carButton.sampleHeight, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
+  console.log(carButton);
+  
   }
 function onFail(message) {
   dbuga('onFail');
