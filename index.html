@@ -1286,7 +1286,7 @@ function populateGraphics(){
   //dbuga('populateGraphics');
   graphicsCanv.width=screenHeight;
   var graphicsCtx=graphicsCanv.getContext('2d');
-  graphicsCtx.lineWidth=cellSize/16;
+  graphicsCtx.lineWidth=cellSize/8;
   var graphic=graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic];
 
   var buttonWidth=cellSize*3;
@@ -1297,8 +1297,8 @@ function populateGraphics(){
   var leftPad=(screenHeight-buttonWidth*3)/2;
   graphicsButtons=[];
 
-  var t=topPad+buttonHeight*3.5;
-  var b=topPad+buttonHeight*4;
+  var t=topPad+buttonHeight*3.25;
+  var b=topPad+buttonHeight*4.25;
   if(graphicsEditing==false){
     graphicsButtons.push({"buttonId":"Done", "highlighted":false, "l":leftPad+buttonWidth*0,"r":leftPad+buttonWidth*1, "t":t,"b":b});
     graphicsButtons.push({"buttonId":"Camera", "highlighted":false,"l":leftPad+buttonWidth*1,"r":leftPad+buttonWidth*2, "t":t,"b":b});
@@ -3294,7 +3294,7 @@ function previewCamera(){
 
 function handleEventLandscape(e){
   dbug('handleEventLandscape '+e.type);
-  dbuga('graphicsUp:'+graphicsUp+' graphicsEditing:'+graphicsEditing+' graphicsTouching:'+graphicsTouching);
+  dbuga(''+graphicsUp+' '+graphicsEditing+' '+graphicsTouching);
   if(e.touches.length>0){
     var t=e.touches[0];
     }
@@ -3385,11 +3385,12 @@ function handleEventLandscape(e){
         if(found==false){
           //dbuga('closeModals found=false 2');
           if(graphicsEditing==false){
-            closeModals(); 
+            closeModals(); // tap closed on background touch
             }
-          else{
-            graphicsTouching=true;
+          else{            
             graphicsEvent=e;
+            graphicsTouching=true;
+            startMoveGraphics();
             dbuga('graphics  touchstart! '+e.touches.length);
             }
           }
@@ -3412,6 +3413,7 @@ function handleEventLandscape(e){
       }
     if((graphicsUp)&&(graphicsTouching)){
       graphicsEvent=e;
+      moveGraphics();
       dbuga('graphics  touchmove! '+e.touches.length);
       }
     else{
@@ -3431,6 +3433,12 @@ function handleEventLandscape(e){
     if((graphicsUp)&&(graphicsTouching)){
       graphicsEvent=e;
       dbuga('graphics  touchend! '+e.touches.length);
+      if(e.touches.length >0){
+        startMoveGraphics();
+        }
+      else{
+        graphicsTouching=false;
+        }
       }
     }
   
@@ -3438,6 +3446,57 @@ function handleEventLandscape(e){
 var graphicsTouching=false;
 var graphicsEvent;
 
+var graphicsStartX;
+var graphicsStartY;
+var graphicsStartR;
+var graphicsAtX;
+var graphicsAtY;
+var graphicsAtR;
+
+function startMoveGraphics(){
+  var sumX=0;
+  var sumY=0;
+  for (var t=0; t<graphicsEvent.touches.length; t++){
+    sumX+=graphicsEvent.touches[t].pageX;
+    sumY+=graphicsEvent.touches[t].pageY;
+    }
+  graphicsAtX=sumX/graphicsEvent.touches.length;
+  graphicsAtY=sumX/graphicsEvent.touches.length;
+  var sumR=0;
+  for (var t=0; t<graphicsEvent.touches.length; t++){
+    var deltaX=graphicsEvent.touches[t].pageX-graphicsAtX;
+    var deltaY=graphicsEvent.touches[t].pageY-graphicsAtY;
+    sumR+=Math.sqrt(deltaX*deltaX+deltaY*deltaY);
+    }
+  graphicsAtR=sumR/graphicsEvent.touches.length;
+
+  graphicsStartX=graphicsAtX;
+  graphicsStartY=graphicsAtY;
+  graphicsStartR=graphicsAtR;
+  }
+function moveGraphics(){
+  var sumX=0;
+  var sumY=0;
+  for (var t=0; t<graphicsEvent.touches.length; t++){
+    sumX+=graphicsEvent.touches[t].pageX;
+    sumY+=graphicsEvent.touches[t].pageY;
+    }
+  graphicsAtX=sumX/graphicsEvent.touches.length;
+  graphicsAtY=sumX/graphicsEvent.touches.length;
+  var sumR=0;
+  for (var t=0; t<graphicsEvent.touches.length; t++){
+    var deltaX=graphicsEvent.touches[t].pageX-graphicsAtX;
+    var deltaY=graphicsEvent.touches[t].pageY-graphicsAtY;
+    sumR+=Math.sqrt(deltaX*deltaX+deltaY*deltaY);
+    }
+  graphicsAtR=sumR/graphicsEvent.touches.length;
+  var deltaX=graphicsAtX-graphicsStartX;
+  var deltaY=graphicsAtY-graphicsStartY;
+  var deltaR=graphicsAtR-graphicsStartR;
+  dbuga('deltaX='+deltaX);
+  dbuga('deltaY='+deltaY);
+  dbuga('deltaR='+deltaR);
+  }
 function fixCamera(){
   transformString='';
   transformString+='rotateX(0deg) ';
