@@ -3235,7 +3235,6 @@ function onFail(message) {
   }
 function onSuccess(imageData) {
     //dbuga('success');
-    populateGraphics();
 
     var image = document.getElementById('cameraImg');
     image.style.display="block";
@@ -3254,6 +3253,7 @@ function cameraLoaded(){
     var image = document.getElementById('cameraImg');
     graphicsScale=1;
     //dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
+    populateGraphics();
     previewCamera();
     //processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
     updateColorsCanv();
@@ -3420,9 +3420,9 @@ function handleEventLandscape(e){
       else{cameraRotationDegrees[focusTrain]-=deltaX/15;}
       if(combinedZoom[focusTrain]<0){combinedZoom[focusTrain]=0;}
       if(combinedZoom[focusTrain]>100){combinedZoom[focusTrain]=100;}
+      prevTouchX=t.pageX;
+      prevTouchY=t.pageY-adHeight;
       }
-    prevTouchX=t.pageX;
-    prevTouchY=t.pageY-adHeight;
     }
   if(e.type == "touchend"){
     if((graphicsUp)&&(graphicsTouching)){
