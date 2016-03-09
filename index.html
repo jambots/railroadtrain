@@ -1671,11 +1671,15 @@ function init(){
   window.setTimeout('preloadTick()',10);
   } 
 function measureLocalStorage(){
-  for(var x in localStorage)console.log(x+"="+((localStorage[x].length * 2)/1024/1024).toFixed(2)+" MB");
+  for(var x in localStorage){
+    dbuga(x+"="+((localStorage[x].length * 2)/1024/1024).toFixed(2)+" MB");
+    }
   }
 function localStorageToImages(){
 
-
+  if(localStorage.getItem('graphicsByColor') != null){
+    graphicsByColor=JSON.parse(localStorage.getItem('graphicsByColor'));
+    }
   for (var d=0; d<12; d++){
     if(localStorage.getItem('default'+d)!=null){
       document.getElementById('default'+d).src=localStorage.getItem('default'+d);
@@ -3437,6 +3441,7 @@ function handleEventLandscape(e){
               }
             if(graphicsButton.buttonId=="Transparent"){
               graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=!(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans);
+              localStorage.setItem('graphicsByColor', JSON.stringify(graphicsByColor));
               processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
               populateCars();
               }
@@ -3444,6 +3449,8 @@ function handleEventLandscape(e){
               graphicsEditing=false;
               // move to storage, image for now
               saveGraphics();
+              graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=false;
+              localStorage.setItem('graphicsByColor', JSON.stringify(graphicsByColor));
               }
             if(graphicsButton.buttonId=="Cancel"){
               graphicsEditing=false;
@@ -3535,7 +3542,7 @@ function encode(data){
   }
 function saveGraphics(){
   var cameraCtx=cameraCanv.getContext('2d');
-  var dataURL = cameraCanv.toDataURL('image/jpeg') ;
+  var dataURL = cameraCanv.toDataURL('image/jpeg');
   var imageId= graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].imageId;
   var image=document.getElementById(imageId);
   image.onload=function (){
