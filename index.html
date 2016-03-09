@@ -96,7 +96,7 @@ width:768px;
 </style>
 
 <script type="text/javascript" charset="utf-8">
-
+/*
 var db;
 function setupDb(){
     db = window.sqlitePlugin.openDatabase({name: "my.db", location: 2});
@@ -113,7 +113,7 @@ function setupDb(){
       localStorage.setItem("nameStack", JSON.stringify([]));
       }
   }
-
+*/
 
 
 var comQueue=new Array();
@@ -1648,7 +1648,7 @@ function init(){
   //dbuga('initSound()');
 
 
-  initSound();
+  ////initSound();
 
   initGeometry();
   setupNav();
@@ -1675,7 +1675,8 @@ function init(){
   for(var f=0; f<faceData.tank.length; f++){
     style.innerHTML += '.blacktank' + f + '{-webkit-backface-visibility:visible; -webkit-transform: ' + faceData.tank[f].trans + ' '+ scaleString +';}';
     }  
-
+  localStorageToImages();
+  
   document.getElementsByTagName('head')[0].appendChild(style);
 
   document.addEventListener('deviceready', function () {
@@ -1686,6 +1687,14 @@ function init(){
   //dbuga('start preloading');
   window.setTimeout('preloadTick()',10);
   } 
+
+function localStorageToImages(){
+  for (var d=0; d<12; d++){
+    if(localStorage.getItem('default'+d)!=null){
+      document.getElementById('default'+d).src=localStorage.getItem('default'+d);
+      }
+    }
+  }
 function resumeInit(){
   //dbuga('resumeInit()');
   changeView();
@@ -3546,6 +3555,8 @@ function saveGraphics(){
     saveComplete();
     };
   image.src = dataURL;
+  localStorage.setItem(imageId, dataURL);
+
   }
 function saveComplete(){
   processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
