@@ -96,24 +96,7 @@ width:768px;
 </style>
 
 <script type="text/javascript" charset="utf-8">
-/*
-var db;
-function setupDb(){
-    db = window.sqlitePlugin.openDatabase({name: "my.db", location: 2});
-    dbuga('setupDb() ');
-    
-    if(localStorage.getItem("tableCreated") == "false"){
-      dbuga('tableCreated==false ');
-      db.transaction(function(tx) {
-        tx.executeSql('DROP TABLE IF EXISTS test_table');
-        tx.executeSql('CREATE TABLE IF NOT EXISTS test_table (id integer primary key, image_url text, image_data text)');
-        localStorage.setItem("tableCreated", "true");
-        dbuga('tableCreated==true ');
-        });
-      localStorage.setItem("nameStack", JSON.stringify([]));
-      }
-  }
-*/
+
 
 
 var comQueue=new Array();
@@ -3378,7 +3361,7 @@ function testImageSample(image, scale, offsetX, offsetY){
 
 
 function handleEventLandscape(e){
-  dbug('handleEventLandscape '+e.type);
+  //dbug('handleEventLandscape '+e.type);
   //dbuga(''+graphicsUp+' '+graphicsEditing+' '+graphicsTouching);
   if(e.touches.length>0){
     var t=e.touches[0];
@@ -3432,7 +3415,7 @@ function handleEventLandscape(e){
             }
           }
         if(found==false){
-          dbug('closeModals()');
+          //dbug('closeModals()');
           closeModals();
           }
         }
@@ -3469,7 +3452,7 @@ function handleEventLandscape(e){
               }
             found=true;
             if(graphicsButton.buttonId=="car"){
-              dbuga('car touchstart');
+              //dbuga('car touchstart');
               found=false;              
               }
             }
@@ -3483,7 +3466,7 @@ function handleEventLandscape(e){
             graphicsEvent=e;
             graphicsTouching=true;
             startMoveGraphics();
-            dbuga('graphics  touchstart! '+e.touches.length);
+            //dbuga('graphics  touchstart! '+e.touches.length);
             }
           }
         else{populateGraphics();}
@@ -3511,7 +3494,7 @@ function handleEventLandscape(e){
     if((graphicsUp)&&(graphicsTouching)){
       graphicsEvent=e;
       moveGraphics();
-      dbuga('graphics  touchmove! '+e.touches.length);
+      //dbuga('graphics  touchmove! '+e.touches.length);
       }
     else{
       //normal drag of pan zoom camera on table
@@ -3529,7 +3512,7 @@ function handleEventLandscape(e){
   if(e.type == "touchend"){
     if((graphicsUp)&&(graphicsTouching)){
       graphicsEvent=e;
-      dbuga('graphics  touchend! '+e.touches.length);
+      //dbuga('graphics  touchend! '+e.touches.length);
       if(e.touches.length >0){
         startMoveGraphics();
         }
@@ -3641,7 +3624,7 @@ function moveGraphics(){
     graphicsOffsetX=tryX;
     graphicsOffsetY=tryY;
     moved=true;
-    dbuga('all');
+    //dbuga('all');
     }
   if(moved==false){
     if(testImageSample(image, graphicsScale, tryX, tryY)){// omit scale
@@ -3652,7 +3635,7 @@ function moveGraphics(){
       graphicsStartR=graphicsAtR;
       graphicsStartScale=graphicsScale;
 
-      dbuga('omit Scale');
+      //dbuga('omit Scale');
       }
     }
   if(moved==false){
@@ -3662,7 +3645,7 @@ function moveGraphics(){
 
       graphicsStartX=graphicsAtX;
       graphicsStartOffsetX=graphicsOffsetX;
-      dbuga('omit X');
+      //dbuga('omit X');
       }
     }
   if(moved==false){
@@ -3672,11 +3655,11 @@ function moveGraphics(){
       graphicsStartY=graphicsAtY;
       graphicsStartOffsetY=graphicsOffsetY;      
       moved=true;
-      dbuga('omit Y');
+      //dbuga('omit Y');
       }
     }
   if(moved==false){
-    dbuga('no move');
+    //dbuga('no move');
     }
   //dbuga('graphicsScale='+graphicsScale);
   //dbuga('graphicsOffsetX='+graphicsOffsetX);
