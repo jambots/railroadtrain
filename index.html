@@ -1670,8 +1670,12 @@ function init(){
   //dbuga('start preloading');
   window.setTimeout('preloadTick()',10);
   } 
-
+function measureLocalStorage(){
+  for(var x in localStorage)console.log(x+"="+((localStorage[x].length * 2)/1024/1024).toFixed(2)+" MB");
+  }
 function localStorageToImages(){
+
+
   for (var d=0; d<12; d++){
     if(localStorage.getItem('default'+d)!=null){
       document.getElementById('default'+d).src=localStorage.getItem('default'+d);
@@ -3531,7 +3535,7 @@ function encode(data){
   }
 function saveGraphics(){
   var cameraCtx=cameraCanv.getContext('2d');
-  var dataURL = cameraCanv.toDataURL();
+  var dataURL = cameraCanv.toDataURL('image/jpeg') ;
   var imageId= graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].imageId;
   var image=document.getElementById(imageId);
   image.onload=function (){
