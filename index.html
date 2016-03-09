@@ -96,6 +96,26 @@ width:768px;
 </style>
 
 <script type="text/javascript" charset="utf-8">
+
+var db;
+function setupDb(){
+    db = window.sqlitePlugin.openDatabase({name: "my.db", location: 2});
+    dbuga('setupDb() ');
+    
+    if(localStorage.getItem("tableCreated") == "false"){
+      dbuga('tableCreated==false ');
+      db.transaction(function(tx) {
+        tx.executeSql('DROP TABLE IF EXISTS test_table');
+        tx.executeSql('CREATE TABLE IF NOT EXISTS test_table (id integer primary key, image_url text, image_data text)');
+        localStorage.setItem("tableCreated", "true");
+        dbuga('tableCreated==true ');
+        });
+      localStorage.setItem("nameStack", JSON.stringify([]));
+      }
+  }
+
+
+
 var comQueue=new Array();
 
 var cellSize=96;
@@ -3522,14 +3542,18 @@ function saveGraphics(){
   var dataURL = cameraCanv.toDataURL();
   var imageId= graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].imageId;
   var image=document.getElementById(imageId);
-  
+  image.onload=function (){
+    saveComplete();
+    };
   image.src = dataURL;
-  processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
-  
-  populateCars();
-  updateColorsCanv();
-populateGraphics();
   }
+function saveComplete(){
+  processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
+  populateCars();
+  populateGraphics();
+  updateColorsCanv();
+  }
+
 var graphicsTouching=false;
 var graphicsEvent;
 

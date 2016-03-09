@@ -30,6 +30,8 @@
 <feature name="http://api.phonegap.com/1.0/network"/>
 <feature name="http://api.phonegap.com/1.0/media"/>
 -->
+<gap:plugin name="io.litehelpers.cordova.sqlitestorage" version="0.7.5" />
+
 <icon src="railroad_train.png" />
 
 <gap:splash src="res/splash.png" />
