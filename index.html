@@ -3414,11 +3414,13 @@ function handleEventLandscape(e){
           }
         }
       else{ 
+ 
         var tryFocus=Math.floor((screenHeight-t.pageX)/colorsHeight);
+        dbuga('tryFocus='+tryFocus);
         if(tryFocus<trainData.length){
           focusTrain=tryFocus;
           //dbuga('updateColorsCanv tryFocus<trainData.length');
-          closeModals();
+          //closeModals();
           updateColorsCanv();
           }
         if(t.pageX<colorsHeight){// x circle
