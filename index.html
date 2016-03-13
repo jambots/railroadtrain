@@ -1278,7 +1278,6 @@ var graphicsSelectedColorNum=0;
 var graphicsSelectedGraphic=0;
 var graphicsEditing=false;
 function openGraphics(carButton){
-  dbuga('openGraphics('+JSON.stringify(carButton)+')');
   graphicsSelectedColorNum=carButton.c;
   graphicsSelectedGraphic=carButton.g;
   populateGraphics();
@@ -1286,7 +1285,7 @@ function openGraphics(carButton){
 }
 var graphicsButtons=[];
 function populateGraphics(){
-  dbug('populateGraphics');
+  //dbuga('populateGraphics');
   graphicsCanv.width=screenHeight;
   var graphicsCtx=graphicsCanv.getContext('2d');
   graphicsCtx.lineWidth=cellSize/8;
@@ -1299,7 +1298,6 @@ function populateGraphics(){
   var topPad=(landscapeScreenHeight-colorsHeight-adHeight-buttonHeight*4)/2;
   var leftPad=(screenHeight-buttonWidth*3)/2;
   graphicsButtons=[];
-  dbuga('populateGraphics 2');
 
   var t=topPad+buttonHeight*3.25;
   var b=topPad+buttonHeight*4.25;
@@ -1313,8 +1311,7 @@ function populateGraphics(){
     graphicsButtons.push({"buttonId":"Retake", "highlighted":false, "l":leftPad+buttonWidth*1,"r":leftPad+buttonWidth*2, "t":t,"b":b});
     graphicsButtons.push({"buttonId":"Cancel", "highlighted":false, "l":leftPad+buttonWidth*2,"r":leftPad+buttonWidth*3, "t":t,"b":b});
     }
-    dbuga('populateGraphics 3');
-
+  
 
   for(var gb=0; gb<graphicsButtons.length; gb++){
     graphicsCtx.strokeStyle="rgba(42,42,42,.25)";
@@ -1329,7 +1326,7 @@ function populateGraphics(){
     graphicsCtx.textBaseline="middle";
     graphicsCtx.fillText(graphicsButtons[gb].buttonId, cx,cy);
     }
-  dbuga('populateGraphics 8');
+
   var carButton={"buttonId":"car"}
   carButton.c=graphicsSelectedColorNum;
   carButton.g= graphicsSelectedGraphic;
@@ -1343,14 +1340,13 @@ function populateGraphics(){
   graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
   graphicsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
   //cameraCanv.style.display="none";
-  dbuga('populateGraphics 9');
 
   }
 var carsButtons=[];
 
 
 function populateCars(){
-  //dbug('populateCars()');
+  dbug('populateCars()');
   carsButtons=[];
   var buttonWidth=cellSize*3;
   var buttonHeight=cellSize*1;
@@ -1366,10 +1362,11 @@ function populateCars(){
 
 //[graphicsSelectedGraphic];
   for (var i=0; i<graphicsByColor[colorArray[focusTrain]].length; i++){
+    dbuga('i='+i);
     var graphic=graphicsByColor[colorArray[focusTrain]][i];
     
     var carButton={"buttonId":"car_"+focusTrain+"-"+i};
-    //dbuga(carButton.buttonId);
+    dbuga(carButton.buttonId);
     carButton.c=focusTrain;
     carButton.g=i;
     carButton.l=leftPad+buttonWidth*graphic.x;
@@ -3302,6 +3299,7 @@ function cameraLoaded(){
     populateGraphics();
     previewGraphics();
     postviewGraphics();
+    //processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
     updateColorsCanv();
     }
 
@@ -3417,8 +3415,7 @@ function handleEventLandscape(e){
         if(tryFocus<trainData.length){
           focusTrain=tryFocus;
           //dbuga('updateColorsCanv tryFocus<trainData.length');
-          //closeModals();
-          if(carsUp){populateCars();}
+          closeModals();
           updateColorsCanv();
           }
         if(t.pageX<colorsHeight){// x circle
@@ -4340,7 +4337,6 @@ function graphicsTick(){
   var color;
   if(atColor<colorArray.length){
     color=colorArray[atColor];
-    dbuga('atColor='+atColor+' atGraphic='+atGraphic  );
     processGraphic(atColor, atGraphic);
     atGraphic++;
     if(atGraphic>=graphicsByColor[color].length){
@@ -4354,7 +4350,6 @@ function graphicsTick(){
     }
   }
 function processGraphic(colorNum, graphicNum){
-  dbuga("processGraphic("+colorNum+", "+graphicNum+")");
   var color=colorArray[colorNum];
   
   var imageId= graphicsByColor[color][graphicNum].imageId;
@@ -4618,7 +4613,7 @@ function placeWithin(canvasRef, imageRef){
 
 
 
-<div id="debugDiv" style="display:none; position:absolute; top:0px; left:10px; font-size:24px; width:750px; background-color:rgba(255,255,255,.75);"></div>
+<div id="debugDiv" style="display:none; position:absolute; top:0px; left:10px; font-size:24px; width:750px;"></div>
 
 <div id="sources" style="display:none;">
   <div id="tiledestblue" class="tiledestblue"></div>
