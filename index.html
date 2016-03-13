@@ -1360,6 +1360,7 @@ function populateCars(){
 //[graphicsSelectedGraphic];
   for (var i=0; i<graphicsByColor[colorArray[focusTrain]].length; i++){
     var graphic=graphicsByColor[colorArray[focusTrain]][i];
+    var carButton={"buttonId":"car_"+focusTrain+"-"+i};
     carButton.c=focusTrain;
     carButton.g=i;
     carButton.l=leftPad+buttonWidth*graphic.x;
