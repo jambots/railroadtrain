@@ -1359,15 +1359,16 @@ function populateCars(){
 
 //[graphicsSelectedGraphic];
   for (var i=0; i<graphicsByColor[colorArray[focusTrain]].length; i++){
-      var graphic=graphicsByColor[colorArray[focusTrain]][i];
-      carButton.c=focusTrain;
-      carButton.g=i;
-      carButton.l=leftPad+buttonWidth*graphic.x;
-      carButton.r=leftPad+buttonWidth*graphic.x+buttonWidth;
-      carButton.t=topPad+buttonHeight*graphic.y;
-      carButton.b=topPad+buttonHeight*graphic.y+buttonHeight;
-      carButton.ref=graphic.ref;
-      carsButtons.push(carButton);
+    var graphic=graphicsByColor[colorArray[focusTrain]][i];
+    carButton.c=focusTrain;
+    carButton.g=i;
+    carButton.l=leftPad+buttonWidth*graphic.x;
+    carButton.r=leftPad+buttonWidth*graphic.x+buttonWidth;
+    carButton.t=topPad+buttonHeight*graphic.y;
+    carButton.b=topPad+buttonHeight*graphic.y+buttonHeight;
+    carButton.ref=graphic.ref;
+    carsButtons.push(carButton);
+    }
 
 /*
   for (var c=0; c<4; c++){
@@ -4334,13 +4335,13 @@ function graphicsTick(){
     if(atGraphic>=graphicsByColor[color].length){
       atGraphic=0;
       atColor++;
-    }
+      }
     window.setTimeout('graphicsTick()',10);
-  }
+    }
   else{// finished last color so resume
     resumeInit();
+    }
   }
-}
 function processGraphic(colorNum, graphicNum){
   var color=colorArray[colorNum];
   
