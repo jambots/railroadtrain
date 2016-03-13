@@ -112,7 +112,6 @@ var colorsUp=true;
 
 var cubeSize=cellSize;
 
-var focusTrain=0;
 var faceData={};
 function setupFaceData(){
   var s=cubeSize;
@@ -1290,7 +1289,7 @@ function populateGraphics(){
   graphicsCanv.width=screenHeight;
   var graphicsCtx=graphicsCanv.getContext('2d');
   graphicsCtx.lineWidth=cellSize/8;
-  var graphic=graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic];
+  var graphic=populateCars
 
   var buttonWidth=cellSize*3;
   var buttonHeight=cellSize*1;
@@ -1357,6 +1356,20 @@ function populateCars(){
   //dbuga("leftPad="+leftPad);
   var carsCtx=carsCanv.getContext('2d');
   carsCtx.lineWidth=cellSize/16;
+
+//[graphicsSelectedGraphic];
+  for (var i=0; i<graphicsByColor[colorArray[focusTrain]].length; i++){
+      var graphic=graphicsByColor[colorArray[focusTrain]][i];
+      carButton.c=focusTrain;
+      carButton.g=i;
+      carButton.l=leftPad+buttonWidth*graphic.x;
+      carButton.r=leftPad+buttonWidth*graphic.x+buttonWidth;
+      carButton.t=topPad+buttonHeight*graphic.y;
+      carButton.b=topPad+buttonHeight*graphic.y+buttonHeight;
+      carButton.ref=graphic.ref;
+      carsButtons.push(carButton);
+
+/*
   for (var c=0; c<4; c++){
     for (var g=0; g<3; g++){
     //dbuga(b);
@@ -1372,6 +1385,7 @@ function populateCars(){
       carsButtons.push(carButton);
       }
     }
+*/
   for (var cb=0; cb<carsButtons.length; cb++){
     var carButton=carsButtons[cb];
 
@@ -1602,6 +1616,7 @@ function changeView(){
   adGeometry();
   }
 function init(){
+  initGraphicsByColor();
   camera=document.getElementById("cameraDiv");
   table=document.getElementById("tableDiv");
   zoom=document.getElementById("zoomDiv");
@@ -4272,13 +4287,40 @@ var colorArray=["black","orange","blue","green"];
 var rgbValArray=[[30,30,30],[218,37,28],[0,91,161],[63,179,160]];
 var rgbArray=["rgb(30,30,30)","rgb(218,37,28)","rgb(0,91,161)","rgb(63,179,160)"];
 
+var graphicsByColor={};
+function initGraphicsByColor(){
+  var atDefault=0;
+  for (var c=0; c<colorArray.length; c++){
+    var color=colorArray[c];
+    graphicsByColor[color]=[];
+    var x=0; 
+    var y=0;
+    for (var i=0; i<12; i++){
+      var imageObj={
+        "imageId":"default"+atDefault,
+        "blackTrans":true,
+        "x":x,
+        "y":y        
+        }
+      graphicsByColor[color].push(imageObj);
+      atDefault++;
+      x++;
+      if(x>2){
+        x=0;
+        y++;
+        }
+      }
+    }
+  }
+
+/*
 var graphicsByColor={
   "black":[{"imageId":"default0", "blackTrans":true},{"imageId":"default1", "blackTrans":true},{"imageId":"default2", "blackTrans":true}],
   "orange":[{"imageId":"default3", "blackTrans":true},{"imageId":"default4", "blackTrans":true},{"imageId":"default5", "blackTrans":true}],
   "blue":[{"imageId":"default6", "blackTrans":true},{"imageId":"default7", "blackTrans":false},{"imageId":"default8", "blackTrans":true}],
   "green":[{"imageId":"default9", "blackTrans":false},{"imageId":"default10", "blackTrans":false},{"imageId":"default11", "blackTrans":true}]
 }
-
+*
 //graphicsByColor={"orange":[{"imageId":"bears", "blackTrans":false}], "black":[{"imageId":"bears", "blackTrans":false}], "blue":[{"imageId":"bears", "blackTrans":false}], "green":[{"imageId":"bears", "blackTrans":false}]};
 var atColor=0;
 var atGraphic=0;
@@ -4593,6 +4635,42 @@ function placeWithin(canvasRef, imageRef){
 <img src="default/default9.jpg" id="default9"   style="display:none;" />
 <img src="default/default10.jpg" id="default10"   style="display:none;" />
 <img src="default/default11.jpg" id="default11"   style="display:none;" />
+<img src="default/default11.jpg" id="default12"   style="display:none;" />
+<img src="default/default11.jpg" id="default13"   style="display:none;" />
+<img src="default/default11.jpg" id="default14"   style="display:none;" />
+<img src="default/default11.jpg" id="default15"   style="display:none;" />
+<img src="default/default11.jpg" id="default16"   style="display:none;" />
+<img src="default/default11.jpg" id="default17"   style="display:none;" />
+<img src="default/default11.jpg" id="default18"   style="display:none;" />
+<img src="default/default11.jpg" id="default19"   style="display:none;" />
+<img src="default/default11.jpg" id="default20"   style="display:none;" />
+<img src="default/default11.jpg" id="default21"   style="display:none;" />
+<img src="default/default11.jpg" id="default22"   style="display:none;" />
+<img src="default/default11.jpg" id="default23"   style="display:none;" />
+<img src="default/default11.jpg" id="default24"   style="display:none;" />
+<img src="default/default11.jpg" id="default25"   style="display:none;" />
+<img src="default/default11.jpg" id="default26"   style="display:none;" />
+<img src="default/default11.jpg" id="default27"   style="display:none;" />
+<img src="default/default11.jpg" id="default28"   style="display:none;" />
+<img src="default/default11.jpg" id="default29"   style="display:none;" />
+<img src="default/default11.jpg" id="default30"   style="display:none;" />
+<img src="default/default11.jpg" id="default31"   style="display:none;" />
+<img src="default/default11.jpg" id="default32"   style="display:none;" />
+<img src="default/default11.jpg" id="default33"   style="display:none;" />
+<img src="default/default11.jpg" id="default34"   style="display:none;" />
+<img src="default/default11.jpg" id="default35"   style="display:none;" />
+<img src="default/default11.jpg" id="default36"   style="display:none;" />
+<img src="default/default11.jpg" id="default37"   style="display:none;" />
+<img src="default/default11.jpg" id="default38"   style="display:none;" />
+<img src="default/default11.jpg" id="default39"   style="display:none;" />
+<img src="default/default11.jpg" id="default40"   style="display:none;" />
+<img src="default/default11.jpg" id="default41"   style="display:none;" />
+<img src="default/default11.jpg" id="default42"   style="display:none;" />
+<img src="default/default11.jpg" id="default43"   style="display:none;" />
+<img src="default/default11.jpg" id="default44"   style="display:none;" />
+<img src="default/default11.jpg" id="default45"   style="display:none;" />
+<img src="default/default11.jpg" id="default46"   style="display:none;" />
+<img src="default/default11.jpg" id="default47"   style="display:none;" />
 
 <img src="sprites/tank/tankside.png" id="tanksideblack"  style="display:none;" />
 <img src="sprites/tank/tankend.png" id="tankendblack"  style="display:none;" />
