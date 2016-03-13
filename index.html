@@ -1285,7 +1285,7 @@ function openGraphics(carButton){
 }
 var graphicsButtons=[];
 function populateGraphics(){
-  dbug('populateGraphics 0');
+  //dbug('populateGraphics 0');
   graphicsCanv.width=screenHeight;
   var graphicsCtx=graphicsCanv.getContext('2d');
   graphicsCtx.lineWidth=cellSize/8;
@@ -1341,16 +1341,16 @@ function populateGraphics(){
   //graphicsButtons.push(carButton);
   var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
   graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
-  dbuga('populateGraphics 9');
+  //dbuga('populateGraphics 9');
 
   graphicsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
   //cameraCanv.style.display="none";
-  dbuga('populateGraphics 10');
+  //dbuga('populateGraphics 10');
 
   }
 var carsButtons=[];
 function populateCars(){
-  dbug('');
+  //dbug('');
   carsButtons=[];
   var buttonWidth=cellSize*3;
   var buttonHeight=cellSize*1;
@@ -1369,7 +1369,7 @@ function populateCars(){
     var graphic=graphicsByColor[colorArray[focusTrain]][i];
     
     var carButton={"buttonId":"car_"+focusTrain+"-"+i};
-    dbuga(carButton.buttonId);
+    //dbuga(carButton.buttonId);
     carButton.c=focusTrain;
     carButton.g=i;
     carButton.l=leftPad+buttonWidth*graphic.x;
@@ -3416,7 +3416,7 @@ function handleEventLandscape(e){
       else{ 
  
         var tryFocus=Math.floor((screenHeight-t.pageX)/colorsHeight);
-        dbuga('tryFocus='+tryFocus);
+        //dbuga('tryFocus='+tryFocus);
         if((tryFocus<trainData.length)&&(tryFocus != focusTrain)){
           focusTrain=tryFocus;
           //dbuga('updateColorsCanv tryFocus<trainData.length');
