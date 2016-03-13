@@ -1285,11 +1285,14 @@ function openGraphics(carButton){
 }
 var graphicsButtons=[];
 function populateGraphics(){
-  //dbuga('populateGraphics');
+  dbug('populateGraphics 0');
   graphicsCanv.width=screenHeight;
   var graphicsCtx=graphicsCanv.getContext('2d');
   graphicsCtx.lineWidth=cellSize/8;
-  var graphic=populateCars
+  var graphic=graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic];
+
+
+
 
   var buttonWidth=cellSize*3;
   var buttonHeight=cellSize*1;
@@ -1338,8 +1341,11 @@ function populateGraphics(){
   //graphicsButtons.push(carButton);
   var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
   graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
+  dbuga('populateGraphics 9');
+
   graphicsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
   //cameraCanv.style.display="none";
+  dbuga('populateGraphics 10');
 
   }
 var carsButtons=[];
