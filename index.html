@@ -114,7 +114,7 @@ var cubeSize=cellSize;
 
 var faceData={};
 function setupFaceData(){
-  var s=cubeSize;
+  var s=cubeSize*4;
   faceData={
   "tank":[
     {"img":"tanktop", "width":1, "height":6/24, "trans":'translateZ('+ -s*18/48+'px) translateY('+ -s*6/48+'px) translateX('+ -s*24/48+'px)'},
@@ -4399,7 +4399,7 @@ function processGraphic(colorNum, graphicNum){
     }
   }
 
-var detail=3;
+var detail=6;
 function trimBox(canv){
   var g=Math.floor(canv.width/24);
   var ctx=canv.getContext('2d');
