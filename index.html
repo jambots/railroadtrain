@@ -1108,17 +1108,17 @@ function initGeometry(){
 function boardGeometry(){
   if(screenWidth<375){ // 320 iPhone 4/5
     if(screenHeight==480){ // iPhone4
-      cellsAcross=6;
+      cellsAcross=5;
       }
     else{ // iPhone 5
-      cellsAcross=6;
+      cellsAcross=5;
       }
     }
   if((screenWidth>=375)&&(screenWidth<414)){ // 375 iPhone6
     cellsAcross=6;
     }
   if((screenWidth>=414)&&(screenWidth<600)){ // 414 iPhone 6+
-    cellsAcross=6;
+    cellsAcross=4;
     if(bannerEnabled){cellsAcross=6;}
     }
   if((screenWidth>=600)&&(screenWidth<768)){ // 600 android
@@ -1135,9 +1135,9 @@ function boardGeometry(){
   totalCells=cellsAcross*cellsDown;
   //dbuga("cellsAcross="+cellsAcross);
 
-  //dbuga("cellsDown="+cellsDown);
-  //dbuga("totalCells="+ totalCells);
-  //dbuga("space="+(screenHeight-cellsDown*cellSize-44-adHeight));
+  dbuga("cellsDown="+cellsDown);
+  dbuga("totalCells="+ totalCells);
+  dbuga("space="+(screenHeight-cellsDown*cellSize-44-adHeight));
 
   boardWidth=screenWidth;
   boardHeight=cellsDown*cellSize;
