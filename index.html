@@ -1088,7 +1088,7 @@ function returnCellsAcross(width, scale){
   return a;
   }
 function boardGeometry(){
-  var scale="O";
+  var scale=menuObject["Scale"]["value"];
   cellsAcross=returnCellsAcross(screenWidth, scale)
   cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
   dbuga("cellSize="+cellSize);
@@ -1625,6 +1625,7 @@ var menuObject={
   "Scale":{"value":"", "values":["O", "HO", "N"]},
   "Detail":{"value":"", "values":["Low", "Med", "High"]}
 };
+var detailByValue={"Low":3, "Med":6, "High":9};
 function initSession(){
   dbuga('initSession()');
   if (localStorage.getItem("initialized") === null) {
@@ -1671,7 +1672,7 @@ function initSession(){
   imgRefs["tanksideblack"]=document.getElementById('tanksideblack');
   imgRefs["tanktopblack"]=document.getElementById('tanktopblack');
   imgRefs["tankendblack"]=document.getElementById('tankendblack');
-
+  var detail=detailByValue[menuObject["Detail"]["value"]];
   var scaleString='scale3d('+1/detail+', '+1/detail+', '+1/detail+')';
   var style = document.createElement('style');
   style.type = 'text/css';
@@ -1700,7 +1701,7 @@ function initSession(){
 
   //dbuga('start preloading');
   window.setTimeout('preloadTick()',10);
-  } 
+  }
 function measureLocalStorage(){
   for(var x in localStorage){
     dbuga(x+"="+((localStorage[x].length * 2)/1024/1024).toFixed(2)+" MB");
@@ -2436,6 +2437,8 @@ function tankObject(color, dir, x, y, oid){
   }
 
 function carObject(color, dir, x, y, oid){
+  var detail=detailByValue[menuObject["Detail"]["value"]];
+  
   //dbuga("color:"+color+" dir:"+dir+" x:"+x+" y:"+y+" oid:"+oid);
   deg=degByDir[dir];
   var c={};
@@ -2495,6 +2498,8 @@ function carObject(color, dir, x, y, oid){
 // train functions
 
 function trainObject(color, x, y, dir){
+  var detail=detailByValue[menuObject["Detail"]["value"]];
+  
   var deg=degByDir[dir];
   var t={};
 
@@ -4410,7 +4415,7 @@ function processGraphic(colorNum, graphicNum){
     }
   }
 
-var detail=6;
+
 function trimBox(canv){
   var g=Math.floor(canv.width/24);
   var ctx=canv.getContext('2d');
@@ -4609,7 +4614,6 @@ function placeWithin(canvasRef, imageRef){
     </div>
   </div>
 
-  <div id="helpHolder"></div>
 
   <div id="uiHolder" class="">
     <div id="progressDiv" >  
@@ -4627,6 +4631,7 @@ function placeWithin(canvasRef, imageRef){
 <canvas id="carsCanvas" style="position:absolute;"></canvas>
 <canvas id="graphicsCanvas" style="position:absolute;"></canvas>
 <canvas id="cameraCanvas" style="position:absolute;" width="100" height="100"></canvas>
+  <div id="helpHolder"></div>
 
 <div id="adHolder" style="opacity:.5; Zbackground-size:contain; background-repeat:no-repeat; background-position:50% 50%; position:absolute;"></div>
 
