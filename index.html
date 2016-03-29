@@ -651,8 +651,12 @@ function setupClasses(){
   if(viewportAspect<1){squarePadTop=screenHeight/2-screenWidth/2;}//portrait
   else{squarePadLeft=screenHeight/2-screenWidth/2;}//landscape
     
-
-
+  dbuga('screenWidth='+screenWidth);
+  dbuga('screenHeight='+screenHeight);
+  dbuga('squarePadLeft='+squarePadLeft);
+  dbuga('squarePadTop='+squarePadTop);
+  
+  
   uiTop=portraitScreenHeight-44-progDivHeight-adHeight;
 
   addStyle('#arrowCircle', 'position:absolute; left:' + p*12 + 'px; top:' + p*12 + 'px; border-color:#DA251C;  border-style:solid; border-width:' + p*12 + 'px;  width:' + p*40 + 'px;  height:' + p*40 + 'px; -webkit-border-radius:' + p*48 + 'px;');
@@ -1585,7 +1589,7 @@ function changeView(){
   adGeometry();
   }
 function init(){
-  dbuga('init() '+screenWidth);
+  dbuga('init() '+screen.width);
   if(screen.width==1680){
     dbuga('local init()');
     initOnce();
