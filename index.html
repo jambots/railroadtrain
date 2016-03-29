@@ -1592,14 +1592,46 @@ function init(){
   dbuga('init() '+screen.width);
   if(screen.width==1680){
     dbuga('local init()');
-    initOnce();
+    initSession();
     }
   }
 function onDeviceReady(){
   dbuga('onDeviceReady()');
-  initOnce();
+  initSession();
   }  
-function initOnce(){
+function initStorage(){
+  dbuga('initStorage();');
+  localStorage.setItem("initialized", "true");
+  localStorage.setItem("Music", "On");
+  localStorage.setItem("Sounds", "On");
+  localStorage.setItem("Scale", "HO");
+  localStorage.setItem("Detail", "Med");
+  }
+function saveStorage(){
+  localStorage.setItem("Music", menuObject["Music"]["value"]);
+  localStorage.setItem("Sounds", menuObject["Sounds"]["value"]);
+  localStorage.setItem("Scale", menuObject["Scale"]["value"]);
+  localStorage.setItem("Detail", menuObject["Detail"]["value"]);
+  }
+function loadStorage(){
+  menuObject["Music"]["value"]=localStorage.getItem("Music");
+  menuObject["Sounds"]["value"]=localStorage.getItem("Sounds");
+  menuObject["Scale"]["value"]=localStorage.getItem("Scale");
+  menuObject["Detail"]["value"]=localStorage.getItem("Detail");
+  }
+var menuObject={
+  "Music":{"value":"", "values":["Off", "On", "Classic"]},
+  "Sounds":{"value":"", "values":["Off", "On", "Classic"]},
+  "Scale":{"value":"", "values":["O", "HO", "N"]},
+  "Detail":{"value":"", "values":["Low", "Med", "High"]}
+};
+function initSession(){
+  dbuga('initSession()');
+  if (localStorage.getItem("initialized") === null) {
+    initStorage();
+    }
+  loadStorage();
+  
   initGraphicsByColor();
   camera=document.getElementById("cameraDiv");
   table=document.getElementById("tableDiv");
