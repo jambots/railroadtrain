@@ -97,6 +97,7 @@ width:768px;
 
 <script type="text/javascript" charset="utf-8">
 
+document.addEventListener("deviceready", onDeviceReady, false);
 
 
 var comQueue=new Array();
@@ -107,7 +108,6 @@ var cellsAcross=8;
 var cellsDown=8;
 var shrink=.95;
 
-var infoUp=false;
 var colorsUp=true;
 
 var cubeSize=cellSize;
@@ -210,15 +210,7 @@ function resumeGame(){
   return true;
   }
 
-function closeInfo(){
-  //document.getElementById('info_label').style.opacity=".5";
-  document.getElementById('infoHolder').style.display="none";
-  document.getElementById('infoHolder1').style.display="none";
-  document.getElementById('infoHolder2').style.display="none";
-  document.getElementById('infoHolder3').style.display="none";
-  document.getElementById('infoHolder4').style.display="none";
-  infoUp=false;
-  }
+
 function transmitBgMusicState(){
   //dbuga("transmitBgMusicState()");
   debugStorage();
@@ -542,16 +534,6 @@ function handleUiEvent(e){
       }
     }
 
-  if (target == "info_touch"){
-    if(infoUp==true){
-      closeInfo();
-      }
-    else{
-      //document.getElementById('info_label').style.opacity="1";
-      document.getElementById('infoHolder').style.display="block";
-      infoUp=true;
-      }
-    }
 */
   if (target == "undo_touch"){
     undo();
@@ -562,24 +544,6 @@ function handleUiEvent(e){
     resetBoardTimersObjects();
     removeAllTracks();
     rebuildSequence();
-    }
-  if (target == "infoImage"){
-    closeInfo();
-    }
-  if (target == "infoImage1"){
-    document.getElementById('infoHolder1').style.display="none";
-    document.getElementById('infoHolder2').style.display="block";
-    }
-  if (target == "infoImage2"){
-    document.getElementById('infoHolder2').style.display="none";
-    document.getElementById('infoHolder3').style.display="block";
-    }
-  if (target == "infoImage3"){
-    document.getElementById('infoHolder3').style.display="none";
-    document.getElementById('infoHolder4').style.display="block";
-    }
-  if (target == "infoImage4"){
-    closeInfo();
     }
   }
 
@@ -668,6 +632,7 @@ function rebuildTracks(){
 var progDivHeight=12;
 var uiDivHeight=16;
 var uiTop=100;
+var squarePadLeft=0;
 
 function setupClasses(){
   var p=cellSize/96
@@ -681,8 +646,11 @@ function setupClasses(){
 
   var childrenSize=82*p;
   var childrenPad=4*p;
-
-
+  squarePadTop=0;
+  squarePadLeft=0;
+  if(viewportAspect<1){squarePadTop=screenHeight/2-screenWidth/2;}//portrait
+  else{squarePadLeft=screenHeight/2-screenWidth/2;}//landscape
+    
 
 
   uiTop=portraitScreenHeight-44-progDivHeight-adHeight;
@@ -692,7 +660,7 @@ function setupClasses(){
   addStyle('#uiHolder', 'position:absolute; top:' + uiTop + 'px; left:0; width:' + screenWidth + 'px; height:' + uiDivHeight + 'px;');
   addStyle('#progressDiv', 'position:absolute; display:block; overflow:hidden; width:' + progDivWidth + 'px; height:' + progDivHeight + 'px; position:absolute; top:' + progDivTop + 'px; left:' + progDivLeft + 'px; Zbackground-color:#fff;');
   addStyle('.grow', '  height:' + progDivHeight + 'px; width:' + p*100 + 'px; float:left;  Zwebkit-transition: width 1s ease;  ');
-  addStyle('#infoHolder', 'position:absolute; top:0; left:0; width:' + p*768 + 'px; height:' + p*768 + 'px;');
+  addStyle('#helpHolder', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px;  width:' + screenWidth + 'px; height:' + screenWidth + 'px; background-color:rgba(0,0,255,.85);');
 
   addStyle('#highlighter', 'width:' + p*94 + 'px; height:' + p*94 + 'px; position:absolute;    -webkit-border-radius:' + p*20 + 'px;    background-color:#FFFF00;    opacity:1;    display:none;');
   addStyle('.tile', 'width:' + p*94 + 'px; height:' + p*94 + 'px; position:absolute;    border:0px #0000ee solid;    -webkit-border-radius:' + p*20 + 'px;    ');
@@ -786,12 +754,6 @@ function setupClasses(){
   addStyle('.blackTrainTank',    'width:' + p*12 + 'px; height:' + p*60 + 'px; top:' + p*10 + 'px; left:' + p*42 + 'px; background-color:#000; -webkit-border-radius: ' + p*10 +'px; position:absolute; ');
   addStyle('.blackTrainCatcher', 'width:' + p*16 + 'px; height:' + p*16 + 'px; top:' + p*0  + 'px; left:' + p*40 + 'px; background-color:#555; position:absolute; -webkit-transform: rotate(45deg);');
 
-  var infoWidth=cellSize*cellsAcross;
-  document.getElementById('infoHolder').innerHTML='<img id="infoImage" src="images/info.png" width="' + infoWidth + '" height="' + infoWidth + '" />';
-  document.getElementById('infoHolder1').innerHTML='<img id="infoImage1" src="images/info1.png" width="' + infoWidth + '" height="' + infoWidth + '" />';
-  document.getElementById('infoHolder2').innerHTML='<img id="infoImage2" src="images/info2.png" width="' + infoWidth + '" height="' + infoWidth + '" />';
-  document.getElementById('infoHolder3').innerHTML='<img id="infoImage3" src="images/info3.png" width="' + infoWidth + '" height="' + infoWidth + '" />';
-  document.getElementById('infoHolder4').innerHTML='<img id="infoImage4" src="images/info4.png" width="' + infoWidth + '" height="' + infoWidth + '" />';
   }
 var bgContext;
 var trackContext;
@@ -1081,8 +1043,8 @@ function initGeometry(){
 
     screenWidth=320;
     screenHeight=568;
-    screenWidth=375;
-    screenHeight=667;
+    screenWidth=414;
+    screenHeight=736;
 /*
 
     screenWidth=414;
@@ -1105,36 +1067,31 @@ function initGeometry(){
   adGeometry();
   boardGeometry();
   }
+var cellsByWidth=[
+{"width":320, "O":4, "HO":5, "N":6},
+{"width":375, "O":4, "HO":6, "N":8},
+{"width":414, "O":4, "HO":7, "N":10},
+{"width":600, "O":6, "HO":8, "N":10},
+{"width":768, "O":6, "HO":9, "N":12},
+{"width":1024, "O":8, "HO":12, "N":16}
+]
+function returnCellsAcross(width, scale){
+  var a=3;
+  for (var c=0; c<cellsByWidth.length; c++){
+    var group=cellsByWidth[c];
+    if(width>=group.width){a=group[scale];}
+    }
+  return a;
+  }
 function boardGeometry(){
-  
-  if(screenWidth<375){ // 320 iPhone 4/5
-    if(screenHeight==480){ // iPhone4
-      cellsAcross=6;
-      }
-    else{ // iPhone 5
-      cellsAcross=6;
-      }
-    }
-  if((screenWidth>=375)&&(screenWidth<414)){ // 375 iPhone6
-    cellsAcross=6;
-    }
-  if((screenWidth>=414)&&(screenWidth<600)){ // 414 iPhone 6+
-    cellsAcross=6;
-    if(bannerEnabled){cellsAcross=6;}
-    }
-  if((screenWidth>=600)&&(screenWidth<768)){ // 600 android
-    cellsAcross=7;
-    }
-  if(screenWidth>=768){ // 768 iPad
-    cellsAcross=8;
-    }
-  cellsAcross=4;
+  var scale="O";
+  cellsAcross=returnCellsAcross(screenWidth, scale)
   cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
-  //dbuga("cellSize="+cellSize);
+  dbuga("cellSize="+cellSize);
   cubeSize=cellSize*shrink;
   cellsDown=Math.floor((portraitScreenHeight-44+13-adHeight)/cellSize);
   totalCells=cellsAcross*cellsDown;
-  //dbuga("cellsAcross="+cellsAcross);
+  dbuga("cellsAcross="+cellsAcross);
 
   dbuga("cellsDown="+cellsDown);
   dbuga("totalCells="+ totalCells);
@@ -1628,6 +1585,17 @@ function changeView(){
   adGeometry();
   }
 function init(){
+  dbuga('init() '+screenWidth);
+  if(screen.width==1680){
+    dbuga('local init()');
+    initOnce();
+    }
+  }
+function onDeviceReady(){
+  dbuga('onDeviceReady()');
+  initOnce();
+  }  
+function initOnce(){
   initGraphicsByColor();
   camera=document.getElementById("cameraDiv");
   table=document.getElementById("tableDiv");
@@ -1838,7 +1806,7 @@ function setupNav(){
 function resetBoardTimersObjects(){
   //dbuga('resetBoardTimersObjects()');
   setupGridData();
-  closeInfo();
+  closeHelp();
   collisionData=new Object();
   possibleObject['blue']=0;
   possibleObject['black']=0;
@@ -2543,7 +2511,7 @@ function trainObject(color, x, y, dir){
   }
 
 function turnTick(){
-  if((infoUp==false)&&(paused==false)){
+  if((helpUp==false)&&(paused==false)){
     var debugString="turnTick() checkTrainNum="+checkTrainNum;
     for (var t=0; t<trainData.length; t++){
     debugString+="<br>"+t+" prev "+trainData[t].prevX+" "+trainData[t].prevY+" next"+trainData[t].nextX+" "+trainData[t].nextY+" nextDir "+trainData[t].nextDir+" nextDeg "+trainData[t].nextDeg;
@@ -3198,7 +3166,7 @@ function touchStart(event){
     handleEventLandscape(event);
     }
   else{
-    if ((event.touches[0].pageY-adHeight < boardHeight)&&(infoUp==false)){
+    if ((event.touches[0].pageY-adHeight < boardHeight)&&(helpUp==false)){
       if(levelsUp){
         handleEventLevels(event);
         }
@@ -3587,6 +3555,14 @@ function saveComplete(){
   populateCars();
   populateGraphics();
   updateColorsCanv();
+  }
+
+var helpImages=["info0", "info1", "info2", "info3", "info4"];
+var atHelp=0;
+var helpUp=false;
+function closeHelp(){
+  document.getElementById('helpHolder').style.display="none";
+  helpUp=false;
   }
 
 var graphicsTouching=false;
@@ -4570,7 +4546,7 @@ function placeWithin(canvasRef, imageRef){
 
 </script>
 </head>
-<body onload="init();" onmousedown="dbug(''); mouseLevel();" ontouchstart="touchStart(event);" ontouchmove="touchMove(event);" ontouchend="touchEnd(event);" ontouchcancel="touchCancel(event);" style="background-color:#fff; width:100%; height:100%;">
+<body onload="init()" onmousedown="dbug(''); mouseLevel();" ontouchstart="touchStart(event);" ontouchmove="touchMove(event);" ontouchend="touchEnd(event);" ontouchcancel="touchCancel(event);" style="background-color:#fff; width:100%; height:100%;">
 <div id="wrapper" style="display:block; position:absolute; top:0px; left:100px; overflow:hidden; Zbackground-color:white;">
   <div id="highlighter"></div>
   <div id="prerails">
@@ -4597,11 +4573,7 @@ function placeWithin(canvasRef, imageRef){
     </div>
   </div>
 
-  <div id="infoHolder"></div>
-  <div id="infoHolder1" style="position:absolute; z-index:1;"></div>
-  <div id="infoHolder2" style="position:absolute; z-index:2;"></div>
-  <div id="infoHolder3" style="position:absolute; z-index:3;"></div>
-  <div id="infoHolder4" style="position:absolute; z-index:4;"></div>
+  <div id="helpHolder"></div>
 
   <div id="uiHolder" class="">
     <div id="progressDiv" >  
