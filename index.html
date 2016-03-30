@@ -651,11 +651,12 @@ function setupClasses(){
   if(viewportAspect<1){squarePadTop=screenHeight/2-screenWidth/2;}//portrait
   else{squarePadLeft=screenHeight/2-screenWidth/2;}//landscape
     
+/*
   dbuga('screenWidth='+screenWidth);
   dbuga('screenHeight='+screenHeight);
   dbuga('squarePadLeft='+squarePadLeft);
   dbuga('squarePadTop='+squarePadTop);
-  
+*/  
   
   uiTop=portraitScreenHeight-44-progDivHeight-adHeight;
 
@@ -664,7 +665,7 @@ function setupClasses(){
   addStyle('#uiHolder', 'position:absolute; top:' + uiTop + 'px; left:0; width:' + screenWidth + 'px; height:' + uiDivHeight + 'px;');
   addStyle('#progressDiv', 'position:absolute; display:block; overflow:hidden; width:' + progDivWidth + 'px; height:' + progDivHeight + 'px; position:absolute; top:' + progDivTop + 'px; left:' + progDivLeft + 'px; Zbackground-color:#fff;');
   addStyle('.grow', '  height:' + progDivHeight + 'px; width:' + p*100 + 'px; float:left;  Zwebkit-transition: width 1s ease;  ');
-  addStyle('#helpHolder', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px;  width:' + screenWidth + 'px; height:' + screenWidth + 'px; background-color:rgba(0,0,255,.85);');
+  addStyle('#helpCanvas', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px;  width:' + screenWidth + 'px; height:' + screenWidth + 'px; background-color:rgba(0,0,255,.85);');
 
   addStyle('#highlighter', 'width:' + p*94 + 'px; height:' + p*94 + 'px; position:absolute;    -webkit-border-radius:' + p*20 + 'px;    background-color:#FFFF00;    opacity:1;    display:none;');
   addStyle('.tile', 'width:' + p*94 + 'px; height:' + p*94 + 'px; position:absolute;    border:0px #0000ee solid;    -webkit-border-radius:' + p*20 + 'px;    ');
@@ -1091,15 +1092,15 @@ function boardGeometry(){
   var scale=menuObject["Scale"]["value"];
   cellsAcross=returnCellsAcross(screenWidth, scale)
   cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
-  dbuga("cellSize="+cellSize);
+  //dbuga("cellSize="+cellSize);
   cubeSize=cellSize*shrink;
   cellsDown=Math.floor((portraitScreenHeight-44+13-adHeight)/cellSize);
   totalCells=cellsAcross*cellsDown;
-  dbuga("cellsAcross="+cellsAcross);
 
-  dbuga("cellsDown="+cellsDown);
-  dbuga("totalCells="+ totalCells);
-  dbuga("space="+(screenHeight-cellsDown*cellSize-44-adHeight));
+//  dbuga("cellsAcross="+cellsAcross);
+//  dbuga("cellsDown="+cellsDown);
+//  dbuga("totalCells="+ totalCells);
+//  dbuga("space="+(screenHeight-cellsDown*cellSize-44-adHeight));
 
   boardWidth=screenWidth;
   boardHeight=cellsDown*cellSize;
@@ -1589,22 +1590,22 @@ function changeView(){
   adGeometry();
   }
 function init(){
-  dbuga('init() '+screen.width);
+  //dbuga('init() '+screen.width);
   if(screen.width==1680){
-    dbuga('local init()');
+    //dbuga('local init()');
     initSession();
     }
   }
 function onDeviceReady(){
-  dbuga('onDeviceReady()');
+  //dbuga('onDeviceReady()');
   initSession();
   }  
 function initStorage(){
-  dbuga('initStorage();');
+  //dbuga('initStorage();');
   localStorage.setItem("initialized", "true");
   localStorage.setItem("Music", "On");
   localStorage.setItem("Sounds", "On");
-  localStorage.setItem("Scale", "HO");
+  localStorage.setItem("Scale", "N");
   localStorage.setItem("Detail", "Med");
   }
 function saveStorage(){
@@ -1627,7 +1628,7 @@ var menuObject={
 };
 var detailByValue={"Low":3, "Med":6, "High":9};
 function initSession(){
-  dbuga('initSession()');
+  //dbuga('initSession()');
   if (localStorage.getItem("initialized") === null) {
     initStorage();
     }
@@ -1883,8 +1884,41 @@ function addColor(fields, barrels){
   return fails;
   }
 function createInitialBuildSequence(){
-  if(cellsAcross==8){createInitialBuildSequence768();}
-  else{createInitialBuildSequence320();}
+  dbuga('createInitialBuildSequence() '+cellsAcross);
+  var x0=1;
+  var y0=0;
+  var x1=cellsAcross-2;
+  var y1=cellsDown-2;
+  buildSequence=[];
+
+  buildSequence.push(new buildObject("train", "orange", "b", x0, y0, 0));
+
+  buildSequence.push(new buildObject("dest", "orange", "b", x0, y0, 0));
+  buildSequence.push(new buildObject("track", "", "tl", x0, y0+1, 0));
+  buildSequence.push(new buildObject("track", "", "tr", x0, y0+1, 0));
+
+  buildSequence.push(new buildObject("source", "orange", "t", x1, y1, 2));
+  buildSequence.push(new buildObject("track", "", "bl", x1, y1-1, 0));
+  buildSequence.push(new buildObject("track", "", "br", x1, y1-1, 0));
+
+  buildSequence.push(new buildObject("track", "", "br", x0-1, y0+1, 0));
+  buildSequence.push(new buildObject("track", "", "bl", x1+1, y0+1, 0));
+
+  buildSequence.push(new buildObject("track", "", "tl", x1+1, y1-1, 0));
+  buildSequence.push(new buildObject("track", "", "tr", x0-1, y1-1, 0));
+  for(var x=x0; x<=x1; x++){
+    buildSequence.push(new buildObject("track", "", "lr", x, y0+1, 0));
+    buildSequence.push(new buildObject("track", "", "lr", x, y1-1, 0));
+    }
+  for(var y=y0+2; y<y1-1; y++){
+    buildSequence.push(new buildObject("track", "", "tb", x0-1, y, 0));
+    buildSequence.push(new buildObject("track", "", "tb", x1+1, y, 0));
+    }
+
+  //buildSequence.push(new buildObject("track", "", "bl", 2, 3, 0));
+  
+  //if(cellsAcross==8){createInitialBuildSequence768();}
+  //else{createInitialBuildSequence320();}
   }
 function createInitialBuildSequence768(){
   buildSequence=[];
@@ -3602,7 +3636,7 @@ var helpImages=["info0", "info1", "info2", "info3", "info4"];
 var atHelp=0;
 var helpUp=false;
 function closeHelp(){
-  document.getElementById('helpHolder').style.display="none";
+  document.getElementById('helpCanvas').style.display="none";
   helpUp=false;
   }
 
@@ -4585,6 +4619,225 @@ function placeWithin(canvasRef, imageRef){
   } 
 
 
+
+
+// chromaris switches
+//toggleSwitch(4,4,"horizontal",0, ["a","b","c"], "alphabet");
+var len=1;
+var slot=2;
+function toggleSwitch(x0,y0,orient,pos, tics, label){//returns path
+
+  var cx=4;
+  var cy=8;
+  var g=screenWidth/16;
+  var canv=document.getElementById('menuCanvas');
+  var ctx=canv.getContext('2d');
+
+  ctx.clearRect(g*(x0-2.5), g*(y0-2.5),g*5,g*5);
+
+  ctx.strokeStyle="#444";
+  if(orient=="vertical"){x0--;}
+
+
+  ctx.fillStyle="#444";
+  
+  if(orient=="horizontal"){
+    var min=(x0-len)*g;
+    var max=(x0+len)*g;
+    
+    var range=max-min;
+    var step=range/(tics.length-1);
+    ctx.font=g/1.5+"px Arial";
+    ctx.strokeStyle="#444";
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+ 
+    ctx.font=g/1.5+"px Arial";
+    for (var t=0; t<tics.length; t++){
+      ctx.fillText(tics[t], min+t*step, y0*g+g*1.25);
+      }
+    if(label.indexOf("VOICE")>-1){
+      ctx.lineWidth=1;
+      ctx.font=g/1.25+"px Arial";
+      ctx.strokeText(label, x0*g,y0*g-g*1.25);
+      }
+    
+    ctx.fillText(label, x0*g,y0*g-g*1.25);
+    }
+  else{
+    var min=(y0-slot)*g;
+    var max=(y0+slot)*g;
+
+    var range=max-min;
+    var step=range/(tics.length-1);
+    ctx.font=g/1.5+"px Arial";
+    ctx.strokeStyle="#444";
+    ctx.textAlign="left";
+    ctx.textBaseline="middle";
+ 
+    ctx.fillText(label, x0*g-g*.5 ,y0*g+g*2);
+    for (var t=0; t<tics.length; t++){
+      ctx.fillText(tics[t], x0*g+g*1, min+t*step);
+      }
+    }
+
+
+  ctx.beginPath();
+  var x1;
+  var y1;
+  if(orient=="horizontal"){
+    x1=x0+len*pos;
+    y1=y0;
+    ctx.arc((x0-slot)*g,(y0)*g, 2+g/2,pi*.5,pi*1.5,false);
+    ctx.arc((x0+slot)*g,(y0)*g, 2+g/2,pi*1.5,pi*.5,false);
+    }
+  else{
+    x1=x0;
+    y1=y0+len*pos;
+    ctx.arc((x0)*g,(y0-slot)*g, 2+g/2,pi*1,pi*0,false);
+    ctx.arc((x0)*g,(y0+slot)*g, 2+g/2,pi*0,pi*1,false);
+    }
+  
+  ctx.closePath();
+  ctx.fill();
+
+  var x1;
+  var y1;
+  if(orient=="horizontal"){
+    x1=x0+len*pos;
+    y1=y0;
+    }
+  else{
+    x1=x0;
+    y1=y0+len*pos;
+    }
+  var x2=x0;
+  var y2=y0;  
+  if(orient=="horizontal"){
+    x2+=len*pos/2;
+    }
+  else{
+    y2+=len*pos/2;
+    }
+
+
+  ctx.lineWidth=2;
+  ctx.strokeStyle="#666";
+
+  var p=.01;
+  // px py is slight perspective offset
+  var px=(cx-x1)*p;
+  var py=(cy-y1)*p;
+  var dx=(x0-x1+px);
+  var dy=(y0-y1+py);
+  var dist=Math.sqrt(dx*dx+dy*dy);
+  var squeeze=1-dist/(len*2);
+  var vec=Math.atan2(-dy, -dx);
+  var deg=(360+Math.floor(180*vec/pi))%360;
+  var mx1=x0-dx;
+  var my1=y0-dy;
+  ctx.beginPath();
+  //ctx.arc(mx1*g,my1*g,g/2,vec-pi*1.5,vec-pi*.5,true);
+  oval(ctx, mx1*g,my1*g,g/2,squeeze*g/2,vec+pi/2,true)
+  ctx.arc(x2*g,y2*g,g/2,vec+pi*1.5,vec+pi*.5,true);
+  ctx.closePath();
+  var bgColor={"r":200, "g":200, "b":200};
+  ctx.fillStyle="rgb("+ bgColor.r +","+bgColor.g+","+bgColor.b+")";
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  oval(ctx,mx1*g,my1*g,g/2,squeeze*g/2,vec+pi/2,false);
+  ctx.stroke();
+  
+  }
+function oval(ctx, x,y,r0,r1,radians,counter){
+  
+  var x0=x+r0*Math.cos(radians);
+  var y0=y+r0*Math.sin(radians);
+  var x1=x+r1*Math.cos(radians+pi/2);
+  var y1=y+r1*Math.sin(radians+pi/2);
+  var x2=x+r0*Math.cos(radians+pi);
+  var y2=y+r0*Math.sin(radians+pi);
+  var x3=x+r1*Math.cos(radians-pi/2);
+  var y3=y+r1*Math.sin(radians-pi/2);
+  var cpx1=x2+r1*Math.cos(radians+pi/2);
+  var cpy1=y2+r1*Math.sin(radians+pi/2);
+  var cpx0=x0+r1*Math.cos(radians+pi/2);
+  var cpy0=y0+r1*Math.sin(radians+pi/2);
+  var cpx2=x2+r1*Math.cos(radians-pi/2);
+  var cpy2=y2+r1*Math.sin(radians-pi/2);
+  var cpx3=x0+r1*Math.cos(radians-pi/2);
+  var cpy3=y0+r1*Math.sin(radians-pi/2);
+  //plot(x0,y0,"black");
+  ctx.beginPath();
+  if(counter){
+    //plot(cpx3,cpy3,"rgba(255,255,0,1)");
+    //plot(cpx2,cpy2,"rgba(0,0,255,1)");
+    ctx.moveTo(x0,y0);
+    ctx.quadraticCurveTo(cpx3,cpy3,x3,y3);
+    ctx.quadraticCurveTo(cpx2,cpy2,x2,y2);
+    }
+  else{
+    //plot(cpx1,cpy1,"rgba(255,0,0,1)");
+    //plot(cpx0,cpy0,"rgba(0,255,0,1)");
+    ctx.moveTo(x0,y0);
+    ctx.quadraticCurveTo(cpx0,cpy0,x1,y1);
+    ctx.quadraticCurveTo(cpx1,cpy1,x2,y2);
+    }
+  ctx.stroke();
+  //moveTo beginning
+  //bez to perp
+  //bez to end 
+  }
+
+//util.js 
+function bez(ctx,x0,y0,deg0,dist0,x1,y1,deg1,dist1){
+  var cp0x=x0+dist0*Math.cos(deg0/180 * Math.PI);
+  var cp0y=y0+dist0*Math.sin(deg0/180 * Math.PI);
+  var cp1x=x1-dist1*Math.cos(deg1/180 * Math.PI);
+  var cp1y=y1-dist1*Math.sin(deg1/ 180 * Math.PI);
+  ctx.bezierCurveTo(cp0x, cp0y, cp1x,cp1y, x1,y1);
+}
+
+
+function GetOffset (object, offset) {
+            if (!object)
+                return;
+            offset.x += object.offsetLeft;
+            offset.y += object.offsetTop;
+
+            GetOffset (object.offsetParent, offset);
+        }
+function GetScrolled (object, scrolled) {
+            if (!object)
+                return;
+            scrolled.x += object.scrollLeft;
+            scrolled.y += object.scrollTop;
+
+    if (object.tagName.toLowerCase () != "html") {
+        GetScrolled (object.parentNode, scrolled);
+    }
+  }
+function urlDecode(str) {
+  return decodeURIComponent((str+'').replace(/\+/g, '%20'));
+  }
+function solveAngle(a, b, c) {  // Returns angle C using law of cosines
+  var temp = (a * a + b * b - c * c) / (2 * a * b);
+  if (temp >= -1 && temp <= 1){return radToDeg(Math.acos(temp));}
+  else{return "No solution";}
+  }
+function degToRad(x) {
+	return x / 180 * Math.PI;
+}
+
+function radToDeg(x) {
+	return x / Math.PI * 180;
+}
+function rnd(range) {
+  return Math.floor(Math.random()*range);
+  }
+
+
 </script>
 </head>
 <body onload="init()" onmousedown="dbug(''); mouseLevel();" ontouchstart="touchStart(event);" ontouchmove="touchMove(event);" ontouchend="touchEnd(event);" ontouchcancel="touchCancel(event);" style="background-color:#fff; width:100%; height:100%;">
@@ -4631,7 +4884,7 @@ function placeWithin(canvasRef, imageRef){
 <canvas id="carsCanvas" style="position:absolute;"></canvas>
 <canvas id="graphicsCanvas" style="position:absolute;"></canvas>
 <canvas id="cameraCanvas" style="position:absolute;" width="100" height="100"></canvas>
-  <div id="helpHolder"></div>
+  <canvas id="helpCanvas"></canvas>
 
 <div id="adHolder" style="opacity:.5; Zbackground-size:contain; background-repeat:no-repeat; background-position:50% 50%; position:absolute;"></div>
 
