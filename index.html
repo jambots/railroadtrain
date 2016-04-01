@@ -651,12 +651,12 @@ function setupClasses(){
   if(viewportAspect<1){squarePadTop=screenHeight/2-screenWidth/2;}//portrait
   else{squarePadLeft=screenHeight/2-screenWidth/2;}//landscape
     
-/*
-  dbuga('screenWidth='+screenWidth);
-  dbuga('screenHeight='+screenHeight);
-  dbuga('squarePadLeft='+squarePadLeft);
-  dbuga('squarePadTop='+squarePadTop);
-*/  
+
+  //dbuga('screenWidth='+screenWidth);
+  //dbuga('screenHeight='+screenHeight);
+  //dbuga('squarePadLeft='+squarePadLeft);
+  //dbuga('squarePadTop='+squarePadTop);
+ 
   
   uiTop=portraitScreenHeight-44-progDivHeight-adHeight;
 
@@ -684,27 +684,10 @@ function setupClasses(){
   addStyle('.dot3', 'left:' + p*7 + 'px; top:' + p*61 + 'px;');
   addStyle('.dot4', 'left:' + p*55 + 'px; top:' + p*61 + 'px;');
 
-  addStyle('.L0', 'left:' + p*0 + 'px;');
-  addStyle('.T0', 'top:' + p*0 + 'px;');
-  addStyle('.L1', 'left:' + p*96 + 'px;');
-  addStyle('.T1', 'top:' + p*96 + 'px;');
-  addStyle('.L2', 'left:' + p*192 + 'px;');
-  addStyle('.T2', 'top:' + p*192 + 'px;');
-  addStyle('.L3', 'left:' + p*288 + 'px;');
-  addStyle('.T3', 'top:' + p*288 + 'px;');
-  addStyle('.L4', 'left:' + p*384 + 'px;');
-  addStyle('.T4', 'top:' + p*384 + 'px;');
-  addStyle('.L5', 'left:' + p*480 + 'px;');
-  addStyle('.T5', 'top:' + p*480 + 'px;');
-  addStyle('.L6', 'left:' + p*576 + 'px;');
-  addStyle('.T6', 'top:' + p*576 + 'px;');
-  addStyle('.L7', 'left:' + p*672 + 'px;');
-  addStyle('.T7', 'top:' + p*672 + 'px;');
-  addStyle('.T8', 'top:' + p*768 + 'px;');
-  addStyle('.T9', 'top:' + p*864 + 'px;');
-  addStyle('.T10', 'top:' + p*960 + 'px;');
-  addStyle('.T11', 'top:' + p*1056 + 'px;');
-  addStyle('.T12', 'top:' + p*1152 + 'px;');
+  for(var s=0; s<=20; s++){
+    addStyle('.L'+s, 'left:' + p*96*s + 'px;');
+    addStyle('.T'+s, 'top:' + p*96*s + 'px;');
+    }
 
 
   addStyle('.tbLeft', 'top:' + p*0 + 'px; left:' + p*38 + 'px; width:' + p*10 + 'px; height:' + p*94 + 'px; border-left:' + p*2 + 'px #888  solid; position:absolute;');
@@ -1006,7 +989,7 @@ var graphicsCanv;
 var graphicsUp=false;
 var cameraCanv;
 function initGeometry(){
-
+ 
   levelsCanv=document.getElementById("levelsCanvas");
   menuCanv=document.getElementById("menuCanvas");
   carsCanv=document.getElementById("carsCanvas");
@@ -1041,19 +1024,13 @@ function initGeometry(){
   if(screenHeight<500){colorsHeight=44;}
   screenAspect=screenWidth/screenHeight;
   if(screen.width==1680){// test iPhone dimension local
-    
+
     screenWidth=320;
     screenHeight=480;
 
-
-    screenWidth=320;
-    screenHeight=568;
     screenWidth=414;
     screenHeight=736;
 /*
-
-    screenWidth=414;
-    screenHeight=736;
     screenWidth=768;
     screenHeight=1024;
 
@@ -1074,8 +1051,8 @@ function initGeometry(){
   }
 var cellsByWidth=[
 {"width":320, "O":4, "HO":5, "N":6},
-{"width":375, "O":4, "HO":6, "N":8},
-{"width":414, "O":4, "HO":7, "N":10},
+{"width":375, "O":4, "HO":5, "N":6},
+{"width":414, "O":4, "HO":6, "N":8},
 {"width":600, "O":6, "HO":8, "N":10},
 {"width":768, "O":6, "HO":9, "N":12},
 {"width":1024, "O":8, "HO":12, "N":16}
@@ -1094,13 +1071,13 @@ function boardGeometry(){
   cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
   //dbuga("cellSize="+cellSize);
   cubeSize=cellSize*shrink;
-  cellsDown=Math.floor((portraitScreenHeight-44+13-adHeight)/cellSize);
+  cellsDown=Math.floor((portraitScreenHeight-44-13-adHeight)/cellSize);
   totalCells=cellsAcross*cellsDown;
 
-//  dbuga("cellsAcross="+cellsAcross);
-//  dbuga("cellsDown="+cellsDown);
-//  dbuga("totalCells="+ totalCells);
-//  dbuga("space="+(screenHeight-cellsDown*cellSize-44-adHeight));
+//dbuga("cellsAcross="+cellsAcross);
+//dbuga("cellsDown="+cellsDown);
+//dbuga("totalCells="+ totalCells);
+//dbuga("space="+(screenHeight-cellsDown*cellSize-44-adHeight));
 
   boardWidth=screenWidth;
   boardHeight=cellsDown*cellSize;
@@ -1377,38 +1354,43 @@ function populateCars(){
   }
 }
 var menuButtons=[
-{"num":0, "label":"How to Play", "l":0, "r":0, "t":0, "b":0},
-{"num":1, "label":"Music", "l":0, "r":0, "t":0, "b":0},
-{"num":2, "label":"Sounds", "l":0, "r":0, "t":0, "b":0},
-{"num":3, "label":"Banner", "l":0, "r":0, "t":0, "b":0}
+{"y":8, "x":-4, "label":"Help", "l":0, "r":0, "t":0, "b":0},
+{"y":8, "x":4, "label":"Done", "l":0, "r":0, "t":0, "b":0}
 ];
 function populateMenu(){
-  var buttonWidth=cellSize*4;
-  var buttonHeight=cellSize*1;
-  var pad=cellSize/2;
-  var radius=cellSize/12;
-
-  var topPad=(portraitScreenHeight-44-adHeight-buttonHeight*menuButtons.length-pad*(menuButtons.length-1))/2;
-  //dbuga("topPad="+topPad);
+  var g=screenWidth/16;
+  var buttonWidth=g*6;
+  var buttonHeight=g*2;
+  var pad=g/2;
+  var radius=g/6;
+  var cx=8;
+  var cy=(screenHeight/2-screenWidth/2)/g+cx;
+  //dbuga("cy "+cy);
   var menuCtx=menuCanv.getContext('2d');
-  menuCtx.lineWidth=cellSize/6;
   for (var b=0; b<menuButtons.length; b++){
-    //dbuga(b);
-    menuButtons[b].l=(screenWidth-buttonWidth)/2;
-    menuButtons[b].r=menuButtons[b].l+buttonWidth;
-    menuButtons[b].t=topPad+buttonHeight*b+pad*(b);
-    menuButtons[b].b=menuButtons[b].t+buttonHeight;
+    //dbuga(buttonHeight);
+    menuButtons[b].l=(cx+menuButtons[b].x)*g-buttonWidth/2;
+    menuButtons[b].r=(cx+menuButtons[b].x)*g+buttonWidth/2;
+    menuButtons[b].t=(cy+menuButtons[b].y)*g-buttonHeight/2;
+    menuButtons[b].b=(cy+menuButtons[b].y)*g+buttonHeight/2;
     
     menuCtx.strokeStyle="rgba(42,42,42,.75)";
     menuCtx.fillStyle="rgba(225,255,255,.9)";
+    menuCtx.lineWidth=g/4;
     roundRect(menuCtx, menuButtons[b].l, menuButtons[b].t, buttonWidth, buttonHeight, radius, true, true);
-    var cx=menuButtons[b].l/2+menuButtons[b].r/2;
-    var cy=menuButtons[b].t/2+menuButtons[b].b/2;
-    menuCtx.font=Math.floor(buttonHeight/2)+"px akzi";
-    menuCtx.fillStyle="black";
+    var bcx=menuButtons[b].l/2+menuButtons[b].r/2;
+    var bcy=menuButtons[b].t/2+menuButtons[b].b/2;
+    var menuFont=Math.floor(buttonHeight/2)+"px akzi";
+    //dbuga('menuFont='+menuFont);
+    menuCtx.font=menuFont;
+    menuCtx.lineWidth=g/16;
+
+    menuCtx.strokeStyle="#666";
+    menuCtx.fillStyle="#666";
     menuCtx.textAlign="center";
     menuCtx.textBaseline="middle";
-    menuCtx.fillText(menuButtons[b].label, cx,cy);
+    menuCtx.fillText(menuButtons[b].label, bcx,bcy);
+    menuCtx.strokeText(menuButtons[b].label, bcx,bcy);
   }
 }
 var levelButtons=[];
@@ -1605,7 +1587,7 @@ function initStorage(){
   localStorage.setItem("initialized", "true");
   localStorage.setItem("Music", "On");
   localStorage.setItem("Sounds", "On");
-  localStorage.setItem("Scale", "N");
+  localStorage.setItem("Scale", "HO");
   localStorage.setItem("Detail", "Med");
   }
 function saveStorage(){
@@ -1619,12 +1601,22 @@ function loadStorage(){
   menuObject["Sounds"]["value"]=localStorage.getItem("Sounds");
   menuObject["Scale"]["value"]=localStorage.getItem("Scale");
   menuObject["Detail"]["value"]=localStorage.getItem("Detail");
+  var keys=Object.keys(menuObject);
+  for (var k=0; k<keys.length; k++){
+    //dbuga(keys[k]);
+    var values=menuObject[keys[k]]['values'];
+    for (var v=0; v<values.length; v++){
+      if(menuObject[keys[k]].value==values[v]){
+        menuObject[keys[k]].pos=v-1;
+        }
+      }
+    }
   }
 var menuObject={
-  "Music":{"value":"", "values":["Off", "On", "Classic"]},
-  "Sounds":{"value":"", "values":["Off", "On", "Classic"]},
-  "Scale":{"value":"", "values":["O", "HO", "N"]},
-  "Detail":{"value":"", "values":["Low", "Med", "High"]}
+  "Music":{"value":"On", "pos":0, "values":["Off", "On", "Classic"]},
+  "Sounds":{"value":"On", "pos":0,  "values":["Off", "On", "Classic"]},
+  "Scale":{"value":"HO", "pos":0,  "values":["O", "HO", "N"]},
+  "Detail":{"value":"Med", "pos":0,  "values":["Low", "Med", "High"]}
 };
 var detailByValue={"Low":3, "Med":6, "High":9};
 function initSession(){
@@ -1705,7 +1697,7 @@ function initSession(){
   }
 function measureLocalStorage(){
   for(var x in localStorage){
-    dbuga(x+"="+((localStorage[x].length * 2)/1024/1024).toFixed(2)+" MB");
+    //dbuga(x+"="+((localStorage[x].length * 2)/1024/1024).toFixed(2)+" MB");
     }
   }
 function localStorageToImages(){
@@ -1735,7 +1727,7 @@ var frames=0;
 var secondInterval;
 function populateModals(){
   populateLevels();
-  populateMenu();
+  //populateMenu();
   populateCars();
   //populateGraphics();
 
@@ -1884,11 +1876,11 @@ function addColor(fields, barrels){
   return fails;
   }
 function createInitialBuildSequence(){
-  dbuga('createInitialBuildSequence() '+cellsAcross);
+  //dbuga('createInitialBuildSequence() '+cellsAcross);
   var x0=1;
   var y0=0;
   var x1=cellsAcross-2;
-  var y1=cellsDown-2;
+  var y1=cellsDown-1;
   buildSequence=[];
 
   buildSequence.push(new buildObject("train", "orange", "b", x0, y0, 0));
@@ -1900,6 +1892,10 @@ function createInitialBuildSequence(){
   buildSequence.push(new buildObject("source", "orange", "t", x1, y1, 2));
   buildSequence.push(new buildObject("track", "", "bl", x1, y1-1, 0));
   buildSequence.push(new buildObject("track", "", "br", x1, y1-1, 0));
+
+  buildSequence.push(new buildObject("source", "orange", "t", x0, y1, 2));
+  buildSequence.push(new buildObject("track", "", "bl", x0, y1-1, 0));
+  buildSequence.push(new buildObject("track", "", "br", x0, y1-1, 0));
 
   buildSequence.push(new buildObject("track", "", "br", x0-1, y0+1, 0));
   buildSequence.push(new buildObject("track", "", "bl", x1+1, y0+1, 0));
@@ -2456,7 +2452,7 @@ function tankObject(color, dir, x, y, oid){
   for (var f=0; f<faceData.tank.length; f++){
     var canv=document.getElementById('carcanvas'+carData.length+'face'+f);
     var ctx=canv.getContext('2d');
-    ctx.webkitImageSmoothingEnabled = false;
+    //ctx.webkitImageSmoothingEnabled = false;
     ctx.imageSmoothingEnabled = false; /// future
     var imageObj = imgRefs[faceData["tank"][f].img+color];
     ctx.drawImage(imageObj, 0, 0, canv.width, canv.height);
@@ -2508,7 +2504,7 @@ function carObject(color, dir, x, y, oid){
   for (var f=0; f<faceData.box.length; f++){
     var canv=document.getElementById('carcanvas'+carData.length+'face'+f);
     var ctx=canv.getContext('2d');
-    ctx.webkitImageSmoothingEnabled = false;
+    //ctx.webkitImageSmoothingEnabled = false;
     ctx.imageSmoothingEnabled = false; /// future
     var imageObj = imgRefs[faceData["box"][f].img+color];
     ctx.drawImage(imageObj, 0, 0, canv.width, canv.height);
@@ -2571,7 +2567,7 @@ function trainObject(color, x, y, dir){
   for (var f=0; f<faceData.engine.length; f++){
     var canv=document.getElementById('canvas'+trainData.length+'face'+f);
     var ctx=canv.getContext('2d');
-    ctx.webkitImageSmoothingEnabled = false;
+    //ctx.webkitImageSmoothingEnabled = false;
     ctx.imageSmoothingEnabled = false; /// future
     var imageObj = imgRefs[faceData["engine"][f].img+color];
     ctx.drawImage(imageObj, 0, 0, canv.width, canv.height);
@@ -4623,13 +4619,28 @@ function placeWithin(canvasRef, imageRef){
 
 // chromaris switches
 //toggleSwitch(4,4,"horizontal",0, ["a","b","c"], "alphabet");
-var len=1;
-var slot=2;
+var len=2;
+var slot=1.5;
+function menuDraw(){
+  openModal('menu');
+  
+  var keys=Object.keys(menuObject);
+  for (var k=0; k<keys.length; k++){
+    var y=(k-2)*4;
+    toggleSwitch(0,y,"horizontal",menuObject[keys[k]]['pos'], menuObject[keys[k]]['values'], keys[k]);
+    }
+  populateMenu();
+  }
+     
 function toggleSwitch(x0,y0,orient,pos, tics, label){//returns path
-
-  var cx=4;
-  var cy=8;
   var g=screenWidth/16;
+  var cx=8;
+  var cy=(screenHeight/2-screenWidth/2)/g+cx;
+  x0+=cx;
+  y0+=cy;
+
+
+
   var canv=document.getElementById('menuCanvas');
   var ctx=canv.getContext('2d');
 
@@ -4647,7 +4658,8 @@ function toggleSwitch(x0,y0,orient,pos, tics, label){//returns path
     
     var range=max-min;
     var step=range/(tics.length-1);
-    ctx.font=g/1.5+"px Arial";
+    ctx.font=g/1.5+"px azki";
+    
     ctx.strokeStyle="#444";
     ctx.textAlign="center";
     ctx.textBaseline="middle";
