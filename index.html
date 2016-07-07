@@ -796,8 +796,99 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
     ctx.fill();
   }        
 }
+var lionel=true;
 //createCanvasTrack('lr', 2, 5)
 function createCanvasTrack(theType, cellX, cellY){
+  // lionel
+  if(lionel){      
+
+    trackContext.strokeStyle = "rgb(66, 66, 66)";
+    trackContext.lineWidth = "3";
+    originX=cellX*cellSize
+    originY=cellY*cellSize
+    unit=cellSize/12;
+    trackContext.beginPath();
+    if((theType=="ts")||(theType=="td")){
+      trackContext.moveTo(originX+4.5*unit, originY+unit); //top
+      trackContext.lineTo(originX+7.5*unit, originY+unit);
+      trackContext.moveTo(originX+4.5*unit, originY+cellSize/2); //middle
+      trackContext.lineTo(originX+7.5*unit, originY+cellSize/2);
+      }
+    if((theType=="bs")||(theType=="bd")){
+      trackContext.moveTo(originX+4.5*unit, originY+cellSize-unit); //bottom
+      trackContext.lineTo(originX+7.5*unit, originY+cellSize-unit);
+      trackContext.moveTo(originX+4.5*unit, originY+cellSize/2); //middle
+      trackContext.lineTo(originX+7.5*unit, originY+cellSize/2);
+      }
+    if((theType=="ls")||(theType=="ld")){
+      trackContext.moveTo(originX+unit, originY+4.5*unit); //left
+      trackContext.lineTo(originX+unit, originY+7.5*unit);
+      trackContext.moveTo(originX+cellSize/2, originY+4.5*unit); //center
+      trackContext.lineTo(originX+cellSize/2, originY+7.5*unit);
+      }
+    if((theType=="rs")||(theType=="rd")){
+      trackContext.moveTo(originX+cellSize-unit, originY+4.5*unit); //right
+      trackContext.lineTo(originX+cellSize-unit, originY+7.5*unit);
+      trackContext.moveTo(originX+cellSize/2, originY+4.5*unit); //center
+      trackContext.lineTo(originX+cellSize/2, originY+7.5*unit);
+      }
+    if(theType=="lr"){
+      trackContext.moveTo(originX+unit, originY+4.5*unit); //left
+      trackContext.lineTo(originX+unit, originY+7.5*unit);
+      trackContext.moveTo(originX+cellSize-unit, originY+4.5*unit); //right
+      trackContext.lineTo(originX+cellSize-unit, originY+7.5*unit);
+      trackContext.moveTo(originX+cellSize/2, originY+4.5*unit); //center
+      trackContext.lineTo(originX+cellSize/2, originY+7.5*unit);
+      }
+    if(theType=="tb"){
+      trackContext.moveTo(originX+4.5*unit, originY+unit); //top
+      trackContext.lineTo(originX+7.5*unit, originY+unit);
+      trackContext.moveTo(originX+4.5*unit, originY+cellSize-unit); //bottom
+      trackContext.lineTo(originX+7.5*unit, originY+cellSize-unit);
+      trackContext.moveTo(originX+4.5*unit, originY+cellSize/2); //middle
+      trackContext.lineTo(originX+7.5*unit, originY+cellSize/2);
+      }
+    if(theType=="br"){
+      trackContext.moveTo(originX+cellSize/2+.75*unit, originY+cellSize/2+.75*unit); //diag br
+      trackContext.lineTo(originX+cellSize/2+2.75*unit, originY+cellSize/2+2.75*unit);
+
+      trackContext.moveTo(originX+4.5*unit, originY+cellSize-unit); //bottom
+      trackContext.lineTo(originX+7.5*unit, originY+cellSize-unit);
+      trackContext.moveTo(originX+cellSize-unit, originY+4.5*unit); //right
+      trackContext.lineTo(originX+cellSize-unit, originY+7.5*unit);
+      }
+    if(theType=="bl"){
+      trackContext.moveTo(originX+cellSize/2-.75*unit, originY+cellSize/2+.75*unit); //diag bl
+      trackContext.lineTo(originX+cellSize/2-2.75*unit, originY+cellSize/2+2.75*unit);
+
+      trackContext.moveTo(originX+4.5*unit, originY+cellSize-unit); //bottom
+      trackContext.lineTo(originX+7.5*unit, originY+cellSize-unit);
+      trackContext.moveTo(originX+unit, originY+4.5*unit); //left
+      trackContext.lineTo(originX+unit, originY+7.5*unit);
+      }
+    if(theType=="tl"){
+      trackContext.moveTo(originX+cellSize/2-.75*unit, originY+cellSize/2-.75*unit); //diag tl
+      trackContext.lineTo(originX+cellSize/2-2.75*unit, originY+cellSize/2-2.75*unit);
+
+
+      trackContext.moveTo(originX+4.5*unit, originY+unit); //top
+      trackContext.lineTo(originX+7.5*unit, originY+unit);
+      trackContext.moveTo(originX+unit, originY+4.5*unit); //left
+      trackContext.lineTo(originX+unit, originY+7.5*unit);
+      }
+    if(theType=="tr"){
+      trackContext.moveTo(originX+cellSize/2+.75*unit, originY+cellSize/2-.75*unit); //diag tr
+      trackContext.lineTo(originX+cellSize/2+2.75*unit, originY+cellSize/2-2.75*unit);
+
+      trackContext.moveTo(originX+4.5*unit, originY+unit); //top
+      trackContext.lineTo(originX+7.5*unit, originY+unit);
+      trackContext.moveTo(originX+cellSize-unit, originY+4.5*unit); //right
+      trackContext.lineTo(originX+cellSize-unit, originY+7.5*unit);
+      }
+
+    trackContext.stroke();
+    }
+  //normal two rails only
   trackContext.strokeStyle = "rgb(128, 128, 128)";
   trackContext.lineWidth = "2";
   originX=cellX*cellSize
@@ -807,78 +898,98 @@ function createCanvasTrack(theType, cellX, cellY){
   if((theType=="ts")||(theType=="td")){
     trackContext.moveTo(originX+5*unit, originY);
     trackContext.lineTo(originX+5*unit, originY+cellSize/2);
-    //trackContext.moveTo(originX+6*unit, originY);
-    //trackContext.lineTo(originX+6*unit, originY+cellSize/2);
     trackContext.moveTo(originX+7*unit, originY);
     trackContext.lineTo(originX+7*unit, originY+cellSize/2);
+    if(lionel){       
+      trackContext.moveTo(originX+6*unit, originY);
+      trackContext.lineTo(originX+6*unit, originY+cellSize/2);
+      }
     }
   if((theType=="bs")||(theType=="bd")){
     trackContext.moveTo(originX+5*unit, originY+cellSize/2);
     trackContext.lineTo(originX+5*unit, originY+cellSize);
-    //trackContext.moveTo(originX+6*unit, originY+cellSize/2);
-    //trackContext.lineTo(originX+6*unit, originY+cellSize);
     trackContext.moveTo(originX+7*unit, originY+cellSize/2);
     trackContext.lineTo(originX+7*unit, originY+cellSize);
+    if(lionel){       
+      trackContext.moveTo(originX+6*unit, originY+cellSize/2);
+      trackContext.lineTo(originX+6*unit, originY+cellSize);
+      }
     }
   if((theType=="ls")||(theType=="ld")){
     trackContext.moveTo(originX, originY+5*unit);
     trackContext.lineTo(originX+cellSize/2, originY+5*unit);
-    //trackContext.moveTo(originX, originY+6*unit);
-    //trackContext.lineTo(originX+cellSize/2, originY+6*unit);
     trackContext.moveTo(originX, originY+7*unit);
     trackContext.lineTo(originX+cellSize/2, originY+7*unit);
+    if(lionel){       
+      trackContext.moveTo(originX, originY+6*unit);
+      trackContext.lineTo(originX+cellSize/2, originY+6*unit);
+      }
     }
   if((theType=="rs")||(theType=="rd")){
     trackContext.moveTo(originX+cellSize/2, originY+5*unit);
     trackContext.lineTo(originX+cellSize, originY+5*unit);
-    //trackContext.moveTo(originX+cellSize/2, originY+6*unit);
-    //trackContext.lineTo(originX+cellSize, originY+6*unit);
     trackContext.moveTo(originX+cellSize/2, originY+7*unit);
     trackContext.lineTo(originX+cellSize, originY+7*unit);
+    if(lionel){       
+      trackContext.moveTo(originX+cellSize/2, originY+6*unit);
+      trackContext.lineTo(originX+cellSize, originY+6*unit);
+      }
     }
   if(theType=="lr"){
     trackContext.moveTo(originX, originY+5*unit);
     trackContext.lineTo(originX+cellSize, originY+5*unit);
-    //trackContext.moveTo(originX, originY+6*unit);
-    //trackContext.lineTo(originX+cellSize, originY+6*unit);
     trackContext.moveTo(originX, originY+7*unit);
     trackContext.lineTo(originX+cellSize, originY+7*unit);
+    if(lionel){       
+      trackContext.moveTo(originX, originY+6*unit); //middle rail
+      trackContext.lineTo(originX+cellSize, originY+6*unit);
+      }
     }
   if(theType=="tb"){
     trackContext.moveTo(originX+5*unit, originY);
     trackContext.lineTo(originX+5*unit, originY+cellSize);
-    //trackContext.moveTo(originX+6*unit, originY);
-    //trackContext.lineTo(originX+6*unit, originY+cellSize);
     trackContext.moveTo(originX+7*unit, originY);
     trackContext.lineTo(originX+7*unit, originY+cellSize);
+    if(lionel){
+      trackContext.moveTo(originX+6*unit, originY);  //center rail
+      trackContext.lineTo(originX+6*unit, originY+cellSize);
+      }
     }
   if(theType=="br"){
     trackContext.arc(originX+cellSize, originY+cellSize, 7*unit, 1 * Math.PI, 1.5 * Math.PI, false);
     trackContext.moveTo(originX+7*unit, originY+cellSize);
     trackContext.arc(originX+cellSize, originY+cellSize, 5*unit, 1 * Math.PI, 1.5 * Math.PI, false);
-    //trackContext.moveTo(originX+6*unit, originY+cellSize);
-    //trackContext.arc(originX+cellSize, originY+cellSize, 6*unit, 1 * Math.PI, 1.5 * Math.PI, false);
+    if(lionel){       
+      trackContext.moveTo(originX+6*unit, originY+cellSize);
+      trackContext.arc(originX+cellSize, originY+cellSize, 6*unit, 1 * Math.PI, 1.5 * Math.PI, false);
+      }
     }
   if(theType=="bl"){
     trackContext.arc(originX, originY+cellSize, 7*unit, 0, 1.5 * Math.PI, true);
     trackContext.moveTo(originX+5*unit, originY+cellSize);
     trackContext.arc(originX, originY+cellSize, 5*unit, 0, 1.5 * Math.PI, true);
-    //trackContext.moveTo(originX+6*unit, originY+cellSize);
-    //trackContext.arc(originX, originY+cellSize, 6*unit, 0, 1.5 * Math.PI, true);
+    if(lionel){       
+      trackContext.moveTo(originX+6*unit, originY+cellSize);
+      trackContext.arc(originX, originY+cellSize, 6*unit, 0, 1.5 * Math.PI, true);
+      }
     }
   if(theType=="tl"){
     trackContext.arc(originX, originY, 7*unit, 0, .5 * Math.PI, false);
     trackContext.moveTo(originX+5*unit, originY);
     trackContext.arc(originX, originY, 5*unit, 0, .5 * Math.PI, false);
-    //trackContext.moveTo(originX+6*unit, originY);
-    //trackContext.arc(originX, originY, 6*unit, 0, .5 * Math.PI, false);
+    if(lionel){       
+      trackContext.moveTo(originX+6*unit, originY);
+      trackContext.arc(originX, originY, 6*unit, 0, .5 * Math.PI, false);
+      }
     }
   if(theType=="tr"){
     trackContext.arc(originX+cellSize, originY, 7*unit, Math.PI, .5 * Math.PI, true);
     trackContext.moveTo(originX+7*unit, originY);
     trackContext.arc(originX+cellSize, originY, 5*unit, Math.PI, .5 * Math.PI, true);
-    //trackContext.moveTo(originX+6*unit, originY);
-    //trackContext.arc(originX+cellSize, originY, 6*unit, Math.PI, .5 * Math.PI, true);
+    if(lionel){       
+      trackContext.moveTo(originX+6*unit, originY);
+      trackContext.arc(originX+cellSize, originY, 6*unit, Math.PI, .5 * Math.PI, true);
+      }
     }
 
   //trackContext.quadraticCurveTo(originX+cellSize, originY, originX, originY);
