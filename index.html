@@ -487,10 +487,10 @@ function undo(){
   rebuildTracks();
   }
 
-function handleUiEvent(e){
+function handleEventUi(e){
 
   target=e.touches[0].target.id;
-  //dbuga("handleUiEvent "+target);
+  //dbuga("handleEventUi "+target);
   if(target == "level_touch"){
     if(levelsUp){
       //dbuga('closeModals levelsUp');
@@ -1624,7 +1624,6 @@ function drawLevels(){
 
 var visHeight=100;
 function openModal(modal){
-  dbuga('menuUp='+menuUp);
   closeModals();
   camera.style.webkitFilter="blur(5px)";
   if(modal=="levels"){
@@ -1635,6 +1634,7 @@ function openModal(modal){
     menuCanv.style.left=0+"px";
     menuUp=true;
     menuDraw();
+    dbuga('openModal menuUp='+menuUp);
     }
   if(modal=="cars"){
     carsCanv.style.left=0+"px";
@@ -1741,10 +1741,10 @@ function loadStorage(){
     }
   }
 var menuObject={
-  "Music":{"value":"On", "pos":0, "values":["Off", "On", "Classic"]},
-  "Sounds":{"value":"On", "pos":0,  "values":["Off", "On", "Classic"]},
-  "Scale":{"value":"O", "pos":0,  "values":["O", "HO", "N"]},
-  "Detail":{"value":"Med", "pos":0,  "values":["Low", "Med", "High"]}
+  "Music":{"value":"On", "pos":0, "values":["Off", "On", "Classic"], "t":0, "r":0, "b":0, "l":0},
+  "Sounds":{"value":"On", "pos":0,  "values":["Off", "On", "Classic"], "t":0, "r":0, "b":0, "l":0},
+  "Scale":{"value":"O", "pos":0,  "values":["O", "HO", "N"], "t":0, "r":0, "b":0, "l":0},
+  "Detail":{"value":"Med", "pos":0,  "values":["Low", "Med", "High"], "t":0, "r":0, "b":0, "l":0}
 };
 var detailByValue={"Low":3, "Med":6, "High":9};
 function initSession(){
@@ -3377,7 +3377,7 @@ function touchStart(event){
         }
       }
     else {
-      handleUiEvent(event);
+      handleEventUi(event);
       }
     }
   }
@@ -3403,8 +3403,10 @@ function touchEnd(event){
     handleEventLandscape(event);
     }
   else{
-    if((levelsUp)||(menuUp)){
-      //handleEventLevels(event);
+    if(levelsUp){
+      }
+    else if(menuUp){
+      handleEventMenu(event);
       }
     else{
       handleEventDraw(event);
@@ -4056,19 +4058,31 @@ function handleEventLevels(event){
       }
     }
   }
+var menuTouchingId="";
 function handleEventMenu(event){
   var typ = event.type;
   if(typ == "touchstart"){
+    menuTouchingId="";
     var x=event.touches[0].pageX;
-    var y=event.touches[0].pageY-adHeight;
-    //dbug("touchstart "+x+" "+y);
-    for (var b=0; b<menuButtons.length; b++){
-      if((x>menuButtons[b].l)&&(x<menuButtons[b].r)&&(y>menuButtons[b].t)&&(y<menuButtons[b].b)){
-        if(menuButtons[b].label=="How to Play"){}
-        if(menuButtons[b].label=="Music"){}
-        if(menuButtons[b].label=="Sounds"){}
-        if(menuButtons[b].label=="Banner"){toggleBanner();}
+    var y=event.touches[0].pageY;
+    var keys=Object.keys(menuObject);
+    for (var k=0; k<keys.length; k++){
+      if((menuObject[keys[k]].t<y)&&(menuObject[keys[k]].r>x)&&(menuObject[keys[k]].b>y)&&(menuObject[keys[k]].l<x)){
+        menuTouchingId=keys[k];
         }
+      }
+    }
+  if((typ=="touchstart")||(typ=="touchmove")){
+    if(menuTouchingId !=""){
+      var x=event.touches[0].pageX;
+      var y=event.touches[0].pageY;
+      var w=menuObject[menuTouchingId].r-menuObject[menuTouchingId].l;
+      var prog=(x-menuObject[menuTouchingId].l)/w;
+      if(prog<0){prog=0;}
+      if(prog>1){prog=1;}
+      dbug(prog);
+      menuObject[menuTouchingId]["pos"]=prog;
+      menuDraw();
       }
     }
   }
@@ -4754,9 +4768,22 @@ var slot=1.5;
 function menuDraw(){
   
   var keys=Object.keys(menuObject);
+  var g=screenWidth/18;
+  var cx=9;
+  var cy=(screenHeight/2-screenWidth/2)/g+cx;
   for (var k=0; k<keys.length; k++){
     var y=(k-2.5)*5;
     toggleSwitch(0,y,"horizontal",menuObject[keys[k]]['pos'], menuObject[keys[k]]['values'], keys[k]);
+    x0=cx;
+    y0=cy+y;
+    var canv=document.getElementById('menuCanvas');
+    var ctx=canv.getContext('2d');
+
+    ctx.strokeRect(g*(x0-2.5), g*(y0-2.5),g*5,g*5);
+    menuObject[keys[k]]["t"]=g*(y0-2.5);
+    menuObject[keys[k]]["r"]=g*(x0+2.5);
+    menuObject[keys[k]]["b"]=g*(y0+2.5);
+    menuObject[keys[k]]["l"]=g*(x0-2.5);
     }
   populateMenu();
   }
