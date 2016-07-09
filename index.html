@@ -4081,7 +4081,17 @@ function handleEventMenu(event){
       if(prog<0){prog=0;}
       if(prog>1){prog=1;}
       dbug(prog);
-      menuObject[menuTouchingId]["pos"]=prog;
+      menuObject[menuTouchingId]["pos"]=prog*2-1;
+      menuDraw();
+      }
+    }
+  if(typ=="touchend"){
+    if(menuTouchingId !=""){
+      var pos=menuObject[menuTouchingId].pos; //-1 to 1
+      var selection=Math.floor(pos+2/3);
+      menuObject[menuTouchingId]["value"]=menuObject[menuTouchingId]["values"][selection];
+      menuObject[menuTouchingId]["pos"]=selection-1;
+      menuTouchingId="";
       menuDraw();
       }
     }
@@ -4772,7 +4782,7 @@ function menuDraw(){
   var cx=9;
   var cy=(screenHeight/2-screenWidth/2)/g+cx;
   for (var k=0; k<keys.length; k++){
-    var y=(k-2.5)*5;
+    var y=(k-2)*5;
     toggleSwitch(0,y,"horizontal",menuObject[keys[k]]['pos'], menuObject[keys[k]]['values'], keys[k]);
     x0=cx;
     y0=cy+y;
