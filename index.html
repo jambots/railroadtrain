@@ -4088,10 +4088,11 @@ function handleEventMenu(event){
   if(typ=="touchend"){
     if(menuTouchingId !=""){
       var pos=menuObject[menuTouchingId].pos; //-1 to 1
-      var selection=Math.floor(pos+1+2/3);
+      var selection=Math.floor(pos+1+1/3);
       dbuga("pos:" +pos +" selection:"+selection);
       menuObject[menuTouchingId]["value"]=menuObject[menuTouchingId]["values"][selection];
       menuObject[menuTouchingId]["pos"]=selection-1;
+      saveStorage();
       menuTouchingId="";
       menuDraw();
       }
