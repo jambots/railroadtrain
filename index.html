@@ -799,22 +799,33 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
 
 
 //createCanvasTrack('lr', 2, 5)
+
 function createCanvasTrack(theType, cellX, cellY){
   var originX=cellX*cellSize;
   var originY=cellY*cellSize;
   var unit=cellSize/12;
-  // HO ties
-  if((menuObject["Scale"]["value"]=="O")||(menuObject["Scale"]["value"]=="HO")){     
-    trackContext.strokeStyle = "rgb(180, 180, 180)";
-    trackContext.lineWidth = ""+Math.floor(5*unit)/10;
-    //dbuga(Math.floor(5*unit)/10);
+
+  // all ties
+  if((menuObject["Scale"]["value"]=="O")||(menuObject["Scale"]["value"]=="HO")||(menuObject["Scale"]["value"]=="N")){    
+    trackContext.globalCompositeOperation = "destination-over";
+    // N default case
     var start=.05;
     var step=.1;
+    if(menuObject["Scale"]["value"]=="N"){      
+      trackContext.strokeStyle = "rgb(76,92,81)";
+      trackContext.lineWidth = ""+Math.floor(5*unit)/10;
+      }
+    if(menuObject["Scale"]["value"]=="HO"){      
+      trackContext.strokeStyle = "rgb(88,89,57)";
+      trackContext.lineWidth = ""+Math.floor(4*unit)/10;
+      start=0.05;
+      step=.09;
+      }
     if(menuObject["Scale"]["value"]=="O"){      
-      trackContext.strokeStyle = "rgb(66, 66, 66)";
-      trackContext.lineWidth = ""+Math.floor(6*unit)/10;
-      start=.05;
-      step=.45;
+      trackContext.strokeStyle = "rgb(81,83,61)";
+      trackContext.lineWidth = ""+Math.floor(8*unit)/10;
+      start=.1;
+      step=.4;
       }
     trackContext.beginPath();
     if((theType=="ts")||(theType=="td")){
@@ -842,40 +853,40 @@ function createCanvasTrack(theType, cellX, cellY){
         }
       }
     if(theType=="lr"){
-      for (var x=start; x<1; x+=step){
+      for (var x=start; x<=1-start; x+=step){
         trackContext.moveTo(originX+cellSize*x, originY+4.5*unit);
         trackContext.lineTo(originX+cellSize*x, originY+7.5*unit);
         }
       }
     if(theType=="tb"){
-      for (var y=start; y<1; y+=step){
+      for (var y=start; y<=1-start; y+=step){
         trackContext.moveTo(originX+4.5*unit, originY+y*cellSize);
         trackContext.lineTo(originX+7.5*unit, originY+y*cellSize);
         }
       }
     if(theType=="br"){
-      for (var deg=180+90*start; deg<270; deg+=90*step){
+      for (var deg=180+90*start; deg<=270-90*start/2; deg+=90*step){ // /2 not sure, floating point error?
         //dbuga(deg);
         trackContext.moveTo(originX+cellSize+4.5*unit*Math.cos(degToRad(deg)), originY+cellSize+4.5*unit*Math.sin(degToRad(deg)));
         trackContext.lineTo(originX+cellSize+7.5*unit*Math.cos(degToRad(deg)), originY+cellSize+7.5*unit*Math.sin(degToRad(deg)));
         }
       }
     if(theType=="bl"){
-      for (var deg=270+90*start; deg<360; deg+=90*step){
+      for (var deg=270+90*start; deg<=360-90*start/2; deg+=90*step){
         //dbuga(deg);
         trackContext.moveTo(originX+4.5*unit*Math.cos(degToRad(deg)), originY+cellSize+4.5*unit*Math.sin(degToRad(deg)));
         trackContext.lineTo(originX+7.5*unit*Math.cos(degToRad(deg)), originY+cellSize+7.5*unit*Math.sin(degToRad(deg)));
         }
       }
     if(theType=="tl"){
-      for (var deg=0+90*start; deg<90; deg+=90*step){
+      for (var deg=0+90*start; deg<=90-90*start/2; deg+=90*step){
         //dbuga(deg);
         trackContext.moveTo(originX+4.5*unit*Math.cos(degToRad(deg)), originY+4.5*unit*Math.sin(degToRad(deg)));
         trackContext.lineTo(originX+7.5*unit*Math.cos(degToRad(deg)), originY+7.5*unit*Math.sin(degToRad(deg)));
         }
       }
     if(theType=="tr"){
-      for (var deg=90+90*start; deg<180; deg+=90*step){
+      for (var deg=90+90*start; deg<=180-90*start/2; deg+=90*step){
         //dbuga(deg);
         trackContext.moveTo(originX+cellSize+4.5*unit*Math.cos(degToRad(deg)), originY+4.5*unit*Math.sin(degToRad(deg)));
         trackContext.lineTo(originX+cellSize+7.5*unit*Math.cos(degToRad(deg)), originY+7.5*unit*Math.sin(degToRad(deg)));
@@ -884,100 +895,20 @@ function createCanvasTrack(theType, cellX, cellY){
 
     trackContext.stroke();
     }
-  // lionel ties
-/*
-  if(menuObject["Scale"]["value"]=="O"){      
-    trackContext.strokeStyle = "rgb(66, 66, 66)";
-    trackContext.lineWidth = "3";
-    trackContext.beginPath();
-    if((theType=="ts")||(theType=="td")){
-      trackContext.moveTo(originX+4.5*unit, originY+unit); //top
-      trackContext.lineTo(originX+7.5*unit, originY+unit);
-      trackContext.moveTo(originX+4.5*unit, originY+cellSize/2); //middle
-      trackContext.lineTo(originX+7.5*unit, originY+cellSize/2);
-      }
-    if((theType=="bs")||(theType=="bd")){
-      trackContext.moveTo(originX+4.5*unit, originY+cellSize-unit); //bottom
-      trackContext.lineTo(originX+7.5*unit, originY+cellSize-unit);
-      trackContext.moveTo(originX+4.5*unit, originY+cellSize/2); //middle
-      trackContext.lineTo(originX+7.5*unit, originY+cellSize/2);
-      }
-    if((theType=="ls")||(theType=="ld")){
-      trackContext.moveTo(originX+unit, originY+4.5*unit); //left
-      trackContext.lineTo(originX+unit, originY+7.5*unit);
-      trackContext.moveTo(originX+cellSize/2, originY+4.5*unit); //center
-      trackContext.lineTo(originX+cellSize/2, originY+7.5*unit);
-      }
-    if((theType=="rs")||(theType=="rd")){
-      trackContext.moveTo(originX+cellSize-unit, originY+4.5*unit); //right
-      trackContext.lineTo(originX+cellSize-unit, originY+7.5*unit);
-      trackContext.moveTo(originX+cellSize/2, originY+4.5*unit); //center
-      trackContext.lineTo(originX+cellSize/2, originY+7.5*unit);
-      }
-    if(theType=="lr"){
-      trackContext.moveTo(originX+unit, originY+4.5*unit); //left
-      trackContext.lineTo(originX+unit, originY+7.5*unit);
-      trackContext.moveTo(originX+cellSize-unit, originY+4.5*unit); //right
-      trackContext.lineTo(originX+cellSize-unit, originY+7.5*unit);
-      trackContext.moveTo(originX+cellSize/2, originY+4.5*unit); //center
-      trackContext.lineTo(originX+cellSize/2, originY+7.5*unit);
-      }
-    if(theType=="tb"){
-      trackContext.moveTo(originX+4.5*unit, originY+unit); //top
-      trackContext.lineTo(originX+7.5*unit, originY+unit);
-      trackContext.moveTo(originX+4.5*unit, originY+cellSize-unit); //bottom
-      trackContext.lineTo(originX+7.5*unit, originY+cellSize-unit);
-      trackContext.moveTo(originX+4.5*unit, originY+cellSize/2); //middle
-      trackContext.lineTo(originX+7.5*unit, originY+cellSize/2);
-      }
-    if(theType=="br"){
-      trackContext.moveTo(originX+cellSize/2+.75*unit, originY+cellSize/2+.75*unit); //diag br
-      trackContext.lineTo(originX+cellSize/2+2.75*unit, originY+cellSize/2+2.75*unit);
-
-      trackContext.moveTo(originX+4.5*unit, originY+cellSize-unit); //bottom
-      trackContext.lineTo(originX+7.5*unit, originY+cellSize-unit);
-      trackContext.moveTo(originX+cellSize-unit, originY+4.5*unit); //right
-      trackContext.lineTo(originX+cellSize-unit, originY+7.5*unit);
-      }
-    if(theType=="bl"){
-      trackContext.moveTo(originX+cellSize/2-.75*unit, originY+cellSize/2+.75*unit); //diag bl
-      trackContext.lineTo(originX+cellSize/2-2.75*unit, originY+cellSize/2+2.75*unit);
-
-      trackContext.moveTo(originX+4.5*unit, originY+cellSize-unit); //bottom
-      trackContext.lineTo(originX+7.5*unit, originY+cellSize-unit);
-      trackContext.moveTo(originX+unit, originY+4.5*unit); //left
-      trackContext.lineTo(originX+unit, originY+7.5*unit);
-      }
-    if(theType=="tl"){
-      trackContext.moveTo(originX+cellSize/2-.75*unit, originY+cellSize/2-.75*unit); //diag tl
-      trackContext.lineTo(originX+cellSize/2-2.75*unit, originY+cellSize/2-2.75*unit);
-
-
-      trackContext.moveTo(originX+4.5*unit, originY+unit); //top
-      trackContext.lineTo(originX+7.5*unit, originY+unit);
-      trackContext.moveTo(originX+unit, originY+4.5*unit); //left
-      trackContext.lineTo(originX+unit, originY+7.5*unit);
-      }
-    if(theType=="tr"){
-      trackContext.moveTo(originX+cellSize/2+.75*unit, originY+cellSize/2-.75*unit); //diag tr
-      trackContext.lineTo(originX+cellSize/2+2.75*unit, originY+cellSize/2-2.75*unit);
-
-      trackContext.moveTo(originX+4.5*unit, originY+unit); //top
-      trackContext.lineTo(originX+7.5*unit, originY+unit);
-      trackContext.moveTo(originX+cellSize-unit, originY+4.5*unit); //right
-      trackContext.lineTo(originX+cellSize-unit, originY+7.5*unit);
-      }
-
-    trackContext.stroke();
-    }
-*/
 
   //normal two rails only
-  trackContext.strokeStyle = "rgb(128, 128, 128)";
-  trackContext.lineWidth = "2";
-  originX=cellX*cellSize
-  originY=cellY*cellSize
-  unit=cellSize/12;
+    trackContext.globalCompositeOperation = "source-over";
+
+    if(menuObject["Scale"]["value"]=="N"){      
+      trackContext.strokeStyle = "rgb(199,185,172)";
+      }
+    if(menuObject["Scale"]["value"]=="HO"){      
+      trackContext.strokeStyle = "rgb(180,154,93)";
+      }
+    if(menuObject["Scale"]["value"]=="O"){      
+      trackContext.strokeStyle = "rgb(113,103,101)";
+      }
+  trackContext.lineWidth = ""+Math.floor(3*unit)/10;
   trackContext.beginPath();
   if((theType=="ts")||(theType=="td")){
     trackContext.moveTo(originX+5*unit, originY);
