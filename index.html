@@ -1624,6 +1624,7 @@ function drawLevels(){
 
 var visHeight=100;
 function openModal(modal){
+  dbuga('menuUp='+menuUp);
   closeModals();
   camera.style.webkitFilter="blur(5px)";
   if(modal=="levels"){
@@ -1633,6 +1634,7 @@ function openModal(modal){
   if(modal=="menu"){
     menuCanv.style.left=0+"px";
     menuUp=true;
+    menuDraw();
     }
   if(modal=="cars"){
     carsCanv.style.left=0+"px";
@@ -3385,8 +3387,10 @@ function touchMove(event){
     handleEventLandscape(event);
     }
   else{
-    if((levelsUp)||(menuUp)){
-      //handleEventLevels(event);
+    if(levelsUp){
+      }
+    else if(menuUp){
+      handleEventMenu(event);
       }
     else{
       handleEventDraw(event);
@@ -4748,19 +4752,18 @@ function placeWithin(canvasRef, imageRef){
 var len=2;
 var slot=1.5;
 function menuDraw(){
-  openModal('menu');
   
   var keys=Object.keys(menuObject);
   for (var k=0; k<keys.length; k++){
-    var y=(k-2)*4;
+    var y=(k-2.5)*5;
     toggleSwitch(0,y,"horizontal",menuObject[keys[k]]['pos'], menuObject[keys[k]]['values'], keys[k]);
     }
   populateMenu();
   }
      
 function toggleSwitch(x0,y0,orient,pos, tics, label){//returns path
-  var g=screenWidth/16;
-  var cx=8;
+  var g=screenWidth/18;
+  var cx=9;
   var cy=(screenHeight/2-screenWidth/2)/g+cx;
   x0+=cx;
   y0+=cy;
