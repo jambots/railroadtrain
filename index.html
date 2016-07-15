@@ -114,6 +114,7 @@ var cubeSize=cellSize;
 
 var faceData={};
 function setupFaceData(){
+  dbuga("setupFaceData() cubeSize="+cubeSize);
   var s=cubeSize;
   faceData={
   "tank":[
@@ -204,7 +205,7 @@ function pauseGame(){
 function resumeGame(){
   // called by shell
   //requestPersistenceData();
-  //dbuga("resumeGame()");
+  dbuga("resumeGame()");
   paused=false;
   transmitBgMusicState();
   return true;
@@ -635,6 +636,7 @@ var uiTop=100;
 var squarePadLeft=0;
 
 function setupClasses(){
+  dbuga("setupClasses()");
   var p=cellSize/96
 
   var buttonsTop=30*p;
@@ -746,7 +748,7 @@ function setupClasses(){
 var bgContext;
 var trackContext;
 function setupGridData(){
-  //alert('setupGridData()');
+  dbuga('setupGridData()');
   tilesByGridXY={};
   for (x=0; x<cellsAcross; x++){
     for (y=0; y<cellsDown; y++){
@@ -1011,6 +1013,7 @@ function createCanvasTrack(theType, cellX, cellY){
   trackContext.stroke();
   }
 function setupCanvas(){
+  dbuga("setupCanvas()");
   htmlBlock="<canvas id=\"backgroundCanvas\" width=\""+boardWidth+"\" height=\""+boardHeight+"\" style=\"position:absolute;\"></canvas>";
   htmlBlock+="<canvas id=\"trackCanvas\" width=\""+boardWidth+"\" height=\""+boardHeight+"\" style=\"position:absolute;\"></canvas>";
   document.getElementById('canvasHolder').innerHTML=htmlBlock;
@@ -1033,8 +1036,6 @@ var screenAspect=screenWidth/screenHeight;
 var viewportAspect=viewportWidth/viewportHeight;
 var boardHeight=100;
 var boardWidth=100;
-var canvasHeight=100;
-var canvasWidth=100;
 var topPad=0;
 var leftPad=0;
 var wrapper;
@@ -1042,8 +1043,8 @@ function changeGeometry(){
   viewportWidth = window.innerWidth;
   viewportHeight = window.innerHeight;
   viewportAspect=viewportWidth/viewportHeight;
-  //dbug("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
-  changeView();
+  dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
+  changeView("changeGeometry");
   }
 
 function mouseLevel(){
@@ -1073,7 +1074,7 @@ function toggleBanner(){
   bannerEnabled=!(bannerEnabled);
   initGeometry();
 
-  changeView();
+  changeView("toggleBanner");
   populateModals();
   }
 function adGeometry(){
@@ -1115,7 +1116,7 @@ var graphicsCanv;
 var graphicsUp=false;
 var cameraCanv;
 function initGeometry(){
- 
+  dbuga("initGeometry()");
   levelsCanv=document.getElementById("levelsCanvas");
   menuCanv=document.getElementById("menuCanvas");
   carsCanv=document.getElementById("carsCanvas");
@@ -1133,7 +1134,7 @@ function initGeometry(){
   if(screenWidth>screenHeight){
     screenWidth = screen.height;
     screenHeight = screen.width;
-    //dbuga('Landroid so swap screen dimensions');
+    dbuga('Landrod so swap screen dimensions');
     }// screen width is consistent with iOS now, width < height
   //dbuga("screenWidth="+screenWidth);
   //dbuga("screenHeight="+screenHeight);
@@ -1191,6 +1192,8 @@ function returnCellsAcross(width, scale){
     }
   return a;
   }
+var boardPad=0;
+var space=0;
 function boardGeometry(){
   var scale=menuObject["Scale"]["value"];
   cellsAcross=returnCellsAcross(screenWidth, scale)
@@ -1199,22 +1202,23 @@ function boardGeometry(){
   cubeSize=cellSize*shrink;
   cellsDown=Math.floor((portraitScreenHeight-44-13-adHeight)/cellSize);
   totalCells=cellsAcross*cellsDown;
-
-//dbuga("cellsAcross="+cellsAcross);
-//dbuga("cellsDown="+cellsDown);
-//dbuga("totalCells="+ totalCells);
-//dbuga("space="+(screenHeight-cellsDown*cellSize-44-adHeight));
+  space=(screenHeight-cellsDown*cellSize-44-adHeight);
+  boardPad=Math.floor(space/2);
+  dbuga("boardGeometry()");
+  dbuga(" - cellsAcross="+cellsAcross);
+  dbuga(" - cellsDown="+cellsDown);
+  dbuga(" - boardPad="+ boardPad);
+  //dbuga(" - space="+space);
 
   boardWidth=screenWidth;
   boardHeight=cellsDown*cellSize;
   
   camera.style.webkitPerspective=boardHeight;
-  canvasWidth=boardWidth;
-  canvasHeight=boardHeight;
+  dbuga(" - boardHeight="+boardHeight +" boardWidth="+boardWidth);
+
   //wrapperHeight=(cellsDown+1.5)*cellSize;
-  //dbuga("cellsDown="+cellsDown);
   wrapper.style.width=boardWidth+"px";
-  wrapper.style.height=canvasHeight+"px";
+  wrapper.style.height=boardHeight+"px";
   wrapper.style.left=leftPad+"px";
   wrapper.style.top=topPad+"px";
 
@@ -1264,7 +1268,7 @@ function boardGeometry(){
   }
 var destMs;
 function restartIntervals(){
-  //dbuga('restartIntervals()');
+  dbuga('restartIntervals()');
   //window.clearInterval(turnInterval);
   window.clearInterval(sourceInterval);
   window.clearInterval(destInterval);
@@ -1351,7 +1355,7 @@ function openGraphics(carButton){
 }
 var graphicsButtons=[];
 function populateGraphics(){
-  //dbug('populateGraphics 0');
+  dbuga('populateGraphics 0');
   graphicsCanv.width=screenHeight;
   var graphicsCtx=graphicsCanv.getContext('2d');
   graphicsCtx.lineWidth=cellSize/8;
@@ -1411,12 +1415,12 @@ function populateGraphics(){
 
   graphicsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
   //cameraCanv.style.display="none";
-  //dbuga('populateGraphics 10');
+  dbuga('populateGraphics 10');
 
   }
 var carsButtons=[];
 function populateCars(){
-  //dbug('');
+  dbuga('populateCars()');
   carsButtons=[];
   var buttonWidth=cellSize*3;
   var buttonHeight=cellSize*1;
@@ -1522,7 +1526,7 @@ function populateMenu(){
 var levelButtons=[];
 function populateLevels(){
   levelButtons=[];
-  //dbug('populateLevels()');
+  dbuga('populateLevels()');
   for (var b=0; b<levelData.length; b++){
     if(levelData[b].space <= totalCells){
       levelButtons.push({"num":b});
@@ -1664,10 +1668,9 @@ function closeModals(){
   graphicsEditing=false;
   camera.style.webkitFilter="none";
   }
-function changeView(){
-  //dbuga("changeView shooting="+shooting);
+function changeView(caller){
+  dbuga("changeView in "+caller+" shooting="+shooting);
   if(shooting){return false;}
-  //dbuga('closeModals changeView()')
   closeModals();
   if(viewportAspect>1){
     document.getElementById("navDiv").style.display="none";
@@ -1677,6 +1680,7 @@ function changeView(){
     updateColorsCanv();
     colorsCanv.style.display="block";
     visHeight=viewportHeight-adHeight;
+    camera.style.marginTop= 0 +"px";
 
     }
   else{
@@ -1685,8 +1689,9 @@ function changeView(){
     document.getElementById("uiHolder").style.display="block";
     document.getElementById("prerails").style.display="block";
     //document.getElementById("highlighter").style.display="block";
-    screenLayout(); //in nav.js
+    styleNavDiv(); //in nav.js
     visHeight=boardHeight;
+    camera.style.marginTop= boardPad +"px";
     }
   document.getElementById("wrapper").style.width= viewportWidth +"px";
   document.getElementById("wrapper").style.height= viewportHeight +"px";
@@ -1700,18 +1705,18 @@ function changeView(){
   adGeometry();
   }
 function init(){
-  //dbuga('init() '+screen.width);
+  dbuga('init() '+screen.width);
   if(screen.width==1680){
     //dbuga('local init()');
     initSession();
     }
   }
 function onDeviceReady(){
-  //dbuga('onDeviceReady()');
+  dbuga('onDeviceReady() so initSession');
   initSession();
   }  
 function initStorage(){
-  //dbuga('initStorage();');
+  dbuga('initStorage();');
   localStorage.setItem("initialized", "true");
   localStorage.setItem("Music", menuObject["Music"]["value"]);
   localStorage.setItem("Sounds", menuObject["Sounds"]["value"]);
@@ -1748,7 +1753,7 @@ var menuObject={
 };
 var detailByValue={"Low":3, "Med":6, "High":9};
 function initSession(){
-  //dbuga('initSession()');
+  dbuga('initSession()');
   if (localStorage.getItem("initialized") === null) {
     initStorage();
     }
@@ -1820,7 +1825,7 @@ function initSession(){
     ////window.plugin.CanvasCamera.initialize(cameraCanv);
     }, false);
 
-  //dbuga('start preloading');
+  dbuga('end of initSession so start preloading');
   window.setTimeout('preloadTick()',10);
   }
 function measureLocalStorage(){
@@ -1840,8 +1845,8 @@ function localStorageToImages(){
     }
   }
 function resumeInit(){
-  //dbuga('resumeInit()');
-  changeView();
+  dbuga('resumeInit()');
+  //changeView("resumeInit");
   resetBoardTimersObjects();
   rebuildSequence();
   document.getElementById('debugDiv').style.width=screenWidth+"px";
@@ -1854,6 +1859,7 @@ function resumeInit(){
 var frames=0;
 var secondInterval;
 function populateModals(){
+  dbuga('populateModals()');
   populateLevels();
   //populateMenu();
   populateCars();
@@ -1933,7 +1939,7 @@ var showQueue=[];
 var testStr="";
 var soundObject={};
 function initSound(){
-  //dbuga('initSound()');
+  dbuga('initSound()');
   loopLoad("measure_loop_inst");
   oneShotLoad("laytrack");
   oneShotLoad("carstart");
@@ -1944,9 +1950,10 @@ function initSound(){
   }
 
 function setupNav(){
+  dbuga('setupNav()');
   var navDivRef=createNavDiv();
-  screenLayout(navDivRef);
-  //document.getElementById('uiHolder').style.top=canvasHeight+"px";
+  styleNavDiv();
+  //document.getElementById('uiHolder').style.top=boardHeight+"px";
 
   var useWidth=320/4;
   
@@ -1958,11 +1965,11 @@ function setupNav(){
   addControl("undo", "Undo", "right", useWidth);
 
   document.getElementById('undo_label').style.opacity=".5";
-  screenLayout();
+  //styleNavDiv();
   }
 
 function resetBoardTimersObjects(){
-  //dbuga('resetBoardTimersObjects()');
+  dbuga('resetBoardTimersObjects()');
   setupGridData();
   closeHelp();
   collisionData=new Object();
@@ -3714,7 +3721,7 @@ function handleEventLandscape(e){
       var deltaX=prevTouchX-t.pageX;
       var deltaY=prevTouchY-(t.pageY-adHeight);
       combinedZoom[focusTrain]-=deltaY/5;
-      if(t.pageY-adHeight>(canvasWidth/2)){cameraRotationDegrees[focusTrain]+=deltaX/2.5;}
+      if(t.pageY-adHeight>(boardWidth/2)){cameraRotationDegrees[focusTrain]+=deltaX/2.5;}
       else{cameraRotationDegrees[focusTrain]-=deltaX/15;}
       if(combinedZoom[focusTrain]<0){combinedZoom[focusTrain]=0;}
       if(combinedZoom[focusTrain]>100){combinedZoom[focusTrain]=100;}
@@ -3891,15 +3898,15 @@ function fixCamera(){
   transformString='';
   transformString+='rotateX(0deg) ';
   transformString+='rotateZ(0deg)';
-  transformString+='translateX('+(canvasWidth*0)+'px) ';
-  transformString+='translateY('+(canvasHeight*0)+'px) ';
+  transformString+='translateX('+(boardWidth*0)+'px) ';
+  transformString+='translateY('+(boardHeight*0)+'px) ';
   //transformString+='translateX(0) ';
   //transformString+='translateY(0) ';
   //dbug(transformString);
   table.style.webkitTransform=transformString;
   
   
-  transformString='translateZ('+((100-100)*canvasHeight/100)+'px) translateY('+(0*canvasWidth/100)+'px)';
+  transformString='translateZ('+((100-100)*boardHeight/100)+'px) translateY('+(0*boardWidth/100)+'px)';
   zoom.style.webkitTransform=transformString;
 
   }
@@ -3997,11 +4004,11 @@ var cachePageY=0;
 function xydirFromTouch(thisTouch){
   var xydirObject=new Object();
   xydirObject.x=Math.floor((thisTouch.pageX)/cellSize);
-  xydirObject.y=Math.floor((thisTouch.pageY-adHeight)/cellSize);
+  xydirObject.y=Math.floor((thisTouch.pageY-boardPad)/cellSize);
 
   centerX=cellSizeHalf+(cellSize*xydirObject.x);
   centerY=cellSizeHalf+(cellSize*xydirObject.y);
-  if(Math.abs(centerX-thisTouch.pageX)>Math.abs(centerY-(thisTouch.pageY-adHeight))){
+  if(Math.abs(centerX-thisTouch.pageX)>Math.abs(centerY-(thisTouch.pageY-boardPad))){
     // further on X axis
     if (centerX-thisTouch.pageX > 0){
       xydirObject.dir="l";
@@ -4012,7 +4019,7 @@ function xydirFromTouch(thisTouch){
     }
   else{
     // further on Y axis
-    if (centerY-(thisTouch.pageY-adHeight) > 0){
+    if (centerY-(thisTouch.pageY-boardPad) > 0){
       xydirObject.dir="t";
       }
     else{
@@ -4020,7 +4027,7 @@ function xydirFromTouch(thisTouch){
       }
     }
   distX=Math.abs(centerX-thisTouch.pageX);
-  distY=Math.abs(centerY-(thisTouch.pageY-adHeight));
+  distY=Math.abs(centerY-(thisTouch.pageY-boardPad));
   xydirObject.dist=Math.sqrt(distX*distX + distY*distY);
   return xydirObject;
 
@@ -5070,7 +5077,7 @@ function rnd(range) {
 
 
 
-<div id="debugDiv" style="display:none; position:absolute; top:0px; left:10px; font-size:24px; width:750px;"></div>
+<div id="debugDiv" style="display:none; position:absolute; top:0px; left:10px; font-size:16px; width:750px; z-index:3;"></div>
 
 <div id="sources" style="display:none;">
   <div id="tiledestblue" class="tiledestblue"></div>

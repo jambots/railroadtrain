@@ -1,8 +1,6 @@
 var controlHeight=44;
 var controlWidth=0;
-var canvasHeight=0;
-var canvasWidth=0;
-var fullHeight=0;
+
 var navDivRef=new Object();
 function createNavDiv(){
   //dbuga('createNavDiv');
@@ -14,19 +12,17 @@ function createNavDiv(){
   navDivRef=newdiv;
   navDivRef.style.overflow="hidden";
   }
-function screenLayout(){
-  fullHeight=portraitScreenHeight;
-  //dbuga("screenLayout fullHeight="+fullHeight);
-  canvasHeight=cellSize*cellsDown;
-  canvasWidth=screenWidth;
+function styleNavDiv(){
   navDivRef.style.height=controlHeight+"px";
-  navDivRef.style.width=canvasWidth+"px";
+  navDivRef.style.width=boardWidth+"px";
   navDivRef.style.top=(portraitScreenHeight-controlHeight)+"px";
+  dbuga("styleNavDiv");
   }
 
 window.onorientationchange = function () {
+  dbuga("onorientationchange");
   //screenLayout();
-  //displayWidth=canvasWidth-controlWidth;
+  //displayWidth=boardWidth-controlWidth;
   //document.getElementById('displayDiv').style.width=displayWidth+"px";
   }
 
