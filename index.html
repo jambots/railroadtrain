@@ -3980,7 +3980,7 @@ var lastY=0;
 var centerSize=24;
 function xyOn(x,y, dir, dist){
   var leftPx=x*cellSize;
-  var topPx=y*cellSize;
+  var topPx=y*cellSize+boardPad;
   document.getElementById("prerails").style.top=topPx+"px";
   document.getElementById("prerails").style.left=leftPx+"px";
   if((dist>centerSize)&&(x<cellsAcross)){
