@@ -2626,7 +2626,9 @@ var sourceMs;
 var turnMs=1000;
 
 function sourceTick(){
-  //return false;////
+  if((menuUp)||(levelsUp)){
+    return false;
+    }
   sourceAction(checkSourceNum);
   checkSourceNum++;
   if (checkSourceNum>=sourceCount){
@@ -2841,6 +2843,10 @@ function trainObject(color, x, y, dir){
   }
 
 function turnTick(){
+  if((menuUp)||(levelsUp)){
+    return false;
+    }
+
   if((helpUp==false)&&(paused==false)){
     var debugString="turnTick() checkTrainNum="+checkTrainNum;
     for (var t=0; t<trainData.length; t++){
