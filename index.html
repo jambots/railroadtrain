@@ -1583,11 +1583,11 @@ var menuButtons=[
 function populateMenu(){
   var g=screenWidth/16;
   var buttonWidth=g*6;
-  var buttonHeight=g*2;
+  var buttonHeight=g*1.5;
   var pad=g/2;
   var radius=g/6;
   var cx=8;
-  var cy=(screenHeight/2-screenWidth/2)/g+cx;
+  var cy=(screenHeight/2-screenWidth/2)/g+8.5;
   //dbuga("cy "+cy);
   var menuCtx=menuCanv.getContext('2d');
   for (var b=0; b<menuButtons.length; b++){
@@ -4910,7 +4910,7 @@ function menuDraw(){
   canv.width=canv.width;
   var ctx=canv.getContext('2d');
   for (var k=0; k<keys.length; k++){
-    var y=(k-2.5)*5;
+    var y=(k-2)*5;
     toggleSwitch(0,y,"horizontal",menuObject[keys[k]]['pos'], menuObject[keys[k]]['values'], keys[k]);
     x0=cx;
     y0=cy+y;
@@ -4924,9 +4924,9 @@ function menuDraw(){
     }
   populateMenu();
   ctx.font=g/1.5+"px Arial";
-  ctx.fillStyle="#666";
+  ctx.fillStyle="#333";
   ctx.textAlign="center";
-  ctx.fillText("MIN FPS: "+minFramesPerSecond,g*cx,g*(cy+6));
+  ctx.fillText("MIN FPS: "+minFramesPerSecond,g*cx,g*(cy+7));
   
   }
      
