@@ -1370,11 +1370,9 @@ function restartIntervals(){
   destMs=Math.floor(1000/trainData.length);
 
 
-  if(freezeMode == false){
     //turnInterval=window.setInterval(turnTick, turnMs);
     sourceInterval=window.setInterval(sourceTick, sourceMs);
     destInterval=window.setInterval(destTick, destMs);
-    }
   }
 var platform="unknown";
 var filePath="";
@@ -1978,64 +1976,64 @@ function secondTick(){
   }
 var turnFrames=0;
 var camPos={"x":0, "y":0, "d":0};
+
 function rafTick(nowMs){
-  turnFrames++;
-  var framesPerTurn=turnMs/17;
-  if(turnFrames>=framesPerTurn){
-    turnFrames=0;
-    turnTick();
-    //dbuga('turn');
-  }
-  frames++;
-  camPos= returnProgPos(trainData[focusTrain], trainData[focusTrain].prog);
-  for(var t=0; t<trainData.length; t++){
-    //if((trainData[t].prevX != trainData[t].nextX)||(trainData[t].prevY != trainData[t].nextY)){
-    if(trainData[t].moving){
-      trainData[t].prog+=1/60;// maybe set proportional to frame ms to maintain sim speed
-      var ref=trainData[t].ref;
-      ref.style.webkitTransform=returnProgTransform(trainData[t], trainData[t].prog);
+  if((menuUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
+
+    turnFrames++;
+    var framesPerTurn=turnMs/17;
+    if(turnFrames>=framesPerTurn){
+      turnFrames=0;
+      turnTick();
+      //dbuga('turn');
+      }
+    frames++;
+    camPos= returnProgPos(trainData[focusTrain], trainData[focusTrain].prog);
+    for(var t=0; t<trainData.length; t++){
+      //if((trainData[t].prevX != trainData[t].nextX)||(trainData[t].prevY != trainData[t].nextY)){
+      if(trainData[t].moving){
+        trainData[t].prog+=1/60;// maybe set proportional to frame ms to maintain sim speed
+        var ref=trainData[t].ref;
+        ref.style.webkitTransform=returnProgTransform(trainData[t], trainData[t].prog);
+        }
+      }
+    testString="";
+    for(var c=0; c<carData.length; c++){
+      if(carData[c].attached){
+        //if(trainData[carData[c].trainNum].moving){
+          var ref=carData[c].ref;
+          ref.style.webkitTransform=returnProgTransform(carData[c], trainData[carData[c].trainNum].prog);
+        //}
+        }
+      }
+    for(var h=0; h<hideQueue.length; h++){
+      hideQueue[h].style.opacity=0;
+      }
+    for(var s=0; s<showQueue.length; s++){
+      showQueue[s].style.opacity=1;
+      }
+    hideQueue=[];
+    showQueue=[];
+
+
+    //ported 
+    if(combinedZoom[focusTrain]>100){
+      combinedZoom[focusTrain]=100;
+      }
+    if(combinedZoom[focusTrain]<0){
+      combinedZoom[focusTrain]=0;
+      }
+    cameraDistancePercent=100-combinedZoom[focusTrain];
+    cameraTilt=90*(combinedZoom[focusTrain]/100);
+
+    //cameraXpercent=100-100*trainPos[focusTrain].x;
+    //cameraYpercent=100-100*trainPos[focusTrain].y;
+
+    if(viewportAspect>1){
+      locateCamera();
+      }
     }
-  }
-  testString="";
-  for(var c=0; c<carData.length; c++){
-    if(carData[c].attached){
-      //if(trainData[carData[c].trainNum].moving){
-        var ref=carData[c].ref;
-        ref.style.webkitTransform=returnProgTransform(carData[c], trainData[carData[c].trainNum].prog);
-      //}
-    }
-  }
-  for(var h=0; h<hideQueue.length; h++){
-    hideQueue[h].style.opacity=0;
-  }
-  for(var s=0; s<showQueue.length; s++){
-    showQueue[s].style.opacity=1;
-  }
-  hideQueue=[];
-  showQueue=[];
-
-
-  //ported 
-  if(combinedZoom[focusTrain]>100){
-    combinedZoom[focusTrain]=100;
-    }
-  if(combinedZoom[focusTrain]<0){
-    combinedZoom[focusTrain]=0;
-    }
-  cameraDistancePercent=100-combinedZoom[focusTrain];
-  cameraTilt=90*(combinedZoom[focusTrain]/100);
-
-  //cameraXpercent=100-100*trainPos[focusTrain].x;
-  //cameraYpercent=100-100*trainPos[focusTrain].y;
-
-  if(viewportAspect>1){
-    locateCamera();
-    }
-
-
-
-  //if(freezeMode==false){window.setTimeout("requestAnimationFrame(rafTick)", 10);}
-  if(freezeMode==false){requestAnimationFrame(rafTick);}
+  requestAnimationFrame(rafTick);
 }
 var hideQueue=[];
 var showQueue=[];
@@ -2843,11 +2841,7 @@ function trainObject(color, x, y, dir){
   }
 
 function turnTick(){
-  if((menuUp)||(levelsUp)){
-    return false;
-    }
-
-  if((helpUp==false)&&(paused==false)){
+  if((menuUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
     var debugString="turnTick() checkTrainNum="+checkTrainNum;
     for (var t=0; t<trainData.length; t++){
     debugString+="<br>"+t+" prev "+trainData[t].prevX+" "+trainData[t].prevY+" next"+trainData[t].nextX+" "+trainData[t].nextY+" nextDir "+trainData[t].nextDir+" nextDeg "+trainData[t].nextDeg;
@@ -3160,7 +3154,6 @@ trainHtmlByColor['black'] ="<div id=\"trainId\" class=\"transit\" style><div cla
 var fullCellGlom=""; //needed for testing the path cells of tiles in viable code
 var destInterval;
 
-var freezeMode=false;
 var dirList=new Array('t', 'b', 'r', 'l');
 var colorList=new Array('black', 'orange', 'blue', 'green');
 var colorCycle=0;
