@@ -1359,6 +1359,7 @@ function boardGeometry(){
 var destMs;
 function restartIntervals(){
   dbuga('restartIntervals()');
+  minFramesPerSecond=999;
   //window.clearInterval(turnInterval);
   window.clearInterval(sourceInterval);
   window.clearInterval(destInterval);
@@ -1753,10 +1754,11 @@ function closeModals(){
   carsUp=false;
   graphicsCanv.style.left="-"+screenHeight+"px";
   graphicsUp=false;
-  //dbuga('closeModals() updateColorsCanv')
   updateColorsCanv();
   graphicsEditing=false;
   camera.style.webkitFilter="none";
+  minFramesPerSecond=999;
+  dbug('')
   }
 function changeView(caller){
   dbuga("changeView in "+caller+" shooting="+shooting);
@@ -4905,7 +4907,7 @@ function menuDraw(){
   ctx.fillStyle="#666";
   ctx.textAlign="center";
   ctx.fillText("MIN FPS: "+minFramesPerSecond,g*cx,g*(cy+6));
-  minFramesPerSecond=999;
+  
   }
      
 function toggleSwitch(x0,y0,orient,pos, tics, label){//returns path
