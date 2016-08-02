@@ -595,6 +595,7 @@ function handleEventUi(e){
     if(menuUp){
       //dbuga('closeModals menu_touch');
       closeModals();
+      minFramesPerSecond=999;
       }
     else{
       openModal("menu");
@@ -1745,7 +1746,7 @@ function openModal(modal){
     }
   }
 function closeModals(){
-  //dbuga('closeModals');
+  dbuga('closeModals');
   levelsCanv.style.left="-"+screenWidth+"px";
   levelsUp=false;
   menuCanv.style.left="-"+screenWidth+"px";
@@ -1757,7 +1758,7 @@ function closeModals(){
   updateColorsCanv();
   graphicsEditing=false;
   camera.style.webkitFilter="none";
-  minFramesPerSecond=999;
+  
   dbug('')
   }
 function changeView(caller){
@@ -1960,7 +1961,7 @@ function populateModals(){
 }
 var minFramesPerSecond=999;
 function secondTick(){
-  //dbug(testStr);
+  dbug("secondTick frames "+frames);
   if(carData.length>0){
     //dbug(progTransform(carData[0].animCache, trainData[0].prog));
     }
