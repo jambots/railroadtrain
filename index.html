@@ -586,7 +586,7 @@ function handleEventUi(e){
     if(levelsUp){
       //dbuga('closeModals levelsUp');
       closeModals();
-      minFramesPerSecond=999;
+      minFramesPerSecond=-4;
       }
     else{
       openModal("levels");
@@ -596,7 +596,7 @@ function handleEventUi(e){
     if(menuUp){
       //dbuga('closeModals menu_touch');
       closeModals();
-      minFramesPerSecond=999;
+      minFramesPerSecond=-4;
       }
     else{
       openModal("menu");
@@ -1361,7 +1361,7 @@ function boardGeometry(){
 var destMs;
 function restartIntervals(){
   dbuga('restartIntervals()');
-  minFramesPerSecond=999;
+  minFramesPerSecond=-4;
   //window.clearInterval(turnInterval);
   window.clearInterval(sourceInterval);
   window.clearInterval(destInterval);
@@ -1575,7 +1575,7 @@ function populateCars(){
     carsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth, buttonHeight);
     
   }
-  minFramesPerSecond=999;
+  minFramesPerSecond=-4;
 }
 var menuButtons=[
 {"y":8, "x":-4, "label":"Help", "l":0, "r":0, "t":0, "b":0},
@@ -1949,7 +1949,6 @@ function resumeInit(){
   populateModals();
   transmitBgMusicState();
   requestAnimationFrame(rafTick);
-  secondInterval=window.setInterval("secondTick()", 1000);
   }
 var frames=0;
 var secondInterval;
@@ -1961,15 +1960,20 @@ function populateModals(){
   //populateGraphics();
 
 }
-var minFramesPerSecond=999;
+var fpsArray=[0,0,0,0,0,0,0,0,0,0];
+var avgFps=0;
 function secondTick(){
-  //dbug("secondTick frames "+frames);
   if(carData.length>0){
     //dbug(progTransform(carData[0].animCache, trainData[0].prog));
     }
-  if(minFramesPerSecond > frames){
-    minFramesPerSecond=frames;
+  fpsArray.unshift(frames);
+  var junk=fpsArray.pop();
+  var totalFrames=0;
+  for (var f=0; f<fpsArray.length; f++){
+    totalFrames+=fpsArray[f];
     }
+  avgFps=Math.floor(10*totalFrames/fpsArray.length)/10;
+  dbug("secondTick frames "+frames+" avgFps="+avgFps);
   frames=0;
   }
 var turnFrames=0;
@@ -2096,6 +2100,9 @@ function resetBoardTimersObjects(){
   document.getElementById('trainHolder').innerHTML="";
   document.getElementById('gridHolder').innerHTML="";
   makeGrid();
+  window.clearInterval(secondInterval);
+  secondInterval=window.setInterval("secondTick()", 1000);
+
   }
 
 //build level functions
@@ -4927,7 +4934,7 @@ function menuDraw(){
   ctx.font=g/1.5+"px Arial";
   ctx.fillStyle="#333";
   ctx.textAlign="center";
-  ctx.fillText("MIN FPS: "+minFramesPerSecond,g*cx,g*(cy+7));
+  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx,g*(cy+7));
   
   }
      
