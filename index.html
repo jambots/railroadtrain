@@ -1961,18 +1961,17 @@ function populateModals(){
 var fpsArray=[0,0,0,0,0,0,0,0,0,0];
 var avgFps=0;
 function secondTick(){
-  if(carData.length>0){
-    //dbug(progTransform(carData[0].animCache, trainData[0].prog));
+  if((menuUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
+    fpsArray.unshift(frames);
+    var junk=fpsArray.pop();
+    var totalFrames=0;
+    for (var f=0; f<fpsArray.length; f++){
+      totalFrames+=fpsArray[f];
+      }
+    avgFps=Math.floor(10*totalFrames/fpsArray.length)/10;
+    //dbug("secondTick frames "+fpsArray.join(" ")+" avgFps="+avgFps);
+    frames=0;
     }
-  fpsArray.unshift(frames);
-  var junk=fpsArray.pop();
-  var totalFrames=0;
-  for (var f=0; f<fpsArray.length; f++){
-    totalFrames+=fpsArray[f];
-    }
-  avgFps=Math.floor(10*totalFrames/fpsArray.length)/10;
-  dbug("secondTick frames "+frames+" avgFps="+avgFps);
-  frames=0;
   }
 var turnFrames=0;
 var camPos={"x":0, "y":0, "d":0};
@@ -4242,7 +4241,25 @@ function createLevel(){
               fails+=addColor(thisData[c],4);
               }
             }
-          restartIntervals();
+  // test to add criss cross
+  var validArray=[];
+  for(var x=1; x<cellsAcross-1; x++){
+    for(var y=1; y<cellsDown-1; y++){
+      var adjSum=returnTracksInCell(x,y);
+      adjSum+=returnTracksInCell(x-1,y);
+      adjSum+=returnTracksInCell(x+1,y);
+      adjSum+=returnTracksInCell(x,y-1);
+      adjSum+=returnTracksInCell(x,y+1);
+      if(adjSum==0){validArray.push({"x":x,"y":y});}
+      }
+    }
+  if(validArray.length>0){
+    var pick=rnd(validArray.length);
+    buildSequence.push(new buildObject("track", "", "lr", validArray[pick].x, validArray[pick].y, 0));
+    buildSequence.push(new buildObject("track", "", "tb", validArray[pick].x, validArray[pick].y, 0));
+
+    }
+  restartIntervals();
   updateColorsCanv();
   }
 var colorsHeight=64;
@@ -4933,7 +4950,7 @@ function menuDraw(){
   ctx.font=g/1.5+"px Arial";
   ctx.fillStyle="#333";
   ctx.textAlign="center";
-  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx,g*(cy+7));
+  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx,g*(cy+8));
   
   }
      
