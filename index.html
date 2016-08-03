@@ -2227,7 +2227,7 @@ function buildObject(type,color,dir,x,y, barrels){
 function randomTileGroup(color, fields, barrels){
   var fails=0;
   posObject=viableRandomPosition();
-  //dbuga(posObject.success+" "+posObject.x+" "+posObject.y);
+  dbuga("randomTileGroup "+posObject.success+" "+posObject.x+" "+posObject.y);
   if(posObject.success==true){
     var buildItem=new Object();
     buildItem.type="dest";
@@ -4228,6 +4228,7 @@ function handleEventMenu(event){
     }
   }
 function createLevel(){
+  dbuga('createLevel()');
           var fails=-1;
           var boost=1;
           while(fails!=0){
@@ -4255,9 +4256,14 @@ function createLevel(){
     }
   if(validArray.length>0){
     var pick=rnd(validArray.length);
-    buildSequence.push(new buildObject("track", "", "lr", validArray[pick].x, validArray[pick].y, 0));
-    buildSequence.push(new buildObject("track", "", "tb", validArray[pick].x, validArray[pick].y, 0));
-
+    var x=validArray[pick].x;
+    var y=validArray[pick].y;
+    createTrack("lr", "grid_"+x+"_"+y);
+    createCanvasTrack("lr", x, y);
+    buildSequence.push(new buildObject("track", "", "lr", x, y, 0));
+    createTrack("tb", "grid_"+x+"_"+y);
+    createCanvasTrack("tb", x, y);
+    buildSequence.push(new buildObject("track", "", "tb", x, y, 0));
     }
   restartIntervals();
   updateColorsCanv();
