@@ -579,6 +579,12 @@ function undo(){
   }
 
 function handleEventUi(e){
+  if(e.touches.length>0){
+    //dbuga("handleEventUi(target:"+e.touches[0].target.id+", type:"+e.type+")");
+    }
+  else{
+    //dbuga("handleEventUi(type:"+e.type+")");
+    }
 
   target=e.touches[0].target.id;
   //dbuga("handleEventUi "+target);
@@ -837,7 +843,7 @@ function setupClasses(){
   addStyle('.blackTrainCatcher', 'width:' + p*16 + 'px; height:' + p*16 + 'px; top:' + p*0  + 'px; left:' + p*40 + 'px; background-color:#555; position:absolute; -webkit-transform: rotate(45deg);');
 
   }
-var bgContext;
+var gridContext;
 var trackContext;
 function setupGridData(){
   dbuga('setupGridData()');
@@ -852,18 +858,18 @@ function setupGridData(){
   trackContext.clearRect(0, 0, boardWidth, boardHeight);
   document.getElementById("trackCanvas").width=boardWidth;
   }
-function fillBgCanvas(){
-  bgContext.strokeStyle = "rgb(220, 220, 220)";
+function fillGridCanvas(){
+  gridContext.strokeStyle = "rgb(220, 220, 220)";
   radius=20*cellSize/96;
   for (x=0; x<cellsAcross; x++){
     for (y=0; y<cellsDown; y++){
-      roundRect(bgContext, x*cellSize, y*cellSize, cellSize, cellSize, radius, false, true);
+      roundRect(gridContext, x*cellSize, y*cellSize, cellSize, cellSize, radius, false, true);
       }
     }
-  //bgContext.fillStyle = "rgba(0,0,255,.5)";
-  //bgContext.beginPath();
-  //bgContext.arc(boardWidth/2,boardHeight/2, cellSize/2 ,0,6.29,true);
-  //bgContext.fill();
+  //gridContext.fillStyle = "rgba(0,0,255,.5)";
+  //gridContext.beginPath();
+  //gridContext.arc(boardWidth/2,boardHeight/2, cellSize/2 ,0,6.29,true);
+  //gridContext.fill();
   }
 function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
   if (typeof stroke == "undefined" ) {
@@ -1106,10 +1112,10 @@ function createCanvasTrack(theType, cellX, cellY){
   }
 function setupCanvas(){
   dbuga("setupCanvas()");
-  htmlBlock="<canvas id=\"backgroundCanvas\" width=\""+boardWidth+"\" height=\""+boardHeight+"\" style=\"position:absolute;\"></canvas>";
+  htmlBlock="<canvas id=\"gridCanvas\" width=\""+boardWidth+"\" height=\""+boardHeight+"\" style=\"position:absolute;\"></canvas>";
   htmlBlock+="<canvas id=\"trackCanvas\" width=\""+boardWidth+"\" height=\""+boardHeight+"\" style=\"position:absolute;\"></canvas>";
   document.getElementById('canvasHolder').innerHTML=htmlBlock;
-  bgContext = document.getElementById("backgroundCanvas").getContext("2d");
+  gridContext = document.getElementById("gridCanvas").getContext("2d");
   trackContext = document.getElementById("trackCanvas").getContext("2d");
 
   }
@@ -1356,7 +1362,9 @@ function boardGeometry(){
   createInitialBuildSequence();
   setupClasses();
   setupCanvas();// maybe move to resetBoardTimersObjects() 
-  fillBgCanvas(); //was makeGrid  
+  fillGridCanvas(); //was makeGrid  
+  document.getElementById('gridCanvas').style.transform="translateZ(-"+cellSize/20+"px)"
+  document.getElementById('fieldHolder').style.transform="translateZ(-"+cellSize/24+"px)"
   }
 var destMs;
 function restartIntervals(){
@@ -1799,6 +1807,9 @@ function changeView(caller){
   }
 function init(){
   dbuga('init() '+screen.width);
+  document.body.addEventListener('mousedown', mouseDown, true); 
+  document.body.addEventListener('mousemove', mouseMove, true); 
+  document.body.addEventListener('mouseup', mouseUp, true); 
   if(screen.width==1680){
     //dbuga('local init()');
     initSession();
@@ -2095,7 +2106,7 @@ function resetBoardTimersObjects(){
   checkTrainNum=0;
   checkSourceNum=0;
   document.getElementById('trainHolder').innerHTML="";
-  document.getElementById('gridHolder').innerHTML="";
+  document.getElementById('fieldHolder').innerHTML="";
   makeGrid();
   window.clearInterval(secondInterval);
   secondInterval=window.setInterval("secondTick()", 1000);
@@ -3396,7 +3407,7 @@ function makeGrid(){
     for (y=0; y<cellsDown; y++){
       var newdiv = document.createElement('div');
       newdiv.innerHTML = "<div id=\"grid_"+x+"_"+y+"\" class=\"tile L"+x+" T"+y+"\"></div>";
-      document.getElementById('gridHolder').appendChild(newdiv);
+      document.getElementById('fieldHolder').appendChild(newdiv);
       }
     }
   }
@@ -3483,12 +3494,41 @@ function createTrack(cellType, targetCell){
     document.getElementById(targetCell).appendChild(newdiv);
     }
   }
-function touchCancel(event){
-  event.preventDefault(); 
+
+var mouseDragging=false;
+function mouseDown(e){
+  
+  mouseDragging=true;
+  var target = e.target;
+  var id = target.id
+  //dbug("mouseDown "+e.clientX+" "+e.clientY+" nn:"+ e.target.nodeName);
+  var event={"type":"touchstart", "touches":[{"pageX":e.clientX, "pageY":e.clientY, "target":{"id":id}}]}
+  touchStart(event);
   }
+function mouseMove(e){
+  e.preventDefault();
+  if(mouseDragging){
+    //dbug("mouseMove "+e.clientX+" "+e.clientY);
+    var target = e.target;
+    var id = target.id
+    var event={"type":"touchmove", "touches":[{"pageX":e.clientX, "pageY":e.clientY, "target":{"id":id}}]}
+    touchMove(event);
+    }// fuck off hover mouse.
+  }
+function mouseUp(e){
+  e.preventDefault();
+  mouseDragging=false;
+  //dbuga("mouseUp");
+  var event={"type":"touchend", "touches":[]};
+  touchEnd(event);
+  }
+
+function touchCancel(event){ 
+  }
+
 function touchStart(event){
   //dbug("touchStart viewportAspect="+ viewportAspect);
-  event.preventDefault(); 
+   
 
   if(viewportAspect>1){
     handleEventLandscape(event);
@@ -3511,7 +3551,7 @@ function touchStart(event){
     }
   }
 function touchMove(event){
-  event.preventDefault();
+
   if(viewportAspect>1){
     handleEventLandscape(event);
     }
@@ -3527,7 +3567,7 @@ function touchMove(event){
     }
   }
 function touchEnd(event){
-  event.preventDefault();
+  
   if(viewportAspect>1){
     handleEventLandscape(event);
     }
@@ -3541,6 +3581,7 @@ function touchEnd(event){
       handleEventDraw(event);
       }
     }
+  //dbuga('touchEnd completed');
   }
 
 
@@ -3694,8 +3735,13 @@ function testImageSample(image, scale, offsetX, offsetY){
 
 
 function handleEventLandscape(e){
-  //dbug('handleEventLandscape '+e.type);
-  //dbuga(''+graphicsUp+' '+graphicsEditing+' '+graphicsTouching);
+  if(e.touches.length>0){
+    //dbuga("handleEventLandscape(target:"+e.touches[0].target.id+", type:"+e.type+")");
+    }
+  else{
+    //dbuga("handleEventLandscape(type:"+e.type+")");
+    }
+
   if(e.touches.length>0){
     var t=e.touches[0];
     }
@@ -4164,11 +4210,18 @@ var inSquare="";
 var squareX=99;
 var squareY=99;
 var lastLastDir="";
-function handleEventLevels(event){
-  var typ = event.type;
+function handleEventLevels(e){
+  if(e.touches.length>0){
+    //dbuga("handleEventLevels(target:"+e.touches[0].target.id+", type:"+e.type+")");
+    }
+  else{
+    //dbuga("handleEventLevels(type:"+e.type+")");
+    }
+
+  var typ = e.type;
   if(typ == "touchstart"){
-    var x=event.touches[0].pageX;
-    var y=event.touches[0].pageY-adHeight;
+    var x=e.touches[0].pageX;
+    var y=e.touches[0].pageY-adHeight;
     //dbug("touchstart "+x+" "+y);
     for (var b=0; b<levelButtons.length; b++){
       if((x>levelButtons[b].l)&&(x<levelButtons[b].r)&&(y>levelButtons[b].t)&&(y<levelButtons[b].b)){
@@ -4187,24 +4240,44 @@ function handleEventLevels(event){
       }
     }
   }
+function xyInTrbl(x,y,trbl){
+  dbuga(x+" "+y+" "+trbl.t+" "+trbl.r+" "+trbl.b+" "+trbl.l);
+  if((trbl.t<y)&&(trbl.r>x)&&(trbl.b>y)&&(trbl.l<x)){return true;}
+  else{return false;}
+  }
 var menuTouchingId="";
-function handleEventMenu(event){
-  var typ = event.type;
+var menuButtonNum=-1;
+
+function handleEventMenu(e){
+  if(e.touches.length>0){
+    //dbuga("handleEventMenu(target:"+e.touches[0].target.id+", type:"+e.type+")");
+    }
+  else{
+    //dbuga("handleEventMenu(type:"+e.type+")");
+    }
+  var typ = e.type;
   if(typ == "touchstart"){
     menuTouchingId="";
-    var x=event.touches[0].pageX;
-    var y=event.touches[0].pageY;
+    menuButtonNum=-1;
+    var x=e.touches[0].pageX;
+    var y=e.touches[0].pageY;
     var keys=Object.keys(menuObject);
     for (var k=0; k<keys.length; k++){
-      if((menuObject[keys[k]].t<y)&&(menuObject[keys[k]].r>x)&&(menuObject[keys[k]].b>y)&&(menuObject[keys[k]].l<x)){
+      if(xyInTrbl(x,y,menuObject[keys[k]])){
         menuTouchingId=keys[k];
         }
       }
+    for (var b=0; b<menuButtons.length; b++){
+      if(xyInTrbl(x,y,menuButtons[b])){
+        menuButtonNum=b;
+        }
+      }
+    
     }
   if((typ=="touchstart")||(typ=="touchmove")){
     if(menuTouchingId !=""){
-      var x=event.touches[0].pageX;
-      var y=event.touches[0].pageY;
+      var x=e.touches[0].pageX;
+      var y=e.touches[0].pageY;
       var w=menuObject[menuTouchingId].r-menuObject[menuTouchingId].l;
       var prog=(x-menuObject[menuTouchingId].l)/w;
       if(prog<0){prog=0;}
@@ -4222,10 +4295,17 @@ function handleEventMenu(event){
       menuObject[menuTouchingId]["value"]=menuObject[menuTouchingId]["values"][selection];
       menuObject[menuTouchingId]["pos"]=selection-1;
       saveStorage();
-      menuTouchingId="";
       menuDraw();
       }
-    }
+    if(menuButtonNum>-1){
+      var buttonLabel=menuButtons[menuButtonNum].label;
+      dbuga('buttonLabel='+buttonLabel);
+      if(buttonLabel=="Done"){closeModals();}
+      //if(buttonLabel=="Help"){openModal("help");}
+      }
+    menuTouchingId="";
+    menuButtonNum=-1;    
+    }// end of touchend
   }
 function createLevel(){
   dbuga('createLevel()');
@@ -4357,6 +4437,12 @@ function updateColorsCanv(){
     }
   }
 function handleEventDraw(e){
+  if(e.touches.length>0){
+    //dbuga("handleEventDraw(target:"+e.touches[0].target.id+", type:"+e.type+")");
+    }
+  else{
+    //dbuga("handleEventDraw(type:"+e.type+")");
+    }
   var typ = e.type;
 
   //dbuga("handleEventDraw:"+typ);
@@ -4958,7 +5044,7 @@ function menuDraw(){
   ctx.font=g/1.5+"px Arial";
   ctx.fillStyle="#333";
   ctx.textAlign="center";
-  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx,g*(cy+10));
+  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx,g*(cy+10.5));
   
   }
      
@@ -5179,10 +5265,9 @@ function rnd(range) {
   return Math.floor(Math.random()*range);
   }
 
-
 </script>
 </head>
-<body onload="init()" onmousedown="dbug(''); mouseLevel();" ontouchstart="touchStart(event);" ontouchmove="touchMove(event);" ontouchend="touchEnd(event);" ontouchcancel="touchCancel(event);" style="background-color:#fff; width:100%; height:100%;">
+<body onload="init()" ontouchstart="event.preventDefault(); touchStart(event);" ontouchmove="event.preventDefault(); touchMove(event);" ontouchend="event.preventDefault(); touchEnd(event);" ontouchcancel="touchCancel(event);" style="background-color:#fff; width:100%; height:100%;">
 <div id="wrapper" style="display:block; position:absolute; top:0px; left:100px; overflow:hidden; Zbackground-color:white;">
   <div id="highlighter"></div>
   <div id="prerails">
@@ -5202,7 +5287,7 @@ function rnd(range) {
   <div id="cameraDiv">
     <div id="zoomDiv">
       <div id="tableDiv">
-<div id="gridHolder"  style="background-color:yellow;"></div>
+<div id="fieldHolder"  style="background-color:yellow;"></div>
 <div id="canvasHolder" style="background-color:yellow;"	></div>
 <div id="trainHolder" ></div>
       </div>
@@ -5390,8 +5475,8 @@ function rnd(range) {
 
 
 
-
-
+<!-- Who else but Jambots.com could create a train puzzle you can solve with multiple engines each pulling multiple cars on tracks that YOU draw? Play endless procedurally genrated games in three different model scales. Put your photos on the box cars and watch your game play out from a 3d chase or in-cab view. Now with no ad banners, this is a free upgrade for anyone who already had the previous ad-supported version. Complete each level to unlock the final challenge.
+-->
   </div>
 
 </body>
