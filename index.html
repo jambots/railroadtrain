@@ -1576,13 +1576,13 @@ function populateCars(){
   minFramesPerSecond=-4;
 }
 var menuButtons=[
-{"y":8, "x":-4, "label":"Help", "l":0, "r":0, "t":0, "b":0},
-{"y":8, "x":4, "label":"Done", "l":0, "r":0, "t":0, "b":0}
+{"y":7, "x":-4, "label":"Help", "l":0, "r":0, "t":0, "b":0},
+{"y":7, "x":4, "label":"Done", "l":0, "r":0, "t":0, "b":0}
 ];
 function populateMenu(){
   var g=screenWidth/16;
   var buttonWidth=g*6;
-  var buttonHeight=g*1.5;
+  var buttonHeight=g*1.25;
   var pad=g/2;
   var radius=g/6;
   var cx=8;
@@ -4242,6 +4242,7 @@ function createLevel(){
               fails+=addColor(thisData[c],4);
               }
             }
+  /*
   // test to add criss cross
   var validArray=[];
   for(var x=1; x<cellsAcross-1; x++){
@@ -4265,6 +4266,7 @@ function createLevel(){
     createCanvasTrack("tb", x, y);
     buildSequence.push(new buildObject("track", "", "tb", x, y, 0));
     }
+  */
   restartIntervals();
   updateColorsCanv();
   }
@@ -4946,7 +4948,7 @@ function menuDraw(){
     y0=cy+y;
 
 
-    ctx.strokeRect(g*(x0-2.5), g*(y0-2.5),g*5,g*5);
+    //ctx.strokeRect(g*(x0-2.5), g*(y0-2.5),g*5,g*5);
     menuObject[keys[k]]["t"]=g*(y0-2.5);
     menuObject[keys[k]]["r"]=g*(x0+2.5);
     menuObject[keys[k]]["b"]=g*(y0+2.5);
@@ -4956,7 +4958,7 @@ function menuDraw(){
   ctx.font=g/1.5+"px Arial";
   ctx.fillStyle="#333";
   ctx.textAlign="center";
-  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx,g*(cy+8));
+  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx,g*(cy+10));
   
   }
      
