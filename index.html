@@ -2707,12 +2707,14 @@ function sourceAction(sourceNum){
     useColor=sourceData[sourceNum].color;
      
     var newCar;
-    if(levelData[atLevel].tank){
+    if(levelData[levelButtons[atLevel].num].tank){
       newCar=tankObject(useColor, sourceData[sourceNum].dir, sourceData[sourceNum].x, sourceData[sourceNum].y, sourceNum);
       //dbuga(' 1 tankObject tank level');
       }
     else{
       //dbuga(' 2 not tank level');
+      newCar=tankObject(useColor, sourceData[sourceNum].dir, sourceData[sourceNum].x, sourceData[sourceNum].y, sourceNum);
+/* rando black tank cars is disabled
       if((useColor != "black")||(rnd(10)<7)){
         //dbuga(' 3 carObject before');
         newCar=carObject(useColor, sourceData[sourceNum].dir, sourceData[sourceNum].x, sourceData[sourceNum].y, sourceNum);
@@ -2723,6 +2725,7 @@ function sourceAction(sourceNum){
         newCar=tankObject(useColor, sourceData[sourceNum].dir, sourceData[sourceNum].x, sourceData[sourceNum].y, sourceNum);
         //dbuga(' # tankObject AFTER');
         }
+*/
       }
     carData.push(newCar);
     }
@@ -4505,7 +4508,7 @@ function updateColorsCanv(){
     colorsCtx.drawImage(imgRefs['boxsidetrans'],h*1+h/8,h/8, h*3-h/4, h-h/4); 
 
     if(trainData.length>1){
-      for (var c=0; c<levelData[atLevel].fields.length; c++){
+      for (var c=0; c<levelData[levelButtons[atLevel].num].fields.length; c++){
         colorsCtx.lineWidth=h/10;
         colorsCtx.fillStyle=rgbArray[c];
         colorsCtx.strokeStyle=rgbArray[c];
