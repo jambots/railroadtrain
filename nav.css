@@ -1,5 +1,6 @@
 .navBarHolder{
   height:44px;
+  top:-44px;
   position:absolute;
   background-image:url('images/tabbar.png');
   }

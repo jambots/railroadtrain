@@ -204,7 +204,7 @@ var colorsUp=true;
 var cubeSize=cellSize;
 var faceData={};
 function setupFaceData(){
-  dbuga("setupFaceData() cubeSize="+cubeSize);
+  //dbuga("setupFaceData() cubeSize="+cubeSize);
   var s=cubeSize;
   faceData={
   "tank":[
@@ -284,7 +284,7 @@ function genericGet(itemName){
 function rnd(range){
   return Math.floor(Math.random()*range);
   }
-var paused=false;
+var paused=true;
 function pauseGame(){
   //dbuga("pauseGame()");
   paused=true;
@@ -295,7 +295,7 @@ function pauseGame(){
 function resumeGame(){
   // called by shell
   //requestPersistenceData();
-  dbuga("resumeGame()");
+  //dbuga("resumeGame()");
   paused=false;
   transmitBgMusicState();
   return true;
@@ -689,7 +689,12 @@ function rebuildSequence(){
       }
     }
   //dbuga(JSON.stringify(tilesByGridXY));
+  
+
   restartIntervals();
+
+
+
   }
 
 function rebuildTracks(){
@@ -734,7 +739,7 @@ var uiTop=100;
 var squarePadLeft=0;
 
 function setupClasses(){
-  dbuga("setupClasses()");
+  //dbuga("setupClasses()");
   var p=cellSize/96
 
   var buttonsTop=30*p;
@@ -846,7 +851,7 @@ function setupClasses(){
 var gridContext;
 var trackContext;
 function setupGridData(){
-  dbuga('setupGridData()');
+  //dbuga('setupGridData()');
   tilesByGridXY={};
   for (x=0; x<cellsAcross; x++){
     for (y=0; y<cellsDown; y++){
@@ -858,14 +863,46 @@ function setupGridData(){
   trackContext.clearRect(0, 0, boardWidth, boardHeight);
   document.getElementById("trackCanvas").width=boardWidth;
   }
+
 function fillGridCanvas(){
-  gridContext.strokeStyle = "rgb(220, 220, 220)";
-  radius=20*cellSize/96;
-  for (x=0; x<cellsAcross; x++){
-    for (y=0; y<cellsDown; y++){
-      roundRect(gridContext, x*cellSize, y*cellSize, cellSize, cellSize, radius, false, true);
+  //dbuga('fillGridCanvas');
+  document.getElementById('gridCanvas').width=boardWidth;
+  if((menuObject["Tiles"].value=="Grid")||(menuObject["Tiles"].value=="Guides")){
+    gridContext.lineWidth= cellSize/60;
+    gridContext.strokeStyle = "rgb(220, 220, 220)";
+    radius=20*cellSize/96;
+    for (x=0; x<cellsAcross; x++){
+      for (y=0; y<cellsDown; y++){
+        roundRect(gridContext, x*cellSize, y*cellSize, cellSize, cellSize, radius, false, true);
+        }
       }
     }
+  if(menuObject["Tiles"].value=="Guides"){
+    var joint=cellSize/30;
+    //gridContext.strokeStyle = "rgb(180, 180, 180)";
+    gridContext.lineWidth= cellSize/15;  
+    gridContext.beginPath();
+    for (x=0; x<cellsAcross; x++){
+      for (y=0; y<cellsDown; y++){
+        if(isTiled(x, y)==false){//self
+          if(isTiled(x, y-1)==false){//top
+            gridContext.moveTo((x+.4125)*cellSize, y*cellSize-joint);
+            gridContext.lineTo((x+.4125)*cellSize, y*cellSize+joint);
+            gridContext.moveTo((x+.5875)*cellSize, y*cellSize-joint);
+            gridContext.lineTo((x+.5875)*cellSize, y*cellSize+joint);
+            }
+          if(isTiled(x-1, y)==false){//left
+            gridContext.moveTo(x*cellSize-joint, (y+.4125)*cellSize);
+            gridContext.lineTo(x*cellSize+joint, (y+.4125)*cellSize);
+            gridContext.moveTo(x*cellSize-joint, (y+.5875)*cellSize);
+            gridContext.lineTo(x*cellSize+joint, (y+.5875)*cellSize);
+            }
+          }
+        }
+      }
+    }
+  gridContext.stroke();
+  
   //gridContext.fillStyle = "rgba(0,0,255,.5)";
   //gridContext.beginPath();
   //gridContext.arc(boardWidth/2,boardHeight/2, cellSize/2 ,0,6.29,true);
@@ -1111,7 +1148,10 @@ function createCanvasTrack(theType, cellX, cellY){
   trackContext.stroke();
   }
 function setupCanvas(){
-  dbuga("setupCanvas()");
+  //dbuga('setupCanvas()');
+  //dbuga(" - boardHeight:"+boardHeight);
+
+
   htmlBlock="<canvas id=\"gridCanvas\" width=\""+boardWidth+"\" height=\""+boardHeight+"\" style=\"position:absolute;\"></canvas>";
   htmlBlock+="<canvas id=\"trackCanvas\" width=\""+boardWidth+"\" height=\""+boardHeight+"\" style=\"position:absolute;\"></canvas>";
   document.getElementById('canvasHolder').innerHTML=htmlBlock;
@@ -1134,14 +1174,13 @@ var screenAspect=screenWidth/screenHeight;
 var viewportAspect=viewportWidth/viewportHeight;
 var boardHeight=100;
 var boardWidth=100;
-var topPad=0;
-var leftPad=0;
+
 var wrapper;
 function changeGeometry(){
   viewportWidth = window.innerWidth;
   viewportHeight = window.innerHeight;
   viewportAspect=viewportWidth/viewportHeight;
-  dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
+  //dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
   changeView("changeGeometry");
   }
 
@@ -1214,7 +1253,7 @@ var graphicsCanv;
 var graphicsUp=false;
 var cameraCanv;
 function initGeometry(){
-  dbuga("initGeometry()");
+  //dbuga("initGeometry()");
   levelsCanv=document.getElementById("levelsCanvas");
   menuCanv=document.getElementById("menuCanvas");
   carsCanv=document.getElementById("carsCanvas");
@@ -1232,7 +1271,7 @@ function initGeometry(){
   if(screenWidth>screenHeight){
     screenWidth = screen.height;
     screenHeight = screen.width;
-    dbuga('Landrod so swap screen dimensions');
+    //dbuga('Landroid so swap screen dimensions');
     }// screen width is consistent with iOS now, width < height
   //dbuga("screenWidth="+screenWidth);
   //dbuga("screenHeight="+screenHeight);
@@ -1252,10 +1291,10 @@ function initGeometry(){
 
     screenWidth=320;
     screenHeight=480;
-
     screenWidth=414;
     screenHeight=736;
 /*
+
     screenWidth=768;
     screenHeight=1024;
 
@@ -1292,6 +1331,8 @@ function returnCellsAcross(width, scale){
   }
 var boardPad=0;
 var space=0;
+var topPad=0;
+var leftPad=0;
 function boardGeometry(){
   var scale=menuObject["Scale"]["value"];
   cellsAcross=returnCellsAcross(screenWidth, scale)
@@ -1302,17 +1343,17 @@ function boardGeometry(){
   totalCells=cellsAcross*cellsDown;
   space=(screenHeight-cellsDown*cellSize-44-adHeight);
   boardPad=Math.floor(space/2);
-  dbuga("boardGeometry()");
-  dbuga(" - cellsAcross="+cellsAcross);
-  dbuga(" - cellsDown="+cellsDown);
-  dbuga(" - boardPad="+ boardPad);
+  //dbuga("boardGeometry()");
+  //dbuga(" - cellsAcross="+cellsAcross);
+  //dbuga(" - cellsDown="+cellsDown);
+  //dbuga(" - boardPad="+ boardPad);
   //dbuga(" - space="+space);
 
   boardWidth=screenWidth;
   boardHeight=cellsDown*cellSize;
   
   camera.style.webkitPerspective=boardHeight;
-  dbuga(" - boardHeight="+boardHeight +" boardWidth="+boardWidth);
+  //dbuga(" - boardHeight="+boardHeight +" boardWidth="+boardWidth);
 
   //wrapperHeight=(cellsDown+1.5)*cellSize;
   wrapper.style.width=boardWidth+"px";
@@ -1327,7 +1368,7 @@ function boardGeometry(){
   levelsCanv.style.backgroundColor="rgba(255,255,255,.75)";
 
   menuCanv.width=screenWidth;
-  menuCanv.height=portraitScreenHeight-44-adHeight;
+  menuCanv.height=portraitScreenHeight;
   menuCanv.style.top=adHeight+"px";
   menuCanv.style.left=screenWidth+"px";
   menuCanv.style.backgroundColor="rgba(255,255,255,.75)";
@@ -1362,13 +1403,14 @@ function boardGeometry(){
   createInitialBuildSequence();
   setupClasses();
   setupCanvas();// maybe move to resetBoardTimersObjects() 
-  fillGridCanvas(); //was makeGrid  
+  //fillGridCanvas();// di move there 
   document.getElementById('gridCanvas').style.transform="translateZ(-"+cellSize/20+"px)"
   document.getElementById('fieldHolder').style.transform="translateZ(-"+cellSize/24+"px)"
   }
 var destMs;
-function restartIntervals(){
-  dbuga('restartIntervals()');
+function restartIntervals(){ 
+  fillGridCanvas();
+  //dbuga('restartIntervals()');
   minFramesPerSecond=-4;
   //window.clearInterval(turnInterval);
   window.clearInterval(sourceInterval);
@@ -1404,7 +1446,8 @@ var levelData=[
     
     {"fields":[4,4,4], "space":80, "tank":false},
     {"fields":[4,4,4,4], "space":80, "tank":false},
-    {"fields":[19], "space":80, "tank":true}
+    {"fields":[19], "space":80, "tank":true},
+    {"fields":[9], "space":40, "tank":true}
   ];
 
 
@@ -1454,7 +1497,7 @@ function openGraphics(carButton){
 }
 var graphicsButtons=[];
 function populateGraphics(){
-  dbuga('populateGraphics 0');
+  //dbuga('populateGraphics 0');
   graphicsCanv.width=screenHeight;
   var graphicsCtx=graphicsCanv.getContext('2d');
   graphicsCtx.lineWidth=cellSize/8;
@@ -1514,12 +1557,12 @@ function populateGraphics(){
 
   graphicsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
   //cameraCanv.style.display="none";
-  dbuga('populateGraphics 10');
+  //dbuga('populateGraphics 10');
 
   }
 var carsButtons=[];
 function populateCars(){
-  dbuga('populateCars()');
+  //dbuga('populateCars()');
   carsButtons=[];
   var buttonWidth=cellSize*3;
   var buttonHeight=cellSize*1;
@@ -1584,8 +1627,8 @@ function populateCars(){
   minFramesPerSecond=-4;
 }
 var menuButtons=[
-{"y":7, "x":-4, "label":"Help", "l":0, "r":0, "t":0, "b":0},
-{"y":7, "x":4, "label":"Done", "l":0, "r":0, "t":0, "b":0}
+{"y":8, "x":-4, "label":"Help", "l":0, "r":0, "t":0, "b":0},
+{"y":8, "x":4, "label":"Done", "l":0, "r":0, "t":0, "b":0}
 ];
 function populateMenu(){
   var g=screenWidth/16;
@@ -1626,10 +1669,19 @@ function populateMenu(){
 var levelButtons=[];
 function populateLevels(){
   levelButtons=[];
-  dbuga('populateLevels()');
-  for (var b=0; b<levelData.length; b++){
-    if(levelData[b].space <= totalCells){
-      levelButtons.push({"num":b});
+  var tankFound=false;
+  //dbuga('populateLevels() cellSize='+cellSize);
+  for (var dNum=0; dNum<levelData.length; dNum++){
+    if(levelData[dNum].space <= totalCells){
+      if(levelData[dNum].tank){
+        if(tankFound==false){
+          levelButtons.push({"num":dNum});
+          tankFound=true;
+          }
+        }
+      else{// not tank
+        levelButtons.push({"num":dNum});
+        }
       }
     }
   var buttonsAcross=2;
@@ -1638,10 +1690,11 @@ function populateLevels(){
     buttonsAcross=3;
     buttonSize=cellSize*2;
     }
-  var buttonsDown=levelButtons.length/buttonsAcross;
+  var buttonsDown=Math.ceil(levelButtons.length/buttonsAcross);
   var leftPad=(screenWidth-buttonsAcross*buttonSize)/2;
-  var topPad=(portraitScreenHeight-adHeight-buttonsDown*buttonSize-cellSize-44)/2;
-
+  var topPad=(portraitScreenHeight-44-buttonsDown*buttonSize-cellSize)/2;
+  
+  //dbuga('populateLevels() topPad='+topPad+' buttonsDown:'+buttonsDown);
   for (var b=0; b<levelButtons.length; b++){
     levelButtons[b].l=b%buttonsAcross*buttonSize+leftPad;
     levelButtons[b].r=b%buttonsAcross*buttonSize+leftPad+buttonSize;
@@ -1685,14 +1738,16 @@ function drawLevels(){
     roundRect(levelsCtx, levelButtons[b].l+pad, levelButtons[b].t+pad, w, h, radius, true, true);
     var cx=levelButtons[b].l/2+levelButtons[b].r/2;
     var cy=levelButtons[b].t/2+levelButtons[b].b/2;
-    if(b<levelButtons.length-1){
+    var dNum=levelButtons[b].num;
+
+    if(b<levelButtons.length-1){// level button
       var req=0;
-      for(var c=0;c<levelData[b].fields.length;c++){
+      for(var c=0;c<levelData[dNum].fields.length;c++){
         
         var color=rgbArray[c];
         levelsCtx.fillStyle=color;
            
-        for(var f=0; f<=levelData[b].fields[c]; f++){
+        for(var f=0; f<=levelData[dNum].fields[c]; f++){
           req++;
           var useF=f%5;
           if(f !=useF){yAdd+=fieldSpread;}
@@ -1704,7 +1759,7 @@ function drawLevels(){
             levelsCtx.arc(x,y+yAdd,baseRad,0,Math.PI*2,true);
             levelsCtx.fill();
             }
-          else{
+          else{// cancel
             roundRect(levelsCtx, x-fieldRad, y+yAdd-fieldRad,fieldRad*2,fieldRad*2, fieldRad/3, true, false);
             }
           }
@@ -1714,13 +1769,14 @@ function drawLevels(){
       levelsCtx.fillStyle="black";
       levelsCtx.textAlign="center";
       levelsCtx.textBaseline="middle";
-      levelsCtx.fillText(req+" "+levelData[b].space, cx,cy+fieldSpread*2);
+      levelsCtx.fillText(req+" "+levelData[dNum].space, cx,cy+fieldSpread*2);
       }
     else{
       levelsCtx.font=Math.floor(fieldSpread)+"px akzi";
       levelsCtx.fillStyle="black";
       levelsCtx.textAlign="center";
       levelsCtx.textBaseline="middle";
+      //dbuga('drawLevels cx='+cx+' cy='+cy);
       levelsCtx.fillText("CANCEL "+atLevel, cx,cy);
       }
     }
@@ -1738,7 +1794,7 @@ function openModal(modal){
     menuCanv.style.left=0+"px";
     menuUp=true;
     menuDraw();
-    dbuga('openModal menuUp='+menuUp);
+    //dbuga('openModal menuUp='+menuUp);
     }
   if(modal=="cars"){
     carsCanv.style.left=0+"px";
@@ -1754,7 +1810,13 @@ function openModal(modal){
     }
   }
 function closeModals(){
-  dbuga('closeModals');
+  //dbuga('closeModals');
+
+        if(localStorage.getItem("Scale") != menuObject["Scale"]["value"]){updateScaleSetting();}
+        if(localStorage.getItem("Detail") != menuObject["Detail"]["value"]){updateDetailSetting();}
+        if(localStorage.getItem("Tiles") != menuObject["Tiles"]["value"]){updateTilesSetting();}
+
+  paused=false;
   levelsCanv.style.left="-"+screenWidth+"px";
   levelsUp=false;
   menuCanv.style.left="-"+screenWidth+"px";
@@ -1767,10 +1829,10 @@ function closeModals(){
   graphicsEditing=false;
   camera.style.webkitFilter="none";
   
-  dbug('')
+  //dbug('')
   }
 function changeView(caller){
-  dbuga("changeView in "+caller+" shooting="+shooting);
+  //dbuga("changeView in "+caller+" shooting="+shooting);
   if(shooting){return false;}
   closeModals();
   if(viewportAspect>1){
@@ -1806,7 +1868,7 @@ function changeView(caller){
   adGeometry();
   }
 function init(){
-  dbuga('init() '+screen.width);
+  //dbuga('init() '+screen.width);
   document.body.addEventListener('mousedown', mouseDown, true); 
   document.body.addEventListener('mousemove', mouseMove, true); 
   document.body.addEventListener('mouseup', mouseUp, true); 
@@ -1816,28 +1878,32 @@ function init(){
     }
   }
 function onDeviceReady(){
-  dbuga('onDeviceReady() so initSession');
+  //dbuga('onDeviceReady() so initSession');
   initSession();
   }  
 function initStorage(){
-  dbuga('initStorage();');
+  //dbuga('initStorage();');
   localStorage.setItem("initialized", "true");
+  localStorage.setItem("tutorialStep", 0);
   localStorage.setItem("Music", menuObject["Music"]["value"]);
   localStorage.setItem("Sounds", menuObject["Sounds"]["value"]);
   localStorage.setItem("Scale", menuObject["Scale"]["value"]);
   localStorage.setItem("Detail", menuObject["Detail"]["value"]);
+  localStorage.setItem("Tiles", menuObject["Tiles"]["value"]);
   }
 function saveStorage(){
   localStorage.setItem("Music", menuObject["Music"]["value"]);
   localStorage.setItem("Sounds", menuObject["Sounds"]["value"]);
   localStorage.setItem("Scale", menuObject["Scale"]["value"]);
   localStorage.setItem("Detail", menuObject["Detail"]["value"]);
+  localStorage.setItem("Tiles", menuObject["Tiles"]["value"]);
   }
 function loadStorage(){
   menuObject["Music"]["value"]=localStorage.getItem("Music");
   menuObject["Sounds"]["value"]=localStorage.getItem("Sounds");
   menuObject["Scale"]["value"]=localStorage.getItem("Scale");
   menuObject["Detail"]["value"]=localStorage.getItem("Detail");
+  menuObject["Tiles"]["value"]=localStorage.getItem("Tiles");
   var keys=Object.keys(menuObject);
   for (var k=0; k<keys.length; k++){
     //dbuga(keys[k]);
@@ -1853,11 +1919,12 @@ var menuObject={
   "Music":{"value":"On", "pos":0, "values":["Off", "On", "Classic"], "t":0, "r":0, "b":0, "l":0},
   "Sounds":{"value":"On", "pos":0,  "values":["Off", "On", "Classic"], "t":0, "r":0, "b":0, "l":0},
   "Scale":{"value":"O", "pos":0,  "values":["O", "HO", "N"], "t":0, "r":0, "b":0, "l":0},
+  "Tiles":{"value":"Guides", "pos":1,  "values":["None", "Grid", "Guides"], "t":0, "r":0, "b":0, "l":0},
   "Detail":{"value":"Med", "pos":0,  "values":["Low", "Med", "High"], "t":0, "r":0, "b":0, "l":0}
 };
 var detailByValue={"Low":3, "Med":6, "High":9};
 function initSession(){
-  dbuga('initSession()');
+  //dbuga('initSession()');
   if (localStorage.getItem("initialized") === null) {
     initStorage();
     }
@@ -1896,40 +1963,21 @@ function initSession(){
   ////initSound();
 
   initGeometry();
-  setupNav();
+  setupNav();//moved styleNavDiv to resumeInit
   setupFaceData();
-
+  updateDetail();
   imgRefs["tanksideblack"]=document.getElementById('tanksideblack');
   imgRefs["tanktopblack"]=document.getElementById('tanktopblack');
   imgRefs["tankendblack"]=document.getElementById('tankendblack');
-  var detail=detailByValue[menuObject["Detail"]["value"]];
-  var scaleString='scale3d('+1/detail+', '+1/detail+', '+1/detail+')';
-  var style = document.createElement('style');
-  style.type = 'text/css';
-  style.innerHTML = '';
-  for(var c=0; c<4; c++){
-    var color=colors[c];
-    for(var f=0; f<faceData.engine.length; f++){
-      style.innerHTML += '.'+color+'engine' + f + '{-webkit-transform: ' + faceData.engine[f].trans + ' '+scaleString+';}';
-      }  
 
-    for(var f=0; f<faceData.box.length; f++){
-      style.innerHTML += '.'+color+'box' + f + '{-webkit-transform: ' + faceData.box[f].trans + ' '+ scaleString +';}';
-      }  
-    }  
-  for(var f=0; f<faceData.tank.length; f++){
-    style.innerHTML += '.blacktank' + f + '{-webkit-backface-visibility:visible; -webkit-transform: ' + faceData.tank[f].trans + ' '+ scaleString +';}';
-    }  
   localStorageToImages();
   
-  document.getElementsByTagName('head')[0].appendChild(style);
-
   document.addEventListener('deviceready', function () {
     
     ////window.plugin.CanvasCamera.initialize(cameraCanv);
     }, false);
 
-  dbuga('end of initSession so start preloading');
+  //dbuga('end of initSession so start preloading');
   window.setTimeout('preloadTick()',10);
   }
 function measureLocalStorage(){
@@ -1949,11 +1997,12 @@ function localStorageToImages(){
     }
   }
 function resumeInit(){
-  dbuga('resumeInit()');
+  //dbuga('resumeInit()');
   changeView("resumeInit");
   resetBoardTimersObjects();
   rebuildSequence();
   document.getElementById('debugDiv').style.width=screenWidth+"px";
+  styleNavDiv();
 
   populateModals();
   transmitBgMusicState();
@@ -1962,14 +2011,14 @@ function resumeInit(){
 var frames=0;
 var secondInterval;
 function populateModals(){
-  dbuga('populateModals()');
+  //dbuga('populateModals()');
   populateLevels();
   //populateMenu();
   populateCars();
   //populateGraphics();
 
 }
-var fpsArray=[0,0,0,0,0,0,0,0,0,0];
+var fpsArray=[60,60,60,60,60,60];
 var avgFps=0;
 function secondTick(){
   if((menuUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
@@ -1998,22 +2047,24 @@ function rafTick(nowMs){
       //dbuga('turn');
       }
     frames++;
-    camPos= returnProgPos(trainData[focusTrain], trainData[focusTrain].prog);
-    for(var t=0; t<trainData.length; t++){
-      //if((trainData[t].prevX != trainData[t].nextX)||(trainData[t].prevY != trainData[t].nextY)){
-      if(trainData[t].moving){
-        trainData[t].prog+=1/60;// maybe set proportional to frame ms to maintain sim speed
-        var ref=trainData[t].ref;
-        ref.style.webkitTransform=returnProgTransform(trainData[t], trainData[t].prog);
+    if(trainData.length>0){
+      camPos= returnProgPos(trainData[focusTrain], trainData[focusTrain].prog);
+      for(var t=0; t<trainData.length; t++){
+        //if((trainData[t].prevX != trainData[t].nextX)||(trainData[t].prevY != trainData[t].nextY)){
+        if(trainData[t].moving){
+          trainData[t].prog+=1/60;// maybe set proportional to frame ms to maintain sim speed
+          var ref=trainData[t].ref;
+          ref.style.webkitTransform=returnProgTransform(trainData[t], trainData[t].prog);
+          }
         }
-      }
-    testString="";
-    for(var c=0; c<carData.length; c++){
-      if(carData[c].attached){
-        //if(trainData[carData[c].trainNum].moving){
-          var ref=carData[c].ref;
-          ref.style.webkitTransform=returnProgTransform(carData[c], trainData[carData[c].trainNum].prog);
-        //}
+      testString="";
+      for(var c=0; c<carData.length; c++){
+        if(carData[c].attached){
+          //if(trainData[carData[c].trainNum].moving){
+            var ref=carData[c].ref;
+            ref.style.webkitTransform=returnProgTransform(carData[c], trainData[carData[c].trainNum].prog);
+          //}
+          }
         }
       }
     for(var h=0; h<hideQueue.length; h++){
@@ -2025,20 +2076,20 @@ function rafTick(nowMs){
     hideQueue=[];
     showQueue=[];
 
+    if(combinedZoom.length>0){
+      //ported 
+      if(combinedZoom[focusTrain]>100){
+        combinedZoom[focusTrain]=100;
+        }
+      if(combinedZoom[focusTrain]<0){
+        combinedZoom[focusTrain]=0;
+        }
+      cameraDistancePercent=100-combinedZoom[focusTrain];
+      cameraTilt=90*(combinedZoom[focusTrain]/100);
 
-    //ported 
-    if(combinedZoom[focusTrain]>100){
-      combinedZoom[focusTrain]=100;
+      //cameraXpercent=100-100*trainPos[focusTrain].x;
+      //cameraYpercent=100-100*trainPos[focusTrain].y;
       }
-    if(combinedZoom[focusTrain]<0){
-      combinedZoom[focusTrain]=0;
-      }
-    cameraDistancePercent=100-combinedZoom[focusTrain];
-    cameraTilt=90*(combinedZoom[focusTrain]/100);
-
-    //cameraXpercent=100-100*trainPos[focusTrain].x;
-    //cameraYpercent=100-100*trainPos[focusTrain].y;
-
     if(viewportAspect>1){
       locateCamera();
       }
@@ -2050,7 +2101,7 @@ var showQueue=[];
 var testStr="";
 var soundObject={};
 function initSound(){
-  dbuga('initSound()');
+  //dbuga('initSound()');
   loopLoad("measure_loop_inst");
   oneShotLoad("laytrack");
   oneShotLoad("carstart");
@@ -2061,9 +2112,8 @@ function initSound(){
   }
 
 function setupNav(){
-  dbuga('setupNav()');
+  //dbuga('setupNav()');
   var navDivRef=createNavDiv();
-  styleNavDiv();
   //document.getElementById('uiHolder').style.top=boardHeight+"px";
 
   var useWidth=320/4;
@@ -2080,7 +2130,7 @@ function setupNav(){
   }
 
 function resetBoardTimersObjects(){
-  dbuga('resetBoardTimersObjects()');
+  //dbuga('resetBoardTimersObjects()');
   setupGridData();
   closeHelp();
   collisionData=new Object();
@@ -2107,9 +2157,10 @@ function resetBoardTimersObjects(){
   checkSourceNum=0;
   document.getElementById('trainHolder').innerHTML="";
   document.getElementById('fieldHolder').innerHTML="";
-  makeGrid();
+  makeGridDivs();
   window.clearInterval(secondInterval);
   secondInterval=window.setInterval("secondTick()", 1000);
+  //dbuga('resetBoardTimersObjects() completed');
 
   }
 
@@ -2238,7 +2289,7 @@ function buildObject(type,color,dir,x,y, barrels){
 function randomTileGroup(color, fields, barrels){
   var fails=0;
   posObject=viableRandomPosition();
-  dbuga("randomTileGroup "+posObject.success+" "+posObject.x+" "+posObject.y);
+  //dbuga("randomTileGroup "+posObject.success+" "+posObject.x+" "+posObject.y);
   if(posObject.success==true){
     var buildItem=new Object();
     buildItem.type="dest";
@@ -2976,7 +3027,8 @@ function trainAction(trainNum){
       carNum=cal-1;
       lastCarId=trainData[trainNum].carsArray[carNum];
       //dbugaObject(carData[lastCarId]);
-      foundCar=findCar(carData[lastCarId].prevX, carData[lastCarId].prevY, carData[lastCarId].prevDir, trainData[trainNum].color);
+      //foundCar=findCar(carData[lastCarId].prevX, carData[lastCarId].prevY, carData[lastCarId].prevDir, trainData[trainNum].color);
+      foundCar=findCar(carData[lastCarId].prevX, carData[lastCarId].prevY, carData[lastCarId].nextDir, trainData[trainNum].color);
       if(foundCar > -1){
         //dbuga("foundCar:"+foundCar);
         trainData[trainNum].carsArray.push(foundCar);
@@ -3183,6 +3235,8 @@ function dbug(theString){
   document.getElementById("debugDiv").innerHTML=""+theString+"<br>";
   }
 function dbuga(theString){
+
+
   document.getElementById("debugDiv").style.display="block";  
   document.getElementById("debugDiv").innerHTML+=theString+"<br>";
   }
@@ -3401,8 +3455,8 @@ function returnProgTransform(anim, prog){
   return trans;
   }
 
-function makeGrid(){
-  // obsolete
+function makeGridDivs(){
+  //dbuga('makeGridDivs()');
   for (x=0; x<cellsAcross; x++){
     for (y=0; y<cellsDown; y++){
       var newdiv = document.createElement('div');
@@ -4241,7 +4295,7 @@ function handleEventLevels(e){
     }
   }
 function xyInTrbl(x,y,trbl){
-  dbuga(x+" "+y+" "+trbl.t+" "+trbl.r+" "+trbl.b+" "+trbl.l);
+  //dbuga(x+" "+y+" "+trbl.t+" "+trbl.r+" "+trbl.b+" "+trbl.l);
   if((trbl.t<y)&&(trbl.r>x)&&(trbl.b>y)&&(trbl.l<x)){return true;}
   else{return false;}
   }
@@ -4249,12 +4303,8 @@ var menuTouchingId="";
 var menuButtonNum=-1;
 
 function handleEventMenu(e){
-  if(e.touches.length>0){
-    //dbuga("handleEventMenu(target:"+e.touches[0].target.id+", type:"+e.type+")");
-    }
-  else{
-    //dbuga("handleEventMenu(type:"+e.type+")");
-    }
+  //if(e.touches.length>0){dbuga("handleEventMenu(target:"+e.touches[0].target.id+", type:"+e.type+")");}
+  //else{dbuga("handleEventMenu(type:"+e.type+")");}
   var typ = e.type;
   if(typ == "touchstart"){
     menuTouchingId="";
@@ -4294,21 +4344,87 @@ function handleEventMenu(e){
       //dbuga("pos:" +pos +" selection:"+selection);
       menuObject[menuTouchingId]["value"]=menuObject[menuTouchingId]["values"][selection];
       menuObject[menuTouchingId]["pos"]=selection-1;
-      saveStorage();
+      // immediate sound response
+      if(localStorage.getItem("Music") != menuObject["Music"]["value"]){updateMusicSetting();}
+      if(localStorage.getItem("Sounds") != menuObject["Sounds"]["value"]){updateSoundsSetting();}
       menuDraw();
       }
     if(menuButtonNum>-1){
       var buttonLabel=menuButtons[menuButtonNum].label;
-      dbuga('buttonLabel='+buttonLabel);
-      if(buttonLabel=="Done"){closeModals();}
-      //if(buttonLabel=="Help"){openModal("help");}
+      //dbuga('buttonLabel='+buttonLabel);
+      if(buttonLabel=="Done"){
+        closeModals();
+        }
+      ////if(buttonLabel=="Help"){openModal("help");}
       }
     menuTouchingId="";
     menuButtonNum=-1;    
     }// end of touchend
   }
+function updateMusicSetting(){
+  //dbuga("updateMusicSetting()");
+  saveStorage();
+  }
+function updateSoundsSetting(){
+  //dbuga("updateSoundsSetting()");
+  saveStorage();
+  }
+function updateScaleSetting(){
+  //dbuga("updateScaleSetting()");
+  saveStorage();
+  updateScale();
+  }
+function updateScale(){
+  boardGeometry();
+  setupFaceData();
+  camera.style.marginTop= boardPad +"px";
+  updateDetailSetting();
+  setupClasses();
+  setupCanvas();
+  populateLevels();
+  atLevel=0;
+  resetBoardTimersObjects();
+  rebuildSequence();
+  changeView("updateScaleSetting");
+
+  }
+function updateTilesSetting(){
+  //dbuga("updateTilesSetting()");
+  saveStorage();
+  fillGridCanvas();
+  }
+function updateDetailSetting(){
+  //dbuga("updateDetailSetting()");
+  saveStorage();
+  updateDetail();
+  resetBoardTimersObjects();
+  rebuildSequence();
+  }
+function updateDetail(){
+  var detail=detailByValue[menuObject["Detail"]["value"]];
+  var scaleString='scale3d('+1/detail+', '+1/detail+', '+1/detail+')';
+  var style = document.createElement('style');
+  style.type = 'text/css';
+  style.innerHTML = '';
+  for(var c=0; c<4; c++){
+    var color=colors[c];
+    for(var f=0; f<faceData.engine.length; f++){
+      style.innerHTML += '.'+color+'engine' + f + '{-webkit-transform: ' + faceData.engine[f].trans + ' '+scaleString+';}';
+      }  
+
+    for(var f=0; f<faceData.box.length; f++){
+      style.innerHTML += '.'+color+'box' + f + '{-webkit-transform: ' + faceData.box[f].trans + ' '+ scaleString +';}';
+      }  
+    }  
+  for(var f=0; f<faceData.tank.length; f++){
+    style.innerHTML += '.blacktank' + f + '{-webkit-backface-visibility:visible; -webkit-transform: ' + faceData.tank[f].trans + ' '+ scaleString +';}';
+    }  
+  document.getElementsByTagName('head')[0].appendChild(style);
+  //resetBoardTimersObjects();
+  //rebuildSequence();
+  }
 function createLevel(){
-  dbuga('createLevel()');
+  //dbuga('createLevel()');
           var fails=-1;
           var boost=1;
           while(fails!=0){
@@ -4316,8 +4432,7 @@ function createLevel(){
             fails=0;
             resetBoardTimersObjects();
             buildSequence=new Array();
-            var thisData=levelData[atLevel].fields;
-            //dbuga('levelData['+atLevel+'].fields.length='+levelData[atLevel].fields.length);
+            var thisData=levelData[levelButtons[atLevel].num].fields;
             for (var c=0; c<thisData.length; c++){
               fails+=addColor(thisData[c],4);
               }
@@ -4642,7 +4757,7 @@ function isSourceInDir(xx,yy,d){
   }
 function isTiled(x,y){
   tiled=false;
-  if((x<0)||(x>=cellsAcross)||(y<0)||(y>=cellsDown)||(isNaN(x))){
+  if((x<0)||(x>=cellsAcross)||(y<0)||(y>=cellsDown)||(isNaN(x))||(Object.keys(tilesByGridXY).length==0)){
     //out of bounds, call it tiled
     //dbuga('<br>out of bounds, call it tiled'+x+" "+y);
  
@@ -5019,32 +5134,38 @@ function placeWithin(canvasRef, imageRef){
 var len=2;
 var slot=1.5;
 function menuDraw(){
-  
-  var keys=Object.keys(menuObject);
-  var g=screenWidth/18;
-  var cx=9;
-  var cy=(screenHeight/2-screenWidth/2)/g+cx;
   var canv=document.getElementById('menuCanvas');
   canv.width=canv.width;
+  menuCanv.style.zIndex=1;
+  var keys=Object.keys(menuObject);
+  var g=screenWidth/18;
+  var halfHeight=12;
+  var cx=9;
+  var cy=(screenHeight/2-screenWidth/2)/g+cx;
+  //dbuga("cy="+cy+" g="+g);
   var ctx=canv.getContext('2d');
+  //ctx.lineWidth=4;
+  //ctx.strokeStyle="blue";
+  //ctx.strokeRect(0,g*(cy-halfHeight),g*18, g*24);// 3/4 aspect fitted
+
   for (var k=0; k<keys.length; k++){
-    var y=(k-2)*5;
+    var y=(k-2.5)*4;
     toggleSwitch(0,y,"horizontal",menuObject[keys[k]]['pos'], menuObject[keys[k]]['values'], keys[k]);
     x0=cx;
     y0=cy+y;
 
 
-    //ctx.strokeRect(g*(x0-2.5), g*(y0-2.5),g*5,g*5);
-    menuObject[keys[k]]["t"]=g*(y0-2.5);
-    menuObject[keys[k]]["r"]=g*(x0+2.5);
-    menuObject[keys[k]]["b"]=g*(y0+2.5);
-    menuObject[keys[k]]["l"]=g*(x0-2.5);
+    //ctx.strokeRect(g*(x0-2), g*(y0-2),g*4,g*4);
+    menuObject[keys[k]]["t"]=g*(y0-2);
+    menuObject[keys[k]]["r"]=g*(x0+2);
+    menuObject[keys[k]]["b"]=g*(y0+2);
+    menuObject[keys[k]]["l"]=g*(x0-2);
     }
   populateMenu();
   ctx.font=g/1.5+"px Arial";
   ctx.fillStyle="#333";
   ctx.textAlign="center";
-  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx,g*(cy+10.5));
+  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx,g*(cy+11.25));
   
   }
      
@@ -5060,7 +5181,7 @@ function toggleSwitch(x0,y0,orient,pos, tics, label){//returns path
   var canv=document.getElementById('menuCanvas');
   var ctx=canv.getContext('2d');
 
-  ctx.clearRect(g*(x0-2.5), g*(y0-2.5),g*5,g*5);
+  ctx.clearRect(g*(x0-2), g*(y0-2),g*4,g*4);
 
   ctx.strokeStyle="#444";
   if(orient=="vertical"){x0--;}
@@ -5475,7 +5596,18 @@ function rnd(range) {
 
 
 
-<!-- Who else but Jambots.com could create a train puzzle you can solve with multiple engines each pulling multiple cars on tracks that YOU draw? Play endless procedurally genrated games in three different model scales. Put your photos on the box cars and watch your game play out from a 3d chase or in-cab view. Now with no ad banners, this is a free upgrade for anyone who already had the previous ad-supported version. Complete each level to unlock the final challenge.
+<!-- 
+Railroad Train by Jambots.com
+Who else but Jambots.com could create a train puzzle you sove using multiple engines each pulling multiple cars on tracks that YOU draw? Play endless procedurally genrated challenges in three different model scales. Put your photos on the box cars and watch your game play out from a 3d chase or in-cab view. Now with no ad banners, this is a free upgrade for anyone who already had the previous ad-supported version. Complete each level to unlock the final challenge.
+
+Scale
+
+The default scale, "HO" provides a balance of complexity and useablity. The largest scale, "O" is much easier to draw tracks and simpler to solve. The smallest scale, "N" gives you the most track space and cars but can be difficult to draw accurately without a stylus. 
+If you are having trouble getting the tracks to go where you want consistently, try starting at the middle of a cell edge and drag slowly across the cell to another cell edge. 
+At any given scale setting a tablet will have more cells available for tracks than a phone. Device size and aspect ratios vary so the grid will adapt to the best fit for each scale. The number of levels also varies with the grid space available.
+
+Detail
+The Menu shows at the bottom your most recent average frames per second. If AVERAGE FPS is below 30 you can get slowdowns or crashes. Set Detail to "Low" to improve performance. Try "High" Detail if you have a very fast device or want the best looking close-ups in video capture. If you have macOS and an iOS device with Lightning cable you can use QuickTime to capture video of your game. Rotating the device will stop the recording!
 -->
   </div>
 
