@@ -1,0 +1,24 @@
+<html>
+<head>
+<script type="text/javascript">
+var topPad=1;
+function init(){
+  var topPad=2;
+  document.getElementById("outputDiv").innerHTML+='<br />init() topPad='+topPad;
+  resumeInit();
+  }
+function resumeInit(){
+  document.getElementById("outputDiv").innerHTML+='<br />resumeInit() topPad='+topPad;
+  }
+console.log('immediate');
+window.onload = function() {
+  init();
+};
+console.log('if not sooner');
+
+</script>
+</head>
+<body>
+<div id="outputDiv"></div>
+</body>
+</html>

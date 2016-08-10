@@ -16,11 +16,11 @@ function styleNavDiv(){
   navDivRef.style.height=controlHeight+"px";
   navDivRef.style.width=boardWidth+"px";
   navDivRef.style.top=(portraitScreenHeight-controlHeight)+"px";
-  dbuga("styleNavDiv");
+  //dbuga("styleNavDiv");
   }
 
 window.onorientationchange = function () {
-  dbuga("onorientationchange");
+  //dbuga("onorientationchange");
   //screenLayout();
   //displayWidth=boardWidth-controlWidth;
   //document.getElementById('displayDiv').style.width=displayWidth+"px";

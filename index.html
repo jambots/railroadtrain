@@ -1291,6 +1291,7 @@ function initGeometry(){
 
     screenWidth=320;
     screenHeight=480;
+
     screenWidth=414;
     screenHeight=736;
 /*
@@ -1331,8 +1332,7 @@ function returnCellsAcross(width, scale){
   }
 var boardPad=0;
 var space=0;
-var topPad=0;
-var leftPad=0;
+
 function boardGeometry(){
   var scale=menuObject["Scale"]["value"];
   cellsAcross=returnCellsAcross(screenWidth, scale)
@@ -1358,8 +1358,8 @@ function boardGeometry(){
   //wrapperHeight=(cellsDown+1.5)*cellSize;
   wrapper.style.width=boardWidth+"px";
   wrapper.style.height=boardHeight+"px";
-  wrapper.style.left=leftPad+"px";
-  wrapper.style.top=topPad+"px";
+  wrapper.style.left=0+"px";
+  wrapper.style.top=0+"px";
 
   levelsCanv.width=screenWidth;
   levelsCanv.height=portraitScreenHeight-44-adHeight;
@@ -1395,8 +1395,8 @@ function boardGeometry(){
   sdiv.style.width=(grid*10)+"px";
   sdiv.style.height=grid*8+"px";
   sdiv.style.fontSize=grid*4+"px";
-  sdiv.style.left=(leftPad+boardWidth-grid*20)+"px";
-  sdiv.style.top=(topPad+grid*2)+"px";
+  sdiv.style.left=(0+boardWidth-grid*20)+"px";
+  sdiv.style.top=(0+grid*2)+"px";
 */
   cellSizeHalf=cellSize/2;
   centerSize=cellSize/4;
@@ -2696,7 +2696,13 @@ function sourceTick(){
   }
 
 function sourceAction(sourceNum){
-  //dbuga('sourceAction ' +sourceData[sourceNum].color);
+  if(avgFps<40){
+    dbug('sourceAction stopped - fps=' +avgFps+" " +carData.length);
+    return false;
+    }
+  else{
+    dbug(avgFps +" "+carData.length);
+    }
   if ((sourceData[sourceNum].occupied==false)&&(sourceData[sourceNum].barrels>0)){
 
     //dbuga(' unoccupied with barrels');
@@ -2713,7 +2719,7 @@ function sourceAction(sourceNum){
       }
     else{
       //dbuga(' 2 not tank level');
-      newCar=tankObject(useColor, sourceData[sourceNum].dir, sourceData[sourceNum].x, sourceData[sourceNum].y, sourceNum);
+      newCar=carObject(useColor, sourceData[sourceNum].dir, sourceData[sourceNum].x, sourceData[sourceNum].y, sourceNum);
 /* rando black tank cars is disabled
       if((useColor != "black")||(rnd(10)<7)){
         //dbuga(' 3 carObject before');
@@ -3584,14 +3590,14 @@ function touchCancel(event){
   }
 
 function touchStart(event){
-  //dbug("touchStart viewportAspect="+ viewportAspect);
+  //dbuga("touchStart event="+ JSON.stringify(event));
    
 
   if(viewportAspect>1){
     handleEventLandscape(event);
     }
   else{
-    if ((event.touches[0].pageY-adHeight < boardHeight)&&(helpUp==false)){
+    if ((event.touches[0].pageY < screenHeight-44)&&(helpUp==false)){
       if(levelsUp){
         handleEventLevels(event);
         }
@@ -4306,8 +4312,10 @@ var menuTouchingId="";
 var menuButtonNum=-1;
 
 function handleEventMenu(e){
-  //if(e.touches.length>0){dbuga("handleEventMenu(target:"+e.touches[0].target.id+", type:"+e.type+")");}
-  //else{dbuga("handleEventMenu(type:"+e.type+")");}
+/*
+  if(e.touches.length>0){dbuga("handleEventMenu(target:"+e.touches[0].target.id+", type:"+e.type+")");}
+  else{dbuga("handleEventMenu(type:"+e.type+")");}
+*/
   var typ = e.type;
   if(typ == "touchstart"){
     menuTouchingId="";
