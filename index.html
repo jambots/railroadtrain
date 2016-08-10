@@ -2700,12 +2700,7 @@ function sourceTick(){
   }
 var minFps=40;
 function sourceAction(sourceNum){
-  if(avgFps<minFps){
-    dbug("<br>sourceAction stopped - fps=" +avgFps+" [" +(carData.length-totalCarsDocked)+"]");
-    }
-  else{
-    dbug("<br>"+avgFps +" ["+(carData.length-totalCarsDocked)+"]");
-    }
+
   if ((sourceData[sourceNum].occupied==false)&&(sourceData[sourceNum].barrels>0)&&(avgFps>minFps)){
     //dbuga(' unoccupied with barrels');
 
@@ -2722,6 +2717,12 @@ function sourceAction(sourceNum){
       newCar=carObject(useColor, sourceData[sourceNum].dir, sourceData[sourceNum].x, sourceData[sourceNum].y, sourceNum);
       }
     carData.push(newCar);
+    }
+  if(avgFps<minFps){
+    dbug("<br>sourceAction stopped - fps=" +avgFps+" [" +(carData.length-totalCarsDocked)+"]");
+    }
+  else{
+    dbug("<br>"+avgFps +" ["+(carData.length-totalCarsDocked)+"]");
     }
   }
 
