@@ -2132,6 +2132,8 @@ function setupNav(){
   }
 
 function resetBoardTimersObjects(){
+  totalCarsNeeded=0;
+  totalCarsDocked=0;
   //dbuga('resetBoardTimersObjects()');
   setupGridData();
   closeHelp();
@@ -2636,8 +2638,8 @@ function zeroProgressBar(){
     document.getElementById(color+"ProgressDiv").style.width="0px";
     }
   }
- var totalCarsNeeded=0;
- var totalCarsDocked=0;
+var totalCarsNeeded=0;
+var totalCarsDocked=0;
 function updateProgressBar(){
   totalCarsNeeded=0;
   totalCarsDocked=0;
