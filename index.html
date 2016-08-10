@@ -2073,7 +2073,7 @@ function rafTick(nowMs){
       }
     for(var s=0; s<showQueue.length; s++){
       showQueue[s].style.opacity=1;
-      hideQueue[s].style.display="block";
+      showQueue[s].style.display="block";
       }
     hideQueue=[];
     showQueue=[];
@@ -2636,6 +2636,8 @@ function zeroProgressBar(){
     document.getElementById(color+"ProgressDiv").style.width="0px";
     }
   }
+ var totalCarsNeeded=0;
+ var totalCarsDocked=0;
 function updateProgressBar(){
   totalCarsNeeded=0;
   totalCarsDocked=0;
@@ -2699,10 +2701,10 @@ function sourceTick(){
 var minFps=40;
 function sourceAction(sourceNum){
   if(avgFps<minFps){
-    dbug("<br>sourceAction stopped - fps=" +avgFps+" [" +carData.length+"]");
+    dbug("<br>sourceAction stopped - fps=" +avgFps+" [" +(carData.length-totalCarsDocked)+"]");
     }
   else{
-    dbug("<br>"+avgFps +" ["+carData.length+"]");
+    dbug("<br>"+avgFps +" ["+(carData.length-totalCarsDocked)+"]");
     }
   if ((sourceData[sourceNum].occupied==false)&&(sourceData[sourceNum].barrels>0)&&(avgFps>minFps)){
     //dbuga(' unoccupied with barrels');
