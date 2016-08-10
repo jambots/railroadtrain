@@ -2694,17 +2694,15 @@ function sourceTick(){
     checkSourceNum=0;
     }
   }
-
+var minFps=40;
 function sourceAction(sourceNum){
-  if(avgFps<40){
-    dbug('sourceAction stopped - fps=' +avgFps+" " +carData.length);
-    return false;
+  if(avgFps<minFps){
+    dbug("<br>sourceAction stopped - fps=" +avgFps+" [" +carData.length+"]");
     }
   else{
-    dbug(avgFps +" "+carData.length);
+    dbug("<br>"+avgFps +" ["+carData.length+"]");
     }
-  if ((sourceData[sourceNum].occupied==false)&&(sourceData[sourceNum].barrels>0)){
-
+  if ((sourceData[sourceNum].occupied==false)&&(sourceData[sourceNum].barrels>0)&&(avgFps>minFps)){
     //dbuga(' unoccupied with barrels');
 
     sourceData[sourceNum].occupied=true;
@@ -2715,23 +2713,9 @@ function sourceAction(sourceNum){
     var newCar;
     if(levelData[levelButtons[atLevel].num].tank){
       newCar=tankObject(useColor, sourceData[sourceNum].dir, sourceData[sourceNum].x, sourceData[sourceNum].y, sourceNum);
-      //dbuga(' 1 tankObject tank level');
       }
     else{
-      //dbuga(' 2 not tank level');
       newCar=carObject(useColor, sourceData[sourceNum].dir, sourceData[sourceNum].x, sourceData[sourceNum].y, sourceNum);
-/* rando black tank cars is disabled
-      if((useColor != "black")||(rnd(10)<7)){
-        //dbuga(' 3 carObject before');
-        newCar=carObject(useColor, sourceData[sourceNum].dir, sourceData[sourceNum].x, sourceData[sourceNum].y, sourceNum);
-        //dbuga(' 3 carObject complete');
-        }
-      else{
-        //dbuga(' # tankObject BEFORE');
-        newCar=tankObject(useColor, sourceData[sourceNum].dir, sourceData[sourceNum].x, sourceData[sourceNum].y, sourceNum);
-        //dbuga(' # tankObject AFTER');
-        }
-*/
       }
     carData.push(newCar);
     }
