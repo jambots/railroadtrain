@@ -1365,7 +1365,7 @@ function boardGeometry(){
   levelsCanv.height=portraitScreenHeight;
   levelsCanv.style.top=0+"px";
   levelsCanv.style.left=(0-screenWidth)+"px";
-  levelsCanv.style.backgroundColor="rgba(255,100,255,.75)";
+  levelsCanv.style.backgroundColor="rgba(255,255,255,.75)";
 
   menuCanv.width=screenWidth;
   menuCanv.height=portraitScreenHeight;
@@ -1447,7 +1447,7 @@ var levelData=[
     {"fields":[4,4,4], "space":80, "tank":false},
     {"fields":[4,4,4,4], "space":80, "tank":false},
     {"fields":[19], "space":80, "tank":true},
-    {"fields":[9], "space":40, "tank":true}
+    {"fields":[11], "space":40, "tank":true}
   ];
 
 
@@ -1666,6 +1666,10 @@ function populateMenu(){
     menuCtx.strokeText(menuButtons[b].label, bcx,bcy);
   }
 }
+var levelsGridPx=0;
+var levelsTopPad=0;
+var levelsLeftPad=0;
+
 
 var levelButtons=[];
 function populateLevels(){
@@ -1694,54 +1698,53 @@ function populateLevels(){
   var gridDown=buttonsDown*2+3;
   var gridAspect=gridAcross/gridDown;
   var canvasAspect=screenWidth/screenHeight;
-  var gridPx;
-  var leftPad;
-  var topPad;
   if(gridAspect>canvasAspect){// fit width, pad top
-    gridPx=screenWidth/gridAcross;
-    leftPad=0;
-    topPad=(screenHeight-gridPx*gridDown)/2;
+    levelsGridPx=screenWidth/gridAcross;
+    levelsLeftPad=0;
+    levelsTopPad=(screenHeight-levelsGridPx*gridDown)/2;
     //dbuga(' - fit width');
     }
   else{
-    gridPx=screenHeight/gridDown;
-    topPad=0;
-    leftPad=(screenWidth-gridPx*gridAcross)/2;
+    levelsGridPx=screenHeight/gridDown;
+    levelsTopPad=0;
+    levelsLeftPad=(screenWidth-levelsGridPx*gridAcross)/2;
     }
-  var buttonSize=gridPx*2;
-  //dbuga('populateLevels() topPad='+topPad+' buttonsDown:'+buttonsDown+' gridAspect:'+gridAspect);
+  var buttonSize=levelsGridPx*2;
+  //dbuga('populateLevels() levelsTopPad='+levelsTopPad+' buttonsDown:'+buttonsDown+' gridAspect:'+gridAspect);
   for (var b=0; b<levelButtons.length; b++){
-    levelButtons[b].l=b%buttonsAcross*buttonSize+leftPad+gridPx;
-    levelButtons[b].r=b%buttonsAcross*buttonSize+leftPad+buttonSize+gridPx;
-    levelButtons[b].t=Math.floor(b/buttonsAcross)*buttonSize+topPad+gridPx;
-    levelButtons[b].b=Math.floor(b/buttonsAcross)*buttonSize+topPad+buttonSize+gridPx;
+    levelButtons[b].l=b%buttonsAcross*buttonSize+levelsLeftPad+levelsGridPx;
+    levelButtons[b].r=b%buttonsAcross*buttonSize+levelsLeftPad+buttonSize+levelsGridPx;
+    levelButtons[b].t=Math.floor(b/buttonsAcross)*buttonSize+levelsTopPad+levelsGridPx;
+    levelButtons[b].b=Math.floor(b/buttonsAcross)*buttonSize+levelsTopPad+buttonSize+levelsGridPx;
     }
-  var cancelButton={"num":levelButtons.length, "l":leftPad+gridPx, "r":screenWidth-leftPad-gridPx, "t":topPad+buttonsDown*buttonSize+gridPx, "b":topPad+buttonsDown*buttonSize+gridPx*2};
+  var cancelButton={"num":levelButtons.length, "l":levelsLeftPad+levelsGridPx, "r":screenWidth-levelsLeftPad-levelsGridPx, "t":levelsTopPad+buttonsDown*buttonSize+levelsGridPx, "b":levelsTopPad+buttonsDown*buttonSize+levelsGridPx*2};
   levelButtons.push(cancelButton);
   drawLevels();
   }
 var highlighted="rgba(255,255,100,1)";
 function drawLevels(){
-  levelsCanv.style.zIndex=1;
+  levelsCanv.style.zIndex="1";
 
   var buttonsAcross=2;
-  var buttonSize=cellSize*1.75;
+  var buttonSize=levelsGridPx*2;
   var fieldsAcross=4;
   var offset=1.5;
-
-  if(levelButtons.length>9){
-    fieldsAcross=5;
-    offset=2;
-    buttonsAcross=3;
-    buttonSize=cellSize*2;
+  
+  for (var b=0; b<levelButtons.length-1; b++){
+    var dNum=levelButtons[b].num;
+    //dbuga(dNum+" fields[0]="+levelData[dNum].fields[0]);
+    if(levelData[dNum].fields[0]==4){
+      fieldsAcross=5;
+      offset=2;
+      }
     }
-
-  var buttonSize=cellSize*2;
+  //dbuga('fieldsAcross '+fieldsAcross);
+  
   var pad=buttonSize/16;
   var radius=buttonSize/12;
-  var fieldRad=buttonSize/16;
-  var baseRad=buttonSize/15;
-  var fieldSpread=buttonSize/6;
+  var fieldRad=buttonSize/(3.2*fieldsAcross);
+  var baseRad=buttonSize/(3*fieldsAcross);
+  var fieldSpread=buttonSize/(fieldsAcross+1);
   var levelsCtx=levelsCanv.getContext('2d');
   levelsCtx.lineWidth=cellSize/6;
   for (var b=0; b<levelButtons.length; b++){
@@ -1766,17 +1769,17 @@ function drawLevels(){
            
         for(var f=0; f<=levelData[dNum].fields[c]; f++){
           req++;
-          var useF=f%5;
-          if(f !=useF){yAdd+=fieldSpread;}
-          yAdd=fieldSpread*Math.floor(f/5);
+          var useF=f%fieldsAcross;
+
+          var yAdd=fieldSpread*Math.floor(f/fieldsAcross);
           var x=cx+(useF-offset)*fieldSpread;
           var y=cy+(c-offset)*fieldSpread;
-          if(f==0){
+          if(f==0){// silo
             levelsCtx.beginPath();
             levelsCtx.arc(x,y+yAdd,baseRad,0,Math.PI*2,true);
             levelsCtx.fill();
             }
-          else{// cancel
+          else{// field
             roundRect(levelsCtx, x-fieldRad, y+yAdd-fieldRad,fieldRad*2,fieldRad*2, fieldRad/3, true, false);
             }
           }
@@ -1788,7 +1791,7 @@ function drawLevels(){
       levelsCtx.textBaseline="middle";
       levelsCtx.fillText(req+" "+levelData[dNum].space, cx,cy+fieldSpread*2);
       }
-    else{
+    else{//cancel button
       levelsCtx.font=Math.floor(fieldSpread)+"px akzi";
       levelsCtx.fillStyle="black";
       levelsCtx.textAlign="center";
@@ -5627,7 +5630,7 @@ If you are having trouble getting the tracks to go where you want consistently, 
 At any given scale setting a tablet will have more cells available for tracks than a phone. Device size and aspect ratios vary so the grid will adapt to the best fit for each scale. The number of levels also varies with the grid space available.
 
 Detail
-The Menu shows at the bottom your most recent average frames per second. If AVERAGE FPS is below 30 you can get slowdowns or crashes. Set Detail to "Low" to improve performance. Try "High" Detail if you have a very fast device or want the best looking close-ups in video capture. If you have macOS and an iOS device with Lightning cable you can use QuickTime to capture video of your game. Rotating the device will stop the recording!
+The Menu shows at the bottom your most recent average Frames Per Second. When AVERAGE FPS falls below 40 cars will stop spawning temporarily. Faster devices will allow more cars but running too many cars can cause congestion or result in the app closing. Set Detail to "Low" to improve performance. Try "High" Detail if you have a very fast device or want the best looking close-ups in video capture. If you have macOS and an iOS device with Lightning cable you can use QuickTime to capture video of your game. Rotating the device will stop the recording!
 -->
   </div>
 
