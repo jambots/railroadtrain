@@ -1362,10 +1362,10 @@ function boardGeometry(){
   wrapper.style.top=0+"px";
 
   levelsCanv.width=screenWidth;
-  levelsCanv.height=portraitScreenHeight-44-adHeight;
-  levelsCanv.style.top=adHeight+"px";
-  levelsCanv.style.left=screenWidth+"px";
-  levelsCanv.style.backgroundColor="rgba(255,255,255,.75)";
+  levelsCanv.height=portraitScreenHeight;
+  levelsCanv.style.top=0+"px";
+  levelsCanv.style.left=(0-screenWidth)+"px";
+  levelsCanv.style.backgroundColor="rgba(255,100,255,.75)";
 
   menuCanv.width=screenWidth;
   menuCanv.height=portraitScreenHeight;
@@ -1666,6 +1666,7 @@ function populateMenu(){
     menuCtx.strokeText(menuButtons[b].label, bcx,bcy);
   }
 }
+
 var levelButtons=[];
 function populateLevels(){
   levelButtons=[];
@@ -1685,28 +1686,44 @@ function populateLevels(){
       }
     }
   var buttonsAcross=2;
-  var buttonSize=cellSize*1.75;
   if(levelButtons.length>8){
     buttonsAcross=3;
-    buttonSize=cellSize*2;
     }
   var buttonsDown=Math.ceil(levelButtons.length/buttonsAcross);
-  var leftPad=(screenWidth-buttonsAcross*buttonSize)/2;
-  var topPad=(portraitScreenHeight-44-buttonsDown*buttonSize-cellSize)/2;
-  
-  //dbuga('populateLevels() topPad='+topPad+' buttonsDown:'+buttonsDown);
-  for (var b=0; b<levelButtons.length; b++){
-    levelButtons[b].l=b%buttonsAcross*buttonSize+leftPad;
-    levelButtons[b].r=b%buttonsAcross*buttonSize+leftPad+buttonSize;
-    levelButtons[b].t=Math.floor(b/buttonsAcross)*buttonSize+topPad;
-    levelButtons[b].b=Math.floor(b/buttonsAcross)*buttonSize+topPad+buttonSize;
+  var gridAcross=buttonsAcross*2+2;
+  var gridDown=buttonsDown*2+3;
+  var gridAspect=gridAcross/gridDown;
+  var canvasAspect=screenWidth/screenHeight;
+  var gridPx;
+  var leftPad;
+  var topPad;
+  if(gridAspect>canvasAspect){// fit width, pad top
+    gridPx=screenWidth/gridAcross;
+    leftPad=0;
+    topPad=(screenHeight-gridPx*gridDown)/2;
+    //dbuga(' - fit width');
     }
-  var cancelButton={"num":levelButtons.length, "l":leftPad, "r":screenWidth-leftPad, "t":topPad+buttonsDown*buttonSize, "b":topPad+buttonsDown*buttonSize+cellSize};
+  else{
+    gridPx=screenHeight/gridDown;
+    topPad=0;
+    leftPad=(screenWidth-gridPx*gridAcross)/2;
+    }
+  var buttonSize=gridPx*2;
+  //dbuga('populateLevels() topPad='+topPad+' buttonsDown:'+buttonsDown+' gridAspect:'+gridAspect);
+  for (var b=0; b<levelButtons.length; b++){
+    levelButtons[b].l=b%buttonsAcross*buttonSize+leftPad+gridPx;
+    levelButtons[b].r=b%buttonsAcross*buttonSize+leftPad+buttonSize+gridPx;
+    levelButtons[b].t=Math.floor(b/buttonsAcross)*buttonSize+topPad+gridPx;
+    levelButtons[b].b=Math.floor(b/buttonsAcross)*buttonSize+topPad+buttonSize+gridPx;
+    }
+  var cancelButton={"num":levelButtons.length, "l":leftPad+gridPx, "r":screenWidth-leftPad-gridPx, "t":topPad+buttonsDown*buttonSize+gridPx, "b":topPad+buttonsDown*buttonSize+gridPx*2};
   levelButtons.push(cancelButton);
   drawLevels();
   }
 var highlighted="rgba(255,255,100,1)";
 function drawLevels(){
+  levelsCanv.style.zIndex=1;
+
   var buttonsAcross=2;
   var buttonSize=cellSize*1.75;
   var fieldsAcross=4;
@@ -2037,6 +2054,7 @@ var turnFrames=0;
 var camPos={"x":0, "y":0, "d":0};
 
 function rafTick(nowMs){
+  if(focusTrain>=trainData.length){focusTrain=0;}
   if((menuUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
 
     turnFrames++;
@@ -2721,10 +2739,10 @@ function sourceAction(sourceNum){
     carData.push(newCar);
     }
   if(avgFps<minFps){
-    dbug("<br>sourceAction stopped - fps=" +avgFps+" [" +(carData.length-totalCarsDocked)+"]");
+    //dbug("<br>sourceAction stopped - fps=" +avgFps+" [" +(carData.length-totalCarsDocked)+"]");
     }
   else{
-    dbug("<br>"+avgFps +" ["+(carData.length-totalCarsDocked)+"]");
+    //dbug("<br>"+avgFps +" ["+(carData.length-totalCarsDocked)+"]");
     }
   }
 

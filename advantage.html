@@ -1,0 +1,151 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<script type="text/javascript">
+var pokeTypes={
+"Bug":{
+  "goodAgainst":["Grass", "Psychic", "Dark"],
+  "badAgainst":["Fire", "Fighting", "Poison", "Flying", "Ghost", "Steel"]
+},
+"Dark":{
+  "goodAgainst":["Ghost", "Psychic"],
+  "badAgainst":["Fighting", "Dark", "Steel"]
+},
+"Dragon":{
+  "goodAgainst":[ "Dragon"],
+  "badAgainst":[ "Ice", "Steel"]
+},
+"Electric":{
+  "goodAgainst":["Water", "Flying"],
+  "badAgainst":["Grass", "Electric", "Ground", "Dragon"]
+},
+"Fighting":{
+  "goodAgainst":["Normal", "Ice", "Rock", "Dark", "Steel"],
+  "badAgainst":["Poison", "Flying", "Bug", "Ghost" , "Psychic"]
+},
+"Fire":{
+  "goodAgainst":["Grass", "Ice", "Bug", "Steel"],
+  "badAgainst":["Water", "Fire", "Dragon", "Rock"]
+},
+"Flying":{
+  "goodAgainst":["Grass", "Fighting", "Bug"],
+  "badAgainst":["Electric", "Rock", "Steel"]
+},
+"Ghost":{
+  "goodAgainst":["Ghost", "Psychic"],
+  "badAgainst":["Dark", "Steel"]
+},
+"Grass":{
+  "goodAgainst":["Water", "Ground", "Rock"],
+  "badAgainst":["Fire", "Grass", "Poison", "Flying", "Bug", "Dragon", "Steel"]
+},
+"Ground":{
+  "goodAgainst":["Fire", "Poison", "Electric", "Rock", "Steel"],
+  "badAgainst":["Grass", "Flying", "Bug"]
+},
+"Ice":{
+  "goodAgainst":["Grass", "Ground", "Flying", "Dragon"],
+  "badAgainst":["Water", "Ice", "Fire", "Steel"]
+},
+"Normal":{
+  "goodAgainst":[],
+  "badAgainst":[ "Fighting", "Ghost", "Rock", "Steel"]
+},
+"Poison":{
+  "goodAgainst":["Grass"],
+  "badAgainst":["Poison", "Ground", "Rock", "Ghost", "Steel"]
+},
+"Psychic":{
+  "goodAgainst":["Fighting", "Poison"],
+  "badAgainst":["Psychic", "Dark", "Steel"]
+},
+"Rock":{
+  "goodAgainst":["Ice", "Fire", "Flying", "Bug"],
+  "badAgainst":["Fighting", "Ground", "Steel"]
+},
+"Steel":{
+  "goodAgainst":["Ice", "Rock"],
+  "badAgainst":["Water", "Fire", "Water", "Steel"]
+},
+"Water":{
+  "goodAgainst":["Fire", "Ground", "Rock"],
+  "badAgainst":[ "Water", "Grass", "Dragon"]
+}
+}
+function gradePlayerAgainst(player, opponent){
+  var grade=0;
+  var playerGoods=pokeTypes[player]["goodAgainst"];
+  var playerBads=pokeTypes[player]["badAgainst"];
+  var opponentGoods=pokeTypes[opponent]["goodAgainst"];
+  var opponentBads=pokeTypes[opponent]["badAgainst"];
+  for(var t=0; t<playerGoods.length; t++){
+    if(playerGoods[t]==opponent){grade++;}
+    }
+  for(var t=0; t<playerBads.length; t++){
+    if(playerBads[t]==opponent){grade--;}
+    }
+  for(var t=0; t<opponentGoods.length; t++){
+    if(opponentGoods[t]==player){grade--;}
+    }
+  for(var t=0; t<opponentBads.length; t++){
+    if(opponentBads[t]==player){grade++;}
+    }
+  return grade;
+  }
+var typeKeys=Object.keys(pokeTypes);
+function changed(b){
+  var opponent=document.getElementById('battle'+b).value;
+  console.log("changed("+b+") "+opponent);
+  var htmlString="<h3>Best Types:</h3>";
+  if(opponent != "None"){
+    var gradeArray=[];
+    for (var k=0; k<typeKeys.length; k++){
+      var typeKey=typeKeys[k];
+      var grade=gradePlayerAgainst(typeKey, opponent);
+      gradeArray.push({"pokeType":typeKey, "grade":grade});
+      }
+    gradeArray.sort(function(a, b) {
+      return b.grade - a.grade;
+      });
+    for(var g=0; g<gradeArray.length; g++){
+      if(gradeArray[g].grade>0){
+        htmlString+=gradeArray[g].pokeType+' <em>+'+gradeArray[g].grade+'</em><br />';
+        }
+      }
+    }
+  document.getElementById('result'+b).innerHTML=htmlString;
+  }
+function init(){
+  var htmlString="";
+  for (b=1; b<=3; b++){
+    htmlString+='<div class="battle">';
+    htmlString+='<h2>Battle '+b+'';
+    htmlString+='<select onchange="changed('+b+');" id="battle'+b+'">';
+    htmlString+='<option value="">None</option>';
+    for (var k=0; k<typeKeys.length; k++){
+      htmlString+='<option value="'+typeKeys[k]+'">'+typeKeys[k]+'</option>';
+      }
+    htmlString+='</select></h2>';
+    htmlString+='<div class="resultHolder" id="result'+b+'"><h3>Best Types:</h3></div>';
+    htmlString+='</div>';
+    }
+  document.getElementById("outputDiv").innerHTML=htmlString;
+  }
+window.onload = function() {
+  init();
+};
+console.log('if not sooner');
+
+</script>
+<style type="text/css">
+select{width:50%; font-size:16px; float:right;}
+.resultHolder{padding:10px;}
+.battle{border:1px solid green;padding:10px;}
+*{font-family:Futura, Trebuchet MS, Arial, sans-serif;}
+h3, h2{margin-bottom:0px;}
+</style>
+</head>
+<body>
+<div id="outputDiv"></div>
+</body>
+</html>
