@@ -3603,7 +3603,7 @@ function touchEvent(event){
         handleEventMenu(event);
         }
       else{
-        handleEventDraw();
+        handleEventDraw(event);
         }
       }
     }
@@ -4214,7 +4214,6 @@ var cachePageX=0;
 var cachePageY=0;
 
 function xydirFromTouch(thisTouch){
-  dbug("<br><br>"+thisTouch.pageY);
   var xydirObject=new Object();
   xydirObject.x=Math.floor((thisTouch.pageX)/cellSize);
   xydirObject.y=Math.floor((thisTouch.pageY-boardPad-44)/cellSize);
@@ -4548,7 +4547,7 @@ function updateColorsCanv(caller){
   }
 function handleEventDraw(e){
   if(e.touches.length>0){
-    dbuga("handleEventDraw(y:"+e.touches[0].pageY+", type:"+e.type+")");
+    //dbuga("handleEventDraw(y:"+e.touches[0].pageY+", type:"+e.type+")");
     }
   else{
     //dbuga("handleEventDraw(type:"+e.type+")");
@@ -4628,6 +4627,7 @@ function handleEventDraw(e){
       }
     }
   if(typ=="touchend"){
+    //dbuga("draw touchend")
     if(lastDir != startDir){
       // end having moved across square
       if (lastDist>centerSize){
