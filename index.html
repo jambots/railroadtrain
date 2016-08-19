@@ -3595,7 +3595,17 @@ function touchEnd(event){
 
 function touchEvent(event){
   if(event.touches.length==0){//touchend
-
+    if(viewportAspect<1){
+      if(levelsUp){
+        return false;
+        }
+      else if(menuUp){
+        handleEventMenu(event);
+        }
+      else{
+        handleEventDraw();
+        }
+      }
     }
   else{
     if(viewportAspect>1){
@@ -4204,14 +4214,14 @@ var cachePageX=0;
 var cachePageY=0;
 
 function xydirFromTouch(thisTouch){
-  dbug(thisTouch.pageY);
+  dbug("<br><br>"+thisTouch.pageY);
   var xydirObject=new Object();
   xydirObject.x=Math.floor((thisTouch.pageX)/cellSize);
   xydirObject.y=Math.floor((thisTouch.pageY-boardPad-44)/cellSize);
 
   centerX=cellSizeHalf+(cellSize*xydirObject.x);
   centerY=cellSizeHalf+(cellSize*xydirObject.y);
-  if(Math.abs(centerX-thisTouch.pageX)>Math.abs(centerY-(thisTouch.pageY-boardPad))){
+  if(Math.abs(centerX-thisTouch.pageX)>Math.abs(centerY-(thisTouch.pageY-boardPad-44))){
     // further on X axis
     if (centerX-thisTouch.pageX > 0){
       xydirObject.dir="l";
@@ -4222,7 +4232,7 @@ function xydirFromTouch(thisTouch){
     }
   else{
     // further on Y axis
-    if (centerY-(thisTouch.pageY-boardPad) > 0){
+    if (centerY-(thisTouch.pageY-boardPad-44) > 0){
       xydirObject.dir="t";
       }
     else{
@@ -4230,7 +4240,7 @@ function xydirFromTouch(thisTouch){
       }
     }
   distX=Math.abs(centerX-thisTouch.pageX);
-  distY=Math.abs(centerY-(thisTouch.pageY-boardPad));
+  distY=Math.abs(centerY-(thisTouch.pageY-boardPad-44));
   xydirObject.dist=Math.sqrt(distX*distX + distY*distY);
   return xydirObject;
 
