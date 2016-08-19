@@ -3660,7 +3660,8 @@ function handleEventCars(e){
     }
   }
 function handleEventGraphics(e){
-  if(e.type=="touchstart"){// normal landscape start pan zoom
+  dbuga(' - handleEventGraphics('+e.type+')');
+  if(e.type=="touchstart"){
     var t=e.touches[0];
         var found=false;
         for (var gb=0; gb<graphicsButtons.length; gb++){
@@ -3669,36 +3670,36 @@ function handleEventGraphics(e){
           var y=t.pageY-44;
           if(xyInTrbl(x,y,graphicsButton)){
 
-            if(graphicsButton.buttonId=="Done"){
+            if(graphicsButton.label=="Done"){
               openModal("cars");
               }
-            if(graphicsButton.buttonId=="Camera"){
+            if(graphicsButton.label=="Camera"){
               graphicsTake();              
               }
-            if(graphicsButton.buttonId=="Transparent"){
+            if(graphicsButton.label=="Transparent"){
               graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=!(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans);
               localStorage.setItem('graphicsByColor', JSON.stringify(graphicsByColor));
               processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
               populateCars();
               }
-            if(graphicsButton.buttonId=="Save"){
+            if(graphicsButton.label=="Save"){
               graphicsEditing=false;
               // move to storage, image for now
               saveGraphics();
               graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=false;
               localStorage.setItem('graphicsByColor', JSON.stringify(graphicsByColor));
               }
-            if(graphicsButton.buttonId=="Cancel"){
+            if(graphicsButton.label=="Cancel"){
               graphicsEditing=false;
               processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
               populateCars();
               
               }
-            if(graphicsButton.buttonId=="Retake"){
+            if(graphicsButton.label=="Retake"){
               graphicsTake();              
               }
             found=true;
-            if(graphicsButton.buttonId=="car"){
+            if(graphicsButton.label=="car"){
               //dbuga('car touchstart');
               found=false;              
               }
@@ -3886,7 +3887,7 @@ function postviewGraphics(){
   var pad=cellSize/10;
   var topPad=(landscapeScreenHeight-44-buttonHeight*4)/2;
   var leftPad=(screenHeight-buttonWidth*3)/2;  
-  var carButton={"buttonId":"car"}
+  var carButton={"label":"car"}
 
   carButton.sampleWidth=image.naturalWidth*graphicsScale;
   carButton.sampleHeight=carButton.sampleWidth/4;
@@ -3919,7 +3920,7 @@ function previewGraphics(){
   var pad=cellSize/10;
   var topPad=(landscapeScreenHeight-44-buttonHeight*4)/2;
   var leftPad=(screenHeight-buttonWidth*3)/2;  
-  var carButton={"buttonId":"car"}
+  var carButton={"label":"car"}
 
   carButton.sampleWidth=image.naturalWidth*graphicsScale;
   carButton.sampleHeight=carButton.sampleWidth/4;
