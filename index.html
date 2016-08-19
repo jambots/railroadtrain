@@ -3593,7 +3593,7 @@ function touchEnd(event){
   }
 
 function touchEvent(event){
-  dbug('touchEvent('+event.type+')');
+  //dbug('touchEvent('+event.type+')');
   if(event.touches.length==0){//touchend
     if(viewportAspect<1){
       if(levelsUp){
@@ -3660,7 +3660,7 @@ function handleEventCars(e){
     }
   }
 function handleEventGraphics(e){
-  dbuga(' - handleEventGraphics('+e.type+')');
+  dbug(' - handleEventGraphics('+e.type+') graphicsUp='+graphicsUp+' graphicsEditing='+graphicsEditing);
   if(e.type=="touchstart"){
     var t=e.touches[0];
         var found=false;
@@ -3714,7 +3714,7 @@ function handleEventGraphics(e){
             graphicsEvent=e;
             graphicsTouching=true;
             startMoveGraphics();
-            //dbuga('graphics  touchstart! '+e.touches.length);
+            dbuga('graphics  touchstart! '+e.touches.length);
             }
           }
         else{populateGraphics();}
@@ -3724,13 +3724,13 @@ function handleEventGraphics(e){
     if(graphicsTouching){
       graphicsEvent=e;
       moveGraphics();
-      //dbuga('graphics  touchmove! '+e.touches.length);
+      dbuga('graphics  touchmove! '+e.touches.length);
       }
     }
   if(e.type=="touchend"){
     if(graphicsTouching){
       graphicsEvent=e;
-      //dbuga('graphics  touchend! '+e.touches.length);
+      dbuga('graphics  touchend! '+e.touches.length);
       if(e.touches.length >0){
         startMoveGraphics();
         }
@@ -4295,17 +4295,17 @@ var carsButtons=[];
 var graphicsButtons=[];
 var menuButtons=[];
 function handleEventMenu(e){
-/*
+
   if(e.touches.length>0){dbuga("handleEventMenu(target:"+e.touches[0].target.id+", type:"+e.type+")");}
   else{dbuga("handleEventMenu(type:"+e.type+")");}
-*/
+
 
   var typ = e.type;
   if(typ == "touchstart"){
     menuTouchingId="";
     menuButtonNum=-1;
     var x=e.touches[0].pageX;
-    var y=e.touches[0].pageY;
+    var y=e.touches[0].pageY-44;
     var keys=Object.keys(menuObject);
     for (var k=0; k<keys.length; k++){
       if(xyInTrbl(x,y,menuObject[keys[k]])){
@@ -4322,7 +4322,7 @@ function handleEventMenu(e){
   if((typ=="touchstart")||(typ=="touchmove")){
     if(menuTouchingId !=""){
       var x=e.touches[0].pageX;
-      var y=e.touches[0].pageY;
+      var y=e.touches[0].pageY-44;
       var w=menuObject[menuTouchingId].r-menuObject[menuTouchingId].l;
       var prog=(x-menuObject[menuTouchingId].l)/w;
       if(prog<0){prog=0;}
