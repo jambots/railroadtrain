@@ -4204,9 +4204,10 @@ var cachePageX=0;
 var cachePageY=0;
 
 function xydirFromTouch(thisTouch){
+  dbug(thisTouch.pageY);
   var xydirObject=new Object();
   xydirObject.x=Math.floor((thisTouch.pageX)/cellSize);
-  xydirObject.y=Math.floor((thisTouch.pageY-boardPad)/cellSize);
+  xydirObject.y=Math.floor((thisTouch.pageY-boardPad-44)/cellSize);
 
   centerX=cellSizeHalf+(cellSize*xydirObject.x);
   centerY=cellSizeHalf+(cellSize*xydirObject.y);
@@ -4537,9 +4538,7 @@ function updateColorsCanv(caller){
   }
 function handleEventDraw(e){
   if(e.touches.length>0){
-      e.touches[0].pageY-=44;
-
-    //dbuga("handleEventDraw(target:"+e.touches[0].target.id+", type:"+e.type+")");
+    dbuga("handleEventDraw(y:"+e.touches[0].pageY+", type:"+e.type+")");
     }
   else{
     //dbuga("handleEventDraw(type:"+e.type+")");
