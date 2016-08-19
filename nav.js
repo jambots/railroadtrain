@@ -15,7 +15,7 @@ function createNavDiv(){
 function styleNavDiv(){
   navDivRef.style.height=controlHeight+"px";
   navDivRef.style.width=boardWidth+"px";
-  navDivRef.style.top=(portraitScreenHeight-controlHeight)+"px";
+  navDivRef.style.top="0px";
   //dbuga("styleNavDiv");
   }
 

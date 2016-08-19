@@ -578,71 +578,39 @@ function undo(){
   rebuildTracks();
   }
 
-function handleEventUi(e){
-  if(e.touches.length>0){
-    //dbuga("handleEventUi(target:"+e.touches[0].target.id+", type:"+e.type+")");
+function handleEventNav(e){// fubar but still in
+  if(e.touches.length==0){
     }
   else{
-    //dbuga("handleEventUi(type:"+e.type+")");
-    }
-
-  target=e.touches[0].target.id;
-  //dbuga("handleEventUi "+target);
-  if(target == "level_touch"){
-    if(levelsUp){
-      //dbuga('closeModals levelsUp');
-      closeModals();
-      minFramesPerSecond=-4;
+    target=e.touches[0].target.id;
+    if(target == "level_touch"){
+      if(levelsUp){
+        closeModals();
+        minFramesPerSecond=-4;
+        }
+      else{
+        openModal("levels");
+        }
       }
-    else{
-      openModal("levels");
+    if(target == "menu_touch"){
+      if(menuUp){
+        closeModals();
+        minFramesPerSecond=-4;
+        }
+      else{
+        openModal("menu");
+        }
       }
-    }
-  if(target == "menu_touch"){
-    if(menuUp){
-      //dbuga('closeModals menu_touch');
-      closeModals();
-      minFramesPerSecond=-4;
+    if (target == "undo_touch"){
+      undo();
+      document.getElementById('undo_label').style.opacity="1";
+      window.setTimeout('resetUndoLabel()', 400);
       }
-    else{
-      openModal("menu");
+    if (target == "reset_touch"){
+      resetBoardTimersObjects();
+      removeAllTracks();
+      rebuildSequence();
       }
-    }
-/*
-  if(target == "music_touch"){
-    if(genericGet("musicOn") == "true"){
-      genericSet("musicOn", "false");
-      //document.getElementById('music_label').style.opacity=".5";
-      }
-    else{
-      genericSet("musicOn", "true");
-      //document.getElementById('Music_label').style.opacity="1";
-      }
-    transmitBgMusicState();
-    }
-
-  if (target == "sfx_touch"){
-    if(genericGet("sfxOn") == "true"){
-      genericSet("sfxOn","false");
-      document.getElementById('Sfx_label').style.opacity=".5";
-      }
-    else{
-      genericSet("sfxOn","true");
-      document.getElementById('Sfx_label').style.opacity="1";
-      oneShot("trainstart");
-      }
-    }
-
-*/
-  if (target == "undo_touch"){
-    undo();
-    document.getElementById('undo_label').style.opacity="1";
-    window.setTimeout('resetUndoLabel()', 400);
-    }
-  if (target == "reset_touch"){
-    resetBoardTimersObjects();
-    removeAllTracks();
-    rebuildSequence();
     }
   }
 
@@ -763,7 +731,7 @@ function setupClasses(){
   //dbuga('squarePadTop='+squarePadTop);
  
   
-  uiTop=portraitScreenHeight-44-progDivHeight-adHeight;
+  uiTop=portraitScreenHeight-44-progDivHeight;
 
   addStyle('#arrowCircle', 'position:absolute; left:' + p*12 + 'px; top:' + p*12 + 'px; border-color:#DA251C;  border-style:solid; border-width:' + p*12 + 'px;  width:' + p*40 + 'px;  height:' + p*40 + 'px; -webkit-border-radius:' + p*48 + 'px;');
   addStyle('#arrowPoint', 'position:absolute; left:' + p*36 + 'px; top:' + p*5 + 'px; border-color:#fff #DA251C #fff  #fff ;  border-style:solid ;  border-width:' + p*15 + 'px ' + p*15 + 'px ' + p*15 + 'px 0px ;  width:0;  height:0;');
@@ -1205,8 +1173,6 @@ var blingHeight=0;
 var portraitScreenHeight=100;
 var landscapeScreenHeight=100;
 var totalCells;
-var adHeight=0;
-var adWidth=480;
 function toggleBanner(){
   bannerEnabled=!(bannerEnabled);
   initGeometry();
@@ -1221,24 +1187,7 @@ function adGeometry(){
 90 - tablets in either orientation
 More specifically, if the screen height of a device is between 400 and 720, an ad height of 50 is used in both orientations; for screen heights greater than 720, a 90 ad height is used.
 */
-  adHeight=0;
-  if(bannerEnabled){
-    adHeight=32; 
-    adWidth=480; 
-    if((viewportHeight>=420)&&(viewportHeight<=720)){
-      adHeight=50;
-      adWidth=320;
-      } 
-    if(viewportHeight>720){
-      adHeight=90;
-      adWidth=728;
-      }
-    document.getElementById('adHolder').style.backgroundImage="url(banners/"+adWidth+"x"+adHeight+".png)";
-    }
-  document.getElementById('wrapper').style.top=adHeight+"px";
-  document.getElementById('adHolder').style.height=adHeight+"px";
-  document.getElementById('adHolder').style.width=viewportWidth+"px";
-
+  document.getElementById('wrapper').style.top="0px";
   }
 
 var colorsCanv;
@@ -1282,9 +1231,7 @@ function initGeometry(){
     blingHeight=screenHeight-viewportHeight;
     }
   viewportAspect=viewportWidth/viewportHeight;
-  portraitScreenHeight=screenHeight-blingHeight;
-  landscapeScreenHeight=screenWidth-blingHeight;
-  colorsHeight=64;
+  colorsHeight=44;
   if(screenHeight<500){colorsHeight=44;}
   screenAspect=screenWidth/screenHeight;
   if(screen.width==1680){// test iPhone dimension local
@@ -1305,6 +1252,9 @@ function initGeometry(){
     viewportHeight=screenHeight;
     portraitScreenHeight= screenHeight;
     }
+  portraitScreenHeight=screenHeight;
+  landscapeScreenHeight=screenWidth;
+
   document.getElementById('debugDiv').style.width=screenWidth+"px";
   
   //dbuga("initGeometry screen: "+screenWidth+" x "+screenHeight+" ");
@@ -1339,9 +1289,9 @@ function boardGeometry(){
   cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
   //dbuga("cellSize="+cellSize);
   cubeSize=cellSize*shrink;
-  cellsDown=Math.floor((portraitScreenHeight-44-13-adHeight)/cellSize);
+  cellsDown=Math.floor((portraitScreenHeight-44-13)/cellSize);
   totalCells=cellsAcross*cellsDown;
-  space=(screenHeight-cellsDown*cellSize-44-adHeight);
+  space=(screenHeight-cellsDown*cellSize-44);
   boardPad=Math.floor(space/2);
   //dbuga("boardGeometry()");
   //dbuga(" - cellsAcross="+cellsAcross);
@@ -1363,31 +1313,31 @@ function boardGeometry(){
 
   levelsCanv.width=screenWidth;
   levelsCanv.height=portraitScreenHeight;
-  levelsCanv.style.top=0+"px";
+  levelsCanv.style.top="44px";
   levelsCanv.style.left=(0-screenWidth)+"px";
   levelsCanv.style.backgroundColor="rgba(255,255,255,.75)";
 
   menuCanv.width=screenWidth;
   menuCanv.height=portraitScreenHeight;
-  menuCanv.style.top=adHeight+"px";
+  menuCanv.style.top="44px";
   menuCanv.style.left=screenWidth+"px";
   menuCanv.style.backgroundColor="rgba(255,255,255,.75)";
 
   carsCanv.width=screenHeight;
-  carsCanv.height=landscapeScreenHeight-colorsHeight-adHeight;
-  carsCanv.style.top=adHeight+"px";
+  carsCanv.height=landscapeScreenHeight-44;
+  carsCanv.style.top="44px";
   carsCanv.style.left=screenHeight+"px";
   carsCanv.style.backgroundColor="rgba(255,255,255,.75)";
 
   graphicsCanv.width=screenHeight;
-  graphicsCanv.height=landscapeScreenHeight-colorsHeight-adHeight;
-  graphicsCanv.style.top=adHeight+"px";
+  graphicsCanv.height=landscapeScreenHeight-44;
+  graphicsCanv.style.top="44px";
   graphicsCanv.style.left=screenHeight+"px";
   graphicsCanv.style.backgroundColor="rgba(255,255,255,.75)";
 
   colorsCanv.width=screenHeight;
   colorsCanv.height=64;
-  colorsCanv.style.top=(landscapeScreenHeight-64)+"px";
+  colorsCanv.style.top="0px";
   colorsCanv.style.left=0+"px";
   //colorsCanv.style.backgroundColor="rgba(33,33,33,.75)";
 
@@ -1495,7 +1445,6 @@ function openGraphics(carButton){
   populateGraphics();
   openModal("graphics");
 }
-var graphicsButtons=[];
 function populateGraphics(){
   //dbuga('populateGraphics 0');
   graphicsCanv.width=screenHeight;
@@ -1510,38 +1459,22 @@ function populateGraphics(){
   var buttonHeight=cellSize*1;
   var radius=cellSize/8;
   var pad=cellSize/10;
-  var topPad=(landscapeScreenHeight-colorsHeight-adHeight-buttonHeight*4)/2;
+  var topPad=(landscapeScreenHeight-44-buttonHeight*4)/2;
   var leftPad=(screenHeight-buttonWidth*3)/2;
   graphicsButtons=[];
 
   var t=topPad+buttonHeight*3.25;
   var b=topPad+buttonHeight*4.25;
   if(graphicsEditing==false){
-    graphicsButtons.push({"buttonId":"Done", "highlighted":false, "l":leftPad+buttonWidth*0,"r":leftPad+buttonWidth*1, "t":t,"b":b});
-    graphicsButtons.push({"buttonId":"Camera", "highlighted":false,"l":leftPad+buttonWidth*1,"r":leftPad+buttonWidth*2, "t":t,"b":b});
-    graphicsButtons.push({"buttonId":"Transparent", "highlighted":graphic.blackTrans,"l":leftPad+buttonWidth*2,"r":leftPad+buttonWidth*3, "t":t,"b":b});
+    graphicsButtons.push(returnModalButton("Done","left","landscape",false));
+    graphicsButtons.push(returnModalButton("Camera","center","landscape",false));
+    graphicsButtons.push(returnModalButton("Transparent","right","landscape",graphic.blackTrans));
     }
   else{
-    graphicsButtons.push({"buttonId":"Save", "highlighted":true, "l":leftPad+buttonWidth*0,"r":leftPad+buttonWidth*1, "t":t,"b":b});
-    graphicsButtons.push({"buttonId":"Retake", "highlighted":false, "l":leftPad+buttonWidth*1,"r":leftPad+buttonWidth*2, "t":t,"b":b});
-    graphicsButtons.push({"buttonId":"Cancel", "highlighted":false, "l":leftPad+buttonWidth*2,"r":leftPad+buttonWidth*3, "t":t,"b":b});
+    graphicsButtons.push(returnModalButton("Save","left","landscape",false));
+    graphicsButtons.push(returnModalButton("Retake","center","landscape",false));
+    graphicsButtons.push(returnModalButton("Cancel","right","landscape",false));
     }
-  
-
-  for(var gb=0; gb<graphicsButtons.length; gb++){
-    graphicsCtx.strokeStyle="rgba(42,42,42,.25)";
-    graphicsCtx.fillStyle="rgba(255,255,255,1)";
-    if(graphicsButtons[gb].highlighted){graphicsCtx.fillStyle=highlighted;}
-    roundRect(graphicsCtx, graphicsButtons[gb].l+pad, graphicsButtons[gb].t+pad, buttonWidth-pad*2, buttonHeight-pad*2, radius, true, true);
-    var cx=graphicsButtons[gb].l/2+graphicsButtons[gb].r/2;
-    var cy=graphicsButtons[gb].t/2+graphicsButtons[gb].b/2;
-    graphicsCtx.font=Math.floor(buttonHeight/2)+"px akzi";
-    graphicsCtx.fillStyle="black";
-    graphicsCtx.textAlign="center";
-    graphicsCtx.textBaseline="middle";
-    graphicsCtx.fillText(graphicsButtons[gb].buttonId, cx,cy);
-    }
-
   var carButton={"buttonId":"car"}
   carButton.c=graphicsSelectedColorNum;
   carButton.g= graphicsSelectedGraphic;
@@ -1557,10 +1490,15 @@ function populateGraphics(){
 
   graphicsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
   //cameraCanv.style.display="none";
+
+  for(var gb=0; gb<graphicsButtons.length; gb++){
+    drawModalButton(graphicsCtx, graphicsButtons[gb]);
+    }
+
   //dbuga('populateGraphics 10');
 
   }
-var carsButtons=[];
+
 function populateCars(){
   //dbuga('populateCars()');
   carsButtons=[];
@@ -1569,12 +1507,13 @@ function populateCars(){
   var pad=cellSize/2;
   var radius=cellSize/12;
 
-  var topPad=(landscapeScreenHeight-colorsHeight-adHeight-buttonHeight*4)/2;
+  var topPad=(landscapeScreenHeight-44-buttonHeight*4)/2;
   var leftPad=(screenHeight-buttonWidth*3)/2;
   //dbuga("topPad="+topPad);
   //dbuga("leftPad="+leftPad);
   var carsCtx=carsCanv.getContext('2d');
-  carsCtx.lineWidth=cellSize/16;
+  //carsCtx.lineWidth=cellSize/16;
+  carsCtx.lineWidth=buttonLine;
 
 //[graphicsSelectedGraphic];
   for (var i=0; i<graphicsByColor[colorArray[focusTrain]].length; i++){
@@ -1627,73 +1566,109 @@ function populateCars(){
   minFramesPerSecond=-4;
 }
 var menuButtons=[
-{"y":8, "x":-4, "label":"Help", "l":0, "r":0, "t":0, "b":0},
-{"y":8, "x":4, "label":"Done", "l":0, "r":0, "t":0, "b":0}
 ];
+var levelButtons=[
+];
+function returnModalButton(label,align,orient,selected){
+  var modalButton={"selected":selected, "label":label, "l":0, "r":0, "t":0, "b":0};
+  var buttonPad=9;
+  var buttonWidth=88;
+  var buttonHeight=44;
+  var spread=(landscapeScreenHeight-320)/6;
+  var topPx=portraitScreenHeight-1-buttonPad-buttonHeight-44;
+  var centerPx=landscapeScreenHeight/2;
+  if(orient=="landscape"){
+    spread=(portraitScreenHeight-320)/6;
+    topPx=landscapeScreenHeight-1-buttonPad-buttonHeight-44;
+    centerPx=portraitScreenHeight/2;
+    buttonWidth*=2;
+    }
+  var leftPx=1+buttonPad+spread;
+  if(align=="center"){leftPx=centerPx-buttonWidth/2;}
+  if(align=="right"){leftPx=centerPx*2-1-buttonWidth-buttonPad-spread;}
+
+  modalButton.l=leftPx;
+  modalButton.r=leftPx+buttonWidth;
+  modalButton.t=topPx;
+  modalButton.b=topPx+buttonHeight;
+  return modalButton;
+  }
+var buttonStroke="rgba(42,42,42,.5)";
+var buttonFill="rgba(200,200,200,.5)";
+var buttonLine=4;
+
+function drawModalButton(ctx, modalButton){
+  
+  ctx.lineWidth=buttonLine;
+  var buttonWidth=modalButton.r-modalButton.l;
+  var buttonHeight=modalButton.b- modalButton.t
+  //ctx.strokeRect(modalButton.l, modalButton.t, buttonWidth, buttonHeight);
+  ctx.strokeStyle=buttonStroke;
+  ctx.fillStyle=buttonFill;
+  roundRect(ctx, modalButton.l, modalButton.t, buttonWidth, buttonHeight, 4, true, true);
+
+    var bcx=modalButton.l/2+modalButton.r/2;
+    var bcy=modalButton.t/2+modalButton.b/2;
+    var menuFont=Math.floor(buttonHeight/2)+"px akzi";
+    //dbuga('menuFont='+menuFont);
+    ctx.font=menuFont;
+    ctx.lineWidth=2;
+    ctx.lineCap="round";
+    ctx.fillStyle="rgba(0,0,0,.4)";
+    ctx.strokeStyle="rgba(0,0,0,.4)";
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    ctx.strokeText(modalButton.label, bcx,bcy);
+    ctx.fillText(modalButton.label, bcx,bcy);
+
+  }
 function populateMenu(){
   var g=screenWidth/16;
-  var buttonWidth=g*6;
-  var buttonHeight=g*1.25;
-  var pad=g/2;
   var radius=g/6;
   var cx=8;
   var cy=(screenHeight/2-screenWidth/2)/g+8.5;
   //dbuga("cy "+cy);
   var menuCtx=menuCanv.getContext('2d');
-  for (var b=0; b<menuButtons.length; b++){
-    //dbuga(buttonHeight);
-    menuButtons[b].l=(cx+menuButtons[b].x)*g-buttonWidth/2;
-    menuButtons[b].r=(cx+menuButtons[b].x)*g+buttonWidth/2;
-    menuButtons[b].t=(cy+menuButtons[b].y)*g-buttonHeight/2;
-    menuButtons[b].b=(cy+menuButtons[b].y)*g+buttonHeight/2;
-    
-    menuCtx.strokeStyle="rgba(42,42,42,.75)";
-    menuCtx.fillStyle="rgba(225,255,255,.9)";
-    menuCtx.lineWidth=g/4;
-    roundRect(menuCtx, menuButtons[b].l, menuButtons[b].t, buttonWidth, buttonHeight, radius, true, true);
-    var bcx=menuButtons[b].l/2+menuButtons[b].r/2;
-    var bcy=menuButtons[b].t/2+menuButtons[b].b/2;
-    var menuFont=Math.floor(buttonHeight/2)+"px akzi";
-    //dbuga('menuFont='+menuFont);
-    menuCtx.font=menuFont;
-    menuCtx.lineWidth=g/16;
-
-    menuCtx.strokeStyle="#666";
-    menuCtx.fillStyle="#666";
-    menuCtx.textAlign="center";
-    menuCtx.textBaseline="middle";
-    menuCtx.fillText(menuButtons[b].label, bcx,bcy);
-    menuCtx.strokeText(menuButtons[b].label, bcx,bcy);
+  menuButtons=[];
+  menuButtons.push(returnModalButton("Help","left","portrait",false));
+  menuButtons.push(returnModalButton("About","center","portrait",false));
+  menuButtons.push(returnModalButton("Done","right","portrait",false));
   }
-}
+function drawMenuButtons(){
+  //dbuga('drawMenuButtons');
+  var menuCtx=menuCanv.getContext('2d');
+  for (var b=0; b<menuButtons.length; b++){
+    drawModalButton(menuCtx, menuButtons[b]);
+    }
+  }
 var levelsGridPx=0;
 var levelsTopPad=0;
 var levelsLeftPad=0;
 
 
-var levelButtons=[];
+var levelBoxes=[];
 function populateLevels(){
-  levelButtons=[];
+  levelBoxes=[];
   var tankFound=false;
   //dbuga('populateLevels() cellSize='+cellSize);
   for (var dNum=0; dNum<levelData.length; dNum++){
     if(levelData[dNum].space <= totalCells){
       if(levelData[dNum].tank){
         if(tankFound==false){
-          levelButtons.push({"num":dNum});
+          levelBoxes.push({"num":dNum});
           tankFound=true;
           }
         }
       else{// not tank
-        levelButtons.push({"num":dNum});
+        levelBoxes.push({"num":dNum});
         }
       }
     }
   var buttonsAcross=2;
-  if(levelButtons.length>8){
+  if(levelBoxes.length>8){
     buttonsAcross=3;
     }
-  var buttonsDown=Math.ceil(levelButtons.length/buttonsAcross);
+  var buttonsDown=Math.ceil(levelBoxes.length/buttonsAcross);
   var gridAcross=buttonsAcross*2+2;
   var gridDown=buttonsDown*2+3;
   var gridAspect=gridAcross/gridDown;
@@ -1711,27 +1686,36 @@ function populateLevels(){
     }
   var buttonSize=levelsGridPx*2;
   //dbuga('populateLevels() levelsTopPad='+levelsTopPad+' buttonsDown:'+buttonsDown+' gridAspect:'+gridAspect);
-  for (var b=0; b<levelButtons.length; b++){
-    levelButtons[b].l=b%buttonsAcross*buttonSize+levelsLeftPad+levelsGridPx;
-    levelButtons[b].r=b%buttonsAcross*buttonSize+levelsLeftPad+buttonSize+levelsGridPx;
-    levelButtons[b].t=Math.floor(b/buttonsAcross)*buttonSize+levelsTopPad+levelsGridPx;
-    levelButtons[b].b=Math.floor(b/buttonsAcross)*buttonSize+levelsTopPad+buttonSize+levelsGridPx;
+  for (var b=0; b<levelBoxes.length; b++){
+    levelBoxes[b].l=b%buttonsAcross*buttonSize+levelsLeftPad+levelsGridPx;
+    levelBoxes[b].r=b%buttonsAcross*buttonSize+levelsLeftPad+buttonSize+levelsGridPx;
+    levelBoxes[b].t=Math.floor(b/buttonsAcross)*buttonSize+levelsTopPad+levelsGridPx;
+    levelBoxes[b].b=Math.floor(b/buttonsAcross)*buttonSize+levelsTopPad+buttonSize+levelsGridPx;
     }
-  var cancelButton={"num":levelButtons.length, "l":levelsLeftPad+levelsGridPx, "r":screenWidth-levelsLeftPad-levelsGridPx, "t":levelsTopPad+buttonsDown*buttonSize+levelsGridPx, "b":levelsTopPad+buttonsDown*buttonSize+levelsGridPx*2};
-  levelButtons.push(cancelButton);
-  drawLevels();
+/*////
+  var cancelButton={"num":levelBoxes.length, "l":levelsLeftPad+levelsGridPx, "r":screenWidth-levelsLeftPad-levelsGridPx, "t":levelsTopPad+buttonsDown*buttonSize+levelsGridPx, "b":levelsTopPad+buttonsDown*buttonSize+levelsGridPx*2};
+  levelBoxes.push(cancelButton);
+*/
+  levelButtons=[];
+  levelButtons.push(returnModalButton("Cancel","right","portrait",false));
+
   }
 var highlighted="rgba(255,255,100,1)";
 function drawLevels(){
+  var levelsCtx=levelsCanv.getContext('2d');
+  levelsCanv.width=screenWidth;
   levelsCanv.style.zIndex="1";
+  for (var b=0; b<levelButtons.length; b++){
+    drawModalButton(levelsCtx, levelButtons[b]);
+    }
 
   var buttonsAcross=2;
   var buttonSize=levelsGridPx*2;
   var fieldsAcross=4;
   var offset=1.5;
   
-  for (var b=0; b<levelButtons.length-1; b++){
-    var dNum=levelButtons[b].num;
+  for (var b=0; b<levelBoxes.length; b++){
+    var dNum=levelBoxes[b].num;
     //dbuga(dNum+" fields[0]="+levelData[dNum].fields[0]);
     if(levelData[dNum].fields[0]==4){
       fieldsAcross=5;
@@ -1745,60 +1729,49 @@ function drawLevels(){
   var fieldRad=buttonSize/(3.2*fieldsAcross);
   var baseRad=buttonSize/(3*fieldsAcross);
   var fieldSpread=buttonSize/(fieldsAcross+1);
-  var levelsCtx=levelsCanv.getContext('2d');
-  levelsCtx.lineWidth=cellSize/6;
-  for (var b=0; b<levelButtons.length; b++){
-    levelsCtx.strokeStyle="rgba(42,42,42,.75)";
-    levelsCtx.fillStyle="rgba(225,255,255,.9)";
+
+
+
+  levelsCtx.lineWidth=buttonLine;
+  for (var b=0; b<levelBoxes.length; b++){
+  levelsCtx.strokeStyle=buttonStroke;
+  levelsCtx.fillStyle=buttonFill;
+
     if(atLevel==b){
       levelsCtx.fillStyle=highlighted;
       }
-    var w=levelButtons[b].r-levelButtons[b].l-pad*2;
-    var h=levelButtons[b].b-levelButtons[b].t-pad*2;
-    roundRect(levelsCtx, levelButtons[b].l+pad, levelButtons[b].t+pad, w, h, radius, true, true);
-    var cx=levelButtons[b].l/2+levelButtons[b].r/2;
-    var cy=levelButtons[b].t/2+levelButtons[b].b/2;
-    var dNum=levelButtons[b].num;
-
-    if(b<levelButtons.length-1){// level button
-      var req=0;
-      for(var c=0;c<levelData[dNum].fields.length;c++){
-        
-        var color=rgbArray[c];
-        levelsCtx.fillStyle=color;
-           
-        for(var f=0; f<=levelData[dNum].fields[c]; f++){
-          req++;
-          var useF=f%fieldsAcross;
-
-          var yAdd=fieldSpread*Math.floor(f/fieldsAcross);
-          var x=cx+(useF-offset)*fieldSpread;
-          var y=cy+(c-offset)*fieldSpread;
-          if(f==0){// silo
-            levelsCtx.beginPath();
-            levelsCtx.arc(x,y+yAdd,baseRad,0,Math.PI*2,true);
-            levelsCtx.fill();
-            }
-          else{// field
-            roundRect(levelsCtx, x-fieldRad, y+yAdd-fieldRad,fieldRad*2,fieldRad*2, fieldRad/3, true, false);
-            }
+    var w=levelBoxes[b].r-levelBoxes[b].l-pad*2;
+    var h=levelBoxes[b].b-levelBoxes[b].t-pad*2;
+    roundRect(levelsCtx, levelBoxes[b].l+pad, levelBoxes[b].t+pad, w, h, radius, true, true);
+    var cx=levelBoxes[b].l/2+levelBoxes[b].r/2;
+    var cy=levelBoxes[b].t/2+levelBoxes[b].b/2;
+    var dNum=levelBoxes[b].num;
+    var req=0;
+    for(var c=0;c<levelData[dNum].fields.length;c++){      
+      var color=rgbArray[c];
+      levelsCtx.fillStyle=color;    
+      for(var f=0; f<=levelData[dNum].fields[c]; f++){
+        req++;
+        var useF=f%fieldsAcross;
+        var yAdd=fieldSpread*Math.floor(f/fieldsAcross);
+        var x=cx+(useF-offset)*fieldSpread;
+        var y=cy+(c-offset)*fieldSpread;
+        if(f==0){// silo
+          levelsCtx.beginPath();
+          levelsCtx.arc(x,y+yAdd,baseRad,0,Math.PI*2,true);
+          levelsCtx.fill();
+          }
+        else{// field
+          roundRect(levelsCtx, x-fieldRad, y+yAdd-fieldRad,fieldRad*2,fieldRad*2, fieldRad/3, true, false);
           }
         }
-      req*=4;
-      levelsCtx.font=Math.floor(fieldSpread)+"px akzi";
-      levelsCtx.fillStyle="black";
-      levelsCtx.textAlign="center";
-      levelsCtx.textBaseline="middle";
-      levelsCtx.fillText(req+" "+levelData[dNum].space, cx,cy+fieldSpread*2);
       }
-    else{//cancel button
-      levelsCtx.font=Math.floor(fieldSpread)+"px akzi";
-      levelsCtx.fillStyle="black";
-      levelsCtx.textAlign="center";
-      levelsCtx.textBaseline="middle";
-      //dbuga('drawLevels cx='+cx+' cy='+cy);
-      levelsCtx.fillText("CANCEL "+atLevel, cx,cy);
-      }
+    req*=4;
+    levelsCtx.font=Math.floor(fieldSpread)+"px akzi";
+    levelsCtx.fillStyle="black";
+    levelsCtx.textAlign="center";
+    levelsCtx.textBaseline="middle";
+    //levelsCtx.fillText(req+" "+levelData[dNum].space, cx,cy+fieldSpread*2);
     }
   }
 
@@ -1807,6 +1780,7 @@ function openModal(modal){
   closeModals();
   camera.style.webkitFilter="blur(5px)";
   if(modal=="levels"){
+    drawLevels();
     levelsCanv.style.left=0+"px";
     levelsUp=true;
     }
@@ -1820,13 +1794,13 @@ function openModal(modal){
     carsCanv.style.left=0+"px";
     carsUp=true;
     //dbuga('openModals() updateColorsCanv')
-    updateColorsCanv();
+    updateColorsCanv('openModal cars');
     }
   if(modal=="graphics"){
     //dbuga('openModals() updateColorsCanv')
     graphicsCanv.style.left=0+"px";
     graphicsUp=true;
-    updateColorsCanv();
+    updateColorsCanv('openModal graphics');
     }
   }
 function closeModals(){
@@ -1845,7 +1819,7 @@ function closeModals(){
   carsUp=false;
   graphicsCanv.style.left="-"+screenHeight+"px";
   graphicsUp=false;
-  updateColorsCanv();
+  updateColorsCanv('closeModals');
   graphicsEditing=false;
   camera.style.webkitFilter="none";
   
@@ -1860,9 +1834,9 @@ function changeView(caller){
     document.getElementById("uiHolder").style.display="none";
     document.getElementById("prerails").style.display="none";
     //dbuga('changeView() updateColorsCanv')
-    updateColorsCanv();
+    ////updateColorsCanv('changeView');
     colorsCanv.style.display="block";
-    visHeight=viewportHeight-adHeight;
+    visHeight=viewportHeight;
     camera.style.marginTop= 0 +"px";
 
     }
@@ -1875,6 +1849,8 @@ function changeView(caller){
     styleNavDiv(); //in nav.js
     visHeight=boardHeight;
     camera.style.marginTop= boardPad +"px";
+    camera.style.top= "44px";
+    camera.style.position= "absolute";
     }
   document.getElementById("wrapper").style.width= viewportWidth +"px";
   document.getElementById("wrapper").style.height= viewportHeight +"px";
@@ -2733,7 +2709,7 @@ function sourceAction(sourceNum){
     useColor=sourceData[sourceNum].color;
      
     var newCar;
-    if(levelData[levelButtons[atLevel].num].tank){
+    if(levelData[levelBoxes[atLevel].num].tank){
       newCar=tankObject(useColor, sourceData[sourceNum].dir, sourceData[sourceNum].x, sourceData[sourceNum].y, sourceNum);
       }
     else{
@@ -3574,10 +3550,13 @@ var mouseDragging=false;
 function mouseDown(e){
   
   mouseDragging=true;
-  var target = e.target;
-  var id = target.id
-  //dbug("mouseDown "+e.clientX+" "+e.clientY+" nn:"+ e.target.nodeName);
-  var event={"type":"touchstart", "touches":[{"pageX":e.clientX, "pageY":e.clientY, "target":{"id":id}}]}
+ 
+  var tid = e.target.id
+  var x=e.clientX;
+  var y=e.clientY;
+  
+  var tArray=[{"pageX":x, "pageY":y, "target":{"id":tid}}];
+  var event={"type":"touchstart", "touches":tArray};
   touchStart(event);
   }
 function mouseMove(e){
@@ -3587,8 +3566,9 @@ function mouseMove(e){
     var target = e.target;
     var id = target.id
     var event={"type":"touchmove", "touches":[{"pageX":e.clientX, "pageY":e.clientY, "target":{"id":id}}]}
+    console.log(event);
     touchMove(event);
-    }// fuck off hover mouse.
+    }// buzz off hover mouse.
   }
 function mouseUp(e){
   e.preventDefault();
@@ -3600,65 +3580,223 @@ function mouseUp(e){
 
 function touchCancel(event){ 
   }
-
+function debugEvent(e){
+  console.log(e);
+  }
 function touchStart(event){
-  //dbuga("touchStart event="+ JSON.stringify(event));
-   
-
-  if(viewportAspect>1){
-    handleEventLandscape(event);
-    }
-  else{
-    if ((event.touches[0].pageY < screenHeight-44)&&(helpUp==false)){
-      if(levelsUp){
-        handleEventLevels(event);
-        }
-      else if(menuUp){
-        handleEventMenu(event);
-        }
-      else{
-        handleEventDraw(event);
-        }
-      }
-    else {
-      handleEventUi(event);
-      }
-    }
+  touchEvent(event);
   }
 function touchMove(event){
-
-  if(viewportAspect>1){
-    handleEventLandscape(event);
-    }
-  else{
-    if(levelsUp){
-      }
-    else if(menuUp){
-      handleEventMenu(event);
-      }
-    else{
-      handleEventDraw(event);
-      }
-    }
+  touchEvent(event);
   }
 function touchEnd(event){
-  
-  if(viewportAspect>1){
-    handleEventLandscape(event);
-    }
-  else{
-    if(levelsUp){
-      }
-    else if(menuUp){
-      handleEventMenu(event);
-      }
-    else{
-      handleEventDraw(event);
-      }
-    }
-  //dbuga('touchEnd completed');
+  touchEvent(event);
   }
 
+function touchEvent(event){
+  if(event.touches.length==0){//touchend
+
+    }
+  else{
+    if(viewportAspect>1){
+      var inColors=false;
+      if(event.touches[0].pageY<44){
+        if(colorsUp){
+          inColors=true;
+          }
+        else{
+          //if(event.touches[0].pageX>landscapeScreenHeight-44){
+          if(event.touches[0].pageX<44){
+            inColors=true;
+            }
+          }
+        }
+      if(inColors){handleEventColors(event);}
+      else{
+        if(carsUp){handleEventCars(event);}
+        else if(graphicsUp){handleEventGraphics(event);}
+        else if(graphicsEditing){handleEventEditing(event);}
+        else{handleEventDolly(event);}      
+        }
+      }
+    else{//portraits
+      if ((event.touches[0].pageY>44)&&(helpUp==false)){
+        if(levelsUp){handleEventLevels(event);}
+        else if(menuUp){handleEventMenu(event);}
+        else{handleEventDraw(event);}
+        }
+      else {
+        handleEventNav(event);
+        }
+      }
+    }
+  }
+function handleEventCars(e){
+  if(e.type=="touchstart"){
+    var t=e.touches[0];
+    for (var cb=0; cb<carsButtons.length; cb++){
+      var carButton=carsButtons[cb];
+      if((t.pageX>carButton.l)&&(t.pageX<carButton.r)&&(t.pageY-44>carButton.t)&&(t.pageY-44<carButton.b)){
+        openGraphics(carButton);
+        }
+      }
+    //// add check for modal button done?
+    }
+  if(e.type=="touchmove"){
+    return false;
+    }
+  if(e.type=="touchend"){
+    return false;
+    }
+  }
+function handleEventGraphics(e){
+  if(e.type=="touchstart"){// normal landscape start pan zoom
+    var t=e.touches[0];
+        var found=false;
+        for (var gb=0; gb<graphicsButtons.length; gb++){
+          var graphicsButton=graphicsButtons[gb];
+          var x=t.pageX;
+          var y=t.pageY-44;
+          if(xyInTrbl(x,y,graphicsButton)){
+
+            if(graphicsButton.buttonId=="Done"){
+              openModal("cars");
+              }
+            if(graphicsButton.buttonId=="Camera"){
+              graphicsTake();              
+              }
+            if(graphicsButton.buttonId=="Transparent"){
+              graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=!(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans);
+              localStorage.setItem('graphicsByColor', JSON.stringify(graphicsByColor));
+              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
+              populateCars();
+              }
+            if(graphicsButton.buttonId=="Save"){
+              graphicsEditing=false;
+              // move to storage, image for now
+              saveGraphics();
+              graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=false;
+              localStorage.setItem('graphicsByColor', JSON.stringify(graphicsByColor));
+              }
+            if(graphicsButton.buttonId=="Cancel"){
+              graphicsEditing=false;
+              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
+              populateCars();
+              
+              }
+            if(graphicsButton.buttonId=="Retake"){
+              graphicsTake();              
+              }
+            found=true;
+            if(graphicsButton.buttonId=="car"){
+              //dbuga('car touchstart');
+              found=false;              
+              }
+            }
+          }
+        if(found==false){
+          //dbuga('closeModals found=false 2');
+          if(graphicsEditing==false){
+            //closeModals(); // tap closed on background touch
+            }
+          else{            
+            graphicsEvent=e;
+            graphicsTouching=true;
+            startMoveGraphics();
+            //dbuga('graphics  touchstart! '+e.touches.length);
+            }
+          }
+        else{populateGraphics();}
+
+    }
+  if(e.type=="touchmove"){
+    if(graphicsTouching){
+      graphicsEvent=e;
+      moveGraphics();
+      //dbuga('graphics  touchmove! '+e.touches.length);
+      }
+    }
+  if(e.type=="touchend"){
+    if(graphicsTouching){
+      graphicsEvent=e;
+      //dbuga('graphics  touchend! '+e.touches.length);
+      if(e.touches.length >0){
+        startMoveGraphics();
+        }
+      else{
+        graphicsTouching=false;
+        postviewGraphics();
+        }
+      }
+    }
+  }
+function handleEventEditing(e){
+  if(e.type=="touchstart"){
+    var t=e.touches[0];
+    }
+  if(e.type=="touchmove"){
+    }
+  if(e.type=="touchend"){
+    }
+  }
+function handleEventDolly(e){
+  if(e.type=="touchstart"){
+    var t=e.touches[0];
+    prevTouchX=t.pageX;
+    prevTouchY=t.pageY-44;
+    }
+  if(e.type=="touchmove"){
+    //normal drag of pan zoom camera on table
+    var deltaX=prevTouchX-t.pageX;
+    var deltaY=prevTouchY-(t.pageY-44);
+    combinedZoom[focusTrain]-=deltaY/5;
+    if(t.pageY-44>(boardWidth/2)){cameraRotationDegrees[focusTrain]+=deltaX/2.5;}
+    else{cameraRotationDegrees[focusTrain]-=deltaX/15;}
+    if(combinedZoom[focusTrain]<0){combinedZoom[focusTrain]=0;}
+    if(combinedZoom[focusTrain]>100){combinedZoom[focusTrain]=100;}
+    prevTouchX=t.pageX;
+    prevTouchY=t.pageY-44;
+    }
+  if(e.type=="touchend"){// no touchend action 
+    }
+  }
+
+
+
+function handleEventColors(event){
+  var t=event.touches[0];
+  if(colorsUp==false){
+    if(t.pageX<44){//menu circle
+      colorsUp=true;
+      updateColorsCanv('touchstart 1');
+      }
+    }
+  else{ 
+    var tryFocus=Math.floor((screenHeight-t.pageX)/44);
+    //dbuga('tryFocus='+tryFocus);
+    if((tryFocus<trainData.length)&&(tryFocus != focusTrain)){
+      focusTrain=tryFocus;
+      if(graphicsUp){openModal("cars");}
+      if(carsUp){populateCars();}
+      updateColorsCanv('touchstart 2');
+      }
+    if(t.pageX<44){// x circle
+      //dbuga('closeModals t.pageX<44');
+      closeModals();
+      colorsUp=false;
+      updateColorsCanv('x circle');
+      }
+    if((t.pageX>44)&&(t.pageX<44*4)){// car button
+      if((carsUp)||(graphicsUp)){
+        //dbuga('closeModals car button');
+        closeModals();
+        }
+      else{
+        openModal("cars");
+        }
+      }
+    }
+  }  
 
 // ported code
 var camera;
@@ -3718,7 +3856,7 @@ function cameraLoaded(){
     previewGraphics();
     postviewGraphics();
     //processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
-    updateColorsCanv();
+    updateColorsCanv('cameraLoaded');
     }
 
 
@@ -3736,7 +3874,7 @@ function postviewGraphics(){
   var buttonHeight=cellSize*1;
   var radius=cellSize/8;
   var pad=cellSize/10;
-  var topPad=(landscapeScreenHeight-colorsHeight-adHeight-buttonHeight*4)/2;
+  var topPad=(landscapeScreenHeight-44-buttonHeight*4)/2;
   var leftPad=(screenHeight-buttonWidth*3)/2;  
   var carButton={"buttonId":"car"}
 
@@ -3769,7 +3907,7 @@ function previewGraphics(){
   var buttonHeight=cellSize*1;
   var radius=cellSize/8;
   var pad=cellSize/10;
-  var topPad=(landscapeScreenHeight-colorsHeight-adHeight-buttonHeight*4)/2;
+  var topPad=(landscapeScreenHeight-44-buttonHeight*4)/2;
   var leftPad=(screenHeight-buttonWidth*3)/2;  
   var carButton={"buttonId":"car"}
 
@@ -3808,185 +3946,6 @@ function testImageSample(image, scale, offsetX, offsetY){
   return true;
   }
 
-
-function handleEventLandscape(e){
-  if(e.touches.length>0){
-    //dbuga("handleEventLandscape(target:"+e.touches[0].target.id+", type:"+e.type+")");
-    }
-  else{
-    //dbuga("handleEventLandscape(type:"+e.type+")");
-    }
-
-  if(e.touches.length>0){
-    var t=e.touches[0];
-    }
-  else{
-    if(graphicsEditing==false){
-      return false;
-      }
-    }
-  if(e.type=="touchstart"){
-    if(t.pageY>landscapeScreenHeight-colorsHeight){ // touched in colors menu
-      if(colorsUp==false){
-        if(t.pageX<colorsHeight){//menu circle
-          colorsUp=true;
-          updateColorsCanv();
-          }
-        }
-      else{ 
- 
-        var tryFocus=Math.floor((screenHeight-t.pageX)/colorsHeight);
-        //dbuga('tryFocus='+tryFocus);
-        if((tryFocus<trainData.length)&&(tryFocus != focusTrain)){
-          focusTrain=tryFocus;
-          //dbuga('updateColorsCanv tryFocus<trainData.length');
-          //closeModals();
-          if(graphicsUp){openModal("cars");}
-          if(carsUp){populateCars();}
-
-
-          updateColorsCanv();
-          }
-        if(t.pageX<colorsHeight){// x circle
-          //dbuga('closeModals t.pageX<colorsHeight');
-          closeModals();
-          colorsUp=false;
-          updateColorsCanv();
-          }
-        if((t.pageX>colorsHeight)&&(t.pageX<colorsHeight*4)){// car button
-          if((carsUp)||(graphicsUp)){
-            //dbuga('closeModals car button');
-            closeModals();
-            }
-          else{
-            openModal("cars");
-            }
-          }
-        }
-      }
-    else{ // touch start above colors menu
-      if(carsUp){
-        var found=false;
-        for (var cb=0; cb<carsButtons.length; cb++){
-          var carButton=carsButtons[cb];
-          if((t.pageX>carButton.l)&&(t.pageX<carButton.r)&&(t.pageY-adHeight>carButton.t)&&(t.pageY-adHeight<carButton.b)){
-            openGraphics(carButton);
-            found=true;
-            }
-          }
-        if(found==false){
-          //dbug('closeModals()');
-          closeModals();
-          }
-        }
-      else if(graphicsUp){
-        var found=false;
-        for (var gb=0; gb<graphicsButtons.length; gb++){
-          var graphicsButton=graphicsButtons[gb];
-          if((t.pageX> graphicsButton.l)&&(t.pageX<graphicsButton.r)&&(t.pageY-adHeight> graphicsButton.t)&&(t.pageY-adHeight<graphicsButton.b)){
-
-            if(graphicsButton.buttonId=="Done"){
-              openModal("cars");
-              }
-            if(graphicsButton.buttonId=="Camera"){
-              graphicsTake();              
-              }
-            if(graphicsButton.buttonId=="Transparent"){
-              graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=!(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans);
-              localStorage.setItem('graphicsByColor', JSON.stringify(graphicsByColor));
-              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
-              populateCars();
-              }
-            if(graphicsButton.buttonId=="Save"){
-              graphicsEditing=false;
-              // move to storage, image for now
-              saveGraphics();
-              graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=false;
-              localStorage.setItem('graphicsByColor', JSON.stringify(graphicsByColor));
-              }
-            if(graphicsButton.buttonId=="Cancel"){
-              graphicsEditing=false;
-              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
-              populateCars();
-              
-              }
-            if(graphicsButton.buttonId=="Retake"){
-              graphicsTake();              
-              }
-            found=true;
-            if(graphicsButton.buttonId=="car"){
-              //dbuga('car touchstart');
-              found=false;              
-              }
-            }
-          }
-        if(found==false){
-          //dbuga('closeModals found=false 2');
-          if(graphicsEditing==false){
-            closeModals(); // tap closed on background touch
-            }
-          else{            
-            graphicsEvent=e;
-            graphicsTouching=true;
-            startMoveGraphics();
-            //dbuga('graphics  touchstart! '+e.touches.length);
-            }
-          }
-        else{populateGraphics();}
-
-        }
-      else{// normal landscape start pan zoom
-        prevTouchX=t.pageX;
-        prevTouchY=t.pageY-adHeight;
-        }    
-      }
-    }
-  //end of touchstarts
-  if(e.type=="touchmove"){// still in handleEventLandscape
-    if(carsUp){
-      return false;
-      }
-    if((graphicsUp==true)&&(graphicsEditing==false)){
-      return false;
-      }
-    if(t.pageY>landscapeScreenHeight-colorsHeight){
-      if(colorsUp==true){
-        return false;
-        }
-      }
-    if((graphicsUp)&&(graphicsTouching)){
-      graphicsEvent=e;
-      moveGraphics();
-      //dbuga('graphics  touchmove! '+e.touches.length);
-      }
-    else{
-      //normal drag of pan zoom camera on table
-      var deltaX=prevTouchX-t.pageX;
-      var deltaY=prevTouchY-(t.pageY-adHeight);
-      combinedZoom[focusTrain]-=deltaY/5;
-      if(t.pageY-adHeight>(boardWidth/2)){cameraRotationDegrees[focusTrain]+=deltaX/2.5;}
-      else{cameraRotationDegrees[focusTrain]-=deltaX/15;}
-      if(combinedZoom[focusTrain]<0){combinedZoom[focusTrain]=0;}
-      if(combinedZoom[focusTrain]>100){combinedZoom[focusTrain]=100;}
-      prevTouchX=t.pageX;
-      prevTouchY=t.pageY-adHeight;
-      }
-    }
-  if(e.type == "touchend"){
-    if((graphicsUp)&&(graphicsTouching)){
-      graphicsEvent=e;
-      //dbuga('graphics  touchend! '+e.touches.length);
-      if(e.touches.length >0){
-        startMoveGraphics();
-        }
-      else{
-        graphicsTouching=false;
-        postviewGraphics();
-        }
-      }
-    }
-  }
-
 function encode(data){
   var str = String.fromCharCode.apply(null,data);
   return btoa(str).replace(/.{76}(?=.)/g,'$&\n');
@@ -4007,7 +3966,7 @@ function saveComplete(){
   processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
   populateCars();
   populateGraphics();
-  updateColorsCanv();
+  updateColorsCanv('saveComplete');
   }
 
 var helpImages=["info0", "info1", "info2", "info3", "info4"];
@@ -4197,7 +4156,7 @@ function locateCamera(){
 
   table.style.webkitTransform=transformString;
   var uncenter=1-centerAmount;
-  var cameraDistancePx=(100-cameraDistancePercent)*boardWidth/100-cameraDistancePercent*adHeight*2/100;
+  var cameraDistancePx=(100-cameraDistancePercent)*boardWidth/100-cameraDistancePercent*44*2/100;
   //dbuga(cameraDistancePercent+" "+cameraDistancePx)
    var cabViewDown=uncenter*cellSize/5;
    var cabViewForward=uncenter*landscapePx+cellSize/7;
@@ -4224,7 +4183,7 @@ var centerSize=24;
 function xyOn(x,y, dir, dist){
   var leftPx=x*cellSize;
   var topPx=y*cellSize+boardPad;
-  document.getElementById("prerails").style.top=topPx+"px";
+  document.getElementById("prerails").style.top=(44+topPx)+"px";
   document.getElementById("prerails").style.left=leftPx+"px";
   if((dist>centerSize)&&(x<cellsAcross)){
     if(dir=="l"){leftPx-=cellSizeHalf;}
@@ -4234,7 +4193,7 @@ function xyOn(x,y, dir, dist){
     if(dir=="t"){topPx-=cellSizeHalf;}
     if(dir=="b"){topPx+=cellSizeHalf;}
     }
-  document.getElementById("highlighter").style.top=topPx+"px";
+  document.getElementById("highlighter").style.top=(44+topPx)+"px";
   document.getElementById("highlighter").style.left=leftPx+"px";
   document.getElementById("highlighter").style.display="block";
   }
@@ -4296,22 +4255,21 @@ function handleEventLevels(e){
   var typ = e.type;
   if(typ == "touchstart"){
     var x=e.touches[0].pageX;
-    var y=e.touches[0].pageY-adHeight;
+    var y=e.touches[0].pageY-44;
     //dbug("touchstart "+x+" "+y);
     for (var b=0; b<levelButtons.length; b++){
-      if((x>levelButtons[b].l)&&(x<levelButtons[b].r)&&(y>levelButtons[b].t)&&(y<levelButtons[b].b)){
-        if(b==levelButtons.length-1){
-          
-          }
-        else{
-          atLevel=b;
-          drawLevels();
-          window.setTimeout("createLevel()",200);
-          }
-       //dbuga('closeModals handleEventLevels');
-
+      if(xyInTrbl(x,y,levelButtons[b])){
+        if(levelButtons[b].label=="Cancel"){closeModals();}
+        }
+      }
+    for (var b=0; b<levelBoxes.length; b++){
+      if(xyInTrbl(x,y,levelBoxes[b])){
+        atLevel=b;
+        drawLevels();
+        window.setTimeout("createLevel()",200);
         closeModals();
         }
+      //dbuga('closeModals handleEventLevels');
       }
     }
   }
@@ -4322,12 +4280,15 @@ function xyInTrbl(x,y,trbl){
   }
 var menuTouchingId="";
 var menuButtonNum=-1;
-
+var carsButtons=[];
+var graphicsButtons=[];
+var menuButtons=[];
 function handleEventMenu(e){
 /*
   if(e.touches.length>0){dbuga("handleEventMenu(target:"+e.touches[0].target.id+", type:"+e.type+")");}
   else{dbuga("handleEventMenu(type:"+e.type+")");}
 */
+
   var typ = e.type;
   if(typ == "touchstart"){
     menuTouchingId="";
@@ -4455,7 +4416,7 @@ function createLevel(){
             fails=0;
             resetBoardTimersObjects();
             buildSequence=new Array();
-            var thisData=levelData[levelButtons[atLevel].num].fields;
+            var thisData=levelData[levelBoxes[atLevel].num].fields;
             for (var c=0; c<thisData.length; c++){
               fails+=addColor(thisData[c],4);
               }
@@ -4486,16 +4447,15 @@ function createLevel(){
     }
   */
   restartIntervals();
-  updateColorsCanv();
+  updateColorsCanv('createLevel');
   }
-var colorsHeight=64;
-function updateColorsCanv(){
-  //dbuga('updateColorsCanv()');
+var colorsHeight=44;
+function updateColorsCanv(caller){
+  //dbuga('updateColorsCanv('+caller+')');
   var h=colorsHeight;
-  if(screenHeight<500){h=44;}
   colorsCanv.width=screenHeight;
   colorsCanv.height=h;
-  colorsCanv.style.top=(landscapeScreenHeight-h)+"px";
+  colorsCanv.style.top="0px";
   
   var colorsCtx=colorsCanv.getContext("2d");
   if(colorsUp){
@@ -4523,13 +4483,13 @@ function updateColorsCanv(){
     if((carsUp)||(graphicsUp)){
       colorsCtx.fillStyle=highlighted;
       }    
-    colorsCtx.lineWidth=h/24;
+    colorsCtx.lineWidth=buttonLine;
+
     roundRect(colorsCtx, h*1+h/20,h/20, h*3-h/10, h-h/10, h/7, true, true);
     colorsCtx.drawImage(imgRefs['boxsidetrans'],h*1+h/8,h/8, h*3-h/4, h-h/4); 
 
     if(trainData.length>1){
-      for (var c=0; c<levelData[levelButtons[atLevel].num].fields.length; c++){
-        colorsCtx.lineWidth=h/10;
+      for (var c=0; c<levelData[levelBoxes[atLevel].num].fields.length; c++){
         colorsCtx.fillStyle=rgbArray[c];
         colorsCtx.strokeStyle=rgbArray[c];
         colorsCtx.beginPath();
@@ -4573,9 +4533,12 @@ function updateColorsCanv(){
 
     colorsCtx.stroke(); 
     }
+
   }
 function handleEventDraw(e){
   if(e.touches.length>0){
+      e.touches[0].pageY-=44;
+
     //dbuga("handleEventDraw(target:"+e.touches[0].target.id+", type:"+e.type+")");
     }
   else{
@@ -5185,6 +5148,7 @@ function menuDraw(){
     menuObject[keys[k]]["l"]=g*(x0-2);
     }
   populateMenu();
+  drawMenuButtons();
   ctx.font=g/1.5+"px Arial";
   ctx.fillStyle="#333";
   ctx.textAlign="center";
@@ -5227,11 +5191,6 @@ function toggleSwitch(x0,y0,orient,pos, tics, label){//returns path
     ctx.font=g/1.5+"px Arial";
     for (var t=0; t<tics.length; t++){
       ctx.fillText(tics[t], min+t*step, y0*g+g*1.25);
-      }
-    if(label.indexOf("VOICE")>-1){
-      ctx.lineWidth=1;
-      ctx.font=g/1.25+"px Arial";
-      ctx.strokeText(label, x0*g,y0*g-g*1.25);
       }
     
     ctx.fillText(label, x0*g,y0*g-g*1.25);
@@ -5294,6 +5253,7 @@ function toggleSwitch(x0,y0,orient,pos, tics, label){//returns path
 
 
   ctx.lineWidth=2;
+
   ctx.strokeStyle="#666";
 
   var p=.01;
