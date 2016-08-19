@@ -579,9 +579,8 @@ function undo(){
   }
 
 function handleEventNav(e){// fubar but still in
-  if(e.touches.length==0){
-    }
-  else{
+  if(e.type=="touchstart"){
+
     target=e.touches[0].target.id;
     if(target == "level_touch"){
       if(levelsUp){
@@ -3594,6 +3593,7 @@ function touchEnd(event){
   }
 
 function touchEvent(event){
+  dbuga('touchEvent('+event.type+'))
   if(event.touches.length==0){//touchend
     if(viewportAspect<1){
       if(levelsUp){
