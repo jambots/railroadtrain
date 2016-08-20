@@ -3813,7 +3813,7 @@ function handleEventColors(event){
     else{
       var tryFocus=Math.floor((screenHeight-t.pageX)/44);
       if(carsUp){
-        dbuga('tryFocus='+tryFocus);
+        //dbuga('tryFocus='+tryFocus);
         if(tryFocus<4){
           focusCars=tryFocus;
           updateColorsCanv('carsUp');
@@ -4005,7 +4005,7 @@ function saveGraphics(){
   var cameraCtx=cameraCanv.getContext('2d');
   var dataURL = cameraCanv.toDataURL('image/jpeg');
   var imageId= graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].imageId;
-  dbuga('saveGraphics '+imageId);
+  //dbuga('saveGraphics '+imageId);
   var image=document.getElementById(imageId);
   image.onload=function (){
     saveComplete();
@@ -5218,7 +5218,7 @@ function menuDraw(){
   ctx.font=g/1.5+"px Arial";
   ctx.fillStyle="#333";
   ctx.textAlign="center";
-  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx, portraitScreenHeight-44-40);
+  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx, portraitScreenHeight-44-44-40);
   
   }
      
