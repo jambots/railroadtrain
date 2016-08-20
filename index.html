@@ -1238,11 +1238,11 @@ function initGeometry(){
     screenWidth=320;
     screenHeight=480;//iphone 4
 
-/*
     screenHeight=Math.floor(320*16/9);//iphone 5
 
     screenWidth=414;//iphone 6+
-    screenHeight=836;
+    screenHeight=736;
+/*
 
     screenWidth=768;//ipad
     screenHeight=1024;
@@ -1590,7 +1590,7 @@ function returnModalButton(label,align,orient,selected){
   var buttonWidth=88;
   var buttonHeight=44;
   var spread=(landscapeScreenHeight-320)/6;
-  var topPx=portraitScreenHeight-1-buttonPad-buttonHeight-44;
+  var topPx=portraitScreenHeight-1-buttonPad-buttonHeight ;
   var centerPx=landscapeScreenHeight/2;
   if(orient=="landscape"){
     spread=(portraitScreenHeight-320)/12;
@@ -5218,7 +5218,7 @@ function menuDraw(){
   ctx.font=g/1.5+"px Arial";
   ctx.fillStyle="#333";
   ctx.textAlign="center";
-  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx,g*(cy+11.25));
+  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx, portraitScreenHeight-44-40);
   
   }
      
