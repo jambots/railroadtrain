@@ -1236,16 +1236,18 @@ function initGeometry(){
   if(screen.width==1680){// test iPhone dimension local
 
     screenWidth=320;
-    screenHeight=480;
+    screenHeight=480;//iphone 4
 
-    screenWidth=414;
-    screenHeight=736;
 /*
+    screenHeight=Math.floor(320*16/9);//iphone 5
 
-    screenWidth=768;
+    screenWidth=414;//iphone 6+
+    screenHeight=836;
+
+    screenWidth=768;//ipad
     screenHeight=1024;
 
-    screenWidth=600;
+    screenWidth=600;//android
     screenHeight=1024;
 */
     viewportHeight=screenHeight;
@@ -1448,47 +1450,61 @@ function populateGraphics(){
   //dbuga('populateGraphics 0');
   graphicsCanv.width=screenHeight;
   var graphicsCtx=graphicsCanv.getContext('2d');
-  graphicsCtx.lineWidth=cellSize/8;
+
   var graphic=graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic];
 
+  //new
+  var groupAspect=(54+4)/(18+4);// matches car group width, padding
+  var availHeight=landscapeScreenHeight-44-44-20;
+  var areaAspect=portraitScreenHeight/availHeight;
+  var leftPad=0;
+  var topPad=0;
+  var g=0;
+  if(areaAspect>groupAspect){//fit height, pad left
+    g=availHeight/(4*6+4);
+    topPad=g*2;
+    leftPad=g*2+portraitScreenHeight/2-g*(3*18+4)/2;
+    }
+  else{//fit width, pad top // always for this aspect anyways.
+    g=portraitScreenHeight/(54+4);
+    leftPad=g*2;
+    topPad=g*2+availHeight/2-g*(18+4)/2;
+    }
+  var buttonWidth=g*54;
+  var buttonHeight=g*18;
+  //dbuga("topPad="+topPad);
+  //dbuga("leftPad="+leftPad);
+  //end new
+
+  var carButton={"buttonId":"car"}
+  carButton.c=graphicsSelectedColorNum;
+  carButton.g= graphicsSelectedGraphic;
+  carButton.l=leftPad;
+  carButton.r=leftPad+buttonWidth;
+  carButton.t=topPad;
+  carButton.b=topPad+buttonHeight;
+  carButton.ref=graphic.ref;
+  //graphicsButtons.push(carButton);
+  var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
+  graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth, buttonHeight);
+  //dbuga('populateGraphics 9');
+
+  graphicsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth, buttonHeight);
+  //cameraCanv.style.display="none";
 
 
-
-  var buttonWidth=cellSize*3;
-  var buttonHeight=cellSize*1;
-  var radius=cellSize/8;
-  var pad=cellSize/10;
-  var topPad=(landscapeScreenHeight-44-buttonHeight*4)/2;
-  var leftPad=(screenHeight-buttonWidth*3)/2;
   graphicsButtons=[];
 
-  var t=topPad+buttonHeight*3.25;
-  var b=topPad+buttonHeight*4.25;
   if(graphicsEditing==false){
-    graphicsButtons.push(returnModalButton("Done","left","landscape",false));
+    graphicsButtons.push(returnModalButton("Done","right","landscape",false));
     graphicsButtons.push(returnModalButton("Camera","center","landscape",false));
-    graphicsButtons.push(returnModalButton("Transparent","right","landscape",graphic.blackTrans));
+    graphicsButtons.push(returnModalButton("Transparent","left","landscape",graphic.blackTrans));
     }
   else{
     graphicsButtons.push(returnModalButton("Save","left","landscape",false));
     graphicsButtons.push(returnModalButton("Retake","center","landscape",false));
     graphicsButtons.push(returnModalButton("Cancel","right","landscape",false));
     }
-  var carButton={"buttonId":"car"}
-  carButton.c=graphicsSelectedColorNum;
-  carButton.g= graphicsSelectedGraphic;
-  carButton.l=leftPad;
-  carButton.r=leftPad+buttonWidth*3;
-  carButton.t=topPad;
-  carButton.b=topPad+buttonHeight*3;
-  carButton.ref=graphic.ref;
-  //graphicsButtons.push(carButton);
-  var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
-  graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
-  //dbuga('populateGraphics 9');
-
-  graphicsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
-  //cameraCanv.style.display="none";
 
   for(var gb=0; gb<graphicsButtons.length; gb++){
     drawModalButton(graphicsCtx, graphicsButtons[gb]);
@@ -1499,70 +1515,69 @@ function populateGraphics(){
   }
 
 function populateCars(){
-  
+  carsCanv.width=carsCanv.width;
+  var groupAspect=(3*18+4)/(4*6+4);
   //dbuga('populateCars()');
-  carsButtons=[];
-  var buttonWidth=cellSize*3;
-  var buttonHeight=cellSize*1;
-  var pad=cellSize/2;
-  var radius=cellSize/12;
-
-  var topPad=(landscapeScreenHeight-44-buttonHeight*4)/2;
-  var leftPad=(screenHeight-buttonWidth*3)/2;
+  var availHeight=landscapeScreenHeight-44-44-20;
+  var areaAspect=portraitScreenHeight/availHeight;
+  var leftPad=0;
+  var topPad=0;
+  var g=0;
+  if(areaAspect>groupAspect){//fit height, pad left
+    g=availHeight/(4*6+4);
+    topPad=g*2;
+    leftPad=g*2+portraitScreenHeight/2-g*(3*18+4)/2;
+    }
+  else{//fit width, pad top
+    g=portraitScreenHeight/(3*18+4);
+    leftPad=g*2;
+    topPad=g*2+availHeight/2-g*(4*6+4)/2;
+    }
+  carsThumbs=[];
+  var buttonWidth=g*18;
+  var buttonHeight=g*6;
   //dbuga("topPad="+topPad);
   //dbuga("leftPad="+leftPad);
   var carsCtx=carsCanv.getContext('2d');
-  //carsCtx.lineWidth=cellSize/16;
   carsCtx.lineWidth=buttonLine;
 
 //[graphicsSelectedGraphic];
   for (var i=0; i<graphicsByColor[colorArray[focusCars]].length; i++){
     var graphic=graphicsByColor[colorArray[focusCars]][i];
     
-    var carButton={"buttonId":"car_"+focusCars+"-"+i};
-    //dbuga(carButton.buttonId);
-    carButton.c=focusCars;
-    carButton.g=i;
-    carButton.l=leftPad+buttonWidth*graphic.x;
-    carButton.r=leftPad+buttonWidth*graphic.x+buttonWidth;
-    carButton.t=topPad+buttonHeight*graphic.y;
-    carButton.b=topPad+buttonHeight*graphic.y+buttonHeight;
-    carButton.ref=graphic.ref;
-    carsButtons.push(carButton);
+    var carThumb={"buttonId":"car_"+focusCars+"-"+i};
+    //dbuga(carThumb.buttonId);
+    carThumb.c=focusCars;
+    carThumb.g=i;
+    carThumb.l=leftPad+buttonWidth*graphic.x;
+    carThumb.r=leftPad+buttonWidth*graphic.x+buttonWidth;
+    carThumb.t=topPad+buttonHeight*graphic.y;
+    carThumb.b=topPad+buttonHeight*graphic.y+buttonHeight;
+    carThumb.ref=graphic.ref;
+    carsThumbs.push(carThumb);
     }
 
-/*
-  for (var c=0; c<4; c++){
-    for (var g=0; g<3; g++){
-    //dbuga(b);
-      var carButton={"buttonId":"car_"+c+"-"+g};
 
-      carButton.c=c;
-      carButton.g=g;
-      carButton.l=leftPad+buttonWidth*g;
-      carButton.r=leftPad+buttonWidth*g+buttonWidth;
-      carButton.t=topPad+buttonHeight*c;
-      carButton.b=topPad+buttonHeight*c+buttonHeight;
-      carButton.ref=graphicsByColor[colorArray[c]][g].ref;
-      carsButtons.push(carButton);
-      }
-    }
-*/
-  for (var cb=0; cb<carsButtons.length; cb++){
-    var carButton=carsButtons[cb];
+  for (var ct=0; ct<carsThumbs.length; ct++){
+    var carThumb=carsThumbs[ct];
 
     carsCtx.strokeStyle="rgba(42,42,42,.25)";
     carsCtx.fillStyle="rgba(255,255,255,.9)";
-    roundRect(carsCtx, carButton.l, carButton.t, buttonWidth, buttonHeight, radius, true, false);
+    roundRect(carsCtx, carThumb.l, carThumb.t, buttonWidth, buttonHeight, radius, true, false);
     
    
-    var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
-    carsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth, buttonHeight);
+    var imageObj = imgRefs["boxside"+colorArray[carThumb.c]];
+    carsCtx.drawImage(imageObj, carThumb.l, carThumb.t, buttonWidth, buttonHeight);
     
 
-    carsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth, buttonHeight);
-    
-  }
+    carsCtx.drawImage(carThumb.ref, carThumb.l, carThumb.t, buttonWidth, buttonHeight);
+    }
+  carsButtons=[];
+  carsButtons.push(returnModalButton("Done","right","landscape",false));
+  for(var cb=0; cb<carsButtons.length; cb++){
+    drawModalButton(carsCtx, carsButtons[cb]);
+    }
+
   minFramesPerSecond=-4;
 }
 var menuButtons=[
@@ -1578,10 +1593,10 @@ function returnModalButton(label,align,orient,selected){
   var topPx=portraitScreenHeight-1-buttonPad-buttonHeight-44;
   var centerPx=landscapeScreenHeight/2;
   if(orient=="landscape"){
-    spread=(portraitScreenHeight-320)/6;
+    spread=(portraitScreenHeight-320)/12;
     topPx=landscapeScreenHeight-1-buttonPad-buttonHeight-44;
     centerPx=portraitScreenHeight/2;
-    buttonWidth*=2;
+    buttonWidth*=1.5;
     }
   var leftPx=1+buttonPad+spread;
   if(align=="center"){leftPx=centerPx-buttonWidth/2;}
@@ -3650,13 +3665,18 @@ function touchEvent(event){
 function handleEventCars(e){
   if(e.type=="touchstart"){
     var t=e.touches[0];
-    for (var cb=0; cb<carsButtons.length; cb++){
-      var carButton=carsButtons[cb];
-      if((t.pageX>carButton.l)&&(t.pageX<carButton.r)&&(t.pageY-44>carButton.t)&&(t.pageY-44<carButton.b)){
-        openGraphics(carButton);
+    for (var ct=0; ct<carsThumbs.length; ct++){
+      var carThumb=carsThumbs[ct];
+      if(xyInTrbl(t.pageX, t.pageY-44,carThumb)){
+        openGraphics(carThumb);
         }
       }
-    //// add check for modal button done?
+    //dbuga('t.pageX='+t.pageX+' t.pageY='+t.pageY);
+    for (var cb=0; cb<carsButtons.length; cb++){
+      if(xyInTrbl(t.pageX, t.pageY-44,carsButtons[cb])){
+        if(carsButtons[cb].label=="Done"){closeModals();}
+        }
+      } 
     }
   if(e.type=="touchmove"){
     return false;
@@ -3730,7 +3750,7 @@ function handleEventGraphics(e){
     if((graphicsEditing)&&(graphicsTouching)){
       graphicsEvent=e;
       moveGraphics();
-      dbuga('graphics  touchmove! '+e.touches.length);
+      dbuga('graphics  touchmove '+e.touches.length);
       }
     }
   if(e.type=="touchend"){
@@ -3781,47 +3801,49 @@ function handleEventDolly(e){
 
 var focusCars=0;
 function handleEventColors(event){
-  dbuga('handleEventColors');
-  var t=event.touches[0];
-  if(colorsUp==false){
-    if(t.pageX<44){//menu circle
-      colorsUp=true;
-      updateColorsCanv('touchstart 1');
+  //dbuga('handleEventColors');
+  if(event.type=="touchstart"){
+    var t=event.touches[0];
+    if(colorsUp==false){
+      if(t.pageX<44){//menu circle
+        colorsUp=true;
+        updateColorsCanv('touchstart 1');
+        }
       }
-    }
-  else{
-    var tryFocus=Math.floor((screenHeight-t.pageX)/44);
-    if(carsUp){
-      dbuga('tryFocus='+tryFocus);
-      if(tryFocus<4){
-        focusCars=tryFocus;
-        updateColorsCanv('carsUp');
-        populateCars();
+    else{
+      var tryFocus=Math.floor((screenHeight-t.pageX)/44);
+      if(carsUp){
+        dbuga('tryFocus='+tryFocus);
+        if(tryFocus<4){
+          focusCars=tryFocus;
+          updateColorsCanv('carsUp');
+          populateCars();
         
+          }
+      }
+      else{//train focus
+        //dbuga('tryFocus='+tryFocus);
+        if((tryFocus<trainData.length)&&(tryFocus != focusTrain)){
+          focusTrain=tryFocus;
+          focusCars=tryFocus;
+          updateColorsCanv('touchstart 2');
+          if(graphicsUp){openModal("cars");}
+          }
         }
-      }
-    else{//train focus
-      //dbuga('tryFocus='+tryFocus);
-      if((tryFocus<trainData.length)&&(tryFocus != focusTrain)){
-        focusTrain=tryFocus;
-        focusCars=tryFocus;
-        updateColorsCanv('touchstart 2');
-        if(graphicsUp){openModal("cars");}
-        }
-      }
-    if(t.pageX<44){// x circle
-      //dbuga('closeModals t.pageX<44');
-      closeModals();
-      colorsUp=false;
-      updateColorsCanv('x circle');
-      }
-    if((t.pageX>44)&&(t.pageX<44*4)){// car button
-      if((carsUp)||(graphicsUp)){
-        //dbuga('closeModals car button');
+      if(t.pageX<44){// x circle
+        //dbuga('closeModals t.pageX<44');
         closeModals();
+        colorsUp=false;
+        updateColorsCanv('x circle');
         }
-      else{
-        openModal("cars");
+      if((t.pageX>44)&&(t.pageX<44*4)){// car button
+        if((carsUp)||(graphicsUp)){
+          //dbuga('closeModals car button');
+          closeModals();
+          }
+        else{
+          openModal("cars");
+          }
         }
       }
     }
@@ -3983,6 +4005,7 @@ function saveGraphics(){
   var cameraCtx=cameraCanv.getContext('2d');
   var dataURL = cameraCanv.toDataURL('image/jpeg');
   var imageId= graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].imageId;
+  dbuga('saveGraphics '+imageId);
   var image=document.getElementById(imageId);
   image.onload=function (){
     saveComplete();
@@ -4309,14 +4332,15 @@ function xyInTrbl(x,y,trbl){
   }
 var menuTouchingId="";
 var menuButtonNum=-1;
+var carsThumbs=[];
 var carsButtons=[];
 var graphicsButtons=[];
 var menuButtons=[];
 function handleEventMenu(e){
-
+/*
   if(e.touches.length>0){dbuga("handleEventMenu(target:"+e.touches[0].target.id+", type:"+e.type+")");}
   else{dbuga("handleEventMenu(type:"+e.type+")");}
-
+*/
 
   var typ = e.type;
   if(typ == "touchstart"){
