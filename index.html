@@ -1590,7 +1590,7 @@ function returnModalButton(label,align,orient,selected){
   var buttonWidth=88;
   var buttonHeight=44;
   var spread=(landscapeScreenHeight-320)/6;
-  var topPx=portraitScreenHeight-1-buttonPad-buttonHeight ;
+  var topPx=portraitScreenHeight-1-buttonPad-buttonHeight-44;
   var centerPx=landscapeScreenHeight/2;
   if(orient=="landscape"){
     spread=(portraitScreenHeight-320)/12;
@@ -3750,13 +3750,13 @@ function handleEventGraphics(e){
     if((graphicsEditing)&&(graphicsTouching)){
       graphicsEvent=e;
       moveGraphics();
-      dbuga('graphics  touchmove '+e.touches.length);
+      //dbuga('graphics  touchmove '+e.touches.length);
       }
     }
   if(e.type=="touchend"){
     if((graphicsEditing)&&(graphicsTouching)){
       graphicsEvent=e;
-      dbuga('graphics  touchend! '+e.touches.length);
+      //dbuga('graphics  touchend! '+e.touches.length);
       if(e.touches.length >0){
         startMoveGraphics();
         }
