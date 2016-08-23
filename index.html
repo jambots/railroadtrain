@@ -564,8 +564,18 @@ function playSound(theSound){
     oneShot(theSound);
     }
   }
+
+function resetResetLabel(){
+  for (var n=0; n<navButtons.length; n++){
+    if(navButtons[n].label=="reset"){navButtons[n].selected=false;}
+    }
+  updateNavCanv();
+  }
 function resetUndoLabel(){
-  document.getElementById('undo_label').style.opacity=".5";
+  for (var n=0; n<navButtons.length; n++){
+    if(navButtons[n].label=="undo"){navButtons[n].selected=false;}
+    }
+  updateNavCanv();
   }
 function undo(){
   lastItemType=buildSequence[buildSequence.length-1].type;
@@ -580,38 +590,50 @@ function undo(){
 function handleEventNav(e){// fubar but still in
   if(e.type=="touchstart"){
     var target="";
+    var buttNum=-1;
     for (var n=0; n<navButtons.length; n++){
       if (xyInTrbl(e.touches[0].pageX, e.touches[0].pageY, navButtons[n])){
         target=navButtons[n].label;
+        buttNum=n;
         }
       }
     if(target == "levels"){
       if(levelsUp){
         closeModals();
         minFramesPerSecond=-4;
+        navButtons[buttNum].selected=false;
         }
       else{
         openModal("levels");
+        navButtons[buttNum].selected=true;
         }
       }
     if(target == "settings"){
       if(menuUp){
         closeModals();
         minFramesPerSecond=-4;
+        navButtons[buttNum].selected=false;
         }
       else{
         openModal("menu");
+        navButtons[buttNum].selected=true;
         }
       }
     if (target == "undo"){
       undo();
+      navButtons[buttNum].selected=true;
       window.setTimeout('resetUndoLabel()', 400);
       }
     if (target == "reset"){
       resetBoardTimersObjects();
       removeAllTracks();
       rebuildSequence();
+      navButtons[buttNum].selected=true;
+      window.setTimeout('resetResetLabel()', 400);
       }
+    }
+  if(target != ""){
+    updateNavCanv();
     }
   }
 
@@ -1883,8 +1905,10 @@ function closeModals(){
   updateColorsCanv('closeModals');
   graphicsEditing=false;
   camera.style.webkitFilter="none";
-  
-  //dbug('')
+  for (var n=0; n<navButtons.length; n++){
+    navButtons[n].selected=false;
+    }
+  updateNavCanv();
   }
 function changeView(caller){
   //dbuga("changeView in "+caller+" shooting="+shooting);
@@ -4659,7 +4683,9 @@ function updateNavCanv(){
       console.log(navButtons[n].label+"Preload");
       var ref=document.getElementById(navButtons[n].label+"Preload");
       var pad=controlsPx/2-controlsPx*iconShrink/2;
+      if(navButtons[n].selected){navCtx.globalAlpha=.5;}
       navCtx.drawImage(ref,navButtons[n].l+pad,navButtons[n].t+pad,controlsPx-pad*2,controlsPx-pad*2); 
+      navCtx.globalAlpha=1;
       }
     }
   }
