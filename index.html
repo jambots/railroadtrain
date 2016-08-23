@@ -1577,12 +1577,15 @@ var menuButtons=[
 ];
 var levelButtons=[
 ];
+
+
 function returnModalButton(label,align,orient,selected){
   var modalButton={"selected":selected, "label":label, "l":0, "r":0, "t":0, "b":0};
   var buttonPad=9;
   var buttonWidth=controlsPx*2;
   var buttonHeight=controlsPx;
-  var spread=(screenWidth-320)/6;
+  var spread=(screenWidth-(buttonWidth+buttonPad*1.5)*3)/4;
+  dbug('spread:'+spread)
   var topPx=screenHeight-1-buttonPad-buttonHeight-controlsPx;
   var centerPx=screenWidth/2;
   if(orient=="landscape"){
@@ -1601,6 +1604,8 @@ function returnModalButton(label,align,orient,selected){
   modalButton.b=topPx+buttonHeight;
   return modalButton;
   }
+
+
 var buttonStroke="rgba(60,60,60,.75)";
 var buttonFill="rgba(222,222,222,.5)";
 var buttonLine=4;
@@ -1615,7 +1620,9 @@ function drawModalButton(ctx, modalButton){
   var buttonHeight=modalButton.b- modalButton.t;
   ctx.strokeStyle=buttonStroke;
   ctx.fillStyle=buttonFill;
-  roundRect(ctx, modalButton.l, modalButton.t, buttonWidth, buttonHeight, 4, true, true);
+  if(modalButton.label != "Transparent"){
+    roundRect(ctx, modalButton.l, modalButton.t, buttonWidth, buttonHeight, 4, true, true);
+    }
   var bcx=modalButton.l/2+modalButton.r/2;
   var bcy=modalButton.t/2+modalButton.b/2;
   var menuFont=Math.floor(buttonHeight/2)+"px akzi";
@@ -1625,7 +1632,12 @@ function drawModalButton(ctx, modalButton){
   ctx.strokeStyle=buttonLabelStroke;
   ctx.lineWidth=buttonLine/2;
   ctx.textBaseline="middle";
-  if(modalButton.label=="Transparent"){
+  if(modalButton.label != "Transparent"){
+    ctx.textAlign="center";
+    ctx.strokeText(modalButton.label, bcx,bcy);
+    ctx.fillText(modalButton.label, bcx,bcy);
+    }
+  else{
     ctx.textAlign="right";
     ctx.strokeText(modalButton.label, modalButton.r-buttonHeight/8,bcy);
     ctx.fillText(modalButton.label, modalButton.r-buttonHeight/8,bcy);
@@ -1636,12 +1648,6 @@ function drawModalButton(ctx, modalButton){
       }
     ctx.drawImage(ref,modalButton.l+buttonHeight/8,modalButton.t+buttonHeight/4,buttonHeight/2,buttonHeight/2); 
     ctx.globalAlpha=1;
-    }
-  else{
-    //dbuga('menuFont='+menuFont);
-    ctx.textAlign="center";
-    ctx.strokeText(modalButton.label, bcx,bcy);
-    ctx.fillText(modalButton.label, bcx,bcy);
     }
   }
 
