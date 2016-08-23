@@ -3731,7 +3731,7 @@ function handleEventGraphics(e){
             if(graphicsButton.label=="Trans"){
               graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=!(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans);
               localStorage.setItem('graphicsByColor', JSON.stringify(graphicsByColor));
-              ////processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
+              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
               populateCars();
               }
             if(graphicsButton.label=="Save"){
