@@ -1,4 +1,4 @@
-var controlHeight=44;
+/*
 var controlWidth=0;
 
 var navDivRef=new Object();
@@ -13,7 +13,7 @@ function createNavDiv(){
   navDivRef.style.overflow="hidden";
   }
 function styleNavDiv(){
-  navDivRef.style.height=controlHeight+"px";
+  navDivRef.style.height=controlsPx+"px";
   navDivRef.style.width=boardWidth+"px";
   navDivRef.style.top="0px";
   //dbuga("styleNavDiv");
@@ -53,7 +53,7 @@ function displayText(theString){
     document.getElementById('displayDiv').innerHTML=theString;
     }
   }
-
+*/
 /*
 function touchCancel(event){
   event.preventDefault(); 

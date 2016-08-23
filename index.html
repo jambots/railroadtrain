@@ -12,7 +12,6 @@
 <link rel="stylesheet" type="text/css" href="interface.css?1">
 <link rel="stylesheet" type="text/css" href="nav.css">
 <script src="phonegap.js"></script>
-<script src="nav.js?3"></script>
 <script src="howler.min.js"></script>
 
 <style>
@@ -580,9 +579,13 @@ function undo(){
 
 function handleEventNav(e){// fubar but still in
   if(e.type=="touchstart"){
-
-    target=e.touches[0].target.id;
-    if(target == "level_touch"){
+    var target="";
+    for (var n=0; n<navButtons.length; n++){
+      if (xyInTrbl(e.touches[0].pageX, e.touches[0].pageY, navButtons[n])){
+        target=navButtons[n].label;
+        }
+      }
+    if(target == "levels"){
       if(levelsUp){
         closeModals();
         minFramesPerSecond=-4;
@@ -591,7 +594,7 @@ function handleEventNav(e){// fubar but still in
         openModal("levels");
         }
       }
-    if(target == "menu_touch"){
+    if(target == "settings"){
       if(menuUp){
         closeModals();
         minFramesPerSecond=-4;
@@ -600,12 +603,11 @@ function handleEventNav(e){// fubar but still in
         openModal("menu");
         }
       }
-    if (target == "undo_touch"){
+    if (target == "undo"){
       undo();
-      document.getElementById('undo_label').style.opacity="1";
       window.setTimeout('resetUndoLabel()', 400);
       }
-    if (target == "reset_touch"){
+    if (target == "reset"){
       resetBoardTimersObjects();
       removeAllTracks();
       rebuildSequence();
@@ -730,7 +732,7 @@ function setupClasses(){
   //dbuga('squarePadTop='+squarePadTop);
  
   
-  uiTop=portraitScreenHeight-progDivHeight;
+  uiTop=screenHeight-progDivHeight;
 
   addStyle('#arrowCircle', 'position:absolute; left:' + p*12 + 'px; top:' + p*12 + 'px; border-color:#DA251C;  border-style:solid; border-width:' + p*12 + 'px;  width:' + p*40 + 'px;  height:' + p*40 + 'px; -webkit-border-radius:' + p*48 + 'px;');
   addStyle('#arrowPoint', 'position:absolute; left:' + p*36 + 'px; top:' + p*5 + 'px; border-color:#fff #DA251C #fff  #fff ;  border-style:solid ;  border-width:' + p*15 + 'px ' + p*15 + 'px ' + p*15 + 'px 0px ;  width:0;  height:0;');
@@ -789,6 +791,7 @@ function setupClasses(){
 
   addStyle('.car', 'width:' + p*96 + 'px; height:' + cellSize + 'px; position:absolute;');
   addStyle('.coupler', 'top:' + p*0  + 'px; left:' + p*46 +'px; width:' + p*10 +'px; height:' + cellSize + 'px; border-left:' + p*4 + 'px #1F1A17 solid; position:absolute;');
+
   addStyle('.blueTank',   'width:' + p*24 + 'px; height:' + p*80 + 'px; position:absolute; top:' + p*8 + 'px; left:' + p*36 + 'px; -webkit-border-radius:' + p*8 + 'px; background-color:#76C5F0; -webkit-border-radius: ' + p*100 +'px');
   addStyle('.orangeTank', 'width:' + p*24 + 'px; height:' + p*80 + 'px; position:absolute; top:' + p*8 + 'px; left:' + p*36 + 'px; -webkit-border-radius:' + p*8 + 'px; background-color:#F1A334;');
   addStyle('.blackCar',   'width:' + p*16 + 'px; height:' + p*72 + 'px; position:absolute; top:' + p*8 + 'px; left:' + p*36 + 'px; border:' + p*4 + 'px #555 solid; background-color:#000000;');
@@ -1168,9 +1171,6 @@ function mouseLevel(){
     }
   }
 
-var blingHeight=0;
-var portraitScreenHeight=100;
-var landscapeScreenHeight=100;
 var totalCells;
 function toggleBanner(){
   bannerEnabled=!(bannerEnabled);
@@ -1190,6 +1190,7 @@ More specifically, if the screen height of a device is between 400 and 720, an a
   }
 
 var colorsCanv;
+var navCanv;
 var bannerEnabled=false;
 var levelsCanv;
 var levelsUp=false;
@@ -1200,6 +1201,7 @@ var carsUp=false;
 var graphicsCanv;
 var graphicsUp=false;
 var cameraCanv;
+
 function initGeometry(){
   //dbuga("initGeometry()");
   levelsCanv=document.getElementById("levelsCanvas");
@@ -1210,6 +1212,7 @@ function initGeometry(){
 
 
   colorsCanv=document.getElementById("colorsCanvas");
+  navCanv=document.getElementById("navCanvas");
   wrapper=document.getElementById("wrapper");
   screenWidth = screen.width;
   screenHeight = screen.height;
@@ -1223,16 +1226,8 @@ function initGeometry(){
     }// screen width is consistent with iOS now, width < height
   //dbuga("screenWidth="+screenWidth);
   //dbuga("screenHeight="+screenHeight);
-  if(viewportWidth>viewportHeight){// landscape
-    blingHeight=screenWidth-viewportHeight;
-    }
-  else{// portrait
-    blingHeight=screenHeight-viewportHeight;
-    }
   viewportAspect=viewportWidth/viewportHeight;
-  colorsHeight=44;
-  if(screenHeight<500){colorsHeight=44;}
-  screenAspect=screenWidth/screenHeight;
+
   if(screen.width==1680){// test iPhone dimension local
 
     screenWidth=320;
@@ -1250,17 +1245,16 @@ function initGeometry(){
     screenWidth=600;//android
     screenHeight=1024;
 */
-    viewportHeight=screenHeight;
-    portraitScreenHeight= screenHeight;
     }
-  portraitScreenHeight=screenHeight;
-  landscapeScreenHeight=screenWidth;
-
+  controlsPx=44;
+  if(screenHeight>500){
+    controlsPx=64;
+    }
+  screenAspect=screenWidth/screenHeight;
   document.getElementById('debugDiv').style.width=screenWidth+"px";
   
   //dbuga("initGeometry screen: "+screenWidth+" x "+screenHeight+" ");
   //dbuga("initGeometry viewport: "+ viewportWidth+" x "+ viewportHeight+" "+viewportAspect);
-  //dbuga("initGeometry blingHeight: "+blingHeight);
 
   adGeometry();
   boardGeometry();
@@ -1290,9 +1284,9 @@ function boardGeometry(){
   cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
   //dbuga("cellSize="+cellSize);
   cubeSize=cellSize*shrink;
-  cellsDown=Math.floor((portraitScreenHeight-44-13)/cellSize);
+  cellsDown=Math.floor((screenHeight-controlsPx-13)/cellSize);
   totalCells=cellsAcross*cellsDown;
-  space=(screenHeight-cellsDown*cellSize-44);
+  space=(screenHeight-cellsDown*cellSize-controlsPx);
   boardPad=Math.floor(space/2);
   //dbuga("boardGeometry()");
   //dbuga(" - cellsAcross="+cellsAcross);
@@ -1313,26 +1307,26 @@ function boardGeometry(){
   wrapper.style.top=0+"px";
 
   levelsCanv.width=screenWidth;
-  levelsCanv.height=portraitScreenHeight;
-  levelsCanv.style.top="44px";
+  levelsCanv.height=screenHeight;
+  levelsCanv.style.top=controlsPx+"px";
   levelsCanv.style.left=(0-screenWidth)+"px";
   levelsCanv.style.backgroundColor="rgba(255,255,255,.75)";
 
   menuCanv.width=screenWidth;
-  menuCanv.height=portraitScreenHeight;
-  menuCanv.style.top="44px";
+  menuCanv.height=screenHeight;
+  menuCanv.style.top=controlsPx+"px";
   menuCanv.style.left=screenWidth+"px";
   menuCanv.style.backgroundColor="rgba(255,255,255,.75)";
 
   carsCanv.width=screenHeight;
-  carsCanv.height=landscapeScreenHeight-44;
-  carsCanv.style.top="44px";
+  carsCanv.height=screenWidth-controlsPx;
+  carsCanv.style.top=controlsPx+"px";
   carsCanv.style.left=screenHeight+"px";
   carsCanv.style.backgroundColor="rgba(255,255,255,.75)";
 
   graphicsCanv.width=screenHeight;
-  graphicsCanv.height=landscapeScreenHeight-44;
-  graphicsCanv.style.top="44px";
+  graphicsCanv.height=screenWidth-controlsPx;
+  graphicsCanv.style.top=controlsPx+"px";
   graphicsCanv.style.left=screenHeight+"px";
   graphicsCanv.style.backgroundColor="rgba(255,255,255,.75)";
 
@@ -1340,15 +1334,13 @@ function boardGeometry(){
   colorsCanv.height=64;
   colorsCanv.style.top="0px";
   colorsCanv.style.left=0+"px";
-  //colorsCanv.style.backgroundColor="rgba(33,33,33,.75)";
 
-/*
-  sdiv.style.width=(grid*10)+"px";
-  sdiv.style.height=grid*8+"px";
-  sdiv.style.fontSize=grid*4+"px";
-  sdiv.style.left=(0+boardWidth-grid*20)+"px";
-  sdiv.style.top=(0+grid*2)+"px";
-*/
+  navCanv.width=screenWidth;
+  navCanv.height=controlsPx;
+  navCanv.style.top="0px";
+  navCanv.style.left=0+"px";
+  //navCanv.style.backgroundColor="rgba(33,33,255,.75)";
+
   cellSizeHalf=cellSize/2;
   centerSize=cellSize/4;
   createInitialBuildSequence();
@@ -1398,7 +1390,8 @@ var levelData=[
     {"fields":[4,4,4], "space":80, "tank":false},
     {"fields":[4,4,4,4], "space":80, "tank":false},
     {"fields":[19], "space":80, "tank":true},
-    {"fields":[11], "space":40, "tank":true}
+    {"fields":[11], "space":40, "tank":true},
+    {"fields":[3], "space":24, "tank":true}
   ];
 
 
@@ -1455,18 +1448,18 @@ function populateGraphics(){
 
   //new
   var groupAspect=(54+4)/(18+4);// matches car group width, padding
-  var availHeight=landscapeScreenHeight-44-44-20;
-  var areaAspect=portraitScreenHeight/availHeight;
+  var availHeight=screenWidth-controlsPx-controlsPx-20;
+  var areaAspect=screenHeight/availHeight;
   var leftPad=0;
   var topPad=0;
   var g=0;
   if(areaAspect>groupAspect){//fit height, pad left
     g=availHeight/(4*6+4);
     topPad=g*2;
-    leftPad=g*2+portraitScreenHeight/2-g*(3*18+4)/2;
+    leftPad=g*2+screenHeight/2-g*(3*18+4)/2;
     }
   else{//fit width, pad top // always for this aspect anyways.
-    g=portraitScreenHeight/(54+4);
+    g=screenHeight/(54+4);
     leftPad=g*2;
     topPad=g*2+availHeight/2-g*(18+4)/2;
     }
@@ -1518,18 +1511,18 @@ function populateCars(){
   carsCanv.width=carsCanv.width;
   var groupAspect=(3*18+4)/(4*6+4);
   //dbuga('populateCars()');
-  var availHeight=landscapeScreenHeight-44-44-20;
-  var areaAspect=portraitScreenHeight/availHeight;
+  var availHeight=screenWidth-controlsPx-controlsPx-20;
+  var areaAspect=screenHeight/availHeight;
   var leftPad=0;
   var topPad=0;
   var g=0;
   if(areaAspect>groupAspect){//fit height, pad left
     g=availHeight/(4*6+4);
     topPad=g*2;
-    leftPad=g*2+portraitScreenHeight/2-g*(3*18+4)/2;
+    leftPad=g*2+screenHeight/2-g*(3*18+4)/2;
     }
   else{//fit width, pad top
-    g=portraitScreenHeight/(3*18+4);
+    g=screenHeight/(3*18+4);
     leftPad=g*2;
     topPad=g*2+availHeight/2-g*(4*6+4)/2;
     }
@@ -1588,14 +1581,14 @@ function returnModalButton(label,align,orient,selected){
   var modalButton={"selected":selected, "label":label, "l":0, "r":0, "t":0, "b":0};
   var buttonPad=9;
   var buttonWidth=88;
-  var buttonHeight=44;
-  var spread=(landscapeScreenHeight-320)/6;
-  var topPx=portraitScreenHeight-1-buttonPad-buttonHeight-44;
-  var centerPx=landscapeScreenHeight/2;
+  var buttonHeight=controlsPx;
+  var spread=(screenWidth-320)/6;
+  var topPx=screenHeight-1-buttonPad-buttonHeight-controlsPx;
+  var centerPx=screenWidth/2;
   if(orient=="landscape"){
-    spread=(portraitScreenHeight-320)/12;
-    topPx=landscapeScreenHeight-1-buttonPad-buttonHeight-44;
-    centerPx=portraitScreenHeight/2;
+    spread=(screenHeight-320)/12;
+    topPx=screenWidth-1-buttonPad-buttonHeight-controlsPx;
+    centerPx=screenHeight/2;
     buttonWidth*=1.5;
     }
   var leftPx=1+buttonPad+spread;
@@ -1640,18 +1633,18 @@ function drawModalButton(ctx, modalButton){
 function populateMenu(){
 /*
   var groupAspect=(54+4)/(18+4);// matches car group width, padding
-  var availHeight=landscapeScreenHeight-44-44-20;
-  var areaAspect=portraitScreenHeight/availHeight;
+  var availHeight=screenWidth-controlsPx-controlsPx-20;
+  var areaAspect=screenHeight/availHeight;
   var leftPad=0;
   var topPad=0;
   var g=0;
   if(areaAspect>groupAspect){//fit height, pad left
     g=availHeight/(4*6+4);
     topPad=g*2;
-    leftPad=g*2+portraitScreenHeight/2-g*(3*18+4)/2;
+    leftPad=g*2+screenHeight/2-g*(3*18+4)/2;
     }
   else{//fit width, pad top // always for this aspect anyways.
-    g=portraitScreenHeight/(54+4);
+    g=screenHeight/(54+4);
     leftPad=g*2;
     topPad=g*2+availHeight/2-g*(18+4)/2;
     }
@@ -1845,9 +1838,9 @@ function openModal(modal){
 function closeModals(){
   //dbuga('closeModals');
 
-        if(localStorage.getItem("Scale") != menuObject["Scale"]["value"]){updateScaleSetting();}
-        if(localStorage.getItem("Detail") != menuObject["Detail"]["value"]){updateDetailSetting();}
-        if(localStorage.getItem("Tiles") != menuObject["Tiles"]["value"]){updateTilesSetting();}
+  if(localStorage.getItem("Scale") != menuObject["Scale"]["value"]){updateScaleSetting();}
+  if(localStorage.getItem("Detail") != menuObject["Detail"]["value"]){updateDetailSetting();}
+  if(localStorage.getItem("Tiles") != menuObject["Tiles"]["value"]){updateTilesSetting();}
 
   paused=false;
   levelsCanv.style.left="-"+screenWidth+"px";
@@ -1869,7 +1862,7 @@ function changeView(caller){
   if(shooting){return false;}
   closeModals();
   if(viewportAspect>1){
-    document.getElementById("navDiv").style.display="none";
+    document.getElementById("navCanvas").style.display="none";
     document.getElementById("uiHolder").style.display="none";
     document.getElementById("prerails").style.display="none";
     //dbuga('changeView() updateColorsCanv')
@@ -1881,14 +1874,14 @@ function changeView(caller){
     }
   else{
     colorsCanv.style.display="none";
-    document.getElementById("navDiv").style.display="block";
+    document.getElementById("navCanvas").style.display="block";
     document.getElementById("uiHolder").style.display="block";
     document.getElementById("prerails").style.display="block";
     //document.getElementById("highlighter").style.display="block";
-    styleNavDiv(); //in nav.js
+    updateNavCanv(); //in nav.js
     visHeight=boardHeight;
     camera.style.marginTop= boardPad +"px";
-    camera.style.top= "44px";
+    camera.style.top= controlsPx+"px";
     camera.style.position= "absolute";
     }
   document.getElementById("wrapper").style.width= viewportWidth +"px";
@@ -1998,7 +1991,8 @@ function initSession(){
   ////initSound();
 
   initGeometry();
-  setupNav();//moved styleNavDiv to resumeInit
+  //dbuga('controlsPx='+controlsPx);
+  setupNav();//moved updateNavCanv to resumeInit
   setupFaceData();
   updateDetail();
   imgRefs["tanksideblack"]=document.getElementById('tanksideblack');
@@ -2037,7 +2031,7 @@ function resumeInit(){
   resetBoardTimersObjects();
   rebuildSequence();
   document.getElementById('debugDiv').style.width=screenWidth+"px";
-  styleNavDiv();
+  updateNavCanv();
 
   populateModals();
   transmitBgMusicState();
@@ -2150,21 +2144,16 @@ function initSound(){
   }
 
 function setupNav(){
-  //dbuga('setupNav()');
-  var navDivRef=createNavDiv();
-  //document.getElementById('uiHolder').style.top=boardHeight+"px";
-
-  var useWidth=320/4;
-  
-  //addControl("Music", "Music", "right", useWidth);
-  //addControl("Sfx", "Sounds", "right", useWidth);
+/*
+  useWidth=100;
   addControl("menu", "Menu", "left", useWidth);
   addControl("level", "Level", "left", useWidth);
   addControl("reset", "Reset", "left", useWidth);
   addControl("undo", "Undo", "right", useWidth);
 
   document.getElementById('undo_label').style.opacity=".5";
-  //styleNavDiv();
+  updateNavCanv();
+*/
   }
 
 function resetBoardTimersObjects(){
@@ -3605,7 +3594,7 @@ function mouseMove(e){
     var target = e.target;
     var id = target.id
     var event={"type":"touchmove", "touches":[{"pageX":e.clientX, "pageY":e.clientY, "target":{"id":id}}]}
-    console.log(event);
+    //console.log(event);
     touchMove(event);
     }// buzz off hover mouse.
   }
@@ -3653,13 +3642,13 @@ function touchEvent(event){
   else{
     if(viewportAspect>1){
       var inColors=false;
-      if(event.touches[0].pageY<44){
+      if(event.touches[0].pageY<controlsPx){
         if(colorsUp){
           inColors=true;
           }
         else{
-          //if(event.touches[0].pageX>landscapeScreenHeight-44){
-          if(event.touches[0].pageX<44){
+          //if(event.touches[0].pageX>screenWidth-controlsPx){
+          if(event.touches[0].pageX>screenHeight-controlsPx){// x circle
             inColors=true;
             }
           }
@@ -3673,7 +3662,7 @@ function touchEvent(event){
         }
       }
     else{//portraits
-      if ((event.touches[0].pageY>44)&&(helpUp==false)){
+      if ((event.touches[0].pageY>controlsPx)&&(helpUp==false)){
         if(levelsUp){handleEventLevels(event);}
         else if(menuUp){handleEventMenu(event);}
         else{handleEventDraw(event);}
@@ -3689,13 +3678,13 @@ function handleEventCars(e){
     var t=e.touches[0];
     for (var ct=0; ct<carsThumbs.length; ct++){
       var carThumb=carsThumbs[ct];
-      if(xyInTrbl(t.pageX, t.pageY-44,carThumb)){
+      if(xyInTrbl(t.pageX, t.pageY-controlsPx,carThumb)){
         openGraphics(carThumb);
         }
       }
     //dbuga('t.pageX='+t.pageX+' t.pageY='+t.pageY);
     for (var cb=0; cb<carsButtons.length; cb++){
-      if(xyInTrbl(t.pageX, t.pageY-44,carsButtons[cb])){
+      if(xyInTrbl(t.pageX, t.pageY-controlsPx,carsButtons[cb])){
         if(carsButtons[cb].label=="Done"){closeModals();}
         }
       } 
@@ -3715,7 +3704,7 @@ function handleEventGraphics(e){
         for (var gb=0; gb<graphicsButtons.length; gb++){
           var graphicsButton=graphicsButtons[gb];
           var x=t.pageX;
-          var y=t.pageY-44;
+          var y=t.pageY-controlsPx;
           if(xyInTrbl(x,y,graphicsButton)){
 
             if(graphicsButton.label=="Done"){
@@ -3802,20 +3791,20 @@ function handleEventDolly(e){
   if(e.type=="touchstart"){
     var t=e.touches[0];
     prevTouchX=t.pageX;
-    prevTouchY=t.pageY-44;
+    prevTouchY=t.pageY-controlsPx;
     }
   if(e.type=="touchmove"){
     var t=e.touches[0];
     //normal drag of pan zoom camera on table
     var deltaX=prevTouchX-t.pageX;
-    var deltaY=prevTouchY-(t.pageY-44);
+    var deltaY=prevTouchY-(t.pageY-controlsPx);
     combinedZoom[focusTrain]-=deltaY/5;
-    if(t.pageY-44>(boardWidth/2)){cameraRotationDegrees[focusTrain]+=deltaX/2.5;}
+    if(t.pageY-controlsPx>(boardWidth/2)){cameraRotationDegrees[focusTrain]+=deltaX/2.5;}
     else{cameraRotationDegrees[focusTrain]-=deltaX/15;}
     if(combinedZoom[focusTrain]<0){combinedZoom[focusTrain]=0;}
     if(combinedZoom[focusTrain]>100){combinedZoom[focusTrain]=100;}
     prevTouchX=t.pageX;
-    prevTouchY=t.pageY-44;
+    prevTouchY=t.pageY-controlsPx;
     }
 
   }
@@ -3827,13 +3816,15 @@ function handleEventColors(event){
   if(event.type=="touchstart"){
     var t=event.touches[0];
     if(colorsUp==false){
-      if(t.pageX<44){//menu circle
+      //dbuga("x:"+t.pageX+" sh:"+screenHeight+" cp:"+controlsPx);
+      if(t.pageX>screenHeight-controlsPx){//menu circle
+
         colorsUp=true;
         updateColorsCanv('touchstart 1');
         }
       }
     else{
-      var tryFocus=Math.floor((screenHeight-t.pageX)/44);
+      var tryFocus=Math.floor((t.pageX)/controlsPx);
       if(carsUp){
         //dbuga('tryFocus='+tryFocus);
         if(tryFocus<4){
@@ -3852,13 +3843,13 @@ function handleEventColors(event){
           if(graphicsUp){openModal("cars");}
           }
         }
-      if(t.pageX<44){// x circle
-        //dbuga('closeModals t.pageX<44');
+      if(t.pageX>screenHeight-controlsPx){// x circle
+        //dbuga('closeModals t.pageX<controlsPx');
         closeModals();
         colorsUp=false;
         updateColorsCanv('x circle');
         }
-      if((t.pageX>44)&&(t.pageX<44*4)){// car button
+      if((t.pageX>screenHeight-controlsPx*2)&&(t.pageX<screenHeight-controlsPx)){// car button
         if((carsUp)||(graphicsUp)){
           //dbuga('closeModals car button');
           closeModals();
@@ -3947,7 +3938,7 @@ function postviewGraphics(){
   var buttonHeight=cellSize*1;
   var radius=cellSize/8;
   var pad=cellSize/10;
-  var topPad=(landscapeScreenHeight-44-buttonHeight*4)/2;
+  var topPad=(screenWidth-controlsPx-buttonHeight*4)/2;
   var leftPad=(screenHeight-buttonWidth*3)/2;  
   var carButton={"label":"car"}
 
@@ -3980,7 +3971,7 @@ function previewGraphics(){
   var buttonHeight=cellSize*1;
   var radius=cellSize/8;
   var pad=cellSize/10;
-  var topPad=(landscapeScreenHeight-44-buttonHeight*4)/2;
+  var topPad=(screenWidth-controlsPx-buttonHeight*4)/2;
   var leftPad=(screenHeight-buttonWidth*3)/2;  
   var carButton={"label":"car"}
 
@@ -4193,7 +4184,6 @@ function locateCamera(){
 
   //dbug("locateCamera");
   //dbuga("screen "+screenWidth+"x"+screenHeight);
-  //dbuga("viewport "+viewportWidth+"x"+viewportHeight);
   centerAmount=0;
   if(combinedZoom[focusTrain]<50){
     centerAmount=(100-combinedZoom[focusTrain]*2)/100;
@@ -4230,7 +4220,7 @@ function locateCamera(){
 
   table.style.webkitTransform=transformString;
   var uncenter=1-centerAmount;
-  var cameraDistancePx=(100-cameraDistancePercent)*boardWidth/100-cameraDistancePercent*44*2/100;
+  var cameraDistancePx=(100-cameraDistancePercent)*boardWidth/100-cameraDistancePercent*controlsPx*2/100;
   //dbuga(cameraDistancePercent+" "+cameraDistancePx)
    var cabViewDown=uncenter*cellSize/5;
    var cabViewForward=uncenter*landscapePx+cellSize/7;
@@ -4257,7 +4247,7 @@ var centerSize=24;
 function xyOn(x,y, dir, dist){
   var leftPx=x*cellSize;
   var topPx=y*cellSize+boardPad;
-  document.getElementById("prerails").style.top=(44+topPx)+"px";
+  document.getElementById("prerails").style.top=(controlsPx+topPx)+"px";
   document.getElementById("prerails").style.left=leftPx+"px";
   if((dist>centerSize)&&(x<cellsAcross)){
     if(dir=="l"){leftPx-=cellSizeHalf;}
@@ -4267,7 +4257,7 @@ function xyOn(x,y, dir, dist){
     if(dir=="t"){topPx-=cellSizeHalf;}
     if(dir=="b"){topPx+=cellSizeHalf;}
     }
-  document.getElementById("highlighter").style.top=(44+topPx)+"px";
+  document.getElementById("highlighter").style.top=(controlsPx+topPx)+"px";
   document.getElementById("highlighter").style.left=leftPx+"px";
   document.getElementById("highlighter").style.display="block";
   }
@@ -4280,11 +4270,11 @@ var cachePageY=0;
 function xydirFromTouch(thisTouch){
   var xydirObject=new Object();
   xydirObject.x=Math.floor((thisTouch.pageX)/cellSize);
-  xydirObject.y=Math.floor((thisTouch.pageY-boardPad-44)/cellSize);
+  xydirObject.y=Math.floor((thisTouch.pageY-boardPad-controlsPx)/cellSize);
 
   centerX=cellSizeHalf+(cellSize*xydirObject.x);
   centerY=cellSizeHalf+(cellSize*xydirObject.y);
-  if(Math.abs(centerX-thisTouch.pageX)>Math.abs(centerY-(thisTouch.pageY-boardPad-44))){
+  if(Math.abs(centerX-thisTouch.pageX)>Math.abs(centerY-(thisTouch.pageY-boardPad-controlsPx))){
     // further on X axis
     if (centerX-thisTouch.pageX > 0){
       xydirObject.dir="l";
@@ -4295,7 +4285,7 @@ function xydirFromTouch(thisTouch){
     }
   else{
     // further on Y axis
-    if (centerY-(thisTouch.pageY-boardPad-44) > 0){
+    if (centerY-(thisTouch.pageY-boardPad-controlsPx) > 0){
       xydirObject.dir="t";
       }
     else{
@@ -4303,7 +4293,7 @@ function xydirFromTouch(thisTouch){
       }
     }
   distX=Math.abs(centerX-thisTouch.pageX);
-  distY=Math.abs(centerY-(thisTouch.pageY-boardPad-44));
+  distY=Math.abs(centerY-(thisTouch.pageY-boardPad-controlsPx));
   xydirObject.dist=Math.sqrt(distX*distX + distY*distY);
   return xydirObject;
 
@@ -4329,7 +4319,7 @@ function handleEventLevels(e){
   var typ = e.type;
   if(typ == "touchstart"){
     var x=e.touches[0].pageX;
-    var y=e.touches[0].pageY-44;
+    var y=e.touches[0].pageY-controlsPx;
     //dbug("touchstart "+x+" "+y);
     for (var b=0; b<levelButtons.length; b++){
       if(xyInTrbl(x,y,levelButtons[b])){
@@ -4369,7 +4359,7 @@ function handleEventMenu(e){
     menuTouchingId="";
     menuButtonNum=-1;
     var x=e.touches[0].pageX;
-    var y=e.touches[0].pageY-44;
+    var y=e.touches[0].pageY-controlsPx;
     var keys=Object.keys(menuObject);
     for (var k=0; k<keys.length; k++){
       if(xyInTrbl(x,y,menuObject[keys[k]])){
@@ -4386,7 +4376,7 @@ function handleEventMenu(e){
   if((typ=="touchstart")||(typ=="touchmove")){
     if(menuTouchingId !=""){
       var x=e.touches[0].pageX;
-      var y=e.touches[0].pageY-44;
+      var y=e.touches[0].pageY-controlsPx;
       var w=menuObject[menuTouchingId].r-menuObject[menuTouchingId].l;
       var prog=(x-menuObject[menuTouchingId].l)/w;
       if(prog<0){prog=0;}
@@ -4524,18 +4514,86 @@ function createLevel(){
   restartIntervals();
   updateColorsCanv('createLevel');
   }
-var colorsHeight=44;
+var controlsPx=44;
+var navButtons=[
+  {"label":"settings", "align":"left", "selected":false, "t":0, "r":0, "b":0, "l":0},
+  {"label":"levels", "align":"left", "selected":false, "t":0, "r":0, "b":0, "l":0},
+  {"label":"reset", "align":"left", "selected":false, "t":0, "r":0, "b":0, "l":0},
+  {"label":"undo", "align":"right", "selected":false, "t":0, "r":0, "b":0, "l":0},
+  {"label":"contextText", "align":"center", "selected":false, "t":0, "r":0, "b":0, "l":0}
+  ];
+function updateNavCanv(){
+  //dbuga('updateNavCanv()');
+  navCanv.width=screenWidth;
+  navCanv.height=controlsPx;
+  navCanv.style.top="0px";
+  var navCtx=navCanv.getContext("2d");
+
+    var grad = navCtx.createLinearGradient(0, controlsPx, 0, 0);
+    grad.addColorStop(0, "rgba(225,225,225,.75)");
+    grad.addColorStop(0.2, "rgba(225,225,225,.90)");
+    grad.addColorStop(0.5, "rgba(255,255,255,.80)");
+    grad.addColorStop(0.8, "rgba(255,255,255,.90)");
+    grad.addColorStop(1, "rgba(255,255,255,.75)");
+    navCtx.fillStyle=grad;
+    navCtx.fillRect(0,0,screenWidth, controlsPx);
+
+
+
+  var atLeft=0;
+  var atRight=screenWidth;
+  for (var n=0; n<navButtons.length; n++){
+    if(navButtons[n].align=="left"){
+      navButtons[n].t=0;
+      navButtons[n].r=atLeft+controlsPx;
+      navButtons[n].b=controlsPx;
+      navButtons[n].l=atLeft;
+      atLeft+=controlsPx;
+      }
+    else if(navButtons[n].align=="right"){
+      navButtons[n].t=0;
+      navButtons[n].r=atRight;
+      navButtons[n].b=controlsPx;
+      navButtons[n].l=atRight-controlsPx;
+      atRight-=controlsPx;
+      }
+    else{// center so use label in remaining area. Do last!
+      navButtons[n].t=0;
+      navButtons[n].r=atRight;
+      navButtons[n].b=controlsPx;
+      navButtons[n].l=atLeft;
+      }
+    }
+  for (var n=0; n<navButtons.length; n++){
+    if(navButtons[n].align=="center"){
+      var x=navButtons[n].l+navButtons[n].r/2-navButtons[n].l/2;
+      var y=navButtons[n].b/2-navButtons[n].t/2;
+      navCtx.textBaseline="middle";
+      navCtx.fillStyle="black";
+      navCtx.font=controlsPx/3+"px akzi";
+      navCtx.textAlign="center";
+      navCtx.textBaseline="middle";
+      navCtx.fillText(navButtons[n].label, x,y);
+      console.log(navButtons[n].label+" "+x+" "+y);
+      }
+    else{
+      console.log(navButtons[n].label+"Preload");
+      var ref=document.getElementById(navButtons[n].label+"Preload");
+      navCtx.drawImage(ref,navButtons[n].l,navButtons[n].t,controlsPx,controlsPx); 
+      }
+    }
+  }
 function updateColorsCanv(caller){
 
   //dbuga('updateColorsCanv('+caller+')');
-  var h=colorsHeight;
   colorsCanv.width=screenHeight;
-  colorsCanv.height=h;
+  colorsCanv.height=controlsPx;
   colorsCanv.style.top="0px";
   
+    var h=controlsPx;
   var colorsCtx=colorsCanv.getContext("2d");
   if(colorsUp){
-    var grad = colorsCtx.createLinearGradient(0, 0, 0, h);
+    var grad = colorsCtx.createLinearGradient(0, h, 0, 0);
     grad.addColorStop(0, "rgba(225,225,225,.75)");
     grad.addColorStop(0.2, "rgba(225,225,225,.90)");
     grad.addColorStop(0.5, "rgba(255,255,255,.80)");
@@ -4543,7 +4601,7 @@ function updateColorsCanv(caller){
     grad.addColorStop(1, "rgba(255,255,255,.75)");
     colorsCtx.fillStyle=grad;
     colorsCtx.fillRect(0,0,screenHeight, h);
-   
+/* x?
     colorsCtx.lineWidth=h/10;
     colorsCtx.strokeStyle="black";
     colorsCtx.beginPath();
@@ -4553,7 +4611,6 @@ function updateColorsCanv(caller){
     colorsCtx.moveTo(h/2+h/4, h/2-h/4);
     colorsCtx.lineTo(h/2-h/4, h/2+h/4);
     colorsCtx.stroke(); 
-
     colorsCtx.strokeStyle="black";
     colorsCtx.fillStyle="rgba(255,255,255,.9)";
     if((carsUp)||(graphicsUp)){
@@ -4562,7 +4619,9 @@ function updateColorsCanv(caller){
     colorsCtx.lineWidth=buttonLine;
 
     roundRect(colorsCtx, h*1+h/20,h/20, h*3-h/10, h-h/10, h/7, true, true);
-    colorsCtx.drawImage(imgRefs['boxsidetrans'],h*1+h/8,h/8, h*3-h/4, h-h/4); 
+*/
+    var ref=document.getElementById("cameraPreload");
+    colorsCtx.drawImage(ref,screenHeight-h*2,0, controlsPx, controlsPx); 
     var colorLimit=-1;
     var selected=focusTrain;
     if(carsUp){
@@ -4581,10 +4640,11 @@ function updateColorsCanv(caller){
       }
     //dbuga('colorLimit='+colorLimit)
     for (var c=0; c<colorLimit; c++){
+      colorsCtx.lineWidth=buttonLine;
       colorsCtx.fillStyle=rgbArray[c];
       colorsCtx.strokeStyle=rgbArray[c];
       colorsCtx.beginPath();
-      colorsCtx.arc(screenHeight-h/2-h*c, h/2, h/2.5, 0, pi*2, true);
+      colorsCtx.arc(h/2+h*c, h/2, h/2.5, 0, pi*2, true);
       if(c==selected){
         colorsCtx.fill();
         }
@@ -4613,14 +4673,12 @@ function updateColorsCanv(caller){
       colorsCtx.fillText("Drag to zoom", screenHeight/2,h/4);
       colorsCtx.fillText("Rotate to play", screenHeight/2,3*h/4);
       }  
+    var ref=document.getElementById("hidePreload");
+    colorsCtx.drawImage(ref,screenHeight-h,0, controlsPx, controlsPx); 
     }
   else{
-    colorsCtx.lineWidth=7;
-    colorsCtx.strokeStyle="rgba(0,0,0,.2)";
-    colorsCtx.beginPath();
-    colorsCtx.arc(h/2, h/2, h/2.5, 0, pi*2, true);
-
-    colorsCtx.stroke(); 
+    var ref=document.getElementById("showPreload");
+    colorsCtx.drawImage(ref,screenHeight-h,0, controlsPx, controlsPx); 
     }
 
   }
@@ -5212,9 +5270,9 @@ function menuDraw(){
   canv.width=canv.width;
   menuCanv.style.zIndex=1;
   var keys=Object.keys(menuObject);
-  var g=(screenHeight-44-44)/(keys.length*4+4);// availHeight/18
+  var g=(screenHeight-controlsPx-controlsPx)/(keys.length*4+4);// availHeight/18
   var cx=.5*screenWidth/g;
-  var cy=((screenHeight-44-44)/2-screenWidth/2)/g+cx;
+  var cy=((screenHeight-controlsPx-controlsPx)/2-screenWidth/2)/g+cx;
   //dbuga("cy="+cy+" g="+g);
 
   var ctx=canv.getContext('2d');
@@ -5497,16 +5555,13 @@ function rnd(range) {
 
 </div>
 <canvas id="colorsCanvas" style="position:absolute;"></canvas>
+<canvas id="navCanvas" style="position:absolute;"></canvas>
 <canvas id="levelsCanvas" style="position:absolute;"></canvas>
 <canvas id="menuCanvas" style="position:absolute;"></canvas>
 <canvas id="carsCanvas" style="position:absolute;"></canvas>
 <canvas id="graphicsCanvas" style="position:absolute;"></canvas>
 <canvas id="cameraCanvas" style="position:absolute;" width="100" height="100"></canvas>
-  <canvas id="helpCanvas"></canvas>
-
-<div id="adHolder" style="opacity:.5; Zbackground-size:contain; background-repeat:no-repeat; background-position:50% 50%; position:absolute;"></div>
-
-
+<canvas id="helpCanvas"></canvas>
 
 <div id="debugDiv" style="display:none; position:absolute; top:150px; left:10px; font-size:16px; width:750px; z-index:3;"></div>
 
@@ -5524,7 +5579,13 @@ function rnd(range) {
 
   <div id="preload">
 
-<img src="default/default0.jpg" id="cameraImg"   style="display:none;" />
+<img src="trainicons/camera.png" id="cameraPreload"   style="display:none;" />
+<img src="trainicons/hide.png" id="hidePreload"   style="display:none;" />
+<img src="trainicons/levels.png" id="levelsPreload"   style="display:none;" />
+<img src="trainicons/reset.png" id="resetPreload"   style="display:none;" />
+<img src="trainicons/settings.png" id="settingsPreload"   style="display:none;" />
+<img src="trainicons/show.png" id="showPreload"   style="display:none;" />
+<img src="trainicons/undo.png" id="undoPreload"   style="display:none;" />
 <img src="default/default0.jpg" id="default0"   style="display:none;" />
 <img src="default/default1.jpg" id="default1"   style="display:none;" />
 <img src="default/default2.jpg" id="default2"   style="display:none;" />
@@ -5680,6 +5741,6 @@ Detail
 The Menu shows at the bottom your most recent average Frames Per Second. When AVERAGE FPS falls below 40 cars will stop spawning temporarily. Faster devices will allow more cars but running too many cars can cause congestion or result in the app closing. Set Detail to "Low" to improve performance. Try "High" Detail if you have a very fast device or want the best looking close-ups in video capture. If you have macOS and an iOS device with Lightning cable you can use QuickTime to capture video of your game. Rotating the device will stop the recording!
 -->
   </div>
-
+<span style="font-family:akzi; position:absolute; top:-100px;">Akzi</span>
 </body>
 </html>
