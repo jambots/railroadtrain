@@ -1580,7 +1580,7 @@ var levelButtons=[
 function returnModalButton(label,align,orient,selected){
   var modalButton={"selected":selected, "label":label, "l":0, "r":0, "t":0, "b":0};
   var buttonPad=9;
-  var buttonWidth=88;
+  var buttonWidth=controlsPx*2;
   var buttonHeight=controlsPx;
   var spread=(screenWidth-320)/6;
   var topPx=screenHeight-1-buttonPad-buttonHeight-controlsPx;
@@ -1601,7 +1601,7 @@ function returnModalButton(label,align,orient,selected){
   modalButton.b=topPx+buttonHeight;
   return modalButton;
   }
-var buttonStroke="rgba(42,42,42,.75)";
+var buttonStroke="rgba(60,60,60,.75)";
 var buttonFill="rgba(222,222,222,.5)";
 var buttonLine=4;
 var buttonLabelStroke="#555";
