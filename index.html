@@ -1491,7 +1491,7 @@ function populateGraphics(){
   if(graphicsEditing==false){
     graphicsButtons.push(returnModalButton("Done","right","landscape",false));
     graphicsButtons.push(returnModalButton("Camera","center","landscape",false));
-    graphicsButtons.push(returnModalButton("Trans","left","landscape",graphic.blackTrans));
+    graphicsButtons.push(returnModalButton("Transparent","left","landscape",graphic.blackTrans));
     }
   else{
     graphicsButtons.push(returnModalButton("Save","left","landscape",false));
@@ -1609,6 +1609,7 @@ var buttonLabelFill="#555";
 
 
 function drawModalButton(ctx, modalButton){
+  buttonLine=buttonHeight/20;
   ctx.lineWidth=buttonLine;
   var buttonWidth=modalButton.r-modalButton.l;
   var buttonHeight=modalButton.b- modalButton.t;
@@ -1624,7 +1625,7 @@ function drawModalButton(ctx, modalButton){
   ctx.strokeStyle=buttonLabelStroke;
   ctx.lineWidth=buttonLine/2;
   ctx.textBaseline="middle";
-  if(modalButton.label=="Trans"){
+  if(modalButton.label=="Transparent"){
     ctx.textAlign="right";
     ctx.strokeText(modalButton.label, modalButton.r-buttonHeight/8,bcy);
     ctx.fillText(modalButton.label, modalButton.r-buttonHeight/8,bcy);
@@ -3728,7 +3729,7 @@ function handleEventGraphics(e){
             if(graphicsButton.label=="Camera"){
               graphicsTake();              
               }
-            if(graphicsButton.label=="Trans"){
+            if(graphicsButton.label=="Transparent"){
               graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=!(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans);
               localStorage.setItem('graphicsByColor', JSON.stringify(graphicsByColor));
               processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
