@@ -1580,6 +1580,8 @@ var menuButtons=[
 ];
 var levelButtons=[
 ];
+var colorsButtons=[
+];
 
 
 function returnModalButton(label,align,orient,selected){
@@ -3738,6 +3740,14 @@ function handleEventGraphics(e){
               openModal("cars");
               }
             if(graphicsButton.label=="Camera"){
+              graphicsCanv.width=screenHeight;
+              var graphicsCtx=graphicsCanv.getContext('2d');
+              graphicsCtx.textBaseline="middle";
+              graphicsCtx.fillStyle="black";
+              graphicsCtx.font=screenWidth/10+"px akzi";
+              graphicsCtx.textAlign="center";
+              
+              graphicsCtx.fillText("Loading Photo...", screenHeight/2, screenWidth/2-controlsPx/2);
               graphicsTake();              
               }
             if(graphicsButton.label=="Transparent"){
@@ -3839,15 +3849,55 @@ function handleEventDolly(e){
 
 var focusCars=0;
 function handleEventColors(event){
-  //dbuga('handleEventColors');
+  //dbuga('handleEventColors '+event.type);
   if(event.type=="touchstart"){
     var t=event.touches[0];
+    for (var b=0; b<colorsButtons.length; b++){
+      if(xyInTrbl(t.pageX, t.pageY,colorsButtons[b])){
+        var label=colorsButtons[b].label;
+        if(label=="showHide"){
+          if(colorsUp==false){
+            colorsUp=true;
+            }
+          else{
+            closeModals();
+            colorsUp=false;
+            }
+          }
+        if(label=="camera"){
+          if((carsUp)||(graphicsUp)){
+            //dbuga('closeModals car button');
+            closeModals();
+            }
+          else{
+            openModal("cars");
+            }
+          }
+        if(label.indexOf("color_")==0){
+          var parts=label.split("_");
+          var c=Number(parts[1]);
+          if(carsUp){
+            focusCars=c;
+            populateCars();
+            }
+          else{
+            focusTrain=c;
+            focusCars=c;
+            if(graphicsUp){openModal("cars");}
+            }    
+          }      
+        }
+      }
+    }
+  updateColorsCanv('touchstart 1');
+  }
+
+/*
     if(colorsUp==false){
       //dbuga("x:"+t.pageX+" sh:"+screenHeight+" cp:"+controlsPx);
       if(t.pageX>screenHeight-controlsPx){//menu circle
-
-        colorsUp=true;
-        updateColorsCanv('touchstart 1');
+        //colorsUp=true;
+        //updateColorsCanv('touchstart 1');
         }
       }
     else{
@@ -3855,28 +3905,28 @@ function handleEventColors(event){
       if(carsUp){
         //dbuga('tryFocus='+tryFocus);
         if(tryFocus<4){
-          focusCars=tryFocus;
-          updateColorsCanv('carsUp');
-          populateCars();
+          //focusCars=tryFocus;
+          //updateColorsCanv('carsUp');
+          //populateCars();
         
           }
       }
       else{//train focus
         //dbuga('tryFocus='+tryFocus);
         if((tryFocus<trainData.length)&&(tryFocus != focusTrain)){
-          focusTrain=tryFocus;
-          focusCars=tryFocus;
-          updateColorsCanv('touchstart 2');
-          if(graphicsUp){openModal("cars");}
+          //focusTrain=tryFocus;
+          //focusCars=tryFocus;
+          //updateColorsCanv('touchstart 2');
+          //if(graphicsUp){openModal("cars");}
           }
         }
       if(t.pageX>screenHeight-controlsPx){// x circle
         //dbuga('closeModals t.pageX<controlsPx');
-        closeModals();
-        colorsUp=false;
-        updateColorsCanv('x circle');
+        //closeModals();
+        //colorsUp=false;
+        //updateColorsCanv('x circle');
         }
-      if((t.pageX>screenHeight-controlsPx*2)&&(t.pageX<screenHeight-controlsPx)){// car button
+      if((t.pageX>screenHeight-controlsPx*2)&&(t.pageX<screenHeight-controlsPx)){// carmera button
         if((carsUp)||(graphicsUp)){
           //dbuga('closeModals car button');
           closeModals();
@@ -3888,7 +3938,7 @@ function handleEventColors(event){
       }
     }
   }  
-
+*/
 // ported code
 var camera;
 var zoom;
@@ -3911,6 +3961,7 @@ var focusTrain=0;
 
 var shooting=false;
 function graphicsTake(){
+  
   shooting=true;
   //dbuga('graphicsTake gscn'+  graphicsSelectedColorNum+' gsg='+graphicsSelectedGraphic);
   navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
@@ -4613,7 +4664,7 @@ function updateNavCanv(){
     }
   }
 function updateColorsCanv(caller){
-
+  colorsButtons=[];
   //dbuga('updateColorsCanv('+caller+')');
   colorsCanv.width=screenHeight;
   colorsCanv.height=controlsPx;
@@ -4634,7 +4685,7 @@ function updateColorsCanv(caller){
     if((carsUp)||(graphicsUp)){
       colorsCtx.globalAlpha=.5;
       }
-
+    colorsButtons.push({"label":"camera", "t":0, "r":screenHeight-h, "b":controlsPx, "l":screenHeight-h*2});
     var ref=document.getElementById("cameraPreload");
     colorsCtx.drawImage(ref,screenHeight-h*2+pad,0, controlsPx-pad*2+pad, controlsPx-pad*2); 
     colorsCtx.globalAlpha=1;
@@ -4662,6 +4713,8 @@ function updateColorsCanv(caller){
       colorsCtx.fillStyle=rgbArray[c];
       colorsCtx.strokeStyle=rgbArray[c];
       colorsCtx.beginPath();
+      colorsButtons.push({"label":"color_"+c, "t":0, "r":c*h+h, "b":h, "l":c*h});
+
       colorsCtx.arc(h/2+h*c, h/2, h/2.5-pad, 0, pi*2, true);
       if(c==selected){
         colorsCtx.fill();
@@ -4701,7 +4754,7 @@ function updateColorsCanv(caller){
     colorsCtx.drawImage(ref,screenHeight-h,0, controlsPx, controlsPx); 
     colorsCtx.globalAlpha=.5;
     }
-
+  colorsButtons.push({"label":"showHide", "t":0, "r":screenHeight, "b":h, "l":screenHeight-h});
   }
 function handleEventDraw(e){
   if(e.touches.length>0){
