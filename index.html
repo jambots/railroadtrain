@@ -3764,15 +3764,8 @@ function handleEventGraphics(e){
               openModal("cars");
               }
             if(graphicsButton.label=="Camera"){
-              graphicsCanv.width=screenHeight;
-              var graphicsCtx=graphicsCanv.getContext('2d');
-              graphicsCtx.textBaseline="middle";
-              graphicsCtx.fillStyle="black";
-              graphicsCtx.font=screenWidth/10+"px akzi";
-              graphicsCtx.textAlign="center";
-              
-              graphicsCtx.fillText("Loading Photo...", screenHeight/2, screenWidth/2-controlsPx/2);
-              graphicsTake();              
+              dbuga('Camera');
+              graphicsTake();
               }
             if(graphicsButton.label=="Transparent"){
               graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=!(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans);
@@ -3796,9 +3789,9 @@ function handleEventGraphics(e){
             if(graphicsButton.label=="Retake"){
               graphicsTake();              
               }
-            found=true;
+            found=true;// because xyInTrbl
             if(graphicsButton.label=="car"){
-              //dbuga('car touchstart');
+              dbuga('car touchstart');
               found=false;              
               }
             }
@@ -3815,7 +3808,10 @@ function handleEventGraphics(e){
             //dbuga('graphics  touchstart! '+e.touches.length);
             }
           }
-        else{populateGraphics();}
+        else{// found == true
+          //populateGraphics(); 
+          //this may be needed elsewhere. Trans?
+          }
 
     }
   if(e.type=="touchmove"){
@@ -3985,21 +3981,31 @@ var focusTrain=0;
 
 var shooting=false;
 function graphicsTake(){
-  
+              graphicsCanv.width=screenHeight;
+              var graphicsCtx=graphicsCanv.getContext('2d');
+              graphicsCtx.textBaseline="middle";
+              graphicsCtx.fillStyle="black";
+              graphicsCtx.font=screenWidth/10+"px akzi";
+              graphicsCtx.textAlign="center";
+              
+              graphicsCtx.fillText("Loading Photo...", screenHeight/2, screenWidth/2-controlsPx/2);
+              window.setTimeout('cameraTake()',50);              
+  }
+function cameraTake(){
   shooting=true;
-  //dbuga('graphicsTake gscn'+  graphicsSelectedColorNum+' gsg='+graphicsSelectedGraphic);
+  dbuga('cameraTake gscn'+  graphicsSelectedColorNum+' gsg='+graphicsSelectedGraphic);
   navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
     destinationType: Camera.DestinationType.DATA_URL
     });
   }
 function onFail(message) {
-  //dbuga('onFail');
+  dbuga('onFail');
   shooting=false;
   graphicsEditing=false;
   populateGraphics();
   }
 function onSuccess(imageData) {
-    //dbuga('success');
+    dbuga('success '+imageData.length);
 
     var image = document.getElementById('cameraImg');
     image.style.display="block";
