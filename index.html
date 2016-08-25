@@ -2062,7 +2062,10 @@ function localStorageToImages(){
     }
   for (var d=0; d<carsPerColor*4; d++){
     if(localStorage.getItem('default'+d)!=null){
-      document.getElementById('default'+d).src=localStorage.getItem('default'+d);
+      var imageData=localStorage.getItem('default'+d);
+      var parts=imageData.split(x);
+      dbuga(parts[1]);
+      document.getElementById('default'+d).src=imageData;
       }
     }
   }
@@ -5244,8 +5247,8 @@ function processGraphic(colorNum, graphicNum, blacken, cache){
     blackTrans=true;
     cached=false;
     }
-  if(cached){// use img default ref
-    document.getElementById(imageId).src="data:image/jpeg;base64," +localStorage.getItem(imageId);
+  if(cached){// use img default ref //data:image/jpeg;base64,
+    document.getElementById(imageId).src="" +localStorage.getItem(imageId);
     }
   //dbuga("processGraphic "+colorNum+", "+graphicNum+" blackTrans="+blackTrans);
   var alphaSourceRef=imgRefs['boxsidesource'];
