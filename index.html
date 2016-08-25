@@ -2056,11 +2056,11 @@ function measureLocalStorage(){
     }
   }
 function localStorageToImages(){
-
+  dbuga('localStorageToImages()');
   if(localStorage.getItem('graphicsByColor') != null){
     graphicsByColor=JSON.parse(localStorage.getItem('graphicsByColor'));
     }
-  for (var d=0; d<carsPerColor; d++){
+  for (var d=0; d<carsPerColor*4; d++){
     if(localStorage.getItem('default'+d)!=null){
       document.getElementById('default'+d).src=localStorage.getItem('default'+d);
       }
