@@ -3735,7 +3735,7 @@ function graphicsTick(){
   var color;
   if(atColor<colorArray.length){
     color=colorArray[atColor];
-    processGraphic(atColor, atGraphic);
+    processGraphic(atColor, atGraphic, false);
     atGraphic++;
     if(atGraphic>=graphicsByColor[color].length){
       atGraphic=0;
@@ -5228,8 +5228,13 @@ function processGraphic(colorNum, graphicNum, blacken){
   var color=colorArray[colorNum];
   
   var imageId= graphicsByColor[color][graphicNum].imageId;
-  //dbuga('processGraphic('+colorNum+', '+graphicNum+')'+imageId);
-  
+  var cached=false;
+  var keys=Object.keys(localStorage);
+  for (var k=0; k<keys.length; k++){
+    if(keys[k]==imageId){
+      dbuga('FOUND! processGraphic('+colorNum+', '+graphicNum+')'+imageId);
+      }
+    }
   var blackTrans= graphicsByColor[color][graphicNum].blackTrans;
   if(blacken){
     imageId="defaultblack";
@@ -5267,6 +5272,13 @@ function processGraphic(colorNum, graphicNum, blacken){
     trimBox(logoTextureRef);  
     blackToTrans(logoTextureRef);
     graphicsByColor[color][graphicNum].ref= logoTextureRef;
+
+    if(blacken){
+      var dataURL = logoTextureRef.toDataURL('image/jpeg');
+      var imageId= graphicsByColor[color][graphicNum].imageId;
+      dbuga('process blacken '+imageId);
+      localStorage.setItem(imageId, dataURL);
+      }
     }
   }
 
