@@ -1569,13 +1569,21 @@ function populateCars(){
     carsCtx.drawImage(carThumb.ref, carThumb.l, carThumb.t, buttonWidth, buttonHeight);
     }
   carsButtons=[];
-  carsButtons.push(returnModalButton("Done","right","landscape",false));
+  if(clearingAll){
+    carsButtons.push(returnModalButton("Sure?","center","landscape",false));
+    carsButtons.push(returnModalButton("Cancel","right","landscape",false));
+    }
+  else{
+    carsButtons.push(returnModalButton("Clear","left","landscape",false));
+    carsButtons.push(returnModalButton("Done","right","landscape",false));
+    }
+
   for(var cb=0; cb<carsButtons.length; cb++){
     drawModalButton(carsCtx, carsButtons[cb]);
     }
-
   minFramesPerSecond=-4;
-}
+  }
+var clearingAll=false;
 var menuButtons=[
 ];
 var levelButtons=[
@@ -1850,6 +1858,8 @@ function openModal(modal){
     //dbuga('openModal menuUp='+menuUp);
     }
   if(modal=="cars"){
+    clearingAll=false;
+
     carsCanv.style.left=0+"px";
     carsUp=true;
     populateCars();
@@ -1866,7 +1876,7 @@ function openModal(modal){
   }
 function closeModals(){
   //dbuga('closeModals');
-
+  clearingAll=false;
   if(localStorage.getItem("Scale") != menuObject["Scale"]["value"]){updateScaleSetting();}
   if(localStorage.getItem("Detail") != menuObject["Detail"]["value"]){updateDetailSetting();}
   if(localStorage.getItem("Tiles") != menuObject["Tiles"]["value"]){updateTilesSetting();}
@@ -3705,6 +3715,53 @@ function touchEvent(event){
       }
     }
   }
+function clearAllGraphics(){
+  //dbuga('clearAllGraphics()');
+  var atDefault=0;
+  var color=colorArray[focusCars];
+  graphicsByColor[color]=[];
+  var x=0; 
+  var y=0;
+  for (var i=0; i<carsPerColor; i++){
+    var imageObj={
+      "imageId":"defaultblack",
+      "blackTrans":true,
+      "x":x,
+      "y":y        
+      }
+    graphicsByColor[color].push(imageObj);
+    processGraphic(focusCars, atDefault);
+    atDefault++;
+    x++;
+    if(x>2){
+      x=0;
+      y++;
+      }
+    }
+  }
+/*
+var atColor=0;
+var atGraphic=0;
+
+function graphicsTick(){
+  //dbugc("-");
+  var color;
+  if(atColor<colorArray.length){
+    color=colorArray[atColor];
+    processGraphic(atColor, atGraphic);
+    atGraphic++;
+    if(atGraphic>=graphicsByColor[color].length){
+      atGraphic=0;
+      atColor++;
+      }
+    window.setTimeout('graphicsTick()',10);
+    }
+  else{// finished last color so resume
+    resumeInit();
+    }
+  }
+*/
+ 
 function handleEventCars(e){
   if(e.type=="touchstart"){
     var t=e.touches[0];
@@ -3717,7 +3774,19 @@ function handleEventCars(e){
     //dbuga('t.pageX='+t.pageX+' t.pageY='+t.pageY);
     for (var cb=0; cb<carsButtons.length; cb++){
       if(xyInTrbl(t.pageX, t.pageY-controlsPx,carsButtons[cb])){
+        //dbuga(carsButtons[cb].label);
         if(carsButtons[cb].label=="Done"){closeModals();}
+        if(carsButtons[cb].label=="Clear"){
+          clearingAll=true;
+          }
+        if(carsButtons[cb].label=="Sure?"){
+          clearingAll=false;
+          clearAllGraphics();
+          }
+        if(carsButtons[cb].label=="Cancel"){
+          clearingAll=false;
+          }
+        populateCars();
         }
       } 
     }
@@ -5708,6 +5777,7 @@ function rnd(range) {
 <img src="trainicons/settings.png" id="settingsPreload"   style="display:none;" />
 <img src="trainicons/show.png" id="showPreload"   style="display:none;" />
 <img src="trainicons/undo.png" id="undoPreload"   style="display:none;" />
+<img src="default/black.jpg" id="defaultblack"   style="display:none;" />
 <img src="default/default0.jpg" id="default0"   style="display:none;" />
 <img src="default/default1.jpg" id="default1"   style="display:none;" />
 <img src="default/default2.jpg" id="default2"   style="display:none;" />
