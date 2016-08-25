@@ -1473,25 +1473,37 @@ function populateGraphics(){
 
   var graphic=graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic];
 
-  //new
-  var groupAspect=3/1;// matches car group width, padding
-  var availHeight=screenWidth-controlsPx-controlsPx-20;
+  var gtl=gtlInWh(screenHeight, screenWidth-controlsPx-controlsPx-20);
+  var g=gtl.g;
+  var topPad=gtl.t;
+  var leftPad=gtl.l;
+/*
+  // duplicated 3 times!
+  var groupAcross=(9+groupGridPad*2);
+  var groupDown=(3+groupGridPad*2);
+  var groupAspect=groupAcross/groupDown;
+  //dbuga('populateCars()');
+  var availHeight=screenWidth-controlsPx-controlsPx-20;//10 px modal pad
   var areaAspect=screenHeight/availHeight;
   var leftPad=0;
   var topPad=0;
   var g=0;
   if(areaAspect>groupAspect){//fit height, pad left
-    g=availHeight/(4*6+4);
-    topPad=g*2;
-    leftPad=g*2+screenHeight/2-g*(3*18+4)/2;
+    dbug('fit height');
+    g=availHeight/groupDown;
+    topPad=g*groupGridPad;
+    leftPad=g*groupGridPad+screenHeight/2-g*groupAcross/2;
     }
-  else{//fit width, pad top // always for this aspect anyways.
-    g=screenHeight/(54+4);
-    leftPad=g*2;
-    topPad=g*2+availHeight/2-g*(18+4)/2;
+  else{//fit width, pad top
+    dbug('fit width');
+    g=screenHeight/groupAcross;
+    leftPad=g*groupGridPad;
+    topPad=g*groupGridPad+availHeight/2-g*groupDown/2;
     }
-  var buttonWidth=g*54;
-  var buttonHeight=g*18;
+*/
+
+  var buttonWidth=g*9;
+  var buttonHeight=g*3;
   //dbuga("topPad="+topPad);
   //dbuga("leftPad="+leftPad);
   //end new
@@ -1536,26 +1548,15 @@ function populateGraphics(){
 
 function populateCars(){
   carsCanv.width=carsCanv.width;
-  var groupAspect=(3*18+4)/(4*6+4);
-  //dbuga('populateCars()');
-  var availHeight=screenWidth-controlsPx-controlsPx-20;
-  var areaAspect=screenHeight/availHeight;
-  var leftPad=0;
-  var topPad=0;
-  var g=0;
-  if(areaAspect>groupAspect){//fit height, pad left
-    g=availHeight/(4*6+4);
-    topPad=g*2;
-    leftPad=g*2+screenHeight/2-g*(3*18+4)/2;
-    }
-  else{//fit width, pad top
-    g=screenHeight/(3*18+4);
-    leftPad=g*2;
-    topPad=g*2+availHeight/2-g*(4*6+4)/2;
-    }
+
+  var gtl=gtlInWh(screenHeight, screenWidth-controlsPx-controlsPx-20);
+  var g=gtl.g;
+  var topPad=gtl.t;
+  var leftPad=gtl.l;
+
   carsThumbs=[];
-  var buttonWidth=g*18;
-  var buttonHeight=g*6;
+  var buttonWidth=g*3;
+  var buttonHeight=g*1;
   //dbuga("topPad="+topPad);
   //dbuga("leftPad="+leftPad);
   var carsCtx=carsCanv.getContext('2d');
@@ -4072,6 +4073,29 @@ function postviewGraphics(){
   //console.log(carButton);
   
   }
+var groupGridPad=.5;
+function gtlInWh(w,h){
+  var gtl={"g":0,"t":0,"l":0};
+
+  var groupAcross=(9+groupGridPad*2);
+  var groupDown=(3+groupGridPad*2);
+  var groupAspect=groupAcross/groupDown;
+  var availHeight=screenWidth-controlsPx-controlsPx-20;//10 px modal pad
+  var areaAspect=w/h;
+  if(areaAspect>groupAspect){//fit height, pad left
+    dbug('fit height');
+    gtl.g=availHeight/groupDown;
+    gtl.t=gtl.g*groupGridPad;
+    gtl.l=gtl.g*groupGridPad+screenHeight/2-gtl.g*groupAcross/2;
+    }
+  else{//fit width, pad top
+    dbug('fit width');
+    gtl.g=screenHeight/groupAcross;
+    gtl.l=gtl.g*groupGridPad;
+    gtl.t=gtl.g*groupGridPad+availHeight/2-gtl.g*groupDown/2;
+    }
+  return gtl;
+  }
 function previewGraphics(){
   
   var image = document.getElementById('cameraImg');
@@ -4080,39 +4104,18 @@ function previewGraphics(){
   //graphicsCtx.lineWidth=cellSize/16;
   var graphic=graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic];
 
+  var gtl=gtlInWh(screenHeight, screenWidth-controlsPx-controlsPx-20);
+  var g=gtl.g;
+  var topPad=gtl.t;
+  var leftPad=gtl.l;
 
-  var groupAspect=18/6;// 3/1
-  var availHeight=screenWidth-controlsPx-controlsPx-20;
-  var areaAspect=screenHeight/availHeight;
-  var leftPad=0;
-  var topPad=0;
-  var g=0;
-  if(areaAspect>groupAspect){//fit height, pad left
-    dbuga('fit height');
-    g=availHeight/(4*6+4);
-    topPad=g*3;
-    leftPad=g*3+screenHeight/2-g*(3*18+4)/2;
-    }
-  else{//fit width, pad top // always for this aspect anyways.
-    dbuga('fit width');
-    g=screenHeight/(54+4);
-    leftPad=g*3;
-    topPad=g*3+availHeight/2-g*(18+4)/2;
-    }
+  var inset=g/3;
+  //graphicsCtx.lineWidth=1;
+  //graphicsCtx.strokeStyle="red";
+  //graphicsCtx.strokeRect(leftPad+inset, topPad+inset, g*9-inset*2, g*3-inset*2);
 
-  graphicsCtx.lineWidth=3;
-  graphicsCtx.strokeStyle="red";
-  graphicsCtx.strokeRect(leftPad, topPad, g*54, g*18);
-
-  }
-
-/*
-  var buttonWidth=cellSize*3;
-  var buttonHeight=cellSize*1;
-  var radius=cellSize/8;
-  var pad=cellSize/10;
-  var topPad=(screenWidth-controlsPx-buttonHeight*4)/2;
-  var leftPad=(screenHeight-buttonWidth*3)/2;  
+  var buttonWidth=g*9-inset*2;
+  var buttonHeight=g*3-inset*2;
   var carButton={"label":"car"}
 
   carButton.sampleWidth=image.naturalWidth*graphicsScale;
@@ -4121,21 +4124,21 @@ function previewGraphics(){
   carButton.sampleLeft=image.naturalWidth/2-carButton.sampleWidth/2+graphicsOffsetX*offsetMultiplier;
 
   carButton.c=graphicsSelectedColorNum;
-  carButton.g= graphicsSelectedGraphic;
-  carButton.l=leftPad;
-  carButton.r=leftPad+buttonWidth*3;
-  carButton.t=topPad;
-  carButton.b=topPad+buttonHeight*3;
+  carButton.g=graphicsSelectedGraphic;
+  carButton.l=leftPad+inset;
+  carButton.r=leftPad+buttonWidth;
+  carButton.t=topPad+inset;
+  carButton.b=topPad+buttonHeight;
   carButton.ref=image;
   var carGrid=buttonWidth*3/60;
 
   var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
-  graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth*3, buttonHeight*3);
-  graphicsCtx.drawImage(carButton.ref, carButton.sampleLeft, carButton.sampleTop, carButton.sampleWidth, carButton.sampleHeight, carButton.l+carGrid*3, carButton.t+carGrid*3, buttonWidth*3-carGrid*5, buttonHeight*3-carGrid*5);
+  graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth, buttonHeight);
+  graphicsCtx.drawImage(carButton.ref, carButton.sampleLeft, carButton.sampleTop, carButton.sampleWidth, carButton.sampleHeight, carButton.l, carButton.t, buttonWidth, buttonHeight);
   //console.log(carButton);
   
   }
-*/
+
 function testImageSample(image, scale, offsetX, offsetY){
   if(scale<.1){return false;}
   var offsetMultiplier=scale*image.naturalWidth/400;
@@ -5140,7 +5143,7 @@ function initGraphicsByColor(){
     graphicsByColor[color]=[];
     var x=0; 
     var y=0;
-    for (var i=0; i<12; i++){
+    for (var i=0; i<9; i++){
       var imageObj={
         "imageId":"default"+atDefault,
         "blackTrans":false,
@@ -5716,8 +5719,8 @@ function rnd(range) {
 
 </div>
 
-  <div id="preload">
-<img id="cameraImg" />
+  <div id="preload" >
+<img id="cameraImg" src="default/default2.jpg" />
 <img src="trainicons/checked.png" id="checkedPreload"   style="display:none;" />
 <img src="trainicons/unchecked.png" id="uncheckedPreload"   style="display:none;" />
 <img src="trainicons/camera.png" id="cameraPreload"   style="display:none;" />
@@ -5880,6 +5883,9 @@ At any given scale setting a tablet will have more cells available for tracks th
 
 Detail
 The Menu shows at the bottom your most recent average Frames Per Second. When AVERAGE FPS falls below 40 cars will stop spawning temporarily. Faster devices will allow more cars but running too many cars can cause congestion or result in the app closing. Set Detail to "Low" to improve performance. Try "High" Detail if you have a very fast device or want the best looking close-ups in video capture. If you have macOS and an iOS device with Lightning cable you can use QuickTime to capture video of your game. Rotating the device will stop the recording!
+
+Graphics
+A set of 36 graphics are loaded randomly when you first open the app. You can replace these with your own graphics using the camera button. Use the Clear button to make all the graphics for the selected color blank. The random graphics will change out each time you open the game but user created or cleared graphics will persist. You can remove any user generated graphics and restore the random feed. Go to your device's settings, under Apps, and clear  data for Railroad Train. Transparent makes dark areas into the car color and works best with white graphics and text on black. 
 -->
   </div>
 <span style="font-family:akzi; position:absolute; top:-100px;">Akzi</span>
