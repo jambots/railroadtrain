@@ -2063,7 +2063,7 @@ function localStorageToImages(){
   for (var d=0; d<carsPerColor*4; d++){
     if(localStorage.getItem('default'+d)!=null){
       var imageData=localStorage.getItem('default'+d);
-      var parts=imageData.split(x);
+      var parts=imageData.split("x");
       dbuga(parts[1]);
       document.getElementById('default'+d).src=imageData;
       }
