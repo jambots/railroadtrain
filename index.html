@@ -3728,6 +3728,8 @@ function clearAllGraphics(){
     processGraphic(focusCars, atDefault, true, true);
     atDefault++;
     }
+  localStorage.setItem('graphicsByColor', JSON.stringify(graphicsByColor));
+
   }
 /*
 var atColor=0;
@@ -5258,6 +5260,7 @@ function processGraphic(colorNum, graphicNum, blacken, cache){
   var textureRef=returnCanvas(textureSourceRef.width, textureSourceRef.height);
   transifyCanvas(textureRef, textureSourceRef);
 
+  graphicsByColor[color][graphicNum].blackTrans=blackTrans;
   if(blackTrans==false){
     //make flat
     var flatSourceRef=document.getElementById(imageId);
