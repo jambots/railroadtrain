@@ -1474,7 +1474,7 @@ function populateGraphics(){
   var graphic=graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic];
 
   //new
-  var groupAspect=(54+4)/(18+4);// matches car group width, padding
+  var groupAspect=3/1;// matches car group width, padding
   var availHeight=screenWidth-controlsPx-controlsPx-20;
   var areaAspect=screenHeight/availHeight;
   var leftPad=0;
@@ -3764,13 +3764,14 @@ function handleEventGraphics(e){
               openModal("cars");
               }
             if(graphicsButton.label=="Camera"){
-              dbuga('Camera');
+              //dbuga('Camera');
               graphicsTake();
               }
             if(graphicsButton.label=="Transparent"){
               graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=!(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans);
               localStorage.setItem('graphicsByColor', JSON.stringify(graphicsByColor));
               processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
+              populateGraphics();
               populateCars();
               }
             if(graphicsButton.label=="Save"){
@@ -3791,7 +3792,7 @@ function handleEventGraphics(e){
               }
             found=true;// because xyInTrbl
             if(graphicsButton.label=="car"){
-              dbuga('car touchstart');
+              /dbuga('car touchstart');
               found=false;              
               }
             }
@@ -3835,6 +3836,9 @@ function handleEventGraphics(e){
       }
     }
   }
+
+
+
 function handleEventEditing(e){
   if(e.type=="touchstart"){
     var t=e.touches[0];
@@ -3993,19 +3997,19 @@ function graphicsTake(){
   }
 function cameraTake(){
   shooting=true;
-  dbuga('cameraTake gscn'+  graphicsSelectedColorNum+' gsg='+graphicsSelectedGraphic);
+  //dbuga('cameraTake gscn'+  graphicsSelectedColorNum+' gsg='+graphicsSelectedGraphic);
   navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
     destinationType: Camera.DestinationType.DATA_URL
     });
   }
 function onFail(message) {
-  dbuga('onFail');
+  //dbuga('onFail');
   shooting=false;
   graphicsEditing=false;
   populateGraphics();
   }
 function onSuccess(imageData) {
-    dbuga('success '+imageData.length);
+    //dbuga('success '+imageData.length);
 
     var image = document.getElementById('cameraImg');
     image.style.display="block";
@@ -4017,7 +4021,7 @@ function onSuccess(imageData) {
     }
     
 function cameraLoaded(){
-    dbuga('cameraLoaded()');
+    //dbuga('cameraLoaded()');
     graphicsEditing=true;
     var image = document.getElementById('cameraImg');
     graphicsScale=.9;
@@ -4069,12 +4073,40 @@ function postviewGraphics(){
   
   }
 function previewGraphics(){
+  
   var image = document.getElementById('cameraImg');
   var offsetMultiplier=graphicsScale*image.naturalWidth/400;
   var graphicsCtx=graphicsCanv.getContext('2d');
-  graphicsCtx.lineWidth=cellSize/16;
+  //graphicsCtx.lineWidth=cellSize/16;
   var graphic=graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic];
 
+
+  var groupAspect=18/6;// 3/1
+  var availHeight=screenWidth-controlsPx-controlsPx-20;
+  var areaAspect=screenHeight/availHeight;
+  var leftPad=0;
+  var topPad=0;
+  var g=0;
+  if(areaAspect>groupAspect){//fit height, pad left
+    dbuga('fit height');
+    g=availHeight/(4*6+4);
+    topPad=g*3;
+    leftPad=g*3+screenHeight/2-g*(3*18+4)/2;
+    }
+  else{//fit width, pad top // always for this aspect anyways.
+    dbuga('fit width');
+    g=screenHeight/(54+4);
+    leftPad=g*3;
+    topPad=g*3+availHeight/2-g*(18+4)/2;
+    }
+
+  graphicsCtx.lineWidth=3;
+  graphicsCtx.strokeStyle="red";
+  graphicsCtx.strokeRect(leftPad, topPad, g*54, g*18);
+
+  }
+
+*/
   var buttonWidth=cellSize*3;
   var buttonHeight=cellSize*1;
   var radius=cellSize/8;
@@ -4103,6 +4135,7 @@ function previewGraphics(){
   //console.log(carButton);
   
   }
+*/
 function testImageSample(image, scale, offsetX, offsetY){
   if(scale<.1){return false;}
   var offsetMultiplier=scale*image.naturalWidth/400;
