@@ -3719,24 +3719,11 @@ function clearAllGraphics(){
   //dbuga('clearAllGraphics()');
   var atDefault=0;
   var color=colorArray[focusCars];
-  graphicsByColor[color]=[];
   var x=0; 
   var y=0;
   for (var i=0; i<carsPerColor; i++){
-    var imageObj={
-      "imageId":"defaultblack",
-      "blackTrans":true,
-      "x":x,
-      "y":y        
-      }
-    graphicsByColor[color].push(imageObj);
-    processGraphic(focusCars, atDefault);
+    processGraphic(focusCars, atDefault, true);
     atDefault++;
-    x++;
-    if(x>2){
-      x=0;
-      y++;
-      }
     }
   }
 /*
@@ -3818,7 +3805,7 @@ function handleEventGraphics(e){
             if(graphicsButton.label=="Transparent"){
               graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=!(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans);
               localStorage.setItem('graphicsByColor', JSON.stringify(graphicsByColor));
-              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
+              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic, false);
               populateGraphics();
               populateCars();
               }
@@ -3831,7 +3818,7 @@ function handleEventGraphics(e){
               }
             if(graphicsButton.label=="Cancel"){
               graphicsEditing=false;
-              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
+              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic, false);
               populateCars();
               
               }
@@ -4079,7 +4066,7 @@ function cameraLoaded(){
     populateGraphics();
     previewGraphics();
     postviewGraphics();
-    //processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic); 
+    //processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic, false); 
     updateColorsCanv('cameraLoaded');
     }
 
@@ -4144,7 +4131,7 @@ function gtlInWh(w,h){
   return gtl;
   }
 function previewGraphics(){
-  
+  //dbuga('previewGraphics');
   var image = document.getElementById('cameraImg');
   var offsetMultiplier=graphicsScale*image.naturalWidth/400;
   var graphicsCtx=graphicsCanv.getContext('2d');
@@ -4156,7 +4143,7 @@ function previewGraphics(){
   var topPad=gtl.t;
   var leftPad=gtl.l;
 
-  var inset=g/3;
+  var inset=g/2;
   //graphicsCtx.lineWidth=1;
   //graphicsCtx.strokeStyle="red";
   //graphicsCtx.strokeRect(leftPad+inset, topPad+inset, g*9-inset*2, g*3-inset*2);
@@ -4209,7 +4196,7 @@ function saveGraphics(){
   var cameraCtx=cameraCanv.getContext('2d');
   var dataURL = cameraCanv.toDataURL('image/jpeg');
   var imageId= graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].imageId;
-  //dbuga('saveGraphics '+imageId);
+  dbuga('saveGraphics '+imageId);
   var image=document.getElementById(imageId);
   image.onload=function (){
     saveComplete();
@@ -4219,10 +4206,11 @@ function saveGraphics(){
 
   }
 function saveComplete(){
-  processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic);
+  processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic, false);
   populateCars();
   populateGraphics();
   updateColorsCanv('saveComplete');
+  dbuga('saveComplete');
   }
 
 var helpImages=["info0", "info1", "info2", "info3", "info4"];
@@ -5224,7 +5212,7 @@ function graphicsTick(){
   var color;
   if(atColor<colorArray.length){
     color=colorArray[atColor];
-    processGraphic(atColor, atGraphic);
+    processGraphic(atColor, atGraphic, false);
     atGraphic++;
     if(atGraphic>=graphicsByColor[color].length){
       atGraphic=0;
@@ -5236,13 +5224,17 @@ function graphicsTick(){
     resumeInit();
     }
   }
-function processGraphic(colorNum, graphicNum){
+function processGraphic(colorNum, graphicNum, blacken){
   var color=colorArray[colorNum];
   
   var imageId= graphicsByColor[color][graphicNum].imageId;
   //dbuga('processGraphic('+colorNum+', '+graphicNum+')'+imageId);
   
   var blackTrans= graphicsByColor[color][graphicNum].blackTrans;
+  if(blacken){
+    imageId="defaultblack";
+    blackTrans=true;
+    }
   //dbuga("processGraphic "+colorNum+", "+graphicNum+" blackTrans="+blackTrans);
   var alphaSourceRef=imgRefs['boxsidesource'];
   var alphaRef=returnCanvas(alphaSourceRef.width, alphaSourceRef.height);
