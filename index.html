@@ -5234,7 +5234,7 @@ function processGraphic(colorNum, graphicNum, blacken){
   var keys=Object.keys(localStorage);
   for (var k=0; k<keys.length; k++){
     if(keys[k]==imageId){
-      dbuga('FOUND! processGraphic('+colorNum+', '+graphicNum+')'+imageId);
+      //dbuga('FOUND! processGraphic('+colorNum+', '+graphicNum+')'+imageId);
       cached=true;
       }
     }
@@ -5245,7 +5245,7 @@ function processGraphic(colorNum, graphicNum, blacken){
     cached=false;
     }
   if(cached){// use img default ref
-    document.getElementById(imageId).src=localStorage.getItem(imageId);
+    document.getElementById(imageId).src="data:image/jpeg;base64," +localStorage.getItem(imageId);
     }
   //dbuga("processGraphic "+colorNum+", "+graphicNum+" blackTrans="+blackTrans);
   var alphaSourceRef=imgRefs['boxsidesource'];
