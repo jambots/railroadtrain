@@ -3722,7 +3722,7 @@ function clearAllGraphics(){
   var x=0; 
   var y=0;
   for (var i=0; i<carsPerColor; i++){
-    processGraphic(focusCars, atDefault, true);
+    processGraphic(focusCars, atDefault, true, true);
     atDefault++;
     }
   }
@@ -3735,7 +3735,7 @@ function graphicsTick(){
   var color;
   if(atColor<colorArray.length){
     color=colorArray[atColor];
-    processGraphic(atColor, atGraphic, false);
+    processGraphic(atColor, atGraphic, false, false);
     atGraphic++;
     if(atGraphic>=graphicsByColor[color].length){
       atGraphic=0;
@@ -3805,7 +3805,7 @@ function handleEventGraphics(e){
             if(graphicsButton.label=="Transparent"){
               graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans=!(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans);
               localStorage.setItem('graphicsByColor', JSON.stringify(graphicsByColor));
-              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic, false);
+              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic, false, false);
               populateGraphics();
               populateCars();
               }
@@ -3818,7 +3818,7 @@ function handleEventGraphics(e){
               }
             if(graphicsButton.label=="Cancel"){
               graphicsEditing=false;
-              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic, false);
+              processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic, false, false);
               populateCars();
               
               }
@@ -4066,7 +4066,6 @@ function cameraLoaded(){
     populateGraphics();
     previewGraphics();
     postviewGraphics();
-    //processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic, false); 
     updateColorsCanv('cameraLoaded');
     }
 
@@ -4206,7 +4205,7 @@ function saveGraphics(){
 
   }
 function saveComplete(){
-  processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic, false);
+  processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic, false, true);
   populateCars();
   populateGraphics();
   updateColorsCanv('saveComplete');
@@ -5212,7 +5211,7 @@ function graphicsTick(){
   var color;
   if(atColor<colorArray.length){
     color=colorArray[atColor];
-    processGraphic(atColor, atGraphic, false);
+    processGraphic(atColor, atGraphic, false, false);
     atGraphic++;
     if(atGraphic>=graphicsByColor[color].length){
       atGraphic=0;
@@ -5226,7 +5225,7 @@ function graphicsTick(){
   }
 
 
-function processGraphic(colorNum, graphicNum, blacken){
+function processGraphic(colorNum, graphicNum, blacken, cache){
   var color=colorArray[colorNum];
   
   var imageId= graphicsByColor[color][graphicNum].imageId;
@@ -5238,6 +5237,7 @@ function processGraphic(colorNum, graphicNum, blacken){
       cached=true;
       }
     }
+  if(cache){cached=false;}// new image doesn't pull in local storage
   var blackTrans= graphicsByColor[color][graphicNum].blackTrans;
   if(blacken){
     imageId="defaultblack";
