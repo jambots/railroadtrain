@@ -5224,6 +5224,8 @@ function graphicsTick(){
     resumeInit();
     }
   }
+
+
 function processGraphic(colorNum, graphicNum, blacken){
   var color=colorArray[colorNum];
   
@@ -5233,12 +5235,17 @@ function processGraphic(colorNum, graphicNum, blacken){
   for (var k=0; k<keys.length; k++){
     if(keys[k]==imageId){
       dbuga('FOUND! processGraphic('+colorNum+', '+graphicNum+')'+imageId);
+      cached=true;
       }
     }
   var blackTrans= graphicsByColor[color][graphicNum].blackTrans;
   if(blacken){
     imageId="defaultblack";
     blackTrans=true;
+    cached=false;
+    }
+  if(cached){// use img default ref
+    document.getElementById(imageId).src=localStorage.getItem(imageId);
     }
   //dbuga("processGraphic "+colorNum+", "+graphicNum+" blackTrans="+blackTrans);
   var alphaSourceRef=imgRefs['boxsidesource'];
