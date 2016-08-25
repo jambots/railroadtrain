@@ -1477,30 +1477,7 @@ function populateGraphics(){
   var g=gtl.g;
   var topPad=gtl.t;
   var leftPad=gtl.l;
-/*
-  // duplicated 3 times!
-  var groupAcross=(9+groupGridPad*2);
-  var groupDown=(3+groupGridPad*2);
-  var groupAspect=groupAcross/groupDown;
-  //dbuga('populateCars()');
-  var availHeight=screenWidth-controlsPx-controlsPx-20;//10 px modal pad
-  var areaAspect=screenHeight/availHeight;
-  var leftPad=0;
-  var topPad=0;
-  var g=0;
-  if(areaAspect>groupAspect){//fit height, pad left
-    dbug('fit height');
-    g=availHeight/groupDown;
-    topPad=g*groupGridPad;
-    leftPad=g*groupGridPad+screenHeight/2-g*groupAcross/2;
-    }
-  else{//fit width, pad top
-    dbug('fit width');
-    g=screenHeight/groupAcross;
-    leftPad=g*groupGridPad;
-    topPad=g*groupGridPad+availHeight/2-g*groupDown/2;
-    }
-*/
+
 
   var buttonWidth=g*9;
   var buttonHeight=g*3;
@@ -2073,12 +2050,13 @@ function localStorageToImages(){
   if(localStorage.getItem('graphicsByColor') != null){
     graphicsByColor=JSON.parse(localStorage.getItem('graphicsByColor'));
     }
-  for (var d=0; d<12; d++){
+  for (var d=0; d<carsPerColor; d++){
     if(localStorage.getItem('default'+d)!=null){
       document.getElementById('default'+d).src=localStorage.getItem('default'+d);
       }
     }
   }
+var carsPerColor=9;
 function resumeInit(){
   //dbuga('resumeInit()');
   changeView("resumeInit");
@@ -4073,7 +4051,7 @@ function postviewGraphics(){
   //console.log(carButton);
   
   }
-var groupGridPad=.5;
+var groupGridPad=.25;
 function gtlInWh(w,h){
   var gtl={"g":0,"t":0,"l":0};
 
@@ -4083,13 +4061,13 @@ function gtlInWh(w,h){
   var availHeight=screenWidth-controlsPx-controlsPx-20;//10 px modal pad
   var areaAspect=w/h;
   if(areaAspect>groupAspect){//fit height, pad left
-    dbug('fit height');
+    //dbug('fit height');
     gtl.g=availHeight/groupDown;
     gtl.t=gtl.g*groupGridPad;
     gtl.l=gtl.g*groupGridPad+screenHeight/2-gtl.g*groupAcross/2;
     }
   else{//fit width, pad top
-    dbug('fit width');
+    //dbug('fit width');
     gtl.g=screenHeight/groupAcross;
     gtl.l=gtl.g*groupGridPad;
     gtl.t=gtl.g*groupGridPad+availHeight/2-gtl.g*groupDown/2;
@@ -5143,7 +5121,7 @@ function initGraphicsByColor(){
     graphicsByColor[color]=[];
     var x=0; 
     var y=0;
-    for (var i=0; i<9; i++){
+    for (var i=0; i<carsPerColor; i++){
       var imageObj={
         "imageId":"default"+atDefault,
         "blackTrans":false,
