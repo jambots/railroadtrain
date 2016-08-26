@@ -2056,7 +2056,7 @@ function measureLocalStorage(){
     }
   }
 function localStorageToImages(){
-  dbuga('localStorageToImages()');
+  //dbuga('localStorageToImages()');
   if(localStorage.getItem('graphicsByColor') != null){
     graphicsByColor=JSON.parse(localStorage.getItem('graphicsByColor'));
     }
@@ -2064,7 +2064,7 @@ function localStorageToImages(){
     if(localStorage.getItem('default'+d)!=null){
       var imageData=localStorage.getItem('default'+d);
       var parts=imageData.split("9");
-      dbuga(parts[0]);
+      //dbuga(parts[0]);
       document.getElementById('default'+d).src=imageData;
       }
     }
@@ -4200,7 +4200,7 @@ function saveGraphics(){
   var cameraCtx=cameraCanv.getContext('2d');
   var dataURL = cameraCanv.toDataURL('image/jpeg');
   var imageId= graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].imageId;
-  dbuga('saveGraphics '+imageId);
+  //dbuga('saveGraphics '+imageId);
   var image=document.getElementById(imageId);
   image.onload=function (){
     saveComplete();
@@ -4214,7 +4214,7 @@ function saveComplete(){
   populateCars();
   populateGraphics();
   updateColorsCanv('saveComplete');
-  dbuga('saveComplete');
+  //dbuga('saveComplete');
   }
 
 var helpImages=["info0", "info1", "info2", "info3", "info4"];
@@ -5289,7 +5289,7 @@ function processGraphic(colorNum, graphicNum, blacken, cache){
     if(blacken){
       var dataURL = logoTextureRef.toDataURL('image/jpeg');
       var imageId= graphicsByColor[color][graphicNum].imageId;
-      dbuga('process blacken '+imageId);
+      //dbuga('process blacken '+imageId);
       localStorage.setItem(imageId, dataURL);
       }
     }
