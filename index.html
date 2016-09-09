@@ -763,7 +763,7 @@ function setupClasses(){
   addStyle('#helpCanvas', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px; background-color:rgba(0,0,255,.85);');
   document.getElementById('helpCanvas').width=screenWidth;
   document.getElementById('helpCanvas').height=screenWidth;
-  var loadingPx=Math.floor(screenWidth/3);
+  var loadingPx=Math.floor(screenWidth/6);
   addStyle('#loadingCanvas', 'position:absolute; top:0px; left:0px; Zbackground-color:rgba(255,0,0,.85);');
   document.getElementById('loadingCanvas').width=loadingPx;
   document.getElementById('loadingCanvas').height=loadingPx;
@@ -5262,8 +5262,8 @@ function graphicsTick(){
     if(atGraphic>=graphicsByColor[color].length){
       atGraphic=0;
       atColor++;
-      updateLoading();
       }
+    updateLoading();
     window.setTimeout('graphicsTick()',10);
     }
   else{// finished last color so resume
@@ -5277,7 +5277,7 @@ function updateLoading(){
 
   var frac=completed/total;
   var perc=Math.floor(frac*100);
-  var loadingPx=screenWidth/3;
+  var loadingPx=screenWidth/6;
   var canv=document.getElementById('loadingCanvas');
   var ctx=canv.getContext('2d');
   canv.width=loadingPx;
