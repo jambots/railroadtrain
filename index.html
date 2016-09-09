@@ -2078,7 +2078,7 @@ function localStorageToImages(){
   }
 var carsPerColor=9;
 function resumeInit(){
-  console.log('resumeInit()');
+  dbug('');
   changeView("resumeInit");
   resetBoardTimersObjects();
   rebuildSequence();
@@ -5181,7 +5181,7 @@ var imageIdArray=["boxside","boxtop","boxend", "enginefloor", "engineroof", "eng
 var folderArray=["source","trans","grey","green","blue","orange","black"];
 var imgRefs={};
 function preloadTick(){
-  dbug(atImage);
+  dbug("preloadTick "+atImage);
   if(atImage<imageIdArray.length){
     var imageId=imageIdArray[atImage]+folderArray[atFolder];
     imgRefs[imageId]=document.getElementById(imageId);
@@ -5239,7 +5239,8 @@ var atColor=0;
 var atGraphic=0;
 
 function graphicsTick(){
-  //dbugc("-");
+  dbug("graphicsTick "+atGraphic);
+
   var color;
   if(atColor<colorArray.length){
     color=colorArray[atColor];
