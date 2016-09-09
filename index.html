@@ -754,13 +754,19 @@ function setupClasses(){
  
   
   uiTop=screenHeight-progDivHeight;
-
+  
   addStyle('#arrowCircle', 'position:absolute; left:' + p*12 + 'px; top:' + p*12 + 'px; border-color:#DA251C;  border-style:solid; border-width:' + p*12 + 'px;  width:' + p*40 + 'px;  height:' + p*40 + 'px; -webkit-border-radius:' + p*48 + 'px;');
   addStyle('#arrowPoint', 'position:absolute; left:' + p*36 + 'px; top:' + p*5 + 'px; border-color:#fff #DA251C #fff  #fff ;  border-style:solid ;  border-width:' + p*15 + 'px ' + p*15 + 'px ' + p*15 + 'px 0px ;  width:0;  height:0;');
   addStyle('#progressHolder', 'position:absolute; top:' + uiTop + 'px; left:0; width:' + screenWidth + 'px; height:' + uiDivHeight + 'px;');
   addStyle('#progressDiv', 'position:absolute; display:block; overflow:hidden; width:' + progDivWidth + 'px; height:' + progDivHeight + 'px; position:absolute; top:' + progDivTop + 'px; left:' + progDivLeft + 'px; Zbackground-color:#fff;');
   addStyle('.grow', '  height:' + progDivHeight + 'px; width:' + p*100 + 'px; float:left;  Zwebkit-transition: width 1s ease;  ');
-  addStyle('#helpCanvas', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px;  width:' + screenWidth + 'px; height:' + screenWidth + 'px; background-color:rgba(0,0,255,.85);');
+  addStyle('#helpCanvas', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px; background-color:rgba(0,0,255,.85);');
+  document.getElementById('helpCanvas').width=screenWidth;
+  document.getElementById('helpCanvas').height=screenWidth;
+  var loadingPx=Math.floor(screenWidth/3);
+  addStyle('#loadingCanvas', 'position:absolute; top:0px; left:0px; Zbackground-color:rgba(255,0,0,.85);');
+  document.getElementById('loadingCanvas').width=loadingPx;
+  document.getElementById('loadingCanvas').height=loadingPx;
 
   addStyle('#highlighter', 'width:' + p*94 + 'px; height:' + p*94 + 'px; position:absolute;    -webkit-border-radius:' + p*20 + 'px;    background-color:#FFFF00;    opacity:1;    display:none;');
   addStyle('.tile', 'width:' + p*94 + 'px; height:' + p*94 + 'px; position:absolute;    border:0px #0000ee solid;    -webkit-border-radius:' + p*20 + 'px;    ');
@@ -2055,7 +2061,7 @@ function initSession(){
     }, false);
 
   //dbuga('end of initSession so start preloading');
-  window.setTimeout('preloadTick()',10);
+  window.setTimeout('preloadTick()',100);
   }
 function measureLocalStorage(){
   for(var x in localStorage){
@@ -2079,8 +2085,10 @@ function localStorageToImages(){
 var carsPerColor=9;
 function resumeInit(){
   dbug('');
+
   changeView("resumeInit");
   resetBoardTimersObjects();
+  closeLoading();
   rebuildSequence();
   document.getElementById('debugDiv').style.width=screenWidth+"px";
   navButtons[4].label="Select a<br>new level";
@@ -3758,7 +3766,7 @@ function graphicsTick(){
       atGraphic=0;
       atColor++;
       }
-    window.setTimeout('graphicsTick()',10);
+    window.setTimeout('graphicsTick()',100);
     }
   else{// finished last color so resume
     resumeInit();
@@ -4233,6 +4241,10 @@ function saveComplete(){
 var helpImages=["info0", "info1", "info2", "info3", "info4"];
 var atHelp=0;
 var helpUp=false;
+
+function closeLoading(){
+  document.getElementById('loadingCanvas').style.display="none";
+  }
 function closeHelp(){
   document.getElementById('helpCanvas').style.display="none";
   helpUp=false;
@@ -5180,23 +5192,6 @@ var atFolder=0;
 var imageIdArray=["boxside","boxtop","boxend", "enginefloor", "engineroof", "enginenose", "enginecab", "enginestarinner", "enginestarouter", "engineportinner", "engineportouter"];
 var folderArray=["source","trans","grey","green","blue","orange","black"];
 var imgRefs={};
-function preloadTick(){
-  dbug("preloadTick "+atImage);
-  if(atImage<imageIdArray.length){
-    var imageId=imageIdArray[atImage]+folderArray[atFolder];
-    imgRefs[imageId]=document.getElementById(imageId);
-
-    atFolder++;
-    if(atFolder>=folderArray.length){
-      atFolder=0;
-      atImage++;
-    }
-    window.setTimeout('preloadTick()',10);
-  }
-  else{
-    graphicsTick();
-  }
-}
 var colorArray=["black","orange","blue","green"];
 var rgbValArray=[[30,30,30],[218,37,28],[0,91,161],[63,179,160]];
 var rgbArray=["rgb(30,30,30)","rgb(218,37,28)","rgb(0,91,161)","rgb(63,179,160)"];
@@ -5237,9 +5232,27 @@ var graphicsByColor={
 */
 var atColor=0;
 var atGraphic=0;
+function preloadTick(){
+  //dbug("preloadTick "+atImage);
+  if(atImage<imageIdArray.length){
+    var imageId=imageIdArray[atImage]+folderArray[atFolder];
+    imgRefs[imageId]=document.getElementById(imageId);
+
+    atFolder++;
+    if(atFolder>=folderArray.length){
+      atFolder=0;
+      atImage++;
+      updateLoading();
+    }
+    window.setTimeout('preloadTick()',10);
+  }
+  else{
+    graphicsTick();
+  }
+}
 
 function graphicsTick(){
-  dbug("graphicsTick "+atGraphic);
+  //dbug("graphicsTick "+atGraphic);
 
   var color;
   if(atColor<colorArray.length){
@@ -5249,6 +5262,7 @@ function graphicsTick(){
     if(atGraphic>=graphicsByColor[color].length){
       atGraphic=0;
       atColor++;
+      updateLoading();
       }
     window.setTimeout('graphicsTick()',10);
     }
@@ -5257,6 +5271,33 @@ function graphicsTick(){
     }
   }
 
+function updateLoading(){
+  var total=imageIdArray.length+carsPerColor*4;
+  var completed=atImage+carsPerColor*atColor+atGraphic;
+
+  var frac=completed/total;
+  var perc=Math.floor(frac*100);
+  var loadingPx=screenWidth/3;
+  var canv=document.getElementById('loadingCanvas');
+  var ctx=canv.getContext('2d');
+  canv.width=loadingPx;
+  var linePx=loadingPx/12;
+  ctx.lineWidth=linePx;
+  ctx.strokeStyle="rgb(100,100,100)";
+  ctx.fillStyle="rgb(200,200,200)";
+  ctx.beginPath();
+  ctx.arc(loadingPx/2, loadingPx/2, loadingPx/2-linePx*2, 0, pi*2);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(loadingPx/2, loadingPx/2, loadingPx/2-linePx*1.5, 0, pi*2*frac);
+  ctx.stroke();
+  ctx.font=loadingPx/5+"px Arial";
+  ctx.fillStyle="rgb(100,100,100)";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillText(perc+"%", loadingPx/2, loadingPx/2);
+  }
 
 function processGraphic(colorNum, graphicNum, blacken, cache){
   var color=colorArray[colorNum];
@@ -5796,6 +5837,7 @@ function rnd(range) {
 <canvas id="graphicsCanvas" style="position:absolute;"></canvas>
 <canvas id="cameraCanvas" style="position:absolute;" width="100" height="100"></canvas>
 <canvas id="helpCanvas"></canvas>
+<canvas id="loadingCanvas"></canvas>
 
 <div id="debugDiv" style="display:none; position:absolute; top:150px; left:10px; font-size:16px; width:750px; z-index:3; background-color:rgba(255,255,255,.5);"></div>
 
