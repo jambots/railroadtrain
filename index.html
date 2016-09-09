@@ -235,7 +235,6 @@ function setupFaceData(){
 
 };
 }
-var colors=["orange", "black", "blue", "green"];
 
 
 
@@ -758,7 +757,7 @@ function setupClasses(){
 
   addStyle('#arrowCircle', 'position:absolute; left:' + p*12 + 'px; top:' + p*12 + 'px; border-color:#DA251C;  border-style:solid; border-width:' + p*12 + 'px;  width:' + p*40 + 'px;  height:' + p*40 + 'px; -webkit-border-radius:' + p*48 + 'px;');
   addStyle('#arrowPoint', 'position:absolute; left:' + p*36 + 'px; top:' + p*5 + 'px; border-color:#fff #DA251C #fff  #fff ;  border-style:solid ;  border-width:' + p*15 + 'px ' + p*15 + 'px ' + p*15 + 'px 0px ;  width:0;  height:0;');
-  addStyle('#uiHolder', 'position:absolute; top:' + uiTop + 'px; left:0; width:' + screenWidth + 'px; height:' + uiDivHeight + 'px;');
+  addStyle('#progressHolder', 'position:absolute; top:' + uiTop + 'px; left:0; width:' + screenWidth + 'px; height:' + uiDivHeight + 'px;');
   addStyle('#progressDiv', 'position:absolute; display:block; overflow:hidden; width:' + progDivWidth + 'px; height:' + progDivHeight + 'px; position:absolute; top:' + progDivTop + 'px; left:' + progDivLeft + 'px; Zbackground-color:#fff;');
   addStyle('.grow', '  height:' + progDivHeight + 'px; width:' + p*100 + 'px; float:left;  Zwebkit-transition: width 1s ease;  ');
   addStyle('#helpCanvas', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px;  width:' + screenWidth + 'px; height:' + screenWidth + 'px; background-color:rgba(0,0,255,.85);');
@@ -1225,7 +1224,7 @@ var graphicsUp=false;
 var cameraCanv;
 
 function initGeometry(){
-  //dbuga("initGeometry()");
+  console.log("initGeometry()");
   levelsCanv=document.getElementById("levelsCanvas");
   menuCanv=document.getElementById("menuCanvas");
   carsCanv=document.getElementById("carsCanvas");
@@ -1462,7 +1461,12 @@ function openGraphics(carButton){
   graphicsSelectedGraphic=carButton.g;
   populateGraphics();
   openModal("graphics");
-}
+  //dbuga('carButton.c='+carButton.c+' focusCars='+focusCars);
+  var color=colorList[focusCars];
+  lastByColor[color]=carButton.g;
+  //dbuga('set '+color+' '+lastByColor[color]);
+  }
+
 function populateGraphics(){
 
 //[graphicsSelectedGraphic];
@@ -1850,11 +1854,13 @@ function openModal(modal){
     drawLevels();
     levelsCanv.style.left=0+"px";
     levelsUp=true;
+    navButtons[4].label="Select a<br>new level";
     }
   if(modal=="menu"){
     menuCanv.style.left=0+"px";
     menuUp=true;
     menuDraw();
+    navButtons[4].label="Settings";
     //dbuga('openModal menuUp='+menuUp);
     }
   if(modal=="cars"){
@@ -1875,7 +1881,7 @@ function openModal(modal){
     }
   }
 function closeModals(){
-  //dbuga('closeModals');
+  console.log('closeModals');
   clearingAll=false;
   if(localStorage.getItem("Scale") != menuObject["Scale"]["value"]){updateScaleSetting();}
   if(localStorage.getItem("Detail") != menuObject["Detail"]["value"]){updateDetailSetting();}
@@ -1896,6 +1902,7 @@ function closeModals(){
   for (var n=0; n<navButtons.length; n++){
     navButtons[n].selected=false;
     }
+  navButtons[4].label="";
   updateNavCanv();
   }
 function changeView(caller){
@@ -1904,7 +1911,7 @@ function changeView(caller){
   closeModals();
   if(viewportAspect>1){
     document.getElementById("navCanvas").style.display="none";
-    document.getElementById("uiHolder").style.display="none";
+    document.getElementById("progressHolder").style.display="none";
     document.getElementById("prerails").style.display="none";
     //dbuga('changeView() updateColorsCanv')
     ////updateColorsCanv('changeView');
@@ -1916,7 +1923,7 @@ function changeView(caller){
   else{
     colorsCanv.style.display="none";
     document.getElementById("navCanvas").style.display="block";
-    document.getElementById("uiHolder").style.display="block";
+    document.getElementById("progressHolder").style.display="block";
     document.getElementById("prerails").style.display="block";
     //document.getElementById("highlighter").style.display="block";
     updateNavCanv(); //in nav.js
@@ -1937,7 +1944,7 @@ function changeView(caller){
   adGeometry();
   }
 function init(){
-  //dbuga('init() '+screen.width);
+  console.log('init() '+screen.width);
   document.body.addEventListener('mousedown', mouseDown, true); 
   document.body.addEventListener('mousemove', mouseMove, true); 
   document.body.addEventListener('mouseup', mouseUp, true); 
@@ -1951,7 +1958,7 @@ function onDeviceReady(){
   initSession();
   }  
 function initStorage(){
-  //dbuga('initStorage();');
+  console.log('initStorage();');
   localStorage.setItem("initialized", "true");
   localStorage.setItem("tutorialStep", 0);
   localStorage.setItem("Music", menuObject["Music"]["value"]);
@@ -1993,7 +2000,7 @@ var menuObject={
 };
 var detailByValue={"Low":3, "Med":6, "High":9};
 function initSession(){
-  //dbuga('initSession()');
+  console.log('initSession()');
   if (localStorage.getItem("initialized") === null) {
     initStorage();
     }
@@ -2056,7 +2063,7 @@ function measureLocalStorage(){
     }
   }
 function localStorageToImages(){
-  //dbuga('localStorageToImages()');
+  console.log('localStorageToImages()');
   if(localStorage.getItem('graphicsByColor') != null){
     graphicsByColor=JSON.parse(localStorage.getItem('graphicsByColor'));
     }
@@ -2071,11 +2078,12 @@ function localStorageToImages(){
   }
 var carsPerColor=9;
 function resumeInit(){
-  //dbuga('resumeInit()');
+  console.log('resumeInit()');
   changeView("resumeInit");
   resetBoardTimersObjects();
   rebuildSequence();
   document.getElementById('debugDiv').style.width=screenWidth+"px";
+  navButtons[4].label="Select a<br>new level";
   updateNavCanv();
 
   populateModals();
@@ -2855,7 +2863,7 @@ function tankObject(color, dir, x, y, oid){
   c.ref=elementRef;
   return c;
   }
-
+var lastByColor={"black":-1, "orange":-1, "blue":-1, "green":-1}
 function carObject(color, dir, x, y, oid){
   var detail=detailByValue[menuObject["Detail"]["value"]];
   
@@ -2890,7 +2898,11 @@ function carObject(color, dir, x, y, oid){
   newdiv.innerHTML = htmlString;
   document.getElementById('trainHolder').appendChild(newdiv);
   var graphicNum=rnd(graphicsByColor[color].length);
-
+  if(lastByColor[color] > -1){
+    //dbuga('choose '+color+' '+lastByColor[color]);
+    graphicNum=lastByColor[color];
+    lastByColor[color]=-1;
+    }
   for (var f=0; f<faceData.box.length; f++){
     var canv=document.getElementById('carcanvas'+carData.length+'face'+f);
     var ctx=canv.getContext('2d');
@@ -3940,7 +3952,8 @@ function handleEventColors(event){
         if(label.indexOf("color_")==0){
           var parts=label.split("_");
           var c=Number(parts[1]);
-          if(carsUp){
+          if((carsUp)||(graphicsUp)){
+            if(c<trainData.length){focusTrain=c;}
             focusCars=c;
             populateCars();
             }
@@ -4639,7 +4652,7 @@ function updateDetail(){
   style.type = 'text/css';
   style.innerHTML = '';
   for(var c=0; c<4; c++){
-    var color=colors[c];
+    var color=colorList[c];
     for(var f=0; f<faceData.engine.length; f++){
       style.innerHTML += '.'+color+'engine' + f + '{-webkit-transform: ' + faceData.engine[f].trans + ' '+scaleString+';}';
       }  
@@ -4656,6 +4669,7 @@ function updateDetail(){
   //rebuildSequence();
   }
 function createLevel(){
+  
   //dbuga('createLevel()');
           var fails=-1;
           var boost=1;
@@ -4695,19 +4709,21 @@ function createLevel(){
     }
   */
   restartIntervals();
+  navButtons[4].label="Drag to<br>place tracks";
+  updateNavCanv();
   updateColorsCanv('createLevel');
   }
 var controlsPx=44;
 var navButtons=[
-  {"label":"settings", "align":"left", "selected":false, "t":0, "r":0, "b":0, "l":0},
+  {"label":"settings", "align":"right", "selected":false, "t":0, "r":0, "b":0, "l":0},
   {"label":"levels", "align":"left", "selected":false, "t":0, "r":0, "b":0, "l":0},
   {"label":"reset", "align":"left", "selected":false, "t":0, "r":0, "b":0, "l":0},
   {"label":"undo", "align":"right", "selected":false, "t":0, "r":0, "b":0, "l":0},
-  {"label":"contextText", "align":"center", "selected":false, "t":0, "r":0, "b":0, "l":0}
+  {"label":"Select a<br>new level", "align":"center", "selected":false, "t":0, "r":0, "b":0, "l":0}
   ];
 var iconShrink=.9;
 function updateNavCanv(){
-  //dbuga('updateNavCanv()');
+  console.log('updateNavCanv()');
   navCanv.width=screenWidth;
   navCanv.height=controlsPx;
   navCanv.style.top="0px";
@@ -4750,18 +4766,25 @@ function updateNavCanv(){
     }
   for (var n=0; n<navButtons.length; n++){
     if(navButtons[n].align=="center"){
+      var parts=navButtons[n].label.split("<br>");
+      var denom=parts.length+1;
+      var step=(navButtons[n].b-navButtons[n].t)/denom; // half or third
+      var y=navButtons[n].t+step;
       var x=navButtons[n].l+navButtons[n].r/2-navButtons[n].l/2;
-      var y=navButtons[n].b/2-navButtons[n].t/2;
+      //console.log(x+" "+step);
+
       navCtx.textBaseline="middle";
       navCtx.fillStyle="black";
       navCtx.font=controlsPx/3+"px akzi";
       navCtx.textAlign="center";
       navCtx.textBaseline="middle";
-      navCtx.fillText(navButtons[n].label, x,y);
-      console.log(navButtons[n].label+" "+x+" "+y);
+      for (var p=0; p<parts.length; p++){
+        navCtx.fillText(parts[p], x,y+step*p);
+        
+        }
       }
     else{
-      console.log(navButtons[n].label+"Preload");
+      //console.log(navButtons[n].label+"Preload");
       var ref=document.getElementById(navButtons[n].label+"Preload");
       var pad=controlsPx/2-controlsPx*iconShrink/2;
       if(navButtons[n].selected){navCtx.globalAlpha=.5;}
@@ -5038,6 +5061,10 @@ function attemptDrawTrack(){
       hidePretracks();
       } 
     }
+  if(navButtons[4].label != ""){
+    navButtons[4].label="";
+    updateNavCanv();
+    }
   }
 var pretrackArray=new Array("blPre","brPre","tlPre","trPre","lrPre","tbPre","tPre","bPre","lPre","rPre");
 function hidePretracks(){
@@ -5154,7 +5181,7 @@ var imageIdArray=["boxside","boxtop","boxend", "enginefloor", "engineroof", "eng
 var folderArray=["source","trans","grey","green","blue","orange","black"];
 var imgRefs={};
 function preloadTick(){
-  //dbugc(atImage);
+  dbug(atImage);
   if(atImage<imageIdArray.length){
     var imageId=imageIdArray[atImage]+folderArray[atFolder];
     imgRefs[imageId]=document.getElementById(imageId);
@@ -5164,7 +5191,7 @@ function preloadTick(){
       atFolder=0;
       atImage++;
     }
-    window.setTimeout('preloadTick()',100);
+    window.setTimeout('preloadTick()',10);
   }
   else{
     graphicsTick();
@@ -5750,7 +5777,7 @@ function rnd(range) {
   </div>
 
 
-  <div id="uiHolder" class="">
+  <div id="progressHolder" class="">
     <div id="progressDiv" >  
       <div id="orangeProgressDiv" class="darkorange grow" ></div>
       <div id="blackProgressDiv" class="darkblack grow" ></div>
@@ -5769,7 +5796,7 @@ function rnd(range) {
 <canvas id="cameraCanvas" style="position:absolute;" width="100" height="100"></canvas>
 <canvas id="helpCanvas"></canvas>
 
-<div id="debugDiv" style="display:none; position:absolute; top:150px; left:10px; font-size:16px; width:750px; z-index:3;"></div>
+<div id="debugDiv" style="display:none; position:absolute; top:150px; left:10px; font-size:16px; width:750px; z-index:3; background-color:rgba(255,255,255,.5);"></div>
 
 <div id="sources" style="display:none;">
   <div id="tiledestblue" class="tiledestblue"></div>
