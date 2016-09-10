@@ -2118,6 +2118,7 @@ function initSession(){
     }, false);
 
   //dbuga('end of initSession so start preloading');
+  updateHelpCanv();
   window.setTimeout('preloadTick()',10);
   }
 function measureLocalStorage(){
@@ -5322,7 +5323,25 @@ var graphicsByColor={
 */
 var atColor=0;
 var atGraphic=0;
-var preloadTicks=0;
+
+function preloadTick(){
+  if(atImage<imageIdArray.length){
+    var imageId=imageIdArray[atImage]+folderArray[atFolder];
+    imgRefs[imageId]=document.getElementById(imageId);
+
+    atFolder++;
+    if(atFolder>=folderArray.length){
+      //dbuga(' ! ' +atFolder +'>='+folderArray.length);
+      atFolder=0;
+      atImage++;
+    }
+    updateLoading();
+    window.setTimeout('preloadTick()',1);
+  }
+  else{
+    graphicsTick();
+  }
+}
 
 function graphicsTick(){
   //dbug("graphicsTick "+atGraphic);
@@ -5343,25 +5362,6 @@ function graphicsTick(){
     resumeInit();
     }
   }
-function preloadTick(){
-  if(atImage<imageIdArray.length){
-    var imageId=imageIdArray[atImage]+folderArray[atFolder];
-    imgRefs[imageId]=document.getElementById(imageId);
-
-    atFolder++;
-    if(atFolder>=folderArray.length){
-      //dbuga(' ! ' +atFolder +'>='+folderArray.length);
-      atFolder=0;
-      atImage++;
-    }
-    updateLoading();
-    preloadTicks++;
-    window.setTimeout('preloadTick()',1);
-  }
-  else{
-    graphicsTick();
-  }
-}
 
 function updateLoading(){
   var totalGraphics=graphicsPerColor*4;
