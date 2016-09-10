@@ -1885,6 +1885,22 @@ function openModal(modal){
     graphicsUp=true;
     updateColorsCanv('openModal graphics');
     }
+  if(modal=="help"){
+    helpUp=true;
+    updateHelp();
+    }
+  }
+var atHelp=0;
+var maxHelp=4;
+function updateHelp(){
+  if(viewportAspect<1){squarePadTop=screenHeight/2-screenWidth/2;}//portrait
+  else{squarePadLeft=screenHeight/2-screenWidth/2;}//landscape
+  addStyle('#helpCanvas', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px; background-color:rgba(0,0,255,.85);');
+  var canv=document.getElementById('helpCanvas')
+  canv.width=screenWidth;
+  canv.height=screenWidth;
+  canv.style.top=squarePadTop+"px";
+  canv.style.left=squarePadLeft+"px";
   }
 function closeModals(){
   console.log('closeModals');
@@ -2061,7 +2077,7 @@ function initSession(){
     }, false);
 
   //dbuga('end of initSession so start preloading');
-  window.setTimeout('preloadTick()',100);
+  window.setTimeout('preloadTick()',10);
   }
 function measureLocalStorage(){
   for(var x in localStorage){
@@ -2073,7 +2089,7 @@ function localStorageToImages(){
   if(localStorage.getItem('graphicsByColor') != null){
     graphicsByColor=JSON.parse(localStorage.getItem('graphicsByColor'));
     }
-  for (var d=0; d<carsPerColor*4; d++){
+  for (var d=0; d<graphicsPerColor*4; d++){
     if(localStorage.getItem('default'+d)!=null){
       var imageData=localStorage.getItem('default'+d);
       var parts=imageData.split("9");
@@ -2082,9 +2098,9 @@ function localStorageToImages(){
       }
     }
   }
-var carsPerColor=9;
+var graphicsPerColor=9;
 function resumeInit(){
-  dbug('');
+  //dbug('');
 
   changeView("resumeInit");
   resetBoardTimersObjects();
@@ -3744,7 +3760,7 @@ function clearAllGraphics(){
   var color=colorArray[focusCars];
   var x=0; 
   var y=0;
-  for (var i=0; i<carsPerColor; i++){
+  for (var i=0; i<graphicsPerColor; i++){
     processGraphic(focusCars, atDefault, true, true);
     atDefault++;
     }
@@ -3766,7 +3782,7 @@ function graphicsTick(){
       atGraphic=0;
       atColor++;
       }
-    window.setTimeout('graphicsTick()',100);
+    window.setTimeout('graphicsTick()',10);
     }
   else{// finished last color so resume
     resumeInit();
@@ -4612,7 +4628,7 @@ function handleEventMenu(e){
       if(buttonLabel=="Done"){
         closeModals();
         }
-      ////if(buttonLabel=="Help"){openModal("help");}
+      if(buttonLabel=="Help"){openModal("help");}
       }
     menuTouchingId="";
     menuButtonNum=-1;    
@@ -5204,7 +5220,7 @@ function initGraphicsByColor(){
     graphicsByColor[color]=[];
     var x=0; 
     var y=0;
-    for (var i=0; i<carsPerColor; i++){
+    for (var i=0; i<graphicsPerColor; i++){
       var imageObj={
         "imageId":"default"+atDefault,
         "blackTrans":false,
@@ -5232,24 +5248,7 @@ var graphicsByColor={
 */
 var atColor=0;
 var atGraphic=0;
-function preloadTick(){
-  //dbug("preloadTick "+atImage);
-  if(atImage<imageIdArray.length){
-    var imageId=imageIdArray[atImage]+folderArray[atFolder];
-    imgRefs[imageId]=document.getElementById(imageId);
-
-    atFolder++;
-    if(atFolder>=folderArray.length){
-      atFolder=0;
-      atImage++;
-      updateLoading();
-    }
-    window.setTimeout('preloadTick()',10);
-  }
-  else{
-    graphicsTick();
-  }
-}
+var preloadTicks=0;
 
 function graphicsTick(){
   //dbug("graphicsTick "+atGraphic);
@@ -5264,18 +5263,45 @@ function graphicsTick(){
       atColor++;
       }
     updateLoading();
-    window.setTimeout('graphicsTick()',10);
+    window.setTimeout('graphicsTick()',1);
     }
   else{// finished last color so resume
     resumeInit();
     }
   }
+function preloadTick(){
+  if(atImage<imageIdArray.length){
+    var imageId=imageIdArray[atImage]+folderArray[atFolder];
+    imgRefs[imageId]=document.getElementById(imageId);
+
+    atFolder++;
+    if(atFolder>=folderArray.length){
+      //dbuga(' ! ' +atFolder +'>='+folderArray.length);
+      atFolder=0;
+      atImage++;
+    }
+    updateLoading();
+    preloadTicks++;
+    window.setTimeout('preloadTick()',1);
+  }
+  else{
+    graphicsTick();
+  }
+}
 
 function updateLoading(){
-  var total=imageIdArray.length+carsPerColor*4;
-  var completed=atImage+carsPerColor*atColor+atGraphic;
+  var totalGraphics=graphicsPerColor*4;
+  var completedGraphics=graphicsPerColor*atColor+atGraphic;
 
+  var totalImages=imageIdArray.length*folderArray.length;
+  var completedImages=atFolder+folderArray.length*atImage;
+  var total=totalImages+totalGraphics;
+  var completed=completedImages+completedGraphics;
+  //dbug(completed+' / '+total);
+  //dbuga('images: '+completedImages+' / '+totalImages);
   var frac=completed/total;
+  //var frac=completedImages/totalImages;
+  //var frac=completedGraphics/totalGraphics;
   var perc=Math.floor(frac*100);
   var loadingPx=screenWidth/6;
   var canv=document.getElementById('loadingCanvas');
@@ -5286,11 +5312,11 @@ function updateLoading(){
   ctx.strokeStyle="rgb(100,100,100)";
   ctx.fillStyle="rgb(200,200,200)";
   ctx.beginPath();
-  ctx.arc(loadingPx/2, loadingPx/2, loadingPx/2-linePx*2, 0, pi*2);
+  ctx.arc(loadingPx/2, loadingPx/2, loadingPx/2-linePx*1.5, 0, pi*2);
   ctx.closePath();
   ctx.fill();
   ctx.beginPath();
-  ctx.arc(loadingPx/2, loadingPx/2, loadingPx/2-linePx*1.5, 0, pi*2*frac);
+  ctx.arc(loadingPx/2, loadingPx/2, loadingPx/2-linePx*2.0, pi*1.5, pi*(1.5+2*frac));
   ctx.stroke();
   ctx.font=loadingPx/5+"px Arial";
   ctx.fillStyle="rgb(100,100,100)";
@@ -5855,6 +5881,10 @@ function rnd(range) {
 
   <div id="preload" >
 <img id="cameraImg" src="default/default2.jpg" />
+<img src="images/info1.png" id="info1Preload"   style="display:none;" />
+<img src="images/info2.png" id="info2Preload"   style="display:none;" />
+<img src="images/info3.png" id="info3reload"   style="display:none;" />
+<img src="images/info4.png" id="info4Preload"   style="display:none;" />
 <img src="trainicons/checked.png" id="checkedPreload"   style="display:none;" />
 <img src="trainicons/unchecked.png" id="uncheckedPreload"   style="display:none;" />
 <img src="trainicons/camera.png" id="cameraPreload"   style="display:none;" />
