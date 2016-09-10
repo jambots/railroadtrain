@@ -588,6 +588,7 @@ function undo(){
 
 function handleEventNav(e){// fubar but still in
   if(e.type=="touchstart"){
+    firstRun=false;
     var target="";
     var buttNum=-1;
     for (var n=0; n<navButtons.length; n++){
@@ -608,13 +609,13 @@ function handleEventNav(e){// fubar but still in
         }
       }
     if(target == "settings"){
-      if(menuUp){
+      if(settingsUp){
         closeModals();
         minFramesPerSecond=-4;
         navButtons[buttNum].selected=false;
         }
       else{
-        openModal("menu");
+        openModal("settings");
         navButtons[buttNum].selected=true;
         }
       }
@@ -654,7 +655,7 @@ function dbugBuildSequence(){
     }
   }
 function rebuildSequence(){
-  //dbuga('rebuildSequence()');
+  console.log('rebuildSequence()');
   //dbugaObject(destData);
   for (var i in buildSequence){
     item=buildSequence[i];
@@ -864,7 +865,7 @@ function setupGridData(){
 function fillGridCanvas(){
   //dbuga('fillGridCanvas');
   document.getElementById('gridCanvas').width=boardWidth;
-  if((menuObject["Tiles"].value=="Grid")||(menuObject["Tiles"].value=="Guides")){
+  if((settingsObject["Tiles"].value=="Grid")||(settingsObject["Tiles"].value=="Guides")){
     gridContext.lineWidth= cellSize/60;
     gridContext.strokeStyle = "rgb(220, 220, 220)";
     radius=20*cellSize/96;
@@ -874,7 +875,7 @@ function fillGridCanvas(){
         }
       }
     }
-  if(menuObject["Tiles"].value=="Guides"){
+  if(settingsObject["Tiles"].value=="Guides"){
     var joint=cellSize/30;
     //gridContext.strokeStyle = "rgb(180, 180, 180)";
     gridContext.lineWidth= cellSize/15;  
@@ -940,22 +941,22 @@ function createCanvasTrack(theType, cellX, cellY){
   var unit=cellSize/12;
 
   // all ties
-  if((menuObject["Scale"]["value"]=="O")||(menuObject["Scale"]["value"]=="HO")||(menuObject["Scale"]["value"]=="N")){    
+  if((settingsObject["Scale"]["value"]=="O")||(settingsObject["Scale"]["value"]=="HO")||(settingsObject["Scale"]["value"]=="N")){    
     trackContext.globalCompositeOperation = "destination-over";
     // N default case
     var start=.05;
     var step=.1;
-    if(menuObject["Scale"]["value"]=="N"){      
+    if(settingsObject["Scale"]["value"]=="N"){      
       trackContext.strokeStyle = "rgb(76,92,81)";
       trackContext.lineWidth = ""+Math.floor(5*unit)/10;
       }
-    if(menuObject["Scale"]["value"]=="HO"){      
+    if(settingsObject["Scale"]["value"]=="HO"){      
       trackContext.strokeStyle = "rgb(88,89,57)";
       trackContext.lineWidth = ""+Math.floor(4*unit)/10;
       start=0.05;
       step=.09;
       }
-    if(menuObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){      
       trackContext.strokeStyle = "rgb(81,83,61)";
       trackContext.lineWidth = ""+Math.floor(8*unit)/10;
       start=.1;
@@ -1033,13 +1034,13 @@ function createCanvasTrack(theType, cellX, cellY){
   //normal two rails only
     trackContext.globalCompositeOperation = "source-over";
 
-    if(menuObject["Scale"]["value"]=="N"){      
+    if(settingsObject["Scale"]["value"]=="N"){      
       trackContext.strokeStyle = "rgb(199,185,172)";
       }
-    if(menuObject["Scale"]["value"]=="HO"){      
+    if(settingsObject["Scale"]["value"]=="HO"){      
       trackContext.strokeStyle = "rgb(180,154,93)";
       }
-    if(menuObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){      
       trackContext.strokeStyle = "rgb(113,103,101)";
       }
   trackContext.lineWidth = ""+Math.floor(3*unit)/10;
@@ -1049,7 +1050,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.lineTo(originX+5*unit, originY+cellSize/2);
     trackContext.moveTo(originX+7*unit, originY);
     trackContext.lineTo(originX+7*unit, originY+cellSize/2);
-    if(menuObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){      
       trackContext.moveTo(originX+6*unit, originY);
       trackContext.lineTo(originX+6*unit, originY+cellSize/2);
       }
@@ -1059,7 +1060,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.lineTo(originX+5*unit, originY+cellSize);
     trackContext.moveTo(originX+7*unit, originY+cellSize/2);
     trackContext.lineTo(originX+7*unit, originY+cellSize);
-    if(menuObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){      
       trackContext.moveTo(originX+6*unit, originY+cellSize/2);
       trackContext.lineTo(originX+6*unit, originY+cellSize);
       }
@@ -1069,7 +1070,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.lineTo(originX+cellSize/2, originY+5*unit);
     trackContext.moveTo(originX, originY+7*unit);
     trackContext.lineTo(originX+cellSize/2, originY+7*unit);
-    if(menuObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){      
       trackContext.moveTo(originX, originY+6*unit);
       trackContext.lineTo(originX+cellSize/2, originY+6*unit);
       }
@@ -1079,7 +1080,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.lineTo(originX+cellSize, originY+5*unit);
     trackContext.moveTo(originX+cellSize/2, originY+7*unit);
     trackContext.lineTo(originX+cellSize, originY+7*unit);
-    if(menuObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){      
       trackContext.moveTo(originX+cellSize/2, originY+6*unit);
       trackContext.lineTo(originX+cellSize, originY+6*unit);
       }
@@ -1089,7 +1090,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.lineTo(originX+cellSize, originY+5*unit);
     trackContext.moveTo(originX, originY+7*unit);
     trackContext.lineTo(originX+cellSize, originY+7*unit);
-    if(menuObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){      
       trackContext.moveTo(originX, originY+6*unit); //middle rail
       trackContext.lineTo(originX+cellSize, originY+6*unit);
       }
@@ -1099,7 +1100,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.lineTo(originX+5*unit, originY+cellSize);
     trackContext.moveTo(originX+7*unit, originY);
     trackContext.lineTo(originX+7*unit, originY+cellSize);
-    if(menuObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){      
       trackContext.moveTo(originX+6*unit, originY);  //center rail
       trackContext.lineTo(originX+6*unit, originY+cellSize);
       }
@@ -1108,7 +1109,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.arc(originX+cellSize, originY+cellSize, 7*unit, 1 * Math.PI, 1.5 * Math.PI, false);
     trackContext.moveTo(originX+7*unit, originY+cellSize);
     trackContext.arc(originX+cellSize, originY+cellSize, 5*unit, 1 * Math.PI, 1.5 * Math.PI, false);
-    if(menuObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){      
       trackContext.moveTo(originX+6*unit, originY+cellSize);
       trackContext.arc(originX+cellSize, originY+cellSize, 6*unit, 1 * Math.PI, 1.5 * Math.PI, false);
       }
@@ -1117,7 +1118,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.arc(originX, originY+cellSize, 7*unit, 0, 1.5 * Math.PI, true);
     trackContext.moveTo(originX+5*unit, originY+cellSize);
     trackContext.arc(originX, originY+cellSize, 5*unit, 0, 1.5 * Math.PI, true);
-    if(menuObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){      
       trackContext.moveTo(originX+6*unit, originY+cellSize);
       trackContext.arc(originX, originY+cellSize, 6*unit, 0, 1.5 * Math.PI, true);
       }
@@ -1126,7 +1127,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.arc(originX, originY, 7*unit, 0, .5 * Math.PI, false);
     trackContext.moveTo(originX+5*unit, originY);
     trackContext.arc(originX, originY, 5*unit, 0, .5 * Math.PI, false);
-    if(menuObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){      
       trackContext.moveTo(originX+6*unit, originY);
       trackContext.arc(originX, originY, 6*unit, 0, .5 * Math.PI, false);
       }
@@ -1135,7 +1136,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.arc(originX+cellSize, originY, 7*unit, Math.PI, .5 * Math.PI, true);
     trackContext.moveTo(originX+7*unit, originY);
     trackContext.arc(originX+cellSize, originY, 5*unit, Math.PI, .5 * Math.PI, true);
-    if(menuObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){      
       trackContext.moveTo(originX+6*unit, originY);
       trackContext.arc(originX+cellSize, originY, 6*unit, Math.PI, .5 * Math.PI, true);
       }
@@ -1218,11 +1219,17 @@ More specifically, if the screen height of a device is between 400 and 720, an a
 
 var colorsCanv;
 var navCanv;
+
+var helpImages=["info0", "info1", "info2", "info3", "info4"];
+var atHelp=0;
+var helpCanv;
+var helpUp=true;
+
 var bannerEnabled=false;
 var levelsCanv;
 var levelsUp=false;
-var menuCanv;
-var menuUp=false;
+var settingsCanv;
+var settingsUp=false;
 var carsCanv;
 var carsUp=false;
 var graphicsCanv;
@@ -1231,8 +1238,9 @@ var cameraCanv;
 
 function initGeometry(){
   console.log("initGeometry()");
+  helpCanv=document.getElementById("helpCanvas");
   levelsCanv=document.getElementById("levelsCanvas");
-  menuCanv=document.getElementById("menuCanvas");
+  settingsCanv=document.getElementById("settingsCanvas");
   carsCanv=document.getElementById("carsCanvas");
   graphicsCanv=document.getElementById("graphicsCanvas");
   cameraCanv=document.getElementById("cameraCanvas");
@@ -1306,7 +1314,7 @@ var boardPad=0;
 var space=0;
 
 function boardGeometry(){
-  var scale=menuObject["Scale"]["value"];
+  var scale=settingsObject["Scale"]["value"];
   cellsAcross=returnCellsAcross(screenWidth, scale)
   cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
   //dbuga("cellSize="+cellSize);
@@ -1339,11 +1347,11 @@ function boardGeometry(){
   levelsCanv.style.left=(0-screenWidth)+"px";
   levelsCanv.style.backgroundColor="rgba(255,255,255,.75)";
 
-  menuCanv.width=screenWidth;
-  menuCanv.height=screenHeight;
-  menuCanv.style.top=controlsPx+"px";
-  menuCanv.style.left=screenWidth+"px";
-  menuCanv.style.backgroundColor="rgba(255,255,255,.75)";
+  settingsCanv.width=screenWidth;
+  settingsCanv.height=screenHeight;
+  settingsCanv.style.top=controlsPx+"px";
+  settingsCanv.style.left=screenWidth+"px";
+  settingsCanv.style.backgroundColor="rgba(255,255,255,.75)";
 
   carsCanv.width=screenHeight;
   carsCanv.height=screenWidth-controlsPx;
@@ -1594,7 +1602,7 @@ function populateCars(){
   minFramesPerSecond=-4;
   }
 var clearingAll=false;
-var menuButtons=[
+var settingsButtons=[
 ];
 var levelButtons=[
 ];
@@ -1610,6 +1618,7 @@ function returnModalButton(label,align,orient,selected){
   var spread=(screenWidth-(buttonWidth+buttonPad*1.5)*3)/4;
   //dbug('spread:'+spread)
   var topPx=screenHeight-1-buttonPad-buttonHeight-controlsPx;
+  if(helpUp){topPx=screenWidth-buttonHeight-buttonPad;}
   var centerPx=screenWidth/2;
   if(orient=="landscape"){
     spread=(screenHeight-320)/12;
@@ -1650,8 +1659,8 @@ function drawModalButton(ctx, modalButton){
     }
   var bcx=modalButton.l/2+modalButton.r/2;
   var bcy=modalButton.t/2+modalButton.b/2;
-  var menuFont=Math.floor(buttonHeight/2)+"px akzi";
-  ctx.font=menuFont;
+  var settingsFont=Math.floor(buttonHeight/2)+"px akzi";
+  ctx.font=settingsFont;
   ctx.lineCap="round";
   ctx.fillStyle=buttonLabelFill;
   ctx.strokeStyle=buttonLabelStroke;
@@ -1677,7 +1686,7 @@ function drawModalButton(ctx, modalButton){
   }
 
 
-function populateMenu(){
+function populateSettings(){
 /*
   var groupAspect=(54+4)/(18+4);// matches car group width, padding
   var availHeight=screenWidth-controlsPx-controlsPx-20;
@@ -1705,17 +1714,24 @@ function populateMenu(){
   var cx=8;
   var cy=(screenHeight/2-screenWidth/2)/g+8.5;
   //dbuga("cy "+cy);
-  var menuCtx=menuCanv.getContext('2d');
-  menuButtons=[];
-  menuButtons.push(returnModalButton("Help","left","portrait",false));
-  menuButtons.push(returnModalButton("About","center","portrait",false));
-  menuButtons.push(returnModalButton("Done","right","portrait",false));
+  var settingsCtx=settingsCanv.getContext('2d');
+  settingsButtons=[];
+  settingsButtons.push(returnModalButton("Help","left","portrait",false));
+  settingsButtons.push(returnModalButton("About","center","portrait",false));
+  settingsButtons.push(returnModalButton("Done","right","portrait",false));
   }
-function drawMenuButtons(){
-  //dbuga('drawMenuButtons');
-  var menuCtx=menuCanv.getContext('2d');
-  for (var b=0; b<menuButtons.length; b++){
-    drawModalButton(menuCtx, menuButtons[b]);
+function drawSettingsButtons(){
+  //dbuga('drawSettingsButtons');
+  var settingsCtx=settingsCanv.getContext('2d');
+  for (var b=0; b<settingsButtons.length; b++){
+    drawModalButton(settingsCtx, settingsButtons[b]);
+    }
+  }
+function drawHelpButtons(){
+  //dbuga('drawSettingsButtons');
+  var helpCtx=helpCanv.getContext('2d');
+  for (var b=0; b<helpButtons.length; b++){
+    drawModalButton(helpCtx, helpButtons[b]);
     }
   }
 var levelsGridPx=0;
@@ -1854,6 +1870,7 @@ function drawLevels(){
 
 var visHeight=100;
 function openModal(modal){
+  console.log('openModal('+modal+')');
   closeModals();
   camera.style.webkitFilter="blur(5px)";
   if(modal=="levels"){
@@ -1862,12 +1879,12 @@ function openModal(modal){
     levelsUp=true;
     navButtons[4].label="Select a<br>new level";
     }
-  if(modal=="menu"){
-    menuCanv.style.left=0+"px";
-    menuUp=true;
-    menuDraw();
+  if(modal=="settings"){
+    settingsCanv.style.left=0+"px";
+    settingsUp=true;
+    settingsDraw();
     navButtons[4].label="Settings";
-    //dbuga('openModal menuUp='+menuUp);
+    //dbuga('openModal settingsUp='+settingsUp);
     }
   if(modal=="cars"){
     clearingAll=false;
@@ -1887,33 +1904,55 @@ function openModal(modal){
     }
   if(modal=="help"){
     helpUp=true;
-    updateHelp();
+    updateHelpCanv();
     }
   }
 var atHelp=0;
 var maxHelp=4;
-function updateHelp(){
+function updateHelpCanv(){
   if(viewportAspect<1){squarePadTop=screenHeight/2-screenWidth/2;}//portrait
   else{squarePadLeft=screenHeight/2-screenWidth/2;}//landscape
   addStyle('#helpCanvas', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px; background-color:rgba(0,0,255,.85);');
-  var canv=document.getElementById('helpCanvas')
-  canv.width=screenWidth;
-  canv.height=screenWidth;
-  canv.style.top=squarePadTop+"px";
-  canv.style.left=squarePadLeft+"px";
+  helpCanv.width=screenWidth;
+  helpCanv.height=screenWidth;
+  helpCanv.style.top=squarePadTop+"px";
+  helpCanv.style.left=squarePadLeft+"px";
+  helpCanv.style.zIndex=3;
+  helpCanv.style.display="block";
+  var ctx=helpCanv.getContext('2d');
+  var img=document.getElementById('help'+atHelp+'Preload');
+  ctx.drawImage(img,0,0,screenWidth,screenWidth);
+  helpButtons=[];
+  if(atHelp>0){
+    helpButtons.push(returnModalButton("Prev","left","portrait",false));
+    }
+  if(atHelp<maxHelp){
+    helpButtons.push(returnModalButton("Next","center","portrait",false));
+    }
+  else{
+    helpButtons.push(returnModalButton("FAQ","center","portrait",false));
+    }
+  helpButtons.push(returnModalButton("Done","right","portrait",false));
+  drawHelpButtons();
   }
 function closeModals(){
-  console.log('closeModals');
+  console.log('closeModals initCompleted:'+initCompleted +' firstRun:'+firstRun );
   clearingAll=false;
-  if(localStorage.getItem("Scale") != menuObject["Scale"]["value"]){updateScaleSetting();}
-  if(localStorage.getItem("Detail") != menuObject["Detail"]["value"]){updateDetailSetting();}
-  if(localStorage.getItem("Tiles") != menuObject["Tiles"]["value"]){updateTilesSetting();}
+  if(localStorage.getItem("Scale") != settingsObject["Scale"]["value"]){updateScaleSetting();}
+  if(localStorage.getItem("Detail") != settingsObject["Detail"]["value"]){updateDetailSetting();}
+  if(localStorage.getItem("Tiles") != settingsObject["Tiles"]["value"]){updateTilesSetting();}
 
-  paused=false;
+  if(initCompleted){
+    if(firstRun==false){
+      paused=false;
+      helpCanv.style.left="-"+screenWidth+"px";
+      helpUp=false;
+      }
+    }
   levelsCanv.style.left="-"+screenWidth+"px";
   levelsUp=false;
-  menuCanv.style.left="-"+screenWidth+"px";
-  menuUp=false;
+  settingsCanv.style.left="-"+screenWidth+"px";
+  settingsUp=false;
   carsCanv.style.left="-"+screenHeight+"px";
   carsUp=false;
   graphicsCanv.style.left="-"+screenHeight+"px";
@@ -1928,7 +1967,7 @@ function closeModals(){
   updateNavCanv();
   }
 function changeView(caller){
-  //dbuga("changeView in "+caller+" shooting="+shooting);
+  console.log("changeView in "+caller+" shooting="+shooting);
   if(shooting){return false;}
   closeModals();
   if(viewportAspect>1){
@@ -1983,37 +2022,37 @@ function initStorage(){
   console.log('initStorage();');
   localStorage.setItem("initialized", "true");
   localStorage.setItem("tutorialStep", 0);
-  localStorage.setItem("Music", menuObject["Music"]["value"]);
-  localStorage.setItem("Sounds", menuObject["Sounds"]["value"]);
-  localStorage.setItem("Scale", menuObject["Scale"]["value"]);
-  localStorage.setItem("Detail", menuObject["Detail"]["value"]);
-  localStorage.setItem("Tiles", menuObject["Tiles"]["value"]);
+  localStorage.setItem("Music", settingsObject["Music"]["value"]);
+  localStorage.setItem("Sounds", settingsObject["Sounds"]["value"]);
+  localStorage.setItem("Scale", settingsObject["Scale"]["value"]);
+  localStorage.setItem("Detail", settingsObject["Detail"]["value"]);
+  localStorage.setItem("Tiles", settingsObject["Tiles"]["value"]);
   }
 function saveStorage(){
-  localStorage.setItem("Music", menuObject["Music"]["value"]);
-  localStorage.setItem("Sounds", menuObject["Sounds"]["value"]);
-  localStorage.setItem("Scale", menuObject["Scale"]["value"]);
-  localStorage.setItem("Detail", menuObject["Detail"]["value"]);
-  localStorage.setItem("Tiles", menuObject["Tiles"]["value"]);
+  localStorage.setItem("Music", settingsObject["Music"]["value"]);
+  localStorage.setItem("Sounds", settingsObject["Sounds"]["value"]);
+  localStorage.setItem("Scale", settingsObject["Scale"]["value"]);
+  localStorage.setItem("Detail", settingsObject["Detail"]["value"]);
+  localStorage.setItem("Tiles", settingsObject["Tiles"]["value"]);
   }
 function loadStorage(){
-  menuObject["Music"]["value"]=localStorage.getItem("Music");
-  menuObject["Sounds"]["value"]=localStorage.getItem("Sounds");
-  menuObject["Scale"]["value"]=localStorage.getItem("Scale");
-  menuObject["Detail"]["value"]=localStorage.getItem("Detail");
-  menuObject["Tiles"]["value"]=localStorage.getItem("Tiles");
-  var keys=Object.keys(menuObject);
+  settingsObject["Music"]["value"]=localStorage.getItem("Music");
+  settingsObject["Sounds"]["value"]=localStorage.getItem("Sounds");
+  settingsObject["Scale"]["value"]=localStorage.getItem("Scale");
+  settingsObject["Detail"]["value"]=localStorage.getItem("Detail");
+  settingsObject["Tiles"]["value"]=localStorage.getItem("Tiles");
+  var keys=Object.keys(settingsObject);
   for (var k=0; k<keys.length; k++){
     //dbuga(keys[k]);
-    var values=menuObject[keys[k]]['values'];
+    var values=settingsObject[keys[k]]['values'];
     for (var v=0; v<values.length; v++){
-      if(menuObject[keys[k]].value==values[v]){
-        menuObject[keys[k]].pos=v-1;
+      if(settingsObject[keys[k]].value==values[v]){
+        settingsObject[keys[k]].pos=v-1;
         }
       }
     }
   }
-var menuObject={
+var settingsObject={
   "Music":{"value":"On", "pos":0, "values":["Off", "On", "Classic"], "t":0, "r":0, "b":0, "l":0},
   "Sounds":{"value":"On", "pos":0,  "values":["Off", "On", "Classic"], "t":0, "r":0, "b":0, "l":0},
   "Scale":{"value":"O", "pos":0,  "values":["O", "HO", "N"], "t":0, "r":0, "b":0, "l":0},
@@ -2021,9 +2060,11 @@ var menuObject={
   "Detail":{"value":"Med", "pos":0,  "values":["Low", "Med", "High"], "t":0, "r":0, "b":0, "l":0}
 };
 var detailByValue={"Low":3, "Med":6, "High":9};
+var firstRun=false;
 function initSession(){
   console.log('initSession()');
   if (localStorage.getItem("initialized") === null) {
+    firstRun=true;
     initStorage();
     }
   loadStorage();
@@ -2099,18 +2140,25 @@ function localStorageToImages(){
     }
   }
 var graphicsPerColor=9;
+var initCompleted=false;
+
 function resumeInit(){
-  //dbug('');
+  console.log('resumeInit firstRun='+firstRun);
 
   changeView("resumeInit");
   resetBoardTimersObjects();
   closeLoading();
-  rebuildSequence();
   document.getElementById('debugDiv').style.width=screenWidth+"px";
   navButtons[4].label="Select a<br>new level";
   updateNavCanv();
 
   populateModals();
+  initCompleted=true;
+  rebuildSequence();
+  updateHelpCanv();
+  if(firstRun==false){
+    closeModals();
+    }
   transmitBgMusicState();
   requestAnimationFrame(rafTick);
   }
@@ -2119,7 +2167,7 @@ var secondInterval;
 function populateModals(){
   //dbuga('populateModals()');
   populateLevels();
-  //populateMenu();
+  //populateSettings();
   populateCars();
   //populateGraphics();
 
@@ -2127,7 +2175,7 @@ function populateModals(){
 var fpsArray=[60,60,60,60,60,60];
 var avgFps=0;
 function secondTick(){
-  if((menuUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
+  if((settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
     fpsArray.unshift(frames);
     var junk=fpsArray.pop();
     var totalFrames=0;
@@ -2144,7 +2192,7 @@ var camPos={"x":0, "y":0, "d":0};
 
 function rafTick(nowMs){
   if(focusTrain>=trainData.length){focusTrain=0;}
-  if((menuUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
+  if((settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
 
     turnFrames++;
     var framesPerTurn=turnMs/17;
@@ -2221,16 +2269,6 @@ function initSound(){
   }
 
 function setupNav(){
-/*
-  useWidth=100;
-  addControl("menu", "Menu", "left", useWidth);
-  addControl("level", "Level", "left", useWidth);
-  addControl("reset", "Reset", "left", useWidth);
-  addControl("undo", "Undo", "right", useWidth);
-
-  document.getElementById('undo_label').style.opacity=".5";
-  updateNavCanv();
-*/
   }
 
 function resetBoardTimersObjects(){
@@ -2238,7 +2276,7 @@ function resetBoardTimersObjects(){
   totalCarsDocked=0;
   //dbuga('resetBoardTimersObjects()');
   setupGridData();
-  closeHelp();
+  //closeHelp();
   collisionData=new Object();
   possibleObject['blue']=0;
   possibleObject['black']=0;
@@ -2793,7 +2831,7 @@ var sourceMs;
 var turnMs=1000;
 
 function sourceTick(){
-  if((menuUp)||(levelsUp)){
+  if((settingsUp)||(levelsUp)){
     return false;
     }
   sourceAction(checkSourceNum);
@@ -2832,7 +2870,7 @@ function sourceAction(sourceNum){
 
 // car functions
 function tankObject(color, dir, x, y, oid){
-  var detail=detailByValue[menuObject["Detail"]["value"]];
+  var detail=detailByValue[settingsObject["Detail"]["value"]];
   //dbuga("color:"+color+" dir:"+dir+" x:"+x+" y:"+y+" oid:"+oid);
   deg=degByDir[dir];
   var c={};
@@ -2889,7 +2927,7 @@ function tankObject(color, dir, x, y, oid){
   }
 var lastByColor={"black":-1, "orange":-1, "blue":-1, "green":-1}
 function carObject(color, dir, x, y, oid){
-  var detail=detailByValue[menuObject["Detail"]["value"]];
+  var detail=detailByValue[settingsObject["Detail"]["value"]];
   
   //dbuga("color:"+color+" dir:"+dir+" x:"+x+" y:"+y+" oid:"+oid);
   deg=degByDir[dir];
@@ -2954,7 +2992,7 @@ function carObject(color, dir, x, y, oid){
 // train functions
 
 function trainObject(color, x, y, dir){
-  var detail=detailByValue[menuObject["Detail"]["value"]];
+  var detail=detailByValue[settingsObject["Detail"]["value"]];
   
   var deg=degByDir[dir];
   var t={};
@@ -3008,7 +3046,7 @@ function trainObject(color, x, y, dir){
   }
 
 function turnTick(){
-  if((menuUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
+  if((settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
     var debugString="turnTick() checkTrainNum="+checkTrainNum;
     for (var t=0; t<trainData.length; t++){
     debugString+="<br>"+t+" prev "+trainData[t].prevX+" "+trainData[t].prevY+" next"+trainData[t].nextX+" "+trainData[t].nextY+" nextDir "+trainData[t].nextDir+" nextDeg "+trainData[t].nextDeg;
@@ -3709,8 +3747,8 @@ function touchEvent(event){
       if(levelsUp){
         return false;
         }
-      else if(menuUp){
-        handleEventMenu(event);
+      else if(settingsUp){
+        handleEventSettings(event);
         }
       else{
         handleEventDraw(event);
@@ -3739,13 +3777,15 @@ function touchEvent(event){
         if(carsUp){handleEventCars(event);}
         else if(graphicsUp){handleEventGraphics(event);}
         else if(graphicsEditing){handleEventEditing(event);}
+        else if(helpUp){handleEventHelp(event);}
         else{handleEventDolly(event);}      
         }
       }
     else{//portraits
-      if ((event.touches[0].pageY>controlsPx)&&(helpUp==false)){
+      if ((event.touches[0].pageY>controlsPx)){
         if(levelsUp){handleEventLevels(event);}
-        else if(menuUp){handleEventMenu(event);}
+        else if(settingsUp){handleEventSettings(event);}
+        else if(helpUp){handleEventHelp(event);}
         else{handleEventDraw(event);}
         }
       else {
@@ -3996,7 +4036,7 @@ function handleEventColors(event){
 /*
     if(colorsUp==false){
       //dbuga("x:"+t.pageX+" sh:"+screenHeight+" cp:"+controlsPx);
-      if(t.pageX>screenHeight-controlsPx){//menu circle
+      if(t.pageX>screenHeight-controlsPx){//settings circle
         //colorsUp=true;
         //updateColorsCanv('touchstart 1');
         }
@@ -4254,14 +4294,13 @@ function saveComplete(){
   //dbuga('saveComplete');
   }
 
-var helpImages=["info0", "info1", "info2", "info3", "info4"];
-var atHelp=0;
-var helpUp=false;
 
 function closeLoading(){
   document.getElementById('loadingCanvas').style.display="none";
   }
 function closeHelp(){
+  console.log('closeHelp');
+  paused=false;
   document.getElementById('helpCanvas').style.display="none";
   helpUp=false;
   }
@@ -4566,72 +4605,107 @@ function xyInTrbl(x,y,trbl){
   if((trbl.t<y)&&(trbl.r>x)&&(trbl.b>y)&&(trbl.l<x)){return true;}
   else{return false;}
   }
-var menuTouchingId="";
-var menuButtonNum=-1;
+var settingsTouchingId="";
+var settingsButtonNum=-1;
 var carsThumbs=[];
 var carsButtons=[];
 var graphicsButtons=[];
-var menuButtons=[];
-function handleEventMenu(e){
-/*
-  if(e.touches.length>0){dbuga("handleEventMenu(target:"+e.touches[0].target.id+", type:"+e.type+")");}
-  else{dbuga("handleEventMenu(type:"+e.type+")");}
-*/
-
-  var typ = e.type;
-  if(typ == "touchstart"){
-    menuTouchingId="";
-    menuButtonNum=-1;
-    var x=e.touches[0].pageX;
-    var y=e.touches[0].pageY-controlsPx;
-    var keys=Object.keys(menuObject);
-    for (var k=0; k<keys.length; k++){
-      if(xyInTrbl(x,y,menuObject[keys[k]])){
-        menuTouchingId=keys[k];
+var settingsButtons=[];
+var helpButtons=[];
+function handleEventHelp(e){
+  console.log('handleEventHelp ');
+  if(e.type=="touchstart"){
+    var t=e.touches[0];
+    var found=false;
+    for (var hb=0; hb<helpButtons.length; hb++){
+      var helpButton=helpButtons[hb];
+      var x=t.pageX-squarePadLeft;
+      var y=t.pageY-squarePadTop;
+      if(xyInTrbl(x,y,helpButton)){
+        if(helpButton.label=="Prev"){
+          atHelp--;
+          if(atHelp<0){atHelp=0;}
+          updateHelpCanv();
+          }
+        if(helpButton.label=="Next"){
+          atHelp++;
+          if(atHelp>maxHelp){atHelp=maxHelp;}
+          updateHelpCanv();
+          }
+        if(helpButton.label=="FAQ"){
+          atHelp++;
+          if(atHelp>maxHelp){atHelp=maxHelp;}
+          updateHelpCanv();
+          }
+        if(helpButton.label=="Done"){
+          closeHelp();
+          closeModals();
+          }
+        //dbug(atHelp);
         }
       }
-    for (var b=0; b<menuButtons.length; b++){
-      if(xyInTrbl(x,y,menuButtons[b])){
-        menuButtonNum=b;
+    }
+  if(e.type=="touchmove"){
+    }
+  if(e.type=="touchend"){
+    }
+  }
+
+function handleEventSettings(e){
+  var typ = e.type;
+  if(typ == "touchstart"){
+    settingsTouchingId="";
+    settingsButtonNum=-1;
+    var x=e.touches[0].pageX;
+    var y=e.touches[0].pageY-controlsPx;
+    var keys=Object.keys(settingsObject);
+    for (var k=0; k<keys.length; k++){
+      if(xyInTrbl(x,y,settingsObject[keys[k]])){
+        settingsTouchingId=keys[k];
+        }
+      }
+    for (var b=0; b<settingsButtons.length; b++){
+      if(xyInTrbl(x,y,settingsButtons[b])){
+        settingsButtonNum=b;
         }
       }
     
     }
   if((typ=="touchstart")||(typ=="touchmove")){
-    if(menuTouchingId !=""){
+    if(settingsTouchingId !=""){
       var x=e.touches[0].pageX;
       var y=e.touches[0].pageY-controlsPx;
-      var w=menuObject[menuTouchingId].r-menuObject[menuTouchingId].l;
-      var prog=(x-menuObject[menuTouchingId].l)/w;
+      var w=settingsObject[settingsTouchingId].r-settingsObject[settingsTouchingId].l;
+      var prog=(x-settingsObject[settingsTouchingId].l)/w;
       if(prog<0){prog=0;}
       if(prog>1){prog=1;}
       //dbug(prog);
-      menuObject[menuTouchingId]["pos"]=prog*2-1;
-      menuDraw();
+      settingsObject[settingsTouchingId]["pos"]=prog*2-1;
+      settingsDraw();
       }
     }
   if(typ=="touchend"){
-    if(menuTouchingId !=""){
-      var pos=menuObject[menuTouchingId].pos; //-1 to 1
+    if(settingsTouchingId !=""){
+      var pos=settingsObject[settingsTouchingId].pos; //-1 to 1
       var selection=Math.floor(pos+1+1/3);
       //dbuga("pos:" +pos +" selection:"+selection);
-      menuObject[menuTouchingId]["value"]=menuObject[menuTouchingId]["values"][selection];
-      menuObject[menuTouchingId]["pos"]=selection-1;
+      settingsObject[settingsTouchingId]["value"]=settingsObject[settingsTouchingId]["values"][selection];
+      settingsObject[settingsTouchingId]["pos"]=selection-1;
       // immediate sound response
-      if(localStorage.getItem("Music") != menuObject["Music"]["value"]){updateMusicSetting();}
-      if(localStorage.getItem("Sounds") != menuObject["Sounds"]["value"]){updateSoundsSetting();}
-      menuDraw();
+      if(localStorage.getItem("Music") != settingsObject["Music"]["value"]){updateMusicSetting();}
+      if(localStorage.getItem("Sounds") != settingsObject["Sounds"]["value"]){updateSoundsSetting();}
+      settingsDraw();
       }
-    if(menuButtonNum>-1){
-      var buttonLabel=menuButtons[menuButtonNum].label;
+    if(settingsButtonNum>-1){
+      var buttonLabel=settingsButtons[settingsButtonNum].label;
       //dbuga('buttonLabel='+buttonLabel);
       if(buttonLabel=="Done"){
         closeModals();
         }
       if(buttonLabel=="Help"){openModal("help");}
       }
-    menuTouchingId="";
-    menuButtonNum=-1;    
+    settingsTouchingId="";
+    settingsButtonNum=-1;    
     }// end of touchend
   }
 function updateMusicSetting(){
@@ -4674,7 +4748,7 @@ function updateDetailSetting(){
   rebuildSequence();
   }
 function updateDetail(){
-  var detail=detailByValue[menuObject["Detail"]["value"]];
+  var detail=detailByValue[settingsObject["Detail"]["value"]];
   var scaleString='scale3d('+1/detail+', '+1/detail+', '+1/detail+')';
   var style = document.createElement('style');
   style.type = 'text/css';
@@ -5566,11 +5640,11 @@ function placeWithin(canvasRef, imageRef){
 //toggleSwitch(4,4,"horizontal",0, ["a","b","c"], "alphabet");
 var len=2;
 var slot=1.5;
-function menuDraw(){
-  var canv=document.getElementById('menuCanvas');
+function settingsDraw(){
+  var canv=document.getElementById('settingsCanvas');
   canv.width=canv.width;
-  menuCanv.style.zIndex=1;
-  var keys=Object.keys(menuObject);
+  settingsCanv.style.zIndex=1;
+  var keys=Object.keys(settingsObject);
   var g=(screenHeight-controlsPx-controlsPx)/(keys.length*4+4);// availHeight/18
   var cx=.5*screenWidth/g;
   var cy=((screenHeight-controlsPx-controlsPx)/2-screenWidth/2)/g+cx;
@@ -5583,19 +5657,19 @@ function menuDraw(){
 
   for (var k=0; k<keys.length; k++){
     var y=(k-2.25)*4;
-    toggleSwitch(g, cx, cy, 0,y,"horizontal",menuObject[keys[k]]['pos'], menuObject[keys[k]]['values'], keys[k]);
+    toggleSwitch(g, cx, cy, 0,y,"horizontal",settingsObject[keys[k]]['pos'], settingsObject[keys[k]]['values'], keys[k]);
     x0=cx;
     y0=cy+y;
 
 
     //ctx.strokeRect(g*(x0-2), g*(y0-2),g*4,g*4);
-    menuObject[keys[k]]["t"]=g*(y0-2);
-    menuObject[keys[k]]["r"]=g*(x0+2);
-    menuObject[keys[k]]["b"]=g*(y0+2);
-    menuObject[keys[k]]["l"]=g*(x0-2);
+    settingsObject[keys[k]]["t"]=g*(y0-2);
+    settingsObject[keys[k]]["r"]=g*(x0+2);
+    settingsObject[keys[k]]["b"]=g*(y0+2);
+    settingsObject[keys[k]]["l"]=g*(x0-2);
     }
-  populateMenu();
-  drawMenuButtons();
+  populateSettings();
+  drawSettingsButtons();
   ctx.font=g/1.5+"px Arial";
   ctx.fillStyle="#333";
   ctx.textAlign="center";
@@ -5611,7 +5685,7 @@ function toggleSwitch(g, cx,cy, x0,y0,orient,pos, tics, label){//returns path
 
 
 
-  var canv=document.getElementById('menuCanvas');
+  var canv=document.getElementById('settingsCanvas');
   var ctx=canv.getContext('2d');
 
   ctx.clearRect(g*(x0-2), g*(y0-2),g*4,g*4);
@@ -5858,11 +5932,11 @@ function rnd(range) {
 <canvas id="colorsCanvas" style="position:absolute;"></canvas>
 <canvas id="navCanvas" style="position:absolute;"></canvas>
 <canvas id="levelsCanvas" style="position:absolute;"></canvas>
-<canvas id="menuCanvas" style="position:absolute;"></canvas>
+<canvas id="settingsCanvas" style="position:absolute;"></canvas>
 <canvas id="carsCanvas" style="position:absolute;"></canvas>
 <canvas id="graphicsCanvas" style="position:absolute;"></canvas>
 <canvas id="cameraCanvas" style="position:absolute;" width="100" height="100"></canvas>
-<canvas id="helpCanvas"></canvas>
+<canvas id="helpCanvas" style="position:absolute;"></canvas>
 <canvas id="loadingCanvas"></canvas>
 
 <div id="debugDiv" style="display:none; position:absolute; top:150px; left:10px; font-size:16px; width:750px; z-index:3; background-color:rgba(255,255,255,.5);"></div>
@@ -5881,10 +5955,11 @@ function rnd(range) {
 
   <div id="preload" >
 <img id="cameraImg" src="default/default2.jpg" />
-<img src="images/info1.png" id="info1Preload"   style="display:none;" />
-<img src="images/info2.png" id="info2Preload"   style="display:none;" />
-<img src="images/info3.png" id="info3reload"   style="display:none;" />
-<img src="images/info4.png" id="info4Preload"   style="display:none;" />
+<img src="images/info0.png" id="help0Preload"   style="display:none;" />
+<img src="images/info1.png" id="help1Preload"   style="display:none;" />
+<img src="images/info2.png" id="help2Preload"   style="display:none;" />
+<img src="images/info3.png" id="help3Preload"   style="display:none;" />
+<img src="images/info4.png" id="help4Preload"   style="display:none;" />
 <img src="trainicons/checked.png" id="checkedPreload"   style="display:none;" />
 <img src="trainicons/unchecked.png" id="uncheckedPreload"   style="display:none;" />
 <img src="trainicons/camera.png" id="cameraPreload"   style="display:none;" />
@@ -6039,15 +6114,20 @@ function rnd(range) {
 <!-- 
 Railroad Train by Jambots.com
 Who else but Jambots.com could create a train puzzle you sove using multiple engines each pulling multiple cars on tracks that YOU draw? Play endless procedurally genrated challenges in three different model scales. Put your photos on the box cars and watch your game play out from a 3d chase or in-cab view. Now with no ad banners, this is a free upgrade for anyone who already had the previous ad-supported version. Complete each level to unlock the final challenge.
+The Game
+Choose a level to begin playing. Drag across tiles to create tracks. Make a loop for the engine to pass by any fields of the same color and return past the silo. Draw tracks from the fields to the loop so cars can be picked up. Finaly add a track for the cars to move into the silo. Get all the cars of all colors into the silos. When the all trains dock at their silos you win!
+
+Tracks will only be placed crossing a tile from one edge to another connecting two adjacent valid tiles. Tracks be laid to silos and fields in only the direction that tracks protrude. Engines will follow tracks when not obstructed, choosing randomly at branches. Cars will attach to the engine or other cars of the same color at an adjacent tile if track allows.
 
 Scale
+Levels of differing complexity will be available depending on the Scale setting and your device's size.
 
-The default scale, "HO" provides a balance of complexity and useablity. The largest scale, "O" is much easier to draw tracks and simpler to solve. The smallest scale, "N" gives you the most track space and cars but can be difficult to draw accurately without a stylus. 
-If you are having trouble getting the tracks to go where you want consistently, try starting at the middle of a cell edge and drag slowly across the cell to another cell edge. 
+The default scale, "HO" provides a balance of complexity and useablity. The largest scale, "O" is much easier to draw tracks and simpler to solve. The smallest scale, "N" gives you the most track space and complexity but it can be difficult to draw accurately without a stylus. 
+Guides are the two spots on the edge of a tile. If you are having trouble getting the tracks to go where you want, try starting at one guide and drag slowly across the cell to another guide. Keep dragging across multiple cells to lay continuous track. 
 At any given scale setting a tablet will have more cells available for tracks than a phone. Device size and aspect ratios vary so the grid will adapt to the best fit for each scale. The number of levels also varies with the grid space available.
 
 Detail
-The Menu shows at the bottom your most recent average Frames Per Second. When AVERAGE FPS falls below 40 cars will stop spawning temporarily. Faster devices will allow more cars but running too many cars can cause congestion or result in the app closing. Set Detail to "Low" to improve performance. Try "High" Detail if you have a very fast device or want the best looking close-ups in video capture. If you have macOS and an iOS device with Lightning cable you can use QuickTime to capture video of your game. Rotating the device will stop the recording!
+Your most recent average Frames Per Second is displayed at the bottom of Settings. When AVERAGE FPS falls below 40 cars will stop spawning temporarily. Faster devices will allow more cars but running too many cars can cause congestion or result in the app closing. Set Detail to "Low" to improve performance. Try "High" Detail if you have a very fast device or want the best looking close-ups in video capture. If you have macOS and an iOS device with Lightning cable you can use QuickTime to capture video of your game. Rotating the device will stop the recording!
 
 Graphics
 A set of 36 graphics are loaded randomly when you first open the app. You can replace these with your own graphics using the camera button. Use the Clear button to make all the graphics for the selected color blank. The random graphics will change out each time you open the game but user created or cleared graphics will persist. You can remove any user generated graphics and restore the random feed. Go to your device's settings, under Apps, and clear  data for Railroad Train. Transparent makes dark areas into the car color and works best with white graphics and text on black. 
