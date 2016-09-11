@@ -1912,7 +1912,7 @@ function openModal(modal){
     }
   }
 var atHelp=0;
-var maxHelp=4;
+var maxHelp=6;
 var squarePx=0;
 var deviceOrient="";
 function updateHelpCanv(){
@@ -1948,11 +1948,11 @@ function updateHelpCanv(){
     if(atHelp>0){
       helpButtons.push(returnModalButton("Prev","left",deviceOrient,false));
       }
-    else{
-      helpButtons.push(returnModalButton("FAQ","left",deviceOrient,false));
-      }
     if(atHelp<maxHelp){
       helpButtons.push(returnModalButton("Next","center",deviceOrient,false));
+      }
+    else{
+      helpButtons.push(returnModalButton("FAQ","center",deviceOrient,false));
       }
     helpButtons.push(returnModalButton("Done","right",deviceOrient,false));
     drawHelpButtons();
@@ -5991,8 +5991,13 @@ function rnd(range) {
 
   <div id="preload" >
 <img id="cameraImg" src="default/default2.jpg" />
-<img src="images/info0.png" id="help0Preload"   style="display:none;" />
-<img src="images/info1.png" id="help1Preload"   style="display:none;" />
+<img src="help/help0.png" id="help0Preload"   style="display:none;" />
+<img src="help/help1.png" id="help1Preload"   style="display:none;" />
+<img src="help/help2.png" id="help2Preload"   style="display:none;" />
+<img src="help/help3.png" id="help3Preload"   style="display:none;" />
+<img src="help/help4.png" id="help4Preload"   style="display:none;" />
+<img src="help/help5.png" id="help5Preload"   style="display:none;" />
+<img src="help/help6.png" id="help6Preload"   style="display:none;" />
 <img src="images/info2.png" id="help2Preload"   style="display:none;" />
 <img src="images/info3.png" id="help3Preload"   style="display:none;" />
 <img src="images/info4.png" id="help4Preload"   style="display:none;" />
