@@ -1382,8 +1382,8 @@ function boardGeometry(){
   setupClasses();
   setupCanvas();// maybe move to resetBoardTimersObjects() 
   //fillGridCanvas();// di move there 
-  document.getElementById('gridCanvas').style.transform="translateZ(-"+cellSize/20+"px)"
-  document.getElementById('fieldHolder').style.transform="translateZ(-"+cellSize/24+"px)"
+  document.getElementById('gridCanvas').style.transform="translateZ(-"+cellSize/40+"px)"
+  document.getElementById('fieldHolder').style.transform="translateZ(-"+cellSize/48+"px)"
   }
 var destMs;
 function restartIntervals(){ 
@@ -1618,7 +1618,7 @@ function returnModalButton(label,align,orient,selected){
   var spread=(screenWidth-(buttonWidth+buttonPad*1.5)*3)/4;
   //dbug('spread:'+spread)
   var topPx=screenHeight-1-buttonPad-buttonHeight-controlsPx;
-  if(helpUp){topPx=screenWidth-buttonHeight-buttonPad;}
+  //if(helpUp){topPx=screenWidth-buttonHeight-buttonPad;}
   var centerPx=screenWidth/2;
   if(orient=="landscape"){
     spread=(screenHeight-320)/12;
@@ -1913,30 +1913,32 @@ function updateHelpCanv(){
 
   squarePadTop=0;
   squarePadLeft=0;
-  if(viewportAspect<1){squarePadTop=screenHeight/2-screenWidth/2;}//portrait
-  else{squarePadLeft=screenHeight/2-screenWidth/2;}//landscape
-
+  if(viewportAspect<1){squarePadTop=(screenHeight-controlsPx)/2-screenWidth/2;}//portrait
+  else{squarePadLeft=(screenHeight-controlsPx)/2-screenWidth/2;}//landscape
   helpCanv.width=screenWidth;
-  helpCanv.height=screenWidth;
-  helpCanv.style.top=squarePadTop+"px";
-  helpCanv.style.left=squarePadLeft+"px";
+  helpCanv.height=screenHeight-controlsPx;
+  helpCanv.style.top=controlsPx+"px";
+  helpCanv.style.left=0+"px";
+  helpCanv.style.backgroundColor="rgba(255,0,255,.75)";
   helpCanv.style.zIndex=3;
   helpCanv.style.display="block";
   var ctx=helpCanv.getContext('2d');
   var img=document.getElementById('help'+atHelp+'Preload');
-  ctx.drawImage(img,0,0,screenWidth,screenWidth);
+  ctx.drawImage(img,squarePadLeft,squarePadTop,screenWidth,screenWidth);
   helpButtons=[];
-  if(atHelp>0){
-    helpButtons.push(returnModalButton("Prev","left","portrait",false));
+  if(initCompleted){
+    if(atHelp>0){
+      helpButtons.push(returnModalButton("Prev","left","portrait",false));
+      }
+    else{
+      helpButtons.push(returnModalButton("FAQ","left","portrait",false));
+      }
+    if(atHelp<maxHelp){
+      helpButtons.push(returnModalButton("Next","center","portrait",false));
+      }
+    helpButtons.push(returnModalButton("Done","right","portrait",false));
+    drawHelpButtons();
     }
-  if(atHelp<maxHelp){
-    helpButtons.push(returnModalButton("Next","center","portrait",false));
-    }
-  else{
-    helpButtons.push(returnModalButton("FAQ","center","portrait",false));
-    }
-  helpButtons.push(returnModalButton("Done","right","portrait",false));
-  drawHelpButtons();
   }
 function closeModals(){
   console.log('closeModals initCompleted:'+initCompleted +' firstRun:'+firstRun );
@@ -2121,7 +2123,8 @@ function initSession(){
     }, false);
 
   //dbuga('end of initSession so start preloading');        
-  updateHelpCanv();
+  //updateHelpCanv();
+  openModal('help');
   window.setTimeout('preloadTick()',10);
   }
 function measureLocalStorage(){
@@ -2154,14 +2157,17 @@ function resumeInit(){
   closeLoading();
   document.getElementById('debugDiv').style.width=screenWidth+"px";
   navButtons[4].label="Select a<br>new level";
-  updateNavCanv();
 
   populateModals();
   initCompleted=true;
+  console.log('resume init happened....');
+  updateNavCanv();
   rebuildSequence();
-  updateHelpCanv();
   if(firstRun==false){
     closeModals();
+    }
+  else{
+    updateHelpCanv();
     }
   transmitBgMusicState();
   requestAnimationFrame(rafTick);
@@ -4621,10 +4627,11 @@ function handleEventHelp(e){
   if(e.type=="touchstart"){
     var t=e.touches[0];
     var found=false;
+      var x=t.pageX;
+      var y=t.pageY-controlsPx;
+    dbuga('x:'+x+' y:'+y);
     for (var hb=0; hb<helpButtons.length; hb++){
       var helpButton=helpButtons[hb];
-      var x=t.pageX-squarePadLeft;
-      var y=t.pageY-squarePadTop;
       if(xyInTrbl(x,y,helpButton)){
         if(helpButton.label=="Prev"){
           atHelp--;
@@ -4637,8 +4644,7 @@ function handleEventHelp(e){
           updateHelpCanv();
           }
         if(helpButton.label=="FAQ"){
-          atHelp++;
-          if(atHelp>maxHelp){atHelp=maxHelp;}
+          ////browser
           updateHelpCanv();
           }
         if(helpButton.label=="Done"){
@@ -4829,7 +4835,8 @@ var navButtons=[
   ];
 var iconShrink=.9;
 function updateNavCanv(){
-  console.log('updateNavCanv()');
+  console.log('updateNavCanv() initCompleted:'+initCompleted);
+  if(initCompleted==false){return false;}
   navCanv.width=screenWidth;
   navCanv.height=controlsPx;
   navCanv.style.top="0px";
@@ -4902,6 +4909,9 @@ function updateNavCanv(){
 function updateColorsCanv(caller){
   colorsButtons=[];
   //dbuga('updateColorsCanv('+caller+')');
+  console.log('updateColorsCanv('+caller+') initCompleted:'+initCompleted);
+  if(initCompleted==false){return false;}
+
   colorsCanv.width=screenHeight;
   colorsCanv.height=controlsPx;
   colorsCanv.style.top="0px";
@@ -5326,7 +5336,7 @@ var graphicsByColor={
 */
 var atColor=0;
 var atGraphic=0;
-
+var loadMs=40;
 function preloadTick(){
   if(atImage<imageIdArray.length){
     var imageId=imageIdArray[atImage]+folderArray[atFolder];
@@ -5339,7 +5349,7 @@ function preloadTick(){
       atImage++;
     }
     updateLoading();
-    window.setTimeout('preloadTick()',1);
+    window.setTimeout('preloadTick()', loadMs);
   }
   else{
     graphicsTick();
@@ -5359,7 +5369,7 @@ function graphicsTick(){
       atColor++;
       }
     updateLoading();
-    window.setTimeout('graphicsTick()',1);
+    window.setTimeout('graphicsTick()',loadMs);
     }
   else{// finished last color so resume
     resumeInit();
