@@ -1611,6 +1611,7 @@ var colorsButtons=[
 
 
 function returnModalButton(label,align,orient,selected){
+  //dbuga('returnModalButton('+label+','+align+','+orient+','+selected+')');
   var modalButton={"selected":selected, "label":label, "l":0, "r":0, "t":0, "b":0};
   var buttonPad=9;
   var buttonWidth=controlsPx*2;
@@ -1625,6 +1626,7 @@ function returnModalButton(label,align,orient,selected){
     topPx=screenWidth-1-buttonPad-buttonHeight-controlsPx;
     centerPx=screenHeight/2;
     buttonWidth*=1.5;
+    //dbuga(label+' topPx:'+topPx+' screenWidth:'+screenWidth);
     }
   var leftPx=1+buttonPad+spread;
   if(align=="center"){leftPx=centerPx-buttonWidth/2;}
@@ -1910,21 +1912,21 @@ function openModal(modal){
 var atHelp=0;
 var maxHelp=4;
 var squarePx=0;
-var orientation="";
+var deviceOrient="";
 function updateHelpCanv(){
   console.log('updateHelpCanv initCompleted:'+initCompleted);
   squarePadTop=0;
   squarePadLeft=0;
   squarePx=0;
   if(viewportAspect<1){//portrait
-    orientation="portrait";
+    deviceOrient="portrait";
     squarePadTop=(screenHeight-controlsPx)/2-screenWidth/2;
     helpCanv.width=screenWidth;
     squarePx=screenWidth;
     helpCanv.height=screenHeight-controlsPx;
     }
   else{//landscape
-    orientation="landscape";
+    deviceOrient="landscape";
     squarePx=screenWidth-controlsPx;
     squarePadLeft=(screenHeight-squarePx)/2;
     console.log(squarePadLeft + '=('+screenHeight+'-'+squarePx+')/2');
@@ -1942,15 +1944,15 @@ function updateHelpCanv(){
   helpButtons=[];
   if(initCompleted){
     if(atHelp>0){
-      helpButtons.push(returnModalButton("Prev","left",orientation,false));
+      helpButtons.push(returnModalButton("Prev","left",deviceOrient,false));
       }
     else{
-      helpButtons.push(returnModalButton("FAQ","left",orientation,false));
+      helpButtons.push(returnModalButton("FAQ","left",deviceOrient,false));
       }
     if(atHelp<maxHelp){
-      helpButtons.push(returnModalButton("Next","center",orientation,false));
+      helpButtons.push(returnModalButton("Next","center",deviceOrient,false));
       }
-    helpButtons.push(returnModalButton("Done","right",orientation,false));
+    helpButtons.push(returnModalButton("Done","right",deviceOrient,false));
     drawHelpButtons();
     console.log(' buttons code ran wtf?');
     }
