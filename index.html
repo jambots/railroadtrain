@@ -1910,9 +1910,12 @@ function openModal(modal){
 var atHelp=0;
 var maxHelp=4;
 function updateHelpCanv(){
+
+  squarePadTop=0;
+  squarePadLeft=0;
   if(viewportAspect<1){squarePadTop=screenHeight/2-screenWidth/2;}//portrait
   else{squarePadLeft=screenHeight/2-screenWidth/2;}//landscape
-  addStyle('#helpCanvas', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px; background-color:rgba(0,0,255,.85);');
+
   helpCanv.width=screenWidth;
   helpCanv.height=screenWidth;
   helpCanv.style.top=squarePadTop+"px";
@@ -2117,7 +2120,7 @@ function initSession(){
     ////window.plugin.CanvasCamera.initialize(cameraCanv);
     }, false);
 
-  //dbuga('end of initSession so start preloading');
+  //dbuga('end of initSession so start preloading');        
   updateHelpCanv();
   window.setTimeout('preloadTick()',10);
   }
