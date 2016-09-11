@@ -1180,6 +1180,8 @@ function changeGeometry(){
   viewportAspect=viewportWidth/viewportHeight;
   //dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
   changeView("changeGeometry");
+    if(helpUp){updateHelpCanv();}
+
   }
 
 function mouseLevel(){
@@ -1345,25 +1347,25 @@ function boardGeometry(){
   levelsCanv.height=screenHeight;
   levelsCanv.style.top=controlsPx+"px";
   levelsCanv.style.left=(0-screenWidth)+"px";
-  levelsCanv.style.backgroundColor="rgba(255,255,255,.75)";
+  levelsCanv.style.backgroundColor="rgba(255,255,255,"+bgAlpha+")";
 
   settingsCanv.width=screenWidth;
   settingsCanv.height=screenHeight;
   settingsCanv.style.top=controlsPx+"px";
   settingsCanv.style.left=screenWidth+"px";
-  settingsCanv.style.backgroundColor="rgba(255,255,255,.75)";
+  settingsCanv.style.backgroundColor="rgba(255,255,255,"+bgAlpha+")";
 
   carsCanv.width=screenHeight;
   carsCanv.height=screenWidth-controlsPx;
   carsCanv.style.top=controlsPx+"px";
   carsCanv.style.left=screenHeight+"px";
-  carsCanv.style.backgroundColor="rgba(255,255,255,.75)";
+  carsCanv.style.backgroundColor="rgba(255,255,255,"+bgAlpha+")";
 
   graphicsCanv.width=screenHeight;
   graphicsCanv.height=screenWidth-controlsPx;
   graphicsCanv.style.top=controlsPx+"px";
   graphicsCanv.style.left=screenHeight+"px";
-  graphicsCanv.style.backgroundColor="rgba(255,255,255,.75)";
+  graphicsCanv.style.backgroundColor="rgba(255,255,255,"+bgAlpha+")";
 
   colorsCanv.width=screenHeight;
   colorsCanv.height=64;
@@ -1374,7 +1376,7 @@ function boardGeometry(){
   navCanv.height=controlsPx;
   navCanv.style.top="0px";
   navCanv.style.left=0+"px";
-  //navCanv.style.backgroundColor="rgba(33,33,255,.75)";
+  //navCanv.style.backgroundColor="rgba(33,33,255,"+bgAlpha+")";
 
   cellSizeHalf=cellSize/2;
   centerSize=cellSize/4;
@@ -1935,7 +1937,7 @@ function updateHelpCanv(){
     }
   helpCanv.style.top=controlsPx+"px";
   helpCanv.style.left=0+"px";
-  helpCanv.style.backgroundColor="rgba(255,0,255,.75)";
+  helpCanv.style.backgroundColor="rgba(255,225,255,"+bgAlpha+")";
   helpCanv.style.zIndex=3;
   helpCanv.style.display="block";
   var ctx=helpCanv.getContext('2d');
@@ -1957,6 +1959,7 @@ function updateHelpCanv(){
     console.log(' buttons code ran wtf?');
     }
   }
+var bgAlpha=.25;
 function closeModals(){
   console.log('closeModals initCompleted:'+initCompleted +' firstRun:'+firstRun );
   clearingAll=false;
@@ -5954,8 +5957,8 @@ function rnd(range) {
 
   <div id="progressHolder" class="">
     <div id="progressDiv" >  
-      <div id="orangeProgressDiv" class="darkorange grow" ></div>
       <div id="blackProgressDiv" class="darkblack grow" ></div>
+      <div id="orangeProgressDiv" class="darkorange grow" ></div>
       <div id="blueProgressDiv" class="darkblue grow" ></div>
       <div id="greenProgressDiv" class="darkgreen grow" ></div>
     </div>
