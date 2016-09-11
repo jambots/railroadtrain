@@ -81,7 +81,6 @@ width:768px;
   -webkit-backface-visibility:hidden;
   }
 #trainHolder{
-  background-image:url(images/grid_yellow.png);
   background-repeat:no-repeat;
   background-position:50% 50%;
 
@@ -5358,7 +5357,7 @@ var graphicsByColor={
 */
 var atColor=0;
 var atGraphic=0;
-var loadMs=40;
+var loadMs=10;
 function preloadTick(){
   if(atImage<imageIdArray.length){
     var imageId=imageIdArray[atImage]+folderArray[atFolder];
@@ -5998,9 +5997,6 @@ function rnd(range) {
 <img src="help/help4.png" id="help4Preload"   style="display:none;" />
 <img src="help/help5.png" id="help5Preload"   style="display:none;" />
 <img src="help/help6.png" id="help6Preload"   style="display:none;" />
-<img src="images/info2.png" id="help2Preload"   style="display:none;" />
-<img src="images/info3.png" id="help3Preload"   style="display:none;" />
-<img src="images/info4.png" id="help4Preload"   style="display:none;" />
 <img src="trainicons/checked.png" id="checkedPreload"   style="display:none;" />
 <img src="trainicons/unchecked.png" id="uncheckedPreload"   style="display:none;" />
 <img src="trainicons/camera.png" id="cameraPreload"   style="display:none;" />
