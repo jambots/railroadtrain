@@ -1909,14 +1909,28 @@ function openModal(modal){
   }
 var atHelp=0;
 var maxHelp=4;
+var squarePx=0;
+var orientation="";
 function updateHelpCanv(){
-
+  console.log('updateHelpCanv initCompleted:'+initCompleted);
   squarePadTop=0;
   squarePadLeft=0;
-  if(viewportAspect<1){squarePadTop=(screenHeight-controlsPx)/2-screenWidth/2;}//portrait
-  else{squarePadLeft=(screenHeight-controlsPx)/2-screenWidth/2;}//landscape
-  helpCanv.width=screenWidth;
-  helpCanv.height=screenHeight-controlsPx;
+  squarePx=0;
+  if(viewportAspect<1){//portrait
+    orientation="portrait";
+    squarePadTop=(screenHeight-controlsPx)/2-screenWidth/2;
+    helpCanv.width=screenWidth;
+    squarePx=screenWidth;
+    helpCanv.height=screenHeight-controlsPx;
+    }
+  else{//landscape
+    orientation="landscape";
+    squarePx=screenWidth-controlsPx;
+    squarePadLeft=(screenHeight-squarePx)/2;
+    console.log(squarePadLeft + '=('+screenHeight+'-'+squarePx+')/2');
+    helpCanv.width=screenHeight;
+    helpCanv.height=screenWidth-controlsPx;
+    }
   helpCanv.style.top=controlsPx+"px";
   helpCanv.style.left=0+"px";
   helpCanv.style.backgroundColor="rgba(255,0,255,.75)";
@@ -1924,20 +1938,21 @@ function updateHelpCanv(){
   helpCanv.style.display="block";
   var ctx=helpCanv.getContext('2d');
   var img=document.getElementById('help'+atHelp+'Preload');
-  ctx.drawImage(img,squarePadLeft,squarePadTop,screenWidth,screenWidth);
+  ctx.drawImage(img,squarePadLeft,squarePadTop,squarePx,squarePx);
   helpButtons=[];
   if(initCompleted){
     if(atHelp>0){
-      helpButtons.push(returnModalButton("Prev","left","portrait",false));
+      helpButtons.push(returnModalButton("Prev","left",orientation,false));
       }
     else{
-      helpButtons.push(returnModalButton("FAQ","left","portrait",false));
+      helpButtons.push(returnModalButton("FAQ","left",orientation,false));
       }
     if(atHelp<maxHelp){
-      helpButtons.push(returnModalButton("Next","center","portrait",false));
+      helpButtons.push(returnModalButton("Next","center",orientation,false));
       }
-    helpButtons.push(returnModalButton("Done","right","portrait",false));
+    helpButtons.push(returnModalButton("Done","right",orientation,false));
     drawHelpButtons();
+    console.log(' buttons code ran wtf?');
     }
   }
 function closeModals(){
@@ -1950,7 +1965,7 @@ function closeModals(){
   if(initCompleted){
     if(firstRun==false){
       paused=false;
-      helpCanv.style.left="-"+screenWidth+"px";
+      helpCanv.style.left="-"+screenHeight+"px";
       helpUp=false;
       }
     }
@@ -2164,9 +2179,11 @@ function resumeInit(){
   updateNavCanv();
   rebuildSequence();
   if(firstRun==false){
+    console.log('in resumeInit firstRun:'+firstRun+' so closeModals');
     closeModals();
     }
   else{
+    console.log('in resumeInit firstRun:'+firstRun+' so updateHelpCanv');
     updateHelpCanv();
     }
   transmitBgMusicState();
@@ -4629,7 +4646,7 @@ function handleEventHelp(e){
     var found=false;
       var x=t.pageX;
       var y=t.pageY-controlsPx;
-    dbuga('x:'+x+' y:'+y);
+    //dbuga('x:'+x+' y:'+y);
     for (var hb=0; hb<helpButtons.length; hb++){
       var helpButton=helpButtons[hb];
       if(xyInTrbl(x,y,helpButton)){
