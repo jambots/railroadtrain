@@ -2037,19 +2037,13 @@ function init(){
     //dbuga('local init()');
     initSession();
     }
+  dbuga('init()')
   }
 var isMobile=false;
 function onDeviceReady(){
-  dbuga('onDeviceReady() so initSession');
+  //dbuga('onDeviceReady() so initSession');
+  isMobile=true;
   initSession();
-  dbuga('onDeviceReady() '+device.platform);
-  if (device.platform == "Android") {
-    isMobile=true;
-    }
-  if (device.platform == "iOS") {
-    isMobile=true;
-    }
-
   }  
 function initStorage(){
   console.log('initStorage();');
@@ -6016,8 +6010,8 @@ function rnd(range) {
 <img src="trainicons/show.png" id="showPreload"   style="display:none;" />
 <img src="trainicons/undo.png" id="undoPreload"   style="display:none;" />
 <img src="default/black.jpg" id="defaultblack"   style="display:none;" />
-<img src="fakegraphics/0a.png" id="default0"   style="display:none;" />
-<img src="fakegraphics/1a.png" id="default1"   style="display:none;" />
+<img src="fakegraphics/21a.png" id="default0"   style="display:none;" />
+<img src="fakegraphics/26a.png" id="default1"   style="display:none;" />
 <img src="fakegraphics/2a.png" id="default2"   style="display:none;" />
 <img src="fakegraphics/3a.png" id="default3"   style="display:none;" />
 <img src="fakegraphics/4a.png" id="default4"   style="display:none;" />
@@ -6037,12 +6031,12 @@ function rnd(range) {
 <img src="fakegraphics/18a.png" id="default18"   style="display:none;" />
 <img src="fakegraphics/19a.png" id="default19"   style="display:none;" />
 <img src="fakegraphics/20a.png" id="default20"   style="display:none;" />
-<img src="fakegraphics/21a.png" id="default21"   style="display:none;" />
+<img src="fakegraphics/0a.png" id="default21"   style="display:none;" />
 <img src="fakegraphics/22a.png" id="default22"   style="display:none;" />
 <img src="fakegraphics/23a.png" id="default23"   style="display:none;" />
 <img src="fakegraphics/24a.png" id="default24"   style="display:none;" />
 <img src="fakegraphics/25a.png" id="default25"   style="display:none;" />
-<img src="fakegraphics/26a.png" id="default26"   style="display:none;" />
+<img src="fakegraphics/1a.png" id="default26"   style="display:none;" />
 <img src="fakegraphics/27a.png" id="default27"   style="display:none;" />
 <img src="fakegraphics/28a.png" id="default28"   style="display:none;" />
 <img src="fakegraphics/29a.png" id="default29"   style="display:none;" />
