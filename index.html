@@ -2038,8 +2038,17 @@ function init(){
     initSession();
     }
   }
+var mobile=false;
 function onDeviceReady(){
   //dbuga('onDeviceReady() so initSession');
+
+  if (device.platform == "Android") {
+    mobile=true;
+    }
+  if (device.platform == "iOS") {
+    mobile=true;
+    }
+
   initSession();
   }  
 function initStorage(){
@@ -5332,7 +5341,7 @@ function initGraphicsByColor(){
     for (var i=0; i<graphicsPerColor; i++){
       var imageObj={
         "imageId":"default"+atDefault,
-        "blackTrans":false,
+        "blackTrans":mobile,
         "x":x,
         "y":y        
         }
@@ -6007,42 +6016,42 @@ function rnd(range) {
 <img src="trainicons/show.png" id="showPreload"   style="display:none;" />
 <img src="trainicons/undo.png" id="undoPreload"   style="display:none;" />
 <img src="default/black.jpg" id="defaultblack"   style="display:none;" />
-<img src="newtraingraphics/0.png" id="default0"   style="display:none;" />
-<img src="newtraingraphics/1.png" id="default1"   style="display:none;" />
-<img src="newtraingraphics/2.png" id="default2"   style="display:none;" />
-<img src="newtraingraphics/3.png" id="default3"   style="display:none;" />
-<img src="newtraingraphics/4.png" id="default4"   style="display:none;" />
-<img src="newtraingraphics/5.png" id="default5"   style="display:none;" />
-<img src="newtraingraphics/0.png" id="default6"   style="display:none;" />
-<img src="newtraingraphics/7.png" id="default7"   style="display:none;" />
-<img src="newtraingraphics/8.png" id="default8"   style="display:none;" />
-<img src="newtraingraphics/9.png" id="default9"   style="display:none;" />
-<img src="newtraingraphics/10.png" id="default10"   style="display:none;" />
-<img src="newtraingraphics/11.png" id="default11"   style="display:none;" />
-<img src="newtraingraphics/12.png" id="default12"   style="display:none;" />
-<img src="newtraingraphics/13.png" id="default13"   style="display:none;" />
-<img src="newtraingraphics/14.png" id="default14"   style="display:none;" />
-<img src="newtraingraphics/15.png" id="default15"   style="display:none;" />
-<img src="newtraingraphics/16.png" id="default16"   style="display:none;" />
-<img src="newtraingraphics/17.png" id="default17"   style="display:none;" />
-<img src="newtraingraphics/18.png" id="default18"   style="display:none;" />
-<img src="newtraingraphics/19.png" id="default19"   style="display:none;" />
-<img src="newtraingraphics/20.png" id="default20"   style="display:none;" />
-<img src="newtraingraphics/21.png" id="default21"   style="display:none;" />
-<img src="newtraingraphics/22.png" id="default22"   style="display:none;" />
-<img src="newtraingraphics/23.png" id="default23"   style="display:none;" />
-<img src="newtraingraphics/24.png" id="default24"   style="display:none;" />
-<img src="newtraingraphics/25.png" id="default25"   style="display:none;" />
-<img src="newtraingraphics/26.png" id="default26"   style="display:none;" />
-<img src="newtraingraphics/27.png" id="default27"   style="display:none;" />
-<img src="newtraingraphics/28.png" id="default28"   style="display:none;" />
-<img src="newtraingraphics/29.png" id="default29"   style="display:none;" />
-<img src="newtraingraphics/30.png" id="default30"   style="display:none;" />
-<img src="newtraingraphics/31.png" id="default31"   style="display:none;" />
-<img src="newtraingraphics/32.png" id="default32"   style="display:none;" />
-<img src="newtraingraphics/33.png" id="default33"   style="display:none;" />
-<img src="newtraingraphics/34.png" id="default34"   style="display:none;" />
-<img src="newtraingraphics/35.png" id="default35"   style="display:none;" />
+<img src="fakegraphics/0a.png" id="default0"   style="display:none;" />
+<img src="fakegraphics/1a.png" id="default1"   style="display:none;" />
+<img src="fakegraphics/2a.png" id="default2"   style="display:none;" />
+<img src="fakegraphics/3a.png" id="default3"   style="display:none;" />
+<img src="fakegraphics/4a.png" id="default4"   style="display:none;" />
+<img src="fakegraphics/5a.png" id="default5"   style="display:none;" />
+<img src="fakegraphics/6a.png" id="default6"   style="display:none;" />
+<img src="fakegraphics/7a.png" id="default7"   style="display:none;" />
+<img src="fakegraphics/8a.png" id="default8"   style="display:none;" />
+<img src="fakegraphics/9a.png" id="default9"   style="display:none;" />
+<img src="fakegraphics/10a.png" id="default10"   style="display:none;" />
+<img src="fakegraphics/11a.png" id="default11"   style="display:none;" />
+<img src="fakegraphics/12a.png" id="default12"   style="display:none;" />
+<img src="fakegraphics/13a.png" id="default13"   style="display:none;" />
+<img src="fakegraphics/14a.png" id="default14"   style="display:none;" />
+<img src="fakegraphics/15a.png" id="default15"   style="display:none;" />
+<img src="fakegraphics/16a.png" id="default16"   style="display:none;" />
+<img src="fakegraphics/17a.png" id="default17"   style="display:none;" />
+<img src="fakegraphics/18a.png" id="default18"   style="display:none;" />
+<img src="fakegraphics/19a.png" id="default19"   style="display:none;" />
+<img src="fakegraphics/20a.png" id="default20"   style="display:none;" />
+<img src="fakegraphics/21a.png" id="default21"   style="display:none;" />
+<img src="fakegraphics/22a.png" id="default22"   style="display:none;" />
+<img src="fakegraphics/23a.png" id="default23"   style="display:none;" />
+<img src="fakegraphics/24a.png" id="default24"   style="display:none;" />
+<img src="fakegraphics/25a.png" id="default25"   style="display:none;" />
+<img src="fakegraphics/26a.png" id="default26"   style="display:none;" />
+<img src="fakegraphics/27a.png" id="default27"   style="display:none;" />
+<img src="fakegraphics/28a.png" id="default28"   style="display:none;" />
+<img src="fakegraphics/29a.png" id="default29"   style="display:none;" />
+<img src="fakegraphics/30a.png" id="default30"   style="display:none;" />
+<img src="fakegraphics/31a.png" id="default31"   style="display:none;" />
+<img src="fakegraphics/32a.png" id="default32"   style="display:none;" />
+<img src="fakegraphics/33a.png" id="default33"   style="display:none;" />
+<img src="fakegraphics/34a.png" id="default34"   style="display:none;" />
+<img src="fakegraphics/35a.png" id="default35"   style="display:none;" />
 
 <img src="sprites/tank/tankside.png" id="tanksideblack"  style="display:none;" />
 <img src="sprites/tank/tankend.png" id="tankendblack"  style="display:none;" />
