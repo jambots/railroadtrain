@@ -2038,18 +2038,18 @@ function init(){
     initSession();
     }
   }
-var mobile=false;
+var isMobile=false;
 function onDeviceReady(){
-  //dbuga('onDeviceReady() so initSession');
-
+  dbuga('onDeviceReady() so initSession');
+  initSession();
+  dbuga('onDeviceReady() '+device.platform);
   if (device.platform == "Android") {
-    mobile=true;
+    isMobile=true;
     }
   if (device.platform == "iOS") {
-    mobile=true;
+    isMobile=true;
     }
 
-  initSession();
   }  
 function initStorage(){
   console.log('initStorage();');
