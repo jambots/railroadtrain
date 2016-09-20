@@ -21,6 +21,10 @@
     font-family: akzi;
     src: url(ttf/akzidenzgrotesklight.ttf);
 }
+@font-face {
+    font-family: akziBold;
+    src: url(ttf/akzidenzgroteskbold.ttf);
+}
 .cubeFace{
   
   display: block;
@@ -763,6 +767,9 @@ function setupClasses(){
   addStyle('#helpCanvas', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px; background-color:rgba(0,0,255,.85);');
   document.getElementById('helpCanvas').width=screenWidth;
   document.getElementById('helpCanvas').height=screenWidth;
+  addStyle('#compCanvas', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px; background-color:rgba(0,0,255,.85);');
+  document.getElementById('compCanvas').width=screenWidth;
+  document.getElementById('compCanvas').height=screenWidth;
   var loadingPx=Math.floor(screenWidth/6);
   addStyle('#loadingCanvas', 'position:absolute; top:0px; left:0px; Zbackground-color:rgba(255,0,0,.85);');
   document.getElementById('loadingCanvas').width=loadingPx;
@@ -1180,7 +1187,7 @@ function changeGeometry(){
   //dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
   changeView("changeGeometry");
     if(helpUp){updateHelpCanv();}
-
+    if(compUp){updateCompCanv();}
   }
 
 function mouseLevel(){
@@ -1225,6 +1232,8 @@ var helpImages=["info0", "info1", "info2", "info3", "info4"];
 var atHelp=0;
 var helpCanv;
 var helpUp=true;
+var compCanv;
+var compUp=false;
 
 var bannerEnabled=false;
 var levelsCanv;
@@ -1240,6 +1249,7 @@ var cameraCanv;
 function initGeometry(){
   console.log("initGeometry()");
   helpCanv=document.getElementById("helpCanvas");
+  compCanv=document.getElementById("compCanvas");
   levelsCanv=document.getElementById("levelsCanvas");
   settingsCanv=document.getElementById("settingsCanvas");
   carsCanv=document.getElementById("carsCanvas");
@@ -1632,6 +1642,12 @@ function returnModalButton(label,align,orient,selected){
   var leftPx=1+buttonPad+spread;
   if(align=="center"){leftPx=centerPx-buttonWidth/2;}
   if(align=="right"){leftPx=centerPx*2-1-buttonWidth-buttonPad-spread;}
+  if(align=="square"){
+    leftPx=squarePadLeft;
+    topPx=squarePadTop;
+    buttonWidth=screenWidth;
+    buttonHeight=screenWidth;
+    }
 
   modalButton.l=leftPx;
   modalButton.r=leftPx+buttonWidth;
@@ -1735,6 +1751,13 @@ function drawHelpButtons(){
   var helpCtx=helpCanv.getContext('2d');
   for (var b=0; b<helpButtons.length; b++){
     drawModalButton(helpCtx, helpButtons[b]);
+    }
+  }
+function drawCompButtons(){
+  //dbuga('drawSettingsButtons');
+  var compCtx=compCanv.getContext('2d');
+  for (var b=0; b<compButtons.length; b++){
+    drawModalButton(compCtx, compButtons[b]);
     }
   }
 var levelsGridPx=0;
@@ -1909,11 +1932,55 @@ function openModal(modal){
     helpUp=true;
     updateHelpCanv();
     }
+  if(modal=="comp"){
+    compUp=true;
+    updateCompCanv();
+    }
   }
-var atHelp=0;
-var maxHelp=6;
 var squarePx=0;
 var deviceOrient="";
+function updateCompCanv(){
+  console.log('updateCompCanv initCompleted:'+initCompleted);
+  squarePadTop=0;
+  squarePadLeft=0;
+  squarePx=0;
+  if(viewportAspect<1){//portrait
+    deviceOrient="portrait";
+    squarePadTop=(screenHeight-controlsPx)/2-screenWidth/2;
+    compCanv.width=screenWidth;
+    squarePx=screenWidth;
+    compCanv.height=screenHeight-controlsPx;
+    }
+  else{//landscape
+    deviceOrient="landscape";
+    squarePx=screenWidth-controlsPx;
+    squarePadLeft=(screenHeight-squarePx)/2;
+    console.log(squarePadLeft + '=('+screenHeight+'-'+squarePx+')/2');
+    compCanv.width=screenHeight;
+    compCanv.height=screenWidth-controlsPx;
+    }
+  compCanv.style.top=controlsPx+"px";
+  compCanv.style.left=0+"px";
+  compCanv.style.backgroundColor="rgba(255,225,255,"+bgAlpha+")";
+  compCanv.style.zIndex=3;
+  compCanv.style.display="block";
+  var ctx=compCanv.getContext('2d');
+  //ctx.drawImage(img,squarePadLeft,squarePadTop,squarePx,squarePx);
+  compButtons=[];
+  compButtons.push(returnModalButton("Done","right",deviceOrient,false));
+  drawCompButtons();
+  }
+var modalBg="rgba(255,255,255,.25)";
+var modalText="rgba(70,70,70,1)";
+var modalStroke="rgba(180,180,180,1)";
+var modalFill="rgba(255,255,255,.75)";
+var modalShrink=.95;
+var modalLine=.025;
+var modalRadius=.1;
+var modalHeading=.08;
+var modalBody=.05;
+var modalHeadingFont="akziBold";
+var modalBodyFont="akzi";
 function updateHelpCanv(){
   console.log('updateHelpCanv initCompleted:'+initCompleted);
   squarePadTop=0;
@@ -1936,12 +2003,38 @@ function updateHelpCanv(){
     }
   helpCanv.style.top=controlsPx+"px";
   helpCanv.style.left=0+"px";
-  helpCanv.style.backgroundColor="rgba(255,225,255,"+bgAlpha+")";
   helpCanv.style.zIndex=3;
   helpCanv.style.display="block";
   var ctx=helpCanv.getContext('2d');
-  var img=document.getElementById('help'+atHelp+'Preload');
-  ctx.drawImage(img,squarePadLeft,squarePadTop,squarePx,squarePx);
+  helpCanv.style.backgroundColor=modalBg;
+  ctx.fillStyle=modalFill;
+  ctx.strokeStyle=modalStroke;
+  ctx.lineWidth=squarePx*modalLine;
+  var pad=squarePx*(1-modalShrink);
+  roundRect(ctx, pad+squarePadLeft, pad+squarePadTop, squarePx-pad*2, squarePx-pad*2, modalRadius*squarePx, true, false);
+  if(helps[atHelp].img != ""){
+    ctx.globalCompositeOperation = "source-in";
+    var img=document.getElementById(helps[atHelp].img);
+    ctx.drawImage(img,squarePadLeft,squarePadTop,squarePx,squarePx);
+    ctx.globalCompositeOperation = "source-over";
+    }
+  roundRect(ctx, pad+squarePadLeft, pad+squarePadTop, squarePx-pad*2, squarePx-pad*2, modalRadius*squarePx, false, true);
+  var cx=squarePadLeft+squarePx/2;
+  var headingPx=modalHeading*squarePx;
+  var bodyPx=modalBody*squarePx;
+  var atY=pad+squarePadTop+headingPx;
+  ctx.textBaseline="middle";
+  ctx.fillStyle=modalText;
+  ctx.textAlign="center";
+  ctx.font=headingPx+"px "+modalHeadingFont;
+  
+  atY+=wrapText(ctx, helps[atHelp].heading, cx, atY, squarePx-pad*2, headingPx, false);
+  ctx.font=bodyPx+"px "+modalBodyFont;
+  var parts=helps[atHelp].body.split("<br>");
+  for (var p=0; p<parts.length; p++){
+    atY+=bodyPx/2;
+    atY+=wrapText(ctx, parts[p], cx, atY, squarePx-pad*4, bodyPx, false);
+    }
   helpButtons=[];
   if(initCompleted){
     if(atHelp>0){
@@ -1950,14 +2043,38 @@ function updateHelpCanv(){
     if(atHelp<maxHelp){
       helpButtons.push(returnModalButton("Next","center",deviceOrient,false));
       }
-    else{
-      helpButtons.push(returnModalButton("FAQ","center",deviceOrient,false));
-      }
     helpButtons.push(returnModalButton("Done","right",deviceOrient,false));
     drawHelpButtons();
-    console.log(' buttons code ran wtf?');
+    if(helps[atHelp].buttonLabel != ""){
+      helpButtons.push(returnModalButton(helps[atHelp].buttonLabel,"square",deviceOrient,false));
+      }
     }
   }
+function wrapText(context, text, x, y, maxWidth, lineHeight, stroke) {
+        //console.log('wrap ' +text+' '+y);
+        var height = lineHeight;
+        var words = text.split(' ');
+        var line = '';
+        for(var n = 0; n < words.length; n++) {
+          var testLine = line + words[n] + ' ';
+          var metrics = context.measureText(testLine);
+          var testWidth = metrics.width;
+          if (testWidth > maxWidth && n > 0) {
+            if(stroke){context.strokeText(line, x, y);}
+            else{context.fillText(line, x, y);}
+            line = words[n] + ' ';
+            y += lineHeight;
+            height += lineHeight;
+            }
+          else {
+            line = testLine;
+            }
+          }
+        if(stroke){context.strokeText(line, x, y);}
+        else{context.fillText(line, x, y);}
+        return height;
+        }
+
 var bgAlpha=.66;
 function closeModals(){
   console.log('closeModals initCompleted:'+initCompleted +' firstRun:'+firstRun );
@@ -1973,6 +2090,8 @@ function closeModals(){
       helpUp=false;
       }
     }
+  compUp=false;
+  compCanv.style.left="-"+screenHeight+"px";
   levelsCanv.style.left="-"+screenWidth+"px";
   levelsUp=false;
   settingsCanv.style.left="-"+screenWidth+"px";
@@ -2836,9 +2955,10 @@ function updateProgressBar(){
       document.getElementById(color+"ProgressDiv").style.width=progressPixels+"px";
       }
     }
-  //if(totalCarsDocked==totalCarsNeeded){
-  //  playSound("applause");
-  // }
+  if(totalCarsDocked==totalCarsNeeded){
+    //playSound("applause");
+    //window.setTimeout("openModal('comp')", 1000);
+    }
   }
 
 // source functions
@@ -3178,6 +3298,10 @@ function trainAction(trainNum){
           thisConnection=thisTrack.replace(trainOppDir, "");          
           connectionsArray=[thisConnection];
           playSound("applause");
+          if(totalCarsDocked==totalCarsNeeded){
+          //playSound("applause");
+            window.setTimeout("openModal('comp')", 1000);
+            }
           }
         }
       }
@@ -3812,6 +3936,7 @@ function touchEvent(event){
         else if(graphicsUp){handleEventGraphics(event);}
         else if(graphicsEditing){handleEventEditing(event);}
         else if(helpUp){handleEventHelp(event);}
+        else if(compUp){handleEventComp(event);}
         else{handleEventDolly(event);}      
         }
       }
@@ -3820,6 +3945,7 @@ function touchEvent(event){
         if(levelsUp){handleEventLevels(event);}
         else if(settingsUp){handleEventSettings(event);}
         else if(helpUp){handleEventHelp(event);}
+        else if(compUp){handleEventComp(event);}
         else{handleEventDraw(event);}
         }
       else {
@@ -4338,6 +4464,12 @@ function closeHelp(){
   document.getElementById('helpCanvas').style.display="none";
   helpUp=false;
   }
+function closeComp(){
+  console.log('closeComp');
+  paused=false;
+  document.getElementById('compCanvas').style.display="none";
+  compUp=false;
+  }
 
 var graphicsTouching=false;
 var graphicsEvent;
@@ -4646,8 +4778,32 @@ var carsButtons=[];
 var graphicsButtons=[];
 var settingsButtons=[];
 var helpButtons=[];
+var compButtons=[];
+
+function handleEventComp(e){
+  console.log('handleEventComp ');
+  if(e.type=="touchstart"){
+    var t=e.touches[0];
+    var found=false;
+      var x=t.pageX;
+      var y=t.pageY-controlsPx;
+    //dbuga('x:'+x+' y:'+y);
+    for (var b=0; b<compButtons.length; b++){
+      var compButton=compButtons[b];
+      if(xyInTrbl(x,y,compButton)){
+        if(compButton.label=="Done"){
+          closeModals();
+          }
+        }
+      }
+    }
+  if(e.type=="touchmove"){
+    }
+  if(e.type=="touchend"){
+    }
+  }
 function handleEventHelp(e){
-  console.log('handleEventHelp ');
+  console.log('handleEventHelp atHelp='+atHelp);
   if(e.type=="touchstart"){
     var t=e.touches[0];
     var found=false;
@@ -4658,18 +4814,18 @@ function handleEventHelp(e){
       var helpButton=helpButtons[hb];
       if(xyInTrbl(x,y,helpButton)){
         if(helpButton.label=="Prev"){
+          found=true;
           atHelp--;
           if(atHelp<0){atHelp=0;}
-          updateHelpCanv();
           }
         if(helpButton.label=="Next"){
+          found=true;
           atHelp++;
+          console.log(hb+' '+helpButton.label+' atHelp now '+atHelp);
           if(atHelp>maxHelp){atHelp=maxHelp;}
-          updateHelpCanv();
           }
-        if(helpButton.label=="FAQ"){
-          ////browser
-          updateHelpCanv();
+        if(helpButton.label=="www"){
+          openBrowser("http://www.jambots.com/railroadTrain");
           }
         if(helpButton.label=="Done"){
           closeHelp();
@@ -4677,6 +4833,9 @@ function handleEventHelp(e){
           }
         //dbug(atHelp);
         }
+      }// hb loop
+    if(found){
+      updateHelpCanv();
       }
     }
   if(e.type=="touchmove"){
@@ -4684,7 +4843,9 @@ function handleEventHelp(e){
   if(e.type=="touchend"){
     }
   }
-
+function openBrowser(url){
+  dbuga(url);
+  }
 function handleEventSettings(e){
   var typ = e.type;
   if(typ == "touchstart"){
@@ -4736,7 +4897,7 @@ function handleEventSettings(e){
       if(buttonLabel=="Done"){
         closeModals();
         }
-      if(buttonLabel=="Help"){openModal("help");}
+      if(buttonLabel=="Help"){atHelp=1; openModal("help");}
       }
     settingsTouchingId="";
     settingsButtonNum=-1;    
@@ -5386,7 +5547,9 @@ function graphicsTick(){
   var color;
   if(atColor<colorArray.length){
     color=colorArray[atColor];
+    ////
     processGraphic(atColor, atGraphic, false, false);
+    ////
     atGraphic++;
     if(atGraphic>=graphicsByColor[color].length){
       atGraphic=0;
@@ -5926,10 +6089,42 @@ function radToDeg(x) {
 function rnd(range) {
   return Math.floor(Math.random()*range);
   }
+var helps=[
+  {"heading":"Railroad Train", "body":"by Jambots.com", "img":"helps0Preload", "buttonLabel":""},
+  {"heading":"How to Play", "body":"Choose a level.<br>Draw a loop past the fields and silos. Connect the fields and silos to the loop to pick up and drop off cars. <br>Get all the cars into the silos to win!", "img":"helps1Preload",  "buttonLabel":""},
+  {"heading":"Drawing Tracks", "body":"Tracks are placed by dragging across a tile from one edge to another.<br>Keep dragging to draw continuous tracks.<br>Guide marks indicate valid track positions.", "img":"helps2Preload",  "buttonLabel":""},
+  {"heading":"Cinematic Mode", "body":"Orient your device to landscape and watch your game progress.<br>Colored circles change the view. Drag to pan and zoom.", "img":"helps3Preload",  "buttonLabel":""},
+  {"heading":"Modify Cars", "body":"In Cinematic mode select the camera icon to modify the car graphics.<br>Select a color and tap a car to modify.<br>Use the Camera button to take and add pictures to cars. Be sure to keep your device oriented landscape. Pinch to scale and position then Save.<br>Dark areas become transparent when the checkbox is checked.", "img":"helps4Preload",  "buttonLabel":""},
+  {"heading":"Settings", "body":"Levels of differing complexity will be available depending on the Scale setting and your device's screen size.<br>The largest scale, O, is much easier to draw tracks and simpler to solve. The smallest scale, N, gives you the most track space and complexity but it can be difficult to draw accurately without a stylus.<br>Lower Detail settings can improve frame rate. When the frame rate drops new cars will not spawn.", "img":"helps5Preload",  "buttonLabel":""},
+  {"heading":"Strategy Guide", "body":"Watch videos about Railroad Train on the jambots.com website.<br>CLICK HERE", "img":"",  "buttonLabel":"www"}
+  ];
+var atHelp=0;
+var maxHelp=helps.length-1;
 
 </script>
 </head>
 <body onload="init()" ontouchstart="event.preventDefault(); touchStart(event);" ontouchmove="event.preventDefault(); touchMove(event);" ontouchend="event.preventDefault(); touchEnd(event);" ontouchcancel="touchCancel(event);" style="background-color:#fff; width:100%; height:100%;">
+<!-- 
+Who else but Jambots.com could create a train puzzle you solve using multiple engines each pulling multiple cars on tracks that YOU draw? Play endless procedurally genrated challenges in three different model scales. Put your photos on the box cars and watch your game play out from a 3d chase or in-cab view. Now with no ad banners, this is a free upgrade for anyone who already had the previous ad-supported version. This is a puzzle, not a simulation of real or toy trains.
+
+
+Help File
+Choose a level to begin playing. Drag across tiles to create tracks. Make a loop for the engine to pass by any fields of the same color and return past the silo. Draw tracks from the fields to the loop so cars can be picked up. Finaly add a track for the cars to move into the silo. Get all the cars of all colors into the silos to win!
+Tracks will only be placed crossing a tile from one edge to another connecting two adjacent valid tiles. Tracks be laid to silos and fields in only the direction that tracks protrude. Engines will follow tracks when not obstructed, choosing randomly at branches. Cars will attach to the engine or other cars of the same color at an adjacent tile if track allows.
+
+Scale
+Levels of differing complexity will be available depending on the Scale setting and your device's screen size.<br>Lower detail settings can improve frame rate. When the frame rate drops new cars will not spawn. 
+
+The default scale, "HO" provides a balance of complexity and useablity. The largest scale, "O" is much easier to draw tracks and simpler to solve. The smallest scale, "N" gives you the most track space and complexity but it can be difficult to draw accurately without a stylus. 
+Guides are the two spots on the edge of a tile. If you are having trouble getting the tracks to go where you want, try starting at one guide and drag slowly across the cell to another guide. Keep dragging across multiple cells to lay continuous track. 
+At any given scale setting a tablet will have more cells available for tracks than a phone. Device size and aspect ratios vary so the grid will adapt to the best fit for each scale. The number of levels also varies with the grid space available.
+
+Detail
+Your most recent average Frames Per Second is displayed at the bottom of Settings. When AVERAGE FPS falls below 40 cars will stop spawning temporarily. Faster devices will allow more cars but running too many cars can cause congestion or result in the app closing. Set Detail to "Low" to improve performance. Try "High" Detail if you have a very fast device or want the best looking close-ups in video capture. If you have macOS and an iOS device with Lightning cable you can use QuickTime to capture video of your game. Rotating the device will stop the recording!
+
+Graphics
+A set of 36 graphics are loaded randomly when you first open the app. You can replace these with your own graphics using the camera button. Use the Clear button to make all the graphics for the selected color blank. The random graphics will change out each time you open the game but user created or cleared graphics will persist. You can remove any user generated graphics and restore the random feed. Go to your device's settings, under Apps, and clear  data for Railroad Train. Transparent makes dark areas into the car color and works best with white graphics and text on black. 
+-->
 <div id="wrapper" style="display:block; position:absolute; top:0px; left:100px; overflow:hidden; Zbackground-color:white;">
   <div id="highlighter"></div>
   <div id="prerails">
@@ -5975,6 +6170,7 @@ function rnd(range) {
 <canvas id="graphicsCanvas" style="position:absolute;"></canvas>
 <canvas id="cameraCanvas" style="position:absolute;" width="100" height="100"></canvas>
 <canvas id="helpCanvas" style="position:absolute;"></canvas>
+<canvas id="compCanvas" style="position:absolute;"></canvas>
 <canvas id="loadingCanvas"></canvas>
 
 <div id="debugDiv" style="display:none; position:absolute; top:150px; left:10px; font-size:16px; width:750px; z-index:3; background-color:rgba(255,255,255,.5);"></div>
@@ -5993,13 +6189,12 @@ function rnd(range) {
 
   <div id="preload" >
 <img id="cameraImg" src="default/default2.jpg" />
-<img src="help/help0.png" id="help0Preload"   style="display:none;" />
-<img src="help/help1.png" id="help1Preload"   style="display:none;" />
-<img src="help/help2.png" id="help2Preload"   style="display:none;" />
-<img src="help/help3.png" id="help3Preload"   style="display:none;" />
-<img src="help/help4.png" id="help4Preload"   style="display:none;" />
-<img src="help/help5.png" id="help5Preload"   style="display:none;" />
-<img src="help/help6.png" id="help6Preload"   style="display:none;" />
+<img src="helps/helps0.png" id="helps0Preload"   style="display:none;" />
+<img src="helps/helps1.png" id="helps1Preload"   style="display:none;" />
+<img src="helps/helps2.png" id="helps2Preload"   style="display:none;" />
+<img src="helps/helps3.png" id="helps3Preload"   style="display:none;" />
+<img src="helps/helps4.png" id="helps4Preload"   style="display:none;" />
+<img src="helps/helps5.png" id="helps5Preload"   style="display:none;" />
 <img src="trainicons/checked.png" id="checkedPreload"   style="display:none;" />
 <img src="trainicons/unchecked.png" id="uncheckedPreload"   style="display:none;" />
 <img src="trainicons/camera.png" id="cameraPreload"   style="display:none;" />
@@ -6138,12 +6333,12 @@ function rnd(range) {
 
 
 
-
 <!-- 
-Railroad Train by Jambots.com
 Who else but Jambots.com could create a train puzzle you solve using multiple engines each pulling multiple cars on tracks that YOU draw? Play endless procedurally genrated challenges in three different model scales. Put your photos on the box cars and watch your game play out from a 3d chase or in-cab view. Now with no ad banners, this is a free upgrade for anyone who already had the previous ad-supported version. This is a puzzle, not a simulation of real or toy trains.
-Choose a level to begin playing. Drag across tiles to create tracks. Make a loop for the engine to pass by any fields of the same color and return past the silo. Draw tracks from the fields to the loop so cars can be picked up. Finaly add a track for the cars to move into the silo. Get all the cars of all colors into the silos. When the all trains dock at their silos you win!
 
+
+Help File
+Choose a level to begin playing. Drag across tiles to create tracks. Make a loop for the engine to pass by any fields of the same color and return past the silo. Draw tracks from the fields to the loop so cars can be picked up. Finaly add a track for the cars to move into the silo. Get all the cars of all colors into the silos to win!
 Tracks will only be placed crossing a tile from one edge to another connecting two adjacent valid tiles. Tracks be laid to silos and fields in only the direction that tracks protrude. Engines will follow tracks when not obstructed, choosing randomly at branches. Cars will attach to the engine or other cars of the same color at an adjacent tile if track allows.
 
 Scale
@@ -6160,6 +6355,7 @@ Graphics
 A set of 36 graphics are loaded randomly when you first open the app. You can replace these with your own graphics using the camera button. Use the Clear button to make all the graphics for the selected color blank. The random graphics will change out each time you open the game but user created or cleared graphics will persist. You can remove any user generated graphics and restore the random feed. Go to your device's settings, under Apps, and clear  data for Railroad Train. Transparent makes dark areas into the car color and works best with white graphics and text on black. 
 -->
   </div>
-<span style="font-family:akzi; position:absolute; top:-100px;">Akzi</span>
+<span style="font-family:akzi; position:absolute; top:-100px;">akzi</span>
+<span style="font-family:akziBold; position:absolute; top:-100px;">akziBold</span>
 </body>
 </html>  
