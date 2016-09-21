@@ -1940,6 +1940,11 @@ function openModal(modal){
 var squarePx=0;
 var deviceOrient="";
 function updateCompCanv(){
+  var totalMs=0;
+  for(var c=0; c<completedCars.length; c++){
+    totalMs+=completedCars[c].destroyed;
+    totalMs-=completedCars[c].created;
+    }
   console.log('updateCompCanv initCompleted:'+initCompleted);
   squarePadTop=0;
   squarePadLeft=0;
@@ -1961,11 +1966,44 @@ function updateCompCanv(){
     }
   compCanv.style.top=controlsPx+"px";
   compCanv.style.left=0+"px";
-  compCanv.style.backgroundColor="rgba(255,225,255,"+bgAlpha+")";
+  compCanv.style.backgroundColor=modalBg;
   compCanv.style.zIndex=3;
   compCanv.style.display="block";
   var ctx=compCanv.getContext('2d');
-  //ctx.drawImage(img,squarePadLeft,squarePadTop,squarePx,squarePx);
+  ctx.fillStyle=modalFill;
+  ctx.strokeStyle=modalStroke;
+  ctx.lineWidth=squarePx*modalLine;
+  var pad=squarePx*(1-modalShrink);
+  roundRect(ctx, pad+squarePadLeft, pad+squarePadTop, squarePx-pad*2, squarePx-pad*2, modalRadius*squarePx, true, true);
+
+  
+    ctx.globalCompositeOperation = "source-atop";
+    var img=document.getElementById(helps[0].img);
+    ctx.drawImage(img,squarePadLeft,squarePadTop,squarePx,squarePx);
+    ctx.globalCompositeOperation = "source-over";
+
+  roundRect(ctx, pad+squarePadLeft, pad+squarePadTop, squarePx-pad*2, squarePx-pad*2, modalRadius*squarePx, false, true);
+
+  var cx=squarePadLeft+squarePx/2;
+  var headingPx=modalHeading*squarePx;
+  var bodyPx=modalBody*squarePx;
+  var atY=pad+squarePadTop+headingPx;
+  ctx.textBaseline="middle";
+  ctx.fillStyle=modalText;
+  ctx.textAlign="center";
+  ctx.font=headingPx+"px "+modalHeadingFont;
+  
+  atY+=wrapText(ctx, "Completed!", cx, atY, squarePx-pad*2, headingPx, false);
+  ctx.font=bodyPx+"px "+modalBodyFont;
+  var compBody=completedCars.length+" number of cars<br>";
+  var totalSec=totalMs/1000;
+  compBody+=Math.floor(totalSec)+" Total Seconds<br>";
+  compBody+="Seconds per car: "+Math.floor(10*totalSec/completedCars.length)/10;
+  var parts=compBody.split("<br>");
+  for (var p=0; p<parts.length; p++){
+    atY+=bodyPx/2;
+    atY+=wrapText(ctx, parts[p], cx, atY, squarePx-pad*4, bodyPx, false);
+    }
   compButtons=[];
   compButtons.push(returnModalButton("Done","right",deviceOrient,false));
   drawCompButtons();
@@ -2011,14 +2049,16 @@ function updateHelpCanv(){
   ctx.strokeStyle=modalStroke;
   ctx.lineWidth=squarePx*modalLine;
   var pad=squarePx*(1-modalShrink);
-  roundRect(ctx, pad+squarePadLeft, pad+squarePadTop, squarePx-pad*2, squarePx-pad*2, modalRadius*squarePx, true, false);
+  roundRect(ctx, pad+squarePadLeft, pad+squarePadTop, squarePx-pad*2, squarePx-pad*2, modalRadius*squarePx, true, true);
+
   if(helps[atHelp].img != ""){
-    ctx.globalCompositeOperation = "source-in";
+    ctx.globalCompositeOperation = "source-atop";
     var img=document.getElementById(helps[atHelp].img);
     ctx.drawImage(img,squarePadLeft,squarePadTop,squarePx,squarePx);
     ctx.globalCompositeOperation = "source-over";
     }
   roundRect(ctx, pad+squarePadLeft, pad+squarePadTop, squarePx-pad*2, squarePx-pad*2, modalRadius*squarePx, false, true);
+
   var cx=squarePadLeft+squarePx/2;
   var headingPx=modalHeading*squarePx;
   var bodyPx=modalBody*squarePx;
@@ -2342,8 +2382,9 @@ function secondTick(){
   }
 var turnFrames=0;
 var camPos={"x":0, "y":0, "d":0};
-
-function rafTick(nowMs){
+var nowMs=0;
+function rafTick(ms){
+  nowMs=Math.floor(ms);
   if(focusTrain>=trainData.length){focusTrain=0;}
   if((settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
 
@@ -2447,6 +2488,7 @@ function resetBoardTimersObjects(){
   sourceCount=0;
   destCount=0;
   carData=[];
+  completedCars=[]; 
   trainData=[];
   sourceData=[];
   destData=[];
@@ -3086,6 +3128,8 @@ function carObject(color, dir, x, y, oid){
   //dbuga("color:"+color+" dir:"+dir+" x:"+x+" y:"+y+" oid:"+oid);
   deg=degByDir[dir];
   var c={};
+  c.created=nowMs;
+  c.color=color;
   c.color=color;
   c.trainNum=-1;
   c.attached=false;
@@ -3393,6 +3437,7 @@ function trainAction(trainNum){
             var deadCar=destData[trainNum].carsArray.shift();
             var thisRef=carData[thisCarId].ref;
             hideQueue.push(thisRef);
+            completedCars.push({"created":carData[thisCarId].created, "destroyed":nowMs});
             carData[thisCarId].attached=false;
             delete collisionData['car'+thisCarId];
             scoreObject[destData[trainNum].color]++;
@@ -3440,7 +3485,7 @@ function trainAction(trainNum){
   //dbugaObject(trainData[trainNum]);
 
   }
-
+var completedCars=[];
 // done.js
 
 // ------------------- completed var and object declairations
