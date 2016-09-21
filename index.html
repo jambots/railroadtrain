@@ -3071,6 +3071,7 @@ function tankObject(color, dir, x, y, oid){
   //dbuga("color:"+color+" dir:"+dir+" x:"+x+" y:"+y+" oid:"+oid);
   deg=degByDir[dir];
   var c={};
+  c.created=nowMs;
   c.color=color;
   c.trainNum=-1;
   c.attached=false;
@@ -4891,6 +4892,7 @@ function handleEventHelp(e){
   }
 function openBrowser(url){
   dbuga(url);
+  var ref=cordova.InAppBrowser.open(url, "_system");
   }
 function handleEventSettings(e){
   var typ = e.type;
