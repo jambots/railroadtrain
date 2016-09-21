@@ -1356,25 +1356,25 @@ function boardGeometry(){
   levelsCanv.height=screenHeight;
   levelsCanv.style.top=controlsPx+"px";
   levelsCanv.style.left=(0-screenWidth)+"px";
-  levelsCanv.style.backgroundColor="rgba(255,255,255,"+bgAlpha+")";
+  levelsCanv.style.backgroundColor=modalBg;
 
   settingsCanv.width=screenWidth;
   settingsCanv.height=screenHeight;
   settingsCanv.style.top=controlsPx+"px";
   settingsCanv.style.left=screenWidth+"px";
-  settingsCanv.style.backgroundColor="rgba(255,255,255,"+bgAlpha+")";
+  settingsCanv.style.backgroundColor=modalBg;
 
   carsCanv.width=screenHeight;
   carsCanv.height=screenWidth-controlsPx;
   carsCanv.style.top=controlsPx+"px";
   carsCanv.style.left=screenHeight+"px";
-  carsCanv.style.backgroundColor="rgba(255,255,255,"+bgAlpha+")";
+  carsCanv.style.backgroundColor=modalBg;
 
   graphicsCanv.width=screenHeight;
   graphicsCanv.height=screenWidth-controlsPx;
   graphicsCanv.style.top=controlsPx+"px";
   graphicsCanv.style.left=screenHeight+"px";
-  graphicsCanv.style.backgroundColor="rgba(255,255,255,"+bgAlpha+")";
+  graphicsCanv.style.backgroundColor=modalBg;
 
   colorsCanv.width=screenHeight;
   colorsCanv.height=64;
@@ -2005,10 +2005,11 @@ function updateCompCanv(){
     atY+=wrapText(ctx, parts[p], cx, atY, squarePx-pad*4, bodyPx, false);
     }
   compButtons=[];
-  compButtons.push(returnModalButton("Done","right",deviceOrient,false));
+  compButtons.push(returnModalButton("Done","center",deviceOrient,false));
   drawCompButtons();
+  compButtons.push(returnModalButton("Done","square",deviceOrient,false));
   }
-var modalBg="rgba(255,255,255,.25)";
+var modalBg="rgba(255,255,255,.45)";
 var modalText="rgba(70,70,70,1)";
 var modalStroke="rgba(180,180,180,1)";
 var modalFill="rgba(255,255,255,.75)";
