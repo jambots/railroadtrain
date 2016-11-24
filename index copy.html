@@ -30,7 +30,7 @@
     src: url(ttf/akzidenzgroteskbold.ttf);
 }
 .cubeFace{
-  background-color:rgba(128,128,128,0);
+  background-color:rgba(128,128,128,.1);
   display: block;
   position: absolute;
   -webkit-backface-visibility: hidden;
@@ -205,12 +205,12 @@ var cellSizeHalf=48;
 var cellsAcross=8;
 var cellsDown=8;
 var shrink=.95;
-//shrink=1
+shrink=1
 var colorsUp=true;
 var cubeSize=cellSize;
 var faceData={};
 function setupFaceData(){
-  //dbuga("setupFaceData() cubeSize="+cubeSize);
+  dbuga("setupFaceData() cubeSize="+cubeSize);
   var s=cubeSize;
   faceData={
   "tank":[
@@ -228,16 +228,16 @@ function setupFaceData(){
     {"img":"boxend", "width":6/24, "height":8/24, "trans":'rotateX(-90deg)  rotateY(-270deg) translateZ('+s*22/48+'px) translateY('+s*8/48+'px) translateX('+-s*6/48+'px)'}
   ],
   "engine":[
-    {"img":"enginefloor", "width":1, "height":6/24, "trans":'rotateZ(180deg) translateZ('+-s*19/44+'px) translateY('+-s*6/44+'px) translateX('+-s*22/44+'px)'},
-    {"img":"engineroof", "width":1, "height":12/44, "trans":'rotateZ(180deg) translateZ('+-s*10/44+'px) translateY('+-s*6/44+'px) translateX('+-s*22/44+'px)'},
-    {"img":"enginestarouter", "width":1, "height":15/44, "trans":'rotateX(-90deg) translateZ('+s*4/44+'px) translateY('+s*7/44+'px) translateX('+-s*22/44+'px)'},
-    {"img":"enginestarinner", "width":1, "height":15/44, "trans":'rotateX(-90deg) translateZ('+s*2.5/44+'px) translateY('+s*7/44+'px) translateX('+-s*22/44+'px)'},
-    {"img":"engineportouter", "width":1, "height":15/44, "trans":'rotateX(-90deg) rotateY(180deg) translateZ('+s*4/44+'px) translateY('+s*7/44+'px) translateX('+-s*22/44+'px)'},
-    {"img":"engineportinner", "width":1, "height":15/44, "trans":'rotateX(-90deg) rotateY(180deg) translateZ('+s*2.5/44+'px) translateY('+s*7/44+'px) translateX('+-s*22/44+'px)'},
-    {"img":"enginenose", "width":12/44, "height":15/44, "trans":'rotateX(-90deg)  rotateY(-90deg) translateZ('+s*18.5/44+'px) translateY('+s*7/44+'px) translateX('+-s*6/44+'px)'},
-    {"img":"enginenose", "width":12/44, "height":15/44, "trans":'rotateX(-90deg)  rotateY(-270deg) translateZ('+s*18/44+'px) translateY('+s*7/44+'px) translateX('+-s*6/44+'px)'},
-    {"img":"enginecab", "width":12/44, "height":15/44, "trans":'rotateX(-90deg)  rotateY(-90deg) translateZ('+-s*7/44+'px) translateY('+s*7/44+'px) translateX('+-s*6/44+'px)'},
-    {"img":"enginecab", "width":12/44, "height":15/44, "trans":'rotateX(-90deg)  rotateY(-270deg) translateZ('+s*12/44+'px) translateY('+s*7/44+'px) translateX('+-s*6/44+'px)'}
+    {"img":"enginefloor", "width":1, "height":6/24, "trans":'rotateZ(180deg) translateZ('+-s*21/48+'px) translateY('+-s*6/48+'px) translateX('+-s*24/48+'px)'},
+    {"img":"engineroof", "width":1, "height":6/24, "trans":'rotateZ(180deg) translateZ('+-s*11/48+'px) translateY('+-s*6/48+'px) translateX('+-s*24/48+'px)'},
+    {"img":"enginestarouter", "width":1, "height":8/24, "trans":'rotateX(-90deg) translateZ('+s*5/48+'px) translateY('+s*8/48+'px) translateX('+-s*24/48+'px)'},
+    {"img":"enginestarinner", "width":1, "height":8/24, "trans":'rotateX(-90deg) translateZ('+s*3/48+'px) translateY('+s*8/48+'px) translateX('+-s*24/48+'px)'},
+    {"img":"engineportouter", "width":1, "height":8/24, "trans":'rotateX(-90deg) rotateY(180deg) translateZ('+s*5/48+'px) translateY('+s*8/48+'px) translateX('+-s*24/48+'px)'},
+    {"img":"engineportinner", "width":1, "height":8/24, "trans":'rotateX(-90deg) rotateY(180deg) translateZ('+s*3/48+'px) translateY('+s*8/48+'px) translateX('+-s*24/48+'px)'},
+    {"img":"enginenose", "width":6/24, "height":8/24, "trans":'rotateX(-90deg)  rotateY(-90deg) translateZ('+s*20/48+'px) translateY('+s*8/48+'px) translateX('+-s*6/48+'px)'},
+    {"img":"enginenose", "width":6/24, "height":8/24, "trans":'rotateX(-90deg)  rotateY(-270deg) translateZ('+s*20/48+'px) translateY('+s*8/48+'px) translateX('+-s*6/48+'px)'},
+    {"img":"enginecab", "width":6/24, "height":8/24, "trans":'rotateX(-90deg)  rotateY(-90deg) translateZ('+-s*7/48+'px) translateY('+s*8/48+'px) translateX('+-s*6/48+'px)'},
+    {"img":"enginecab", "width":6/24, "height":8/24, "trans":'rotateX(-90deg)  rotateY(-270deg) translateZ('+s*14/48+'px) translateY('+s*8/48+'px) translateX('+-s*6/48+'px)'}
   ]
 
 };
@@ -363,7 +363,7 @@ function oneShot(soundName){
             }
           });
         soundRefByName[soundName]=newSound;
-        //dbuga('new howl in oneShot '+soundName);
+        dbuga('new howl in oneShot '+soundName);
  
         }  
       }  
@@ -399,7 +399,7 @@ function loopStart(soundName){// soundName like "Classic/measure_loop_inst"
             }
           });
         soundRefByName[soundName]=newSound;
-        //dbuga('loop new howl '+soundName);
+        dbuga('loop new howl '+soundName);
  
         }  
       }  
@@ -782,7 +782,7 @@ function setupClasses(){
   addStyle('.trInner', 'top:' + p*0 + 'px; left:' + p*54 + 'px; width:' + p*38 + 'px; height:' + p*38 + 'px; border-bottom:' + p*2 + 'px #888  solid; border-left:' + p*2 + 'px #888  solid; -webkit-border-bottom-left-radius:' + p*100 + 'px; position:absolute;');
   addStyle('.blOuter', 'top:' + p*38 + 'px; left:' + p*0 + 'px; width:' + p*54 + 'px; height:' + p*54 + 'px; border-top:' + p*2 + 'px #888  solid; border-right:' + p*2 + 'px #888  solid; -webkit-border-top-right-radius:' + p*100 + 'px; position:absolute;');
   addStyle('.blInner', 'top:' + p*54 + 'px; left:' + p*0 + 'px; width:' + p*38 + 'px; height:' + p*38 + 'px; border-top:' + p*2 + 'px #888  solid; border-right:' + p*2 + 'px #888  solid; -webkit-border-top-right-radius:' + p*100 + 'px; position:absolute;');
-/*
+
 
   addStyle('.car', 'width:' + p*96 + 'px; height:' + cellSize + 'px; position:absolute;');
   addStyle('.coupler', 'top:' + p*0  + 'px; left:' + p*46 +'px; width:' + p*10 +'px; height:' + cellSize + 'px; border-left:' + p*4 + 'px #1F1A17 solid; position:absolute;');
@@ -811,7 +811,7 @@ function setupClasses(){
   addStyle('.blackTrainBody',    'width:' + p*24 + 'px; height:' + p*60 + 'px; top:' + p*12 + 'px; left:' + p*36 + 'px; background-color:#555; position:absolute; ');
   addStyle('.blackTrainTank',    'width:' + p*12 + 'px; height:' + p*60 + 'px; top:' + p*10 + 'px; left:' + p*42 + 'px; background-color:#000; -webkit-border-radius: ' + p*10 +'px; position:absolute; ');
   addStyle('.blackTrainCatcher', 'width:' + p*16 + 'px; height:' + p*16 + 'px; top:' + p*0  + 'px; left:' + p*40 + 'px; background-color:#555; position:absolute; -webkit-transform: rotate(45deg);');
-*/
+
   }
 var gridContext;
 var trackContext;
@@ -1245,8 +1245,8 @@ function initGeometry(){
     screenWidth=414;//iphone 6+
     screenHeight=736;
 
-    screenWidth=400;//cube 100
-    screenHeight=736;
+    screenWidth=422;//cube 100
+    screenHeight=800;
 /*
 
     screenWidth=768;//ipad
