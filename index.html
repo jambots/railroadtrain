@@ -2170,6 +2170,8 @@ function onDeviceReady(){
   //dbuga('onDeviceReady() so initSession');
   isMobile=true;
   initSession();
+  StatusBar.overlaysWebView(true);
+  StatusBar.hide();
   }  
 function initStorage(){
   console.log('initStorage();');
