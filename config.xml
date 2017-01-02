@@ -31,6 +31,7 @@
 <gap:plugin name="io.litehelpers.cordova.sqlitestorage" version="0.7.5" />
 -->
 <!-- in testing plugins -->
+<gap:plugin name="cordova-plugin-fullscreen" source="npm" />
 <gap:plugin name="cordova-plugin-statusbar" source="npm" />
 <preference name="StatusBarOverlaysWebView" value="false" />
 
