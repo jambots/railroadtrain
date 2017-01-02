@@ -2170,6 +2170,8 @@ function onDeviceReady(){
   //dbuga('onDeviceReady() so initSession');
   isMobile=true;
   initSession();
+
+  // dependant on <gap:plugin name="cordova-plugin-statusbar" source="npm" />
   StatusBar.overlaysWebView(true);
   StatusBar.hide();
   }  
