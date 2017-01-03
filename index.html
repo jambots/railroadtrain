@@ -1638,9 +1638,9 @@ function drawModalButton(ctx, modalButton){
   //dbuga(buttonLine);
   ctx.strokeStyle=buttonStroke;
   ctx.fillStyle=buttonFill;
-  if(modalButton.label != "Transparent"){
+  //if(modalButton.label != "Transparent"){
     roundRect(ctx, modalButton.l, modalButton.t, buttonWidth, buttonHeight, buttonHeight/2, true, true);
-    }
+  //  }
   var bcx=modalButton.l/2+modalButton.r/2;
   var bcy=modalButton.t+buttonHeight/2;
   var settingsFont=Math.floor(buttonHeight/2)+"px akziBold";
