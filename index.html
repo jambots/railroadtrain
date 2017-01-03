@@ -1473,7 +1473,8 @@ function populateGraphics(){
 
 
   var buttonWidth=g*9;
-  var buttonHeight=g*3;
+  var carGrid=buttonWidth/22
+  var buttonHeight=carGrid*7.5;
   //dbuga("topPad="+topPad);
   //dbuga("leftPad="+leftPad);
   //end new
@@ -1490,6 +1491,8 @@ function populateGraphics(){
   var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
   graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth, buttonHeight);
   //dbuga('populateGraphics 9');
+  graphicsCtx.fillStyle="rgba(255,255,0,.5)";
+  graphicsCtx.fillRect(carButton.l, carButton.t, buttonWidth, buttonHeight);
 
   graphicsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth, buttonHeight);
   //cameraCanv.style.display="none";
@@ -5715,12 +5718,12 @@ function processGraphic(colorNum, graphicNum, blacken, cache){
 
 
 function trimBox(canv){
-  var g=Math.floor(canv.width/24);
+  var g=Math.floor(canv.width/22);
   var ctx=canv.getContext('2d');
-  ctx.clearRect(0,0,g*24,g);
-  ctx.clearRect(0,0,g,g*8);
-  ctx.clearRect(0,g*7,g*24,g);
-  ctx.clearRect(g*23,0,g,g*8);
+  ctx.clearRect(0,0,g*22,g);
+  ctx.clearRect(0,0,g,g*7.5);
+  ctx.clearRect(0,g*7,g*22,g);
+  ctx.clearRect(g*23,0,g,g*7.5);
   //dbuga(g);
   }
 function returnCanvas(w,h){
