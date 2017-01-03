@@ -5720,10 +5720,10 @@ function processGraphic(colorNum, graphicNum, blacken, cache){
 function trimBox(canv){
   var g=Math.floor(canv.width/22);
   var ctx=canv.getContext('2d');
-  ctx.clearRect(0,0,g*22,g);
-  ctx.clearRect(0,0,g,g*7.5);
-  ctx.clearRect(0,g*7,g*22,g);
-  ctx.clearRect(g*23,0,g,g*7.5);
+  ctx.clearRect(0,0,g*22,g);//top
+  ctx.clearRect(0,0,g,g*7.5);//left
+  ctx.clearRect(0,g*6,g*22,g*1.5);//bottom
+  ctx.clearRect(g*21,0,g,g*7.5);//right
   //dbuga(g);
   }
 function returnCanvas(w,h){
