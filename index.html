@@ -5512,6 +5512,9 @@ function openAdjacentCellsArray(x, y, excludeCell){
     }
   return returnArray;
   }
+
+
+// fuctions to modify canvas and images
 function processTransPanel(){
   var c=document.getElementById("myCanvas");
   var ctx=c.getContext("2d");
@@ -5723,8 +5726,10 @@ function trimBox(canv){
   ctx.clearRect(0,0,g*22,g);//top
   ctx.clearRect(0,0,g,g*7.5);//left
   ctx.clearRect(0,g*6,g*22,g*1.5);//bottom
-  ctx.clearRect(g*21,0,g,g*7.5);//right
-  //dbuga(g);
+  ctx.clearRect(g*21,0,g,g*7.5);//right 
+
+  ctx.clearRect(0,g*5,g*22,g*1.5);//bottom
+  dbuga('trimbox');
   }
 function returnCanvas(w,h){
   var canvas=document.createElement("canvas");
