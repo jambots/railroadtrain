@@ -3577,9 +3577,13 @@ function returnObjectInfo(theObject){
   return dstring;
   }
 function dbug(theString){
-  
-  document.getElementById("debugDiv").style.display="block";
-  document.getElementById("debugDiv").innerHTML=""+theString+"<br>";
+  if(theString==""){
+    document.getElementById("debugDiv").style.display="none";
+    }
+  else{
+    document.getElementById("debugDiv").style.display="block";
+    document.getElementById("debugDiv").innerHTML=""+theString+"<br>";
+    }
   }
 function dbuga(theString){
 
@@ -4072,6 +4076,7 @@ function handleEventCars(e){
 function handleEventGraphics(e){
   //dbuga(' - handleEventGraphics('+e.type+') graphicsUp='+graphicsUp+' graphicsEditing='+graphicsEditing);
   if(e.type=="touchstart"){
+    dbug('handleEventGraphics touchstart');
     var t=e.touches[0];
         var found=false;
         for (var gb=0; gb<graphicsButtons.length; gb++){
@@ -5885,9 +5890,10 @@ function multiplyCanvas(canvasRef, imageRef){
   ctx.drawImage(imageRef, 0, 0);
   } 
 function placeWithin(canvasRef, imageRef){
-  var g= canvasRef.width/24;
+  dbuga('placeWithin');
+  var g= canvasRef.width/22;
   var ctx=canvasRef.getContext("2d");
-  ctx.drawImage(imageRef, g,g, g*22,g*6);
+  ctx.drawImage(imageRef, g,g, g*20,g*5);
   } 
 
 
