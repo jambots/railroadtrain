@@ -4354,6 +4354,7 @@ function cameraLoaded(){
 
 
 function postviewGraphics(){
+  dbuga("postviewGraphics()");
   cameraCanv.width=800;
   cameraCanv.height=200;
   cameraCanv.style.display="none";
@@ -5728,15 +5729,28 @@ function processGraphic(colorNum, graphicNum, blacken, cache){
 function trimBox(canv){
   var g=Math.floor(canv.width/22);
   var ctx=canv.getContext('2d');
+
   ctx.clearRect(0,0,g*22,g);//top
   ctx.clearRect(0,0,g,g*7.5);//left
   ctx.clearRect(0,g*6,g*22,g*1.5);//bottom
   ctx.clearRect(g*21,0,g,g*7.5);//right 
+  ctx.strokeStyle="blue";
+  ctx.lineWidth=2;
+  ctx.beginPath();
+  for(var x=0; x<=22; x++){
+    ctx.moveTo(g*x, 0);
+    ctx.lineTo(g*x, canv.height);
+    }
+  for(var y=0; y<=7; y++){
+    ctx.moveTo(0, g*y, 0);
+    ctx.lineTo(canv.width, g*y);
+    }
+  ctx.stroke();
 
-  ctx.clearRect(0,g*5,g*22,g*1.5);//bottom
-  dbuga('trimbox');
+  dbuga('trimbox aspect:'+(canv.width/canv.height));
   }
 function returnCanvas(w,h){
+  dbuga('returnCanvas() '+(w/h));
   var canvas=document.createElement("canvas");
   canvas.width = w;
   canvas.height = h;
