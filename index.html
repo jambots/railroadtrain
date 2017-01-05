@@ -222,7 +222,7 @@ function setupFaceData(){
   ],
   "box":[
     {"img":"boxend", "width":6/22, "height":7.5/22, "trans":'rotateX(-90deg)  rotateY(-90deg) translateZ('+s*10/22+'px) translateY('+s*4/22+'px) translateX(-'+s*3/22+'px)'},
-    {"img":"boxtop", "width":1, "height":6/22, "trans":'translateZ(-'+s*4/22+'px) translateY('+ -s*3/22+'px) translateX('+ -s*11/22+'px)'},
+    {"img":"boxtop", "width":1, "height":6/22, "trans":'translateZ(-'+s*4.5/22+'px) translateY('+ -s*3/22+'px) translateX('+ -s*11/22+'px)'},
     {"img":"boxside", "width":1, "height":7.5/22, "trans":'rotateX(-90deg) rotateY(180deg) translateZ('+s*2.5/22+'px) translateY('+s*3.75/22+'px) translateX(-'+s*11/22+'px)'},
     {"img":"boxside", "width":1, "height":7.5/22, "trans":'rotateX(-90deg) translateZ('+cubeSize*2.5/22+'px) translateY('+s*3.75/22+'px) translateX(-'+ s*11/22+'px)'},
     {"img":"boxend", "width":6/22, "height":7.5/22, "trans":'rotateX(-90deg)  rotateY(-270deg) translateZ('+s*10/22+'px) translateY('+s*4/22+'px) translateX('+-s*3/22+'px)'}
@@ -1501,9 +1501,10 @@ function populateGraphics(){
   var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
   graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth, buttonHeight);
   //dbuga('populateGraphics 9');
+/*
   graphicsCtx.fillStyle="rgba(255,255,0,.5)";
   graphicsCtx.fillRect(carButton.l, carButton.t, buttonWidth, buttonHeight);
-
+*/
   graphicsCtx.drawImage(carButton.ref, carButton.l, carButton.t, buttonWidth, buttonHeight);
   //cameraCanv.style.display="none";
 
@@ -5751,6 +5752,7 @@ function trimBox(canv){
   ctx.clearRect(0,0,g,g*7.5);//left
   ctx.clearRect(0,g*6,g*22,g*1.5);//bottom
   ctx.clearRect(g*21,0,g,g*7.5);//right 
+/*
   ctx.strokeStyle="blue";
   ctx.lineWidth=2;
   ctx.beginPath();
@@ -5763,6 +5765,7 @@ function trimBox(canv){
     ctx.lineTo(canv.width, g*y);
     }
   ctx.stroke();
+*/
 
   //dbuga('trimbox aspect:'+(canv.width/canv.height));
   }
