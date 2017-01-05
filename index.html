@@ -5539,7 +5539,8 @@ function processTransPanel(){
 var atImage=0;
 var atFolder=0;
 var imageIdArray=["boxside","boxtop","boxend", "enginefloor", "engineroof", "enginenose", "enginecab", "enginestarinner", "enginestarouter", "engineportinner", "engineportouter"];
-var folderArray=["source","trans","grey","green","blue","orange","black"];
+//var folderArray=["source","trans","grey","green","blue","orange","black"];
+var folderArray=["grey","green","blue","orange","black"];
 var imgRefs={};
 var colorArray=["black","orange","blue","green"];
 var rgbValArray=[[30,30,30],[218,37,28],[0,91,161],[63,179,160]];
@@ -5586,6 +5587,7 @@ function preloadTick(){
   if(atImage<imageIdArray.length){
     var imageId=imageIdArray[atImage]+folderArray[atFolder];
     imgRefs[imageId]=document.getElementById(imageId);
+    dbuga('preloadTick imageId='+imageId);
     dbuga(imgRefs[imageId].width+" "+imgRefs[imageId].height);
     atFolder++;
     if(atFolder>=folderArray.length){
@@ -5682,11 +5684,12 @@ function processGraphic(colorNum, graphicNum, blacken, cache){
   if(cached){// use img default ref //data:image/jpeg;base64,
     document.getElementById(imageId).src="" +localStorage.getItem(imageId);
     }
-  var alphaSourceRef=imgRefs['boxsidesource'];
+  var alphaSourceRef=imgRefs['boxsideblack'];
   dbuga("processGraphic "+colorNum+", "+graphicNum+" blackTrans="+blackTrans);
   var alphaRef=returnCanvas(alphaSourceRef.width, alphaSourceRef.height);
   imageCanvas(alphaRef, alphaSourceRef);
-  var textureSourceRef=imgRefs['boxsidetrans'];
+  //var textureSourceRef=imgRefs['boxsidetrans'];
+  var textureSourceRef=imgRefs['boxsideblack'];
   var textureRef=returnCanvas(textureSourceRef.width, textureSourceRef.height);
   transifyCanvas(textureRef, textureSourceRef);
 
@@ -6300,8 +6303,9 @@ var maxHelp=helps.length-1;
 <img src="sprites/tank/tankend.png" id="tankendblack"  style="display:none;" />
 <img src="sprites/tank/tanktop.png" id="tanktopblack" style="display:none;" />
 
-<img src="sprites/trans/boxside.png" id="boxsidetrans"  style="display:none;" />
-<img src="sprites/source/boxside.png" id="boxsidesource"  style="display:none;" />
+<img src="sprites/black/boxside.png" id="boxsidetrans"  style="display:none;" />
+<img src="sprites/black/boxside.png" id="boxsidesource"  style="display:none;" />
+
 <!--
 <img src="sprites/trans/boxend.png" id="boxendtrans"  style="display:none;" />
 <img src="sprites/trans/boxtop.png" id="boxtoptrans" style="display:none;" />
@@ -6325,6 +6329,7 @@ var maxHelp=helps.length-1;
 <img src="sprites/source/enginenose.png" id="enginenosesource" style="display:none;" />
 <img src="sprites/source/enginecab.png" id="enginecabsource" style="display:none;" />
 -->
+
 <img src="sprites/green/boxside.png" id="boxsidegreen"  style="display:none;" />
 <img src="sprites/green/boxend.png" id="boxendgreen"  style="display:none;" />
 <img src="sprites/green/boxtop.png" id="boxtopgreen" style="display:none;" />
