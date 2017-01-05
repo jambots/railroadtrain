@@ -5586,7 +5586,7 @@ function preloadTick(){
   if(atImage<imageIdArray.length){
     var imageId=imageIdArray[atImage]+folderArray[atFolder];
     imgRefs[imageId]=document.getElementById(imageId);
-
+    dbuga(imgRefs[imageId].width+" "+imgRefs[imageId].height);
     atFolder++;
     if(atFolder>=folderArray.length){
       //dbuga(' ! ' +atFolder +'>='+folderArray.length);
@@ -5682,8 +5682,8 @@ function processGraphic(colorNum, graphicNum, blacken, cache){
   if(cached){// use img default ref //data:image/jpeg;base64,
     document.getElementById(imageId).src="" +localStorage.getItem(imageId);
     }
-  //dbuga("processGraphic "+colorNum+", "+graphicNum+" blackTrans="+blackTrans);
   var alphaSourceRef=imgRefs['boxsidesource'];
+  dbuga("processGraphic "+colorNum+", "+graphicNum+" blackTrans="+blackTrans);
   var alphaRef=returnCanvas(alphaSourceRef.width, alphaSourceRef.height);
   imageCanvas(alphaRef, alphaSourceRef);
   var textureSourceRef=imgRefs['boxsidetrans'];
