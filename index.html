@@ -221,6 +221,16 @@ function setupFaceData(){
     {"img":"tankend", "width":6/24, "height":8/24, "trans":'rotateX(-90deg)  rotateY(-270deg) translateZ('+s*20/48+'px) translateY('+s*8/48+'px) translateX('+-s*6/48+'px)'}
   ],
   "box":[
+    {"img":"boxend", "width":5/22, "height":7.5/22, "trans":'rotateX(-90deg)  rotateY(-90deg) translateZ('+s*10/22+'px) translateY('+s*3/22+'px) translateX(-'+s*3/22+'px)'},
+    {"img":"boxtop", "width":1, "height":5/22, "trans":'translateZ(-'+s*5.5/22+'px) translateY('+ -s*2.5/22+'px) translateX('+ -s*11/22+'px)'},
+    {"img":"boxside", "width":1, "height":7.5/22, "trans":'rotateX(-90deg) rotateY(180deg) translateZ('+s*2.5/22+'px) translateY('+s*3.75/22+'px) translateX(-'+s*11/22+'px)'},
+    {"img":"boxside", "width":1, "height":7.5/22, "trans":'rotateX(-90deg) translateZ('+cubeSize*2.5/22+'px) translateY('+s*3.75/22+'px) translateX(-'+ s*11/22+'px)'},
+    {"img":"boxend", "width":5/22, "height":7.5/22, "trans":'rotateX(-90deg)  rotateY(-270deg) translateZ('+s*10/22+'px) translateY('+s*3/22+'px) translateX('+-s*3/22+'px)'}
+  ],
+  "hold":[
+
+  ],
+  "boxBACK":[
     {"img":"boxtop", "width":1, "height":6/24, "trans":'translateZ('+ -s*10/48+'px) translateY('+ -s*6/48+'px) translateX('+ -s*24/48+'px)'},
     {"img":"boxside", "width":1, "height":8/24, "trans":'rotateX(-90deg) translateZ('+cubeSize*5/48+'px) translateY('+s*8/48+'px) translateX('+-s*24/48+'px)'},
     {"img":"boxside", "width":1, "height":8/24, "trans":'rotateX(-90deg) rotateY(180deg) translateZ('+s*5/48+'px) translateY('+s*8/48+'px) translateX('+-s*24/48+'px)'},
@@ -1227,8 +1237,8 @@ function initGeometry(){
   viewportHeight = window.innerHeight;
 
   if(screenWidth>screenHeight){
-    screenWidth = screen.height;
-    screenHeight = screen.width;
+    //screenWidth = screen.height;
+    //screenHeight = screen.width;
     //dbuga('Landroid so swap screen dimensions');
     }// screen width is consistent with iOS now, width < height
   //dbuga("screenWidth="+screenWidth);
@@ -1245,7 +1255,7 @@ function initGeometry(){
     screenWidth=414;//iphone 6+
     screenHeight=736;
 
-    screenWidth=400;//cube 100
+    screenWidth=414;//cube 100
     screenHeight=736;
 /*
 
@@ -1460,7 +1470,7 @@ function populateGraphics(){
 
 //[graphicsSelectedGraphic];
 
-  dbuga('populateGraphics 0');
+  //dbuga('populateGraphics 0');
   graphicsCanv.width=screenHeight;
   var graphicsCtx=graphicsCanv.getContext('2d');
 
@@ -1530,7 +1540,7 @@ function populateCars(){
   carsThumbs=[];
   var buttonWidth=g*3;
   var buttonHeight=g*1;
-  dbuga("populateCars topPad="+topPad);
+  //dbuga("populateCars topPad="+topPad);
   //dbuga("leftPad="+leftPad);
   var carsCtx=carsCanv.getContext('2d');
   carsCtx.lineWidth=buttonHeight/12;
@@ -4076,7 +4086,7 @@ function handleEventCars(e){
 function handleEventGraphics(e){
   //dbuga(' - handleEventGraphics('+e.type+') graphicsUp='+graphicsUp+' graphicsEditing='+graphicsEditing);
   if(e.type=="touchstart"){
-    dbug('handleEventGraphics touchstart');
+    //dbug('handleEventGraphics touchstart');
     var t=e.touches[0];
         var found=false;
         for (var gb=0; gb<graphicsButtons.length; gb++){
@@ -4354,7 +4364,7 @@ function cameraLoaded(){
 
 
 function postviewGraphics(){
-  dbuga("postviewGraphics()");
+  //dbuga("postviewGraphics()");
   cameraCanv.width=800;
   cameraCanv.height=200;
   cameraCanv.style.display="none";
@@ -4414,7 +4424,7 @@ function gtlInWh(w,h){
   return gtl;
   }
 function previewGraphics(){
-  dbuga('previewGraphics');
+  //dbuga('previewGraphics');
   var image = document.getElementById('cameraImg');
   var offsetMultiplier=graphicsScale*image.naturalWidth/400;
   var graphicsCtx=graphicsCanv.getContext('2d');
@@ -4426,12 +4436,9 @@ function previewGraphics(){
   var topPad=gtl.t;
   var leftPad=gtl.l;
 
-  var inset=g/2;
-  graphicsCtx.lineWidth=1;
-  graphicsCtx.strokeStyle="red";
-  graphicsCtx.strokeRect(leftPad+inset, topPad+inset, g*9-inset*2, g*3-inset*2);
+  //var inset=g/2;
 
-  var buttonWidth=g*9-inset*2;
+  var buttonWidth=g*9;
   // 22x7.5 at 40
   var carGrid=buttonWidth/22;
   var buttonHeight=carGrid*7.5;
@@ -4445,22 +4452,29 @@ function previewGraphics(){
 
   carButton.c=graphicsSelectedColorNum;
   carButton.g=graphicsSelectedGraphic;
-  carButton.l=leftPad+inset;
-  carButton.r=leftPad+buttonWidth;
-  carButton.t=topPad+inset;
-  carButton.b=topPad+buttonHeight;
-  carButton.h=topPad+buttonHeight;
+  carButton.l=leftPad+carGrid;
+  carButton.r=leftPad+carGrid*21;
+  carButton.t=topPad+carGrid;
+  carButton.b=topPad+carGrid*6;
+  carButton.h=carGrid*5;
+  carButton.w=carGrid*20;
 
   carButton.ref=image;
-  var carGrid=buttonWidth*3/60;
-
+  
   var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
-  graphicsCtx.drawImage(imageObj, carButton.l, carButton.t, buttonWidth, buttonHeight);
-  //graphicsCtx.drawImage(carButton.ref, carButton.sampleLeft, carButton.sampleTop, carButton.sampleWidth, carButton.sampleHeight, carButton.l, carButton.t, buttonWidth, buttonHeight);
+  graphicsCtx.drawImage(imageObj, leftPad, topPad, buttonWidth, buttonHeight);
+  graphicsCtx.drawImage(carButton.ref, carButton.sampleLeft, carButton.sampleTop, carButton.sampleWidth, carButton.sampleHeight, carButton.l, carButton.t, carButton.w, carButton.h);
   //console.log(carButton);
+  graphicsCtx.lineWidth=3;
+  graphicsCtx.strokeStyle="red";
+  graphicsCtx.strokeRect(leftPad, topPad, buttonWidth, buttonHeight);
+  graphicsCtx.strokeStyle="green";
+  graphicsCtx.strokeRect(leftPad+carGrid, topPad+carGrid, carGrid*20, carGrid*5);
   
   }
+function safeImageSample(image, scale, offsetX, offsetY){
 
+  }
 function testImageSample(image, scale, offsetX, offsetY){
   if(scale<.1){return false;}
   var offsetMultiplier=scale*image.naturalWidth/400;
@@ -5587,8 +5601,8 @@ function preloadTick(){
   if(atImage<imageIdArray.length){
     var imageId=imageIdArray[atImage]+folderArray[atFolder];
     imgRefs[imageId]=document.getElementById(imageId);
-    dbuga('preloadTick imageId='+imageId);
-    dbuga(imgRefs[imageId].width+" "+imgRefs[imageId].height);
+    //dbuga('preloadTick imageId='+imageId);
+    //dbuga(imgRefs[imageId].width+" "+imgRefs[imageId].height);
     atFolder++;
     if(atFolder>=folderArray.length){
       //dbuga(' ! ' +atFolder +'>='+folderArray.length);
@@ -5685,7 +5699,7 @@ function processGraphic(colorNum, graphicNum, blacken, cache){
     document.getElementById(imageId).src="" +localStorage.getItem(imageId);
     }
   var alphaSourceRef=imgRefs['boxsideblack'];
-  dbuga("processGraphic "+colorNum+", "+graphicNum+" blackTrans="+blackTrans);
+  //dbuga("processGraphic "+colorNum+", "+graphicNum+" blackTrans="+blackTrans);
   var alphaRef=returnCanvas(alphaSourceRef.width, alphaSourceRef.height);
   imageCanvas(alphaRef, alphaSourceRef);
   //var textureSourceRef=imgRefs['boxsidetrans'];
@@ -5750,10 +5764,10 @@ function trimBox(canv){
     }
   ctx.stroke();
 
-  dbuga('trimbox aspect:'+(canv.width/canv.height));
+  //dbuga('trimbox aspect:'+(canv.width/canv.height));
   }
 function returnCanvas(w,h){
-  dbuga('returnCanvas() '+(w/h));
+  //dbuga('returnCanvas() '+(w/h));
   var canvas=document.createElement("canvas");
   canvas.width = w;
   canvas.height = h;
@@ -5907,7 +5921,7 @@ function multiplyCanvas(canvasRef, imageRef){
   ctx.drawImage(imageRef, 0, 0);
   } 
 function placeWithin(canvasRef, imageRef){
-  dbuga('placeWithin');
+  //dbuga('placeWithin');
   var g= canvasRef.width/22;
   var ctx=canvasRef.getContext("2d");
   ctx.drawImage(imageRef, g,g, g*20,g*5);
