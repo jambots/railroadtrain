@@ -97,7 +97,8 @@ width:768px;
 #wrapper{
   -webkit-transform-style: preserve-3d;
   background-color:#fff;
-  zbackground-image:url(images/grid_white.png);
+  background-image:url(res/sqsplash.jpg);
+background-size: cover;
 }
 </style>
 
@@ -485,8 +486,8 @@ function setupFaceData(){
    
   faceData={
   "tank":[
-    {"img":"tankbody", "width":1, "height":6/22, "trans":'translateZ('+ -s*8/22+'px) translateY('+ -s*6/48+'px) translateX('+ -s*22/44+'px)'},
-    {"img":"tankfloor", "width":1, "height":6/22, "trans":'translateZ('+ -s*10/22+'px) translateY('+ -s*6/44+'px) translateX('+ -s*22/44+'px)'},
+    {"img":"tankbody", "width":1, "height":6/22, "trans":'translateZ(-'+ s*7/22+'px) translateY('+ -s*6/48+'px) translateX('+ -s*22/44+'px)'},
+    {"img":"tankfloor", "width":1, "height":6/22, "trans":'translateZ(-'+ s*9/22+'px) translateY('+ -s*6/44+'px) translateX('+ -s*22/44+'px)'},
     {"img":"tankside", "width":1, "height":7.5/22, "trans":'rotateX(-90deg) translateZ('+s*0/44+'px) translateY('+s*8/44+'px) translateX('+-s*22/44+'px)'},
     {"img":"tankend", "width":6/22, "height":7.5/22, "trans":'rotateX(-90deg)  rotateY(-90deg) translateZ('+s*16/44+'px) translateY('+s*7.5/44+'px) translateX('+-s*6/44+'px)'},
     {"img":"tankmid", "width":6/22, "height":7.5/22, "trans":'rotateX(-90deg)  rotateY(-90deg) translateZ('+s*0/44+'px) translateY('+s*7.5/44+'px) translateX('+-s*6/44+'px)'},
@@ -1956,21 +1957,21 @@ function updateCompCanv(){
   var cx=squarePadLeft+squarePx/2;
   var headingPx=modalHeading*squarePx;
   var bodyPx=modalBody*squarePx;
-  var atY=pad+squarePadTop+headingPx;
+  var atY=pad+squarePadTop+headingPx*2.5;
   ctx.textBaseline="middle";
   ctx.fillStyle=modalText;
   ctx.textAlign="center";
   ctx.font=headingPx+"px "+modalHeadingFont;
   
-  atY+=wrapText(ctx, "Completed!", cx, atY, squarePx-pad*2, headingPx, false);
+  atY+=wrapText(ctx, "Completed!", cx, atY, squarePx-pad*2, headingPx, false)+squarePx/3;
   ctx.font=bodyPx+"px "+modalBodyFont;
-  var compBody=completedCars.length+" number of cars<br>";
+  var compBody=completedCars.length+" Total Cars<br>";
   var totalSec=totalMs/1000;
   compBody+=Math.floor(totalSec)+" Total Seconds<br>";
   compBody+="Seconds per car: "+Math.floor(10*totalSec/completedCars.length)/10;
   var parts=compBody.split("<br>");
   for (var p=0; p<parts.length; p++){
-    atY+=bodyPx/2;
+    atY+=bodyPx/6;
     atY+=wrapText(ctx, parts[p], cx, atY, squarePx-pad*4, bodyPx, false);
     }
   compButtons=[];
@@ -2281,6 +2282,7 @@ function initSession(){
   //dbuga('end of initSession so start preloading');        
   //updateHelpCanv();
   openModal('help');
+  wrapper.style.background="white";
   window.setTimeout('preloadTick()',10);
   }
 function measureLocalStorage(){
@@ -6179,7 +6181,7 @@ function rnd(range) {
   return Math.floor(Math.random()*range);
   }
 var helps=[
-  {"heading":"Railroad Train", "body":"by Jambots.com", "img":"helps0Preload", "buttonLabel":""},
+  {"heading":"", "body":"", "img":"helps0Preload", "buttonLabel":""},
   {"heading":"How to Play", "body":"Choose a level.<br>Draw a loop past the fields and silos. Connect the fields and silos to the loop to pick up and drop off cars. <br>Get all the cars into the silos to win!", "img":"helps1Preload",  "buttonLabel":""},
   {"heading":"Drawing Tracks", "body":"Tracks are placed by dragging across a tile from one edge to another.<br>Keep dragging to draw continuous tracks.<br>Guide marks indicate valid track positions.", "img":"helps2Preload",  "buttonLabel":""},
   {"heading":"Cinematic Mode", "body":"Orient your device to landscape and watch your game progress.<br>Colored circles change the view. Drag to pan and zoom.", "img":"helps3Preload",  "buttonLabel":""},
