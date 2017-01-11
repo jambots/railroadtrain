@@ -1871,50 +1871,7 @@ var visHeight=100;
 function openModal(modal){
   console.log('openModal('+modal+')');
   closeModals();
-  camera.style.webkitfunction openModal(modal){
-  console.log('openModal('+modal+')');
-  closeModals();
   camera.style.webkitFilter="blur(5px)";
-  if(modal=="levels"){
-    drawLevels();
-    levelsCanv.style.left=0+"px";
-    levelsUp=true;
-    navButtons[4].label="Select a<br>new level";
-    }
-  if(modal=="settings"){
-    settingsCanv.style.left=0+"px";
-    settingsUp=true;
-    settingsDraw();
-    navButtons[4].label="Settings";
-    //dbuga('openModal settingsUp='+settingsUp);
-    }
-  if(modal=="cars"){
-    clearingAll=false;
-
-    carsCanv.style.left=0+"px";
-    carsUp=true;
-    populateCars();
-
-    //dbuga('openModals() updateColorsCanv')
-    updateColorsCanv('openModal cars');
-    }
-  if(modal=="graphics"){
-    //dbuga('openModals() updateColorsCanv')
-    graphicsCanv.style.left=0+"px";
-    graphicsUp=true;
-    updateColorsCanv('openModal graphics');
-    }
-  if(modal=="help"){
-    helpUp=true;
-    updateHelpCanv();
-    }
-  if(modal=="comp"){
-    compUp=true;
-    updateCompCanv();
-    }
-  console.log('openModal('+modal+') completed OKAY');
-
-  }Filter="blur(5px)";
   if(modal=="levels"){
     drawLevels();
     levelsCanv.style.left=0+"px";
@@ -6328,8 +6285,8 @@ var maxHelp=helps.length-1;
 <img src="trainicons/show.png" id="showPreload"   style="display:none;" />
 <img src="trainicons/undo.png" id="undoPreload"   style="display:none;" />
 <img src="default/black.jpg" id="defaultblack"   style="display:none;" />
-<img src="fakegraphics/21a.png" id="default0"   style="display:none;" />
-<img src="fakegraphics/26a.png" id="default1"   style="display:none;" />
+<img src="fakegraphics/0a.png" id="default0"   style="display:none;" />
+<img src="fakegraphics/1a.png" id="default1"   style="display:none;" />
 <img src="fakegraphics/2a.png" id="default2"   style="display:none;" />
 <img src="fakegraphics/3a.png" id="default3"   style="display:none;" />
 <img src="fakegraphics/4a.png" id="default4"   style="display:none;" />
@@ -6349,12 +6306,12 @@ var maxHelp=helps.length-1;
 <img src="fakegraphics/18a.png" id="default18"   style="display:none;" />
 <img src="fakegraphics/19a.png" id="default19"   style="display:none;" />
 <img src="fakegraphics/20a.png" id="default20"   style="display:none;" />
-<img src="fakegraphics/0a.png" id="default21"   style="display:none;" />
+<img src="fakegraphics/21a.png" id="default21"   style="display:none;" />
 <img src="fakegraphics/22a.png" id="default22"   style="display:none;" />
 <img src="fakegraphics/23a.png" id="default23"   style="display:none;" />
 <img src="fakegraphics/24a.png" id="default24"   style="display:none;" />
 <img src="fakegraphics/25a.png" id="default25"   style="display:none;" />
-<img src="fakegraphics/1a.png" id="default26"   style="display:none;" />
+<img src="fakegraphics/26a.png" id="default26"   style="display:none;" />
 <img src="fakegraphics/27a.png" id="default27"   style="display:none;" />
 <img src="fakegraphics/28a.png" id="default28"   style="display:none;" />
 <img src="fakegraphics/29a.png" id="default29"   style="display:none;" />
