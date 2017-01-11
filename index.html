@@ -5984,9 +5984,10 @@ var len=2;
 var slot=1.5;
 function settingsDraw(){
 
+  //dbuga('settingsDraw');
   console.log('settingsDraw');
   var canv=document.getElementById('settingsCanvas');
-  canv.width=canv.width;
+  canv.width=squarePx;
   settingsCanv.style.zIndex=1;
   var keys=Object.keys(settingsObject);
   var g=(screenHeight-controlsPx-controlsPx)/(keys.length*4+4);// availHeight/18
