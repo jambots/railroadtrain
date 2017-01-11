@@ -1140,6 +1140,7 @@ var boardWidth=100;
 
 var wrapper;
 function changeGeometry(){
+  console.log('changeGeometry');
   viewportWidth = window.innerWidth;
   viewportHeight = window.innerHeight;
   viewportAspect=viewportWidth/viewportHeight;
@@ -1287,6 +1288,7 @@ var boardPad=0;
 var space=0;
 
 function boardGeometry(){
+  console.log("boardGeometry()");
   var scale=settingsObject["Scale"]["value"];
   cellsAcross=returnCellsAcross(screenWidth, scale)
   cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
@@ -1296,7 +1298,6 @@ function boardGeometry(){
   totalCells=cellsAcross*cellsDown;
   space=(screenHeight-cellsDown*cellSize-controlsPx);
   boardPad=Math.floor(space/2);
-  //dbuga("boardGeometry()");
   //dbuga(" - cellsAcross="+cellsAcross);
   //dbuga(" - cellsDown="+cellsDown);
   //dbuga(" - boardPad="+ boardPad);
@@ -1791,6 +1792,7 @@ function populateLevels(){
   }
 var highlighted="rgba(255,255,100,1)";
 function drawLevels(){
+  console.log('drawLevels');
   var levelsCtx=levelsCanv.getContext('2d');
   levelsCanv.width=screenWidth;
   levelsCanv.style.zIndex="1";
@@ -1862,10 +1864,14 @@ function drawLevels(){
     levelsCtx.textBaseline="middle";
     //levelsCtx.fillText(req+" "+levelData[dNum].space, cx,cy+fieldSpread*2);
     }
+  console.log('drawLevels completed');
   }
 
 var visHeight=100;
 function openModal(modal){
+  console.log('openModal('+modal+')');
+  closeModals();
+  camera.style.webkitfunction openModal(modal){
   console.log('openModal('+modal+')');
   closeModals();
   camera.style.webkitFilter="blur(5px)";
@@ -1906,6 +1912,48 @@ function openModal(modal){
     compUp=true;
     updateCompCanv();
     }
+  console.log('openModal('+modal+') completed OKAY');
+
+  }Filter="blur(5px)";
+  if(modal=="levels"){
+    drawLevels();
+    levelsCanv.style.left=0+"px";
+    levelsUp=true;
+    navButtons[4].label="Select a<br>new level";
+    }
+  if(modal=="settings"){
+    settingsCanv.style.left=0+"px";
+    settingsUp=true;
+    settingsDraw();
+    navButtons[4].label="Settings";
+    //dbuga('openModal settingsUp='+settingsUp);
+    }
+  if(modal=="cars"){
+    clearingAll=false;
+
+    carsCanv.style.left=0+"px";
+    carsUp=true;
+    populateCars();
+
+    //dbuga('openModals() updateColorsCanv')
+    updateColorsCanv('openModal cars');
+    }
+  if(modal=="graphics"){
+    //dbuga('openModals() updateColorsCanv')
+    graphicsCanv.style.left=0+"px";
+    graphicsUp=true;
+    updateColorsCanv('openModal graphics');
+    }
+  if(modal=="help"){
+    helpUp=true;
+    updateHelpCanv();
+    }
+  if(modal=="comp"){
+    compUp=true;
+    updateCompCanv();
+    }
+  console.log('openModal('+modal+') completed OKAY');
+
   }
 var squarePx=0;
 var deviceOrient="";
@@ -5935,6 +5983,8 @@ function placeWithin(canvasRef, imageRef){
 var len=2;
 var slot=1.5;
 function settingsDraw(){
+
+  console.log('settingsDraw');
   var canv=document.getElementById('settingsCanvas');
   canv.width=canv.width;
   settingsCanv.style.zIndex=1;
@@ -5968,6 +6018,7 @@ function settingsDraw(){
   ctx.fillStyle="#333";
   ctx.textAlign="center";
   ctx.fillText("AVERAGE FPS: "+avgFps,g*cx, g*22);
+  console.log('settingsDraw completed');
   
   }
      
