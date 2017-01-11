@@ -177,7 +177,7 @@ function oneShot(soundName){
   //dbuga("oneShot("+soundName+")");
   soundName=settingsObject.Sounds.value+"/"+soundName;
   if(settingsObject.Sounds.value != "Off"){
-    if(platform=="android"){
+    if(platform=="Zandroid"){
       if(soundRefByName.hasOwnProperty(soundName)){
         //dbuga(' - extant '+soundName);
         //soundRefByName[soundName].stop();
@@ -217,7 +217,7 @@ function oneShot(soundName){
 function loopStart(soundName){// soundName like "Classic/measure_loop_inst"
   //dbuga("loopStart("+soundName+") "+platform);
   if(persistenceObject.music=="on"){
-    if(platform=="android"){
+    if(platform=="Zandroid"){
       //dbuga('BOOYA!');
       if(soundRefByName.hasOwnProperty(soundName)){
         soundRefByName[soundName].play();
@@ -281,7 +281,7 @@ function successCallback(evt){
 
 
 function oneShotLoad(soundName){
-  if(platform=="android"){
+  if(platform=="Zandroid"){
     var newSound = new Media(filePath+"/"+soundName+".mp3");
     soundRefByName[soundName]=newSound;
     //dbuga('new Media '+soundName);
@@ -306,7 +306,7 @@ function oneShotLoad(soundName){
     }  
   }
 function loopStop(soundName){
-  if(platform=="android"){
+  if(platform=="Zandroid"){
     //dbuga('ANDROID loopStop');
     if(soundRefByName.hasOwnProperty(soundName)){
       //dbuga('extant '+soundName);
@@ -327,7 +327,7 @@ function loopStop(soundName){
   }
 var persistenceObject={"music":"on", "sfx":"on"};
 function loopLoad(soundName){
-  if(platform=="android"){
+  if(platform=="Zandroid"){
     if(soundRefByName.hasOwnProperty(soundName)){
       //dbuga(' - extant '+soundName);
       //soundRefByName[soundName].stop();
