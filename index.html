@@ -1220,10 +1220,12 @@ function initGeometry(){
   colorsCanv=document.getElementById("colorsCanvas");
   navCanv=document.getElementById("navCanvas");
   wrapper=document.getElementById("wrapper");
-  screenWidth = screen.width;
-  screenHeight = screen.height;
-  viewportWidth = window.innerWidth;
-  viewportHeight = window.innerHeight;
+  screenWidth=screen.width;
+  screenHeight=screen.height;
+  dbuga("initGeometry() "+screenWidth+" x "+screenHeight);
+
+  viewportWidth=window.innerWidth;
+  viewportHeight=window.innerHeight;
 
   if(screenWidth>screenHeight){
     //screenWidth = screen.height;
