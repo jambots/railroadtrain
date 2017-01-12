@@ -1222,7 +1222,7 @@ function initGeometry(){
   wrapper=document.getElementById("wrapper");
   screenWidth=screen.width;
   screenHeight=screen.height;
-  dbuga("initGeometry() "+screenWidth+" x "+screenHeight);
+  //dbuga("initGeometry() "+screenWidth+" x "+screenHeight);
 
   viewportWidth=window.innerWidth;
   viewportHeight=window.innerHeight;
@@ -1290,7 +1290,7 @@ var boardPad=0;
 var space=0;
 
 function boardGeometry(){
-  dbuga("boardGeometry() "+screenWidth+" x "+screenHeight);
+  //dbuga("boardGeometry() "+screenWidth+" x "+screenHeight);
   var scale=settingsObject["Scale"]["value"];
   cellsAcross=returnCellsAcross(screenWidth, scale)
   cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
@@ -5949,8 +5949,7 @@ function settingsDraw(){
 
   //dbuga('settingsDraw');
   console.log('settingsDraw');
-  var canv=document.getElementById('settingsCanvas');
-  canv.width=squarePx;
+  settingsCanv.width=screenWidth;
   settingsCanv.style.zIndex=1;
   var keys=Object.keys(settingsObject);
   var g=(screenHeight-controlsPx-controlsPx)/(keys.length*4+4);// availHeight/18
@@ -5958,7 +5957,7 @@ function settingsDraw(){
   var cy=((screenHeight-controlsPx-controlsPx)/2-screenWidth/2)/g+cx;
   //dbuga("cy="+cy+" g="+g);
 
-  var ctx=canv.getContext('2d');
+  var ctx=settingsCanv.getContext('2d');
   //ctx.lineWidth=4;
   //ctx.strokeStyle="blue";
   //ctx.strokeRect(0,g*(cy-halfHeight),g*18, g*24);// 3/4 aspect fitted
@@ -5994,8 +5993,7 @@ function toggleSwitch(g, cx,cy, x0,y0,orient,pos, tics, label){//returns path
 
 
 
-  var canv=document.getElementById('settingsCanvas');
-  var ctx=canv.getContext('2d');
+  var ctx=settingsCanv.getContext('2d');
 
   ctx.clearRect(g*(x0-2), g*(y0-2),g*4,g*4);
 
