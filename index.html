@@ -1288,7 +1288,7 @@ var boardPad=0;
 var space=0;
 
 function boardGeometry(){
-  console.log("boardGeometry()");
+  console.log("boardGeometry() "+screenWidth+" x "+screenHeight);
   var scale=settingsObject["Scale"]["value"];
   cellsAcross=returnCellsAcross(screenWidth, scale)
   cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
@@ -1323,6 +1323,7 @@ function boardGeometry(){
 
   settingsCanv.width=screenWidth;
   settingsCanv.height=screenHeight;
+
   settingsCanv.style.top=controlsPx+"px";
   settingsCanv.style.left=screenWidth+"px";
   settingsCanv.style.backgroundColor=modalBg;
@@ -1912,6 +1913,7 @@ function openModal(modal){
   console.log('openModal('+modal+') completed OKAY');
 
   }
+
 var squarePx=0;
 var deviceOrient="";
 function updateCompCanv(){
@@ -2350,7 +2352,7 @@ function populateModals(){
 var fpsArray=[60,60,60,60,60,60];
 var avgFps=0;
 function secondTick(){
-  if((settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
+  if((carsUp==false)&&(graphicsUp==false)&&(settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
     fpsArray.unshift(frames);
     var junk=fpsArray.pop();
     var totalFrames=0;
@@ -2368,7 +2370,7 @@ var nowMs=0;
 function rafTick(ms){
   nowMs=Math.floor(ms);
   if(focusTrain>=trainData.length){focusTrain=0;}
-  if((settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
+  if((carsUp==false)&&(graphicsUp==false)&&(settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
 
     turnFrames++;
     var framesPerTurn=turnMs/17;
@@ -2991,10 +2993,10 @@ function updateProgressBar(){
       document.getElementById(color+"ProgressDiv").style.width=progressPixels+"px";
       }
     }
-  if(totalCarsDocked==totalCarsNeeded){
-    //playSound("applause");
-    //window.setTimeout("openModal('comp')", 1000);
-    }
+  }
+function complete(){
+  playSound("applause");
+  window.setTimeout("openModal('comp')", 1000);
   }
 
 // source functions
@@ -3337,11 +3339,12 @@ function trainAction(trainNum){
           tracksArray=[thisTrack];// remove non winners from list
           thisConnection=thisTrack.replace(trainOppDir, "");          
           connectionsArray=[thisConnection];
-          playSound("applause");
+
+          // complete game if last engine docking
           if(totalCarsDocked==totalCarsNeeded){
-          //playSound("applause");
-            window.setTimeout("openModal('comp')", 1000);
+            complete();
             }
+
           }
         }
       }
@@ -5037,6 +5040,7 @@ function updateDetail(){
   //rebuildSequence();
   }
 function createLevel(){
+
   
   //dbuga('createLevel()');
           var fails=-1;
