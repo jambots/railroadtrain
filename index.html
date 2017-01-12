@@ -1288,7 +1288,7 @@ var boardPad=0;
 var space=0;
 
 function boardGeometry(){
-  console.log("boardGeometry() "+screenWidth+" x "+screenHeight);
+  dbuga("boardGeometry() "+screenWidth+" x "+screenHeight);
   var scale=settingsObject["Scale"]["value"];
   cellsAcross=returnCellsAcross(screenWidth, scale)
   cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
