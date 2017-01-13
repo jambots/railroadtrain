@@ -1290,7 +1290,7 @@ var boardPad=0;
 var space=0;
 
 function boardGeometry(){
-  dbuga("boardGeometry() "+screenWidth+" x "+screenHeight);
+  //dbuga("boardGeometry() "+screenWidth+" x "+screenHeight);
   var scale=settingsObject["Scale"]["value"];
   cellsAcross=returnCellsAcross(screenWidth, scale)
   cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
@@ -1320,14 +1320,14 @@ function boardGeometry(){
   levelsCanv.width=screenWidth;
   levelsCanv.height=screenHeight;
   levelsCanv.style.top=controlsPx+"px";
-  levelsCanv.style.left=(0-screenWidth)+"px";
+  levelsCanv.style.left=screenHeight+"px";
   levelsCanv.style.backgroundColor=modalBg;
 
   settingsCanv.width=screenWidth;
   settingsCanv.height=screenHeight;
   settingsCanv.style.top=controlsPx+"px";
-  settingsCanv.style.left=screenWidth+"px";
-  //settingsCanv.style.backgroundColor=modalBg;
+  settingsCanv.style.left=screenHeight+"px";
+  settingsCanv.style.backgroundColor=modalBg;
 
   navCanv.width=screenWidth;
   navCanv.height=controlsPx;
@@ -1692,7 +1692,7 @@ function populateSettings(){
   settingsButtons.push(returnModalButton("Done","right","portrait",false));
   }
 function drawSettingsButtons(){
-  dbuga('drawSettingsButtons');
+  //dbuga('drawSettingsButtons');
   var settingsCtx=settingsCanv.getContext('2d');
   for (var b=0; b<settingsButtons.length; b++){
     drawModalButton(settingsCtx, settingsButtons[b]);
@@ -2093,9 +2093,9 @@ function closeModals(){
     }
   compUp=false;
   compCanv.style.left=screenHeight+"px";
-  levelsCanv.style.left=screenWidth+"px";
+  levelsCanv.style.left=screenHeight+"px";
   levelsUp=false;
-  settingsCanv.style.left=screenWidth+"px";
+  settingsCanv.style.left=screenHeight+"px";
   settingsUp=false;
   carsCanv.style.left=screenHeight+"px";
   carsUp=false;
@@ -5928,7 +5928,7 @@ var len=2;
 var slot=1.5;
 function settingsDraw(){
 
-  dbuga('settingsDraw');
+  //dbuga('settingsDraw');
   console.log('settingsDraw');
   //settingsCanv.style.zIndex=1;
   settingsCanv.width=screenWidth;
@@ -5939,7 +5939,7 @@ function settingsDraw(){
   var g=(screenHeight-controlsPx-controlsPx)/(keys.length*4+4);// availHeight/18
   var cx=.5*screenWidth/g;
   var cy=((screenHeight-controlsPx-controlsPx)/2-screenWidth/2)/g+cx;
-  dbuga("cy="+cy+" g="+g);
+  //dbuga("cy="+cy+" g="+g);
 
 
   for (var k=0; k<keys.length; k++){
@@ -5964,7 +5964,7 @@ function settingsDraw(){
   ctx.fillStyle="#333";
   ctx.textAlign="center";
   ctx.fillText("AVERAGE FPS: "+avgFps,g*cx, g*22);
-  dbuga('settingsDraw completed');
+  //dbuga('settingsDraw completed');
   
   }
      
