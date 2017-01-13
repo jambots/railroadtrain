@@ -2104,7 +2104,7 @@ function closeModals(){
   levelsCanv.style.left="-"+screenWidth+"px";
   levelsUp=false;
   settingsCanv.style.left="-"+screenWidth+"px";
-  testCanv.style.left="-"+screenWidth+"px";
+  ////testCanv.style.left="-"+screenWidth+"px";
   settingsUp=false;
   carsCanv.style.left="-"+screenHeight+"px";
   carsUp=false;
@@ -2124,8 +2124,8 @@ function changeView(caller){
   if(shooting){return false;}
   closeModals();
   if(viewportAspect>1){
-    document.getElementById("navCanvas").style.display="none";
-    ////document.getElementById("testCanvas").style.display="none";
+    navCanv.style.display="none";
+    testCanv.style.display="none";
     document.getElementById("progressHolder").style.display="none";
     document.getElementById("prerails").style.display="none";
     //dbuga('changeView() updateColorsCanv')
