@@ -1333,7 +1333,7 @@ function boardGeometry(){
   testCanv.width=screenWidth;
   testCanv.height=screenHeight;
   testCanv.style.top=controlsPx+"px";
-  testCanv.style.left=screenWidth+"px";
+  //testCanv.style.left=screenWidth+"px";
   //testCanv.style.backgroundColor=modalBg;
 
   navCanv.width=screenWidth;
@@ -1867,8 +1867,8 @@ function openModal(modal){
     navButtons[4].label="Select a<br>new level";
     }
   if(modal=="settings"){
-    settingsCanv.style.left=0+"px";
-    testCanv.style.left="0px";
+    //settingsCanv.style.left=0+"px";
+    //testCanv.style.left="0px";
     settingsUp=true;
     settingsDraw();
     navButtons[4].label="Settings";
@@ -2104,7 +2104,7 @@ function closeModals(){
   levelsCanv.style.left="-"+screenWidth+"px";
   levelsUp=false;
   settingsCanv.style.left="-"+screenWidth+"px";
-  testCanv.style.left="-"+screenWidth+"px";
+  //testCanv.style.left="-"+screenWidth+"px";
   settingsUp=false;
   carsCanv.style.left="-"+screenHeight+"px";
   carsUp=false;
