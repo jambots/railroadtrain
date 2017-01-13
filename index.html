@@ -1680,41 +1680,18 @@ function drawModalButton(ctx, modalButton){
 
 
 function populateSettings(){
-/*
-  var groupAspect=(54+4)/(18+4);// matches car group width, padding
-  var availHeight=screenWidth-controlsPx-controlsPx-20;
-  var areaAspect=screenHeight/availHeight;
-  var leftPad=0;
-  var topPad=0;
-  var g=0;
-  if(areaAspect>groupAspect){//fit height, pad left
-    g=availHeight/(4*6+4);
-    topPad=g*2;
-    leftPad=g*2+screenHeight/2-g*(3*18+4)/2;
-    }
-  else{//fit width, pad top // always for this aspect anyways.
-    g=screenHeight/(54+4);
-    leftPad=g*2;
-    topPad=g*2+availHeight/2-g*(18+4)/2;
-    }
-  var buttonWidth=g*54;
-  var buttonHeight=g*18;
-
-*/
-
   var g=screenWidth/16;
   var radius=g/6;
   var cx=8;
   var cy=(screenHeight/2-screenWidth/2)/g+8.5;
   //dbuga("cy "+cy);
-  var settingsCtx=settingsCanv.getContext('2d');
   settingsButtons=[];
   settingsButtons.push(returnModalButton("Help","left","portrait",false));
   settingsButtons.push(returnModalButton("About","center","portrait",false));
   settingsButtons.push(returnModalButton("Done","right","portrait",false));
   }
 function drawSettingsButtons(){
-  //dbuga('drawSettingsButtons');
+  dbuga('drawSettingsButtons');
   var settingsCtx=settingsCanv.getContext('2d');
   for (var b=0; b<settingsButtons.length; b++){
     drawModalButton(settingsCtx, settingsButtons[b]);
@@ -5947,7 +5924,7 @@ var len=2;
 var slot=1.5;
 function settingsDraw(){
 
-  //dbuga('settingsDraw');
+  dbug('settingsDraw');
   console.log('settingsDraw');
   settingsCanv.width=screenWidth;
   settingsCanv.style.zIndex=1;
@@ -5955,12 +5932,13 @@ function settingsDraw(){
   var g=(screenHeight-controlsPx-controlsPx)/(keys.length*4+4);// availHeight/18
   var cx=.5*screenWidth/g;
   var cy=((screenHeight-controlsPx-controlsPx)/2-screenWidth/2)/g+cx;
-  //dbuga("cy="+cy+" g="+g);
+  dbuga("cy="+cy+" g="+g);
 
   var ctx=settingsCanv.getContext('2d');
-  //ctx.lineWidth=4;
-  //ctx.strokeStyle="blue";
-  //ctx.strokeRect(0,g*(cy-halfHeight),g*18, g*24);// 3/4 aspect fitted
+
+  ctx.lineWidth=4;
+  ctx.strokeStyle="blue";
+  ctx.strokeRect(0,g*(cy-halfHeight),g*18, g*24);// 3/4 aspect fitted
 
   for (var k=0; k<keys.length; k++){
     var y=(k-2.25)*4;
@@ -5969,7 +5947,10 @@ function settingsDraw(){
     y0=cy+y;
 
 
-    //ctx.strokeRect(g*(x0-2), g*(y0-2),g*4,g*4);
+    ctx.lineWidth=4;
+    ctx.strokeStyle="blue";
+    ctx.strokeRect(g*(x0-2), g*(y0-2),g*4,g*4);
+
     settingsObject[keys[k]]["t"]=g*(y0-2);
     settingsObject[keys[k]]["r"]=g*(x0+2);
     settingsObject[keys[k]]["b"]=g*(y0+2);
