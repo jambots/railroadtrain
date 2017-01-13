@@ -1635,6 +1635,7 @@ var buttonLabelFill="#fff";
 
 
 function drawModalButton(ctx, modalButton){
+
   if(modalButton.align=="square"){return false;}
   var buttonWidth=modalButton.r-modalButton.l;
   var buttonHeight=(modalButton.b- modalButton.t)*.75;
@@ -1691,6 +1692,7 @@ function populateSettings(){
   settingsButtons.push(returnModalButton("Done","right","portrait",false));
   }
 function drawSettingsButtons(){
+  return false;
   dbuga('drawSettingsButtons');
   var settingsCtx=settingsCanv.getContext('2d');
   for (var b=0; b<settingsButtons.length; b++){
@@ -5960,7 +5962,7 @@ function settingsDraw(){
   ctx.fillStyle="#333";
   ctx.textAlign="center";
   ctx.fillText("AVERAGE FPS: "+avgFps,g*cx, g*22);
-  console.log('settingsDraw completed');
+  dbuga('settingsDraw completed');
   
   }
      
@@ -6251,7 +6253,7 @@ var maxHelp=helps.length-1;
 </div>
 
   <div id="preload" >
-<img id="cameraImg" src="default/default2.jpg" />
+<img id="cameraImg" src="fakegraphics/default2.jpg" />
 <img src="helps/helps0.png" id="helps0Preload"   style="display:none;" />
 <img src="helps/helps1.png" id="helps1Preload"   style="display:none;" />
 <img src="helps/helps2.png" id="helps2Preload"   style="display:none;" />
