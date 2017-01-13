@@ -1328,7 +1328,7 @@ function boardGeometry(){
 
   settingsCanv.style.top=controlsPx+"px";
   settingsCanv.style.left=screenWidth+"px";
-  settingsCanv.style.backgroundColor=modalBg;
+  //settingsCanv.style.backgroundColor=modalBg;
 
   carsCanv.width=screenHeight;
   carsCanv.height=screenWidth-controlsPx;
@@ -1853,7 +1853,7 @@ var visHeight=100;
 function openModal(modal){
   console.log('openModal('+modal+')');
   closeModals();
-  camera.style.webkitFilter="blur(5px)";
+  ////camera.style.webkitFilter="blur(5px)";
   if(modal=="levels"){
     drawLevels();
     levelsCanv.style.left=0+"px";
@@ -5930,6 +5930,7 @@ function settingsDraw(){
   console.log('settingsDraw');
   settingsCanv.width=screenWidth;
   var ctx=settingsCanv.getContext('2d');
+  ////var ctx=navCanv.getContext('2d');
   var img=document.getElementById('defaultblack');
   ctx.drawImage(img, 0,0,400,400);  
   settingsCanv.style.zIndex=1;
