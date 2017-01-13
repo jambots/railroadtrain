@@ -5927,6 +5927,9 @@ function settingsDraw(){
   dbug('settingsDraw');
   console.log('settingsDraw');
   settingsCanv.width=screenWidth;
+  var ctx=settingsCanv.getContext('2d');
+  var img=document.getElementById('defaultblack');
+  ctx.drawImage(img, 0,0,400,400);  
   settingsCanv.style.zIndex=1;
   var keys=Object.keys(settingsObject);
   var g=(screenHeight-controlsPx-controlsPx)/(keys.length*4+4);// availHeight/18
@@ -5934,11 +5937,6 @@ function settingsDraw(){
   var cy=((screenHeight-controlsPx-controlsPx)/2-screenWidth/2)/g+cx;
   dbuga("cy="+cy+" g="+g);
 
-  var ctx=settingsCanv.getContext('2d');
-
-  ctx.lineWidth=4;
-  ctx.strokeStyle="blue";
-  ctx.strokeRect(0,g*(cy-halfHeight),g*18, g*24);// 3/4 aspect fitted
 
   for (var k=0; k<keys.length; k++){
     var y=(k-2.25)*4;
@@ -6269,7 +6267,7 @@ var maxHelp=helps.length-1;
 <img src="trainicons/settings.png" id="settingsPreload"   style="display:none;" />
 <img src="trainicons/show.png" id="showPreload"   style="display:none;" />
 <img src="trainicons/undo.png" id="undoPreload"   style="display:none;" />
-<img src="default/black.jpg" id="defaultblack"   style="display:none;" />
+<img src="fakegraphics/black.jpg" id="defaultblack"   style="display:none;" />
 <img src="fakegraphics/0a.png" id="default0"   style="display:none;" />
 <img src="fakegraphics/1a.png" id="default1"   style="display:none;" />
 <img src="fakegraphics/2a.png" id="default2"   style="display:none;" />
