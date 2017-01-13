@@ -1199,7 +1199,6 @@ var bannerEnabled=false;
 var levelsCanv;
 var levelsUp=false;
 var settingsCanv;
-var testCanv;
 var settingsUp=false;
 var carsCanv;
 var carsUp=false;
@@ -1214,7 +1213,6 @@ function initGeometry(){
   levelsCanv=document.getElementById("levelsCanvas");
   settingsCanv=document.getElementById("settingsCanvas");
   navCanv=document.getElementById("navCanvas");
-  testCanv=document.getElementById("testCanvas");
   carsCanv=document.getElementById("carsCanvas");
   graphicsCanv=document.getElementById("graphicsCanvas");
   cameraCanv=document.getElementById("cameraCanvas");
@@ -1330,11 +1328,6 @@ function boardGeometry(){
   settingsCanv.style.top=controlsPx+"px";
   settingsCanv.style.left=screenWidth+"px";
   //settingsCanv.style.backgroundColor=modalBg;
-  testCanv.width=screenWidth;
-  testCanv.height=screenHeight;
-  testCanv.style.top=controlsPx+"px";
-  //testCanv.style.left=screenWidth+"px";
-  //testCanv.style.backgroundColor=modalBg;
 
   navCanv.width=screenWidth;
   navCanv.height=controlsPx;
@@ -1867,8 +1860,7 @@ function openModal(modal){
     navButtons[4].label="Select a<br>new level";
     }
   if(modal=="settings"){
-    //settingsCanv.style.left=0+"px";
-    testCanv.style.left="0px";
+    settingsCanv.style.left=0+"px";
     settingsUp=true;
     settingsDraw();
     navButtons[4].label="Settings";
@@ -2095,20 +2087,19 @@ function closeModals(){
   if(initCompleted){
     if(firstRun==false){
       paused=false;
-      helpCanv.style.left="-"+screenHeight+"px";
+      helpCanv.style.left=screenHeight+"px";
       helpUp=false;
       }
     }
   compUp=false;
-  compCanv.style.left="-"+screenHeight+"px";
-  levelsCanv.style.left="-"+screenWidth+"px";
+  compCanv.style.left=screenHeight+"px";
+  levelsCanv.style.left=screenWidth+"px";
   levelsUp=false;
-  settingsCanv.style.left="-"+screenWidth+"px";
-  testCanv.style.left=screenWidth+"px";
+  settingsCanv.style.left=screenWidth+"px";
   settingsUp=false;
-  carsCanv.style.left="-"+screenHeight+"px";
+  carsCanv.style.left=screenHeight+"px";
   carsUp=false;
-  graphicsCanv.style.left="-"+screenHeight+"px";
+  graphicsCanv.style.left=screenHeight+"px";
   graphicsUp=false;
   updateColorsCanv('closeModals');
   graphicsEditing=false;
@@ -2125,7 +2116,6 @@ function changeView(caller){
   closeModals();
   if(viewportAspect>1){
     navCanv.style.display="none";
-    testCanv.style.display="none";
     document.getElementById("progressHolder").style.display="none";
     document.getElementById("prerails").style.display="none";
     //dbuga('changeView() updateColorsCanv')
@@ -2139,7 +2129,6 @@ function changeView(caller){
     colorsCanv.style.display="none";
     settingsCanv.style.display="block";
     navCanv.style.display="block";
-    testCanv.style.display="block";
     document.getElementById("progressHolder").style.display="block";
     document.getElementById("prerails").style.display="block";
     //document.getElementById("highlighter").style.display="block";
@@ -5942,10 +5931,8 @@ function settingsDraw(){
   dbuga('settingsDraw');
   console.log('settingsDraw');
   //settingsCanv.style.zIndex=1;
-  //settingsCanv.width=screenWidth;
-  //testCanv.width=screenWidth;
-  var ctx=testCanv.getContext('2d');
-  ////var ctx=settingsCanv.getContext('2d');
+  settingsCanv.width=screenWidth;
+  var ctx=settingsCanv.getContext('2d');
   var img=document.getElementById('defaultblack');
   ctx.drawImage(img, 0,0,400,400);  
   var keys=Object.keys(settingsObject);
@@ -5989,8 +5976,7 @@ function toggleSwitch(g, cx,cy, x0,y0,orient,pos, tics, label){//returns path
 
 
 
-  ////var ctx=settingsCanv.getContext('2d');
-  var ctx=testCanv.getContext('2d');
+  var ctx=settingsCanv.getContext('2d');
 
   ctx.clearRect(g*(x0-2), g*(y0-2),g*4,g*4);
 
@@ -6247,7 +6233,6 @@ var maxHelp=helps.length-1;
 <canvas id="navCanvas" style="position:absolute;"></canvas>
 <canvas id="levelsCanvas" style="position:absolute;"></canvas>
 <canvas id="settingsCanvas" style="position:absolute;"></canvas>
-<canvas id="testCanvas" style="position:absolute;"></canvas>
 <canvas id="carsCanvas" style="position:absolute;"></canvas>
 <canvas id="graphicsCanvas" style="position:absolute;"></canvas>
 <canvas id="cameraCanvas" style="position:absolute;" width="100" height="100"></canvas>
