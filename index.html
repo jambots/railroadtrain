@@ -1330,11 +1330,11 @@ function boardGeometry(){
   settingsCanv.style.top=controlsPx+"px";
   settingsCanv.style.left=screenWidth+"px";
   //settingsCanv.style.backgroundColor=modalBg;
-  testCanv.width=screenWidth;
-  testCanv.height=screenHeight;
-  testCanv.style.top=controlsPx+"px";
-  testCanv.style.left=screenWidth+"px";
-  //settingsCanv.style.backgroundColor=modalBg;
+  //testCanv.width=screenWidth;
+  //testCanv.height=screenHeight;
+  //testCanv.style.top=controlsPx+"px";
+  //testCanv.style.left=screenWidth+"px";
+  //testCanv.style.backgroundColor=modalBg;
 
   navCanv.width=screenWidth;
   navCanv.height=controlsPx;
@@ -1700,7 +1700,7 @@ function populateSettings(){
   }
 function drawSettingsButtons(){
   dbuga('drawSettingsButtons');
-  var settingsCtx=testCanv.getContext('2d');
+  var settingsCtx=settingsCanv.getContext('2d');
   for (var b=0; b<settingsButtons.length; b++){
     drawModalButton(settingsCtx, settingsButtons[b]);
     }
@@ -1867,8 +1867,7 @@ function openModal(modal){
     navButtons[4].label="Select a<br>new level";
     }
   if(modal=="settings"){
-    ////settingsCanv.style.left=0+"px";
-    testCanv.style.left=0+"px";
+    settingsCanv.style.left=0+"px";
     settingsUp=true;
     settingsDraw();
     navButtons[4].label="Settings";
@@ -2104,7 +2103,6 @@ function closeModals(){
   levelsCanv.style.left="-"+screenWidth+"px";
   levelsUp=false;
   settingsCanv.style.left="-"+screenWidth+"px";
-  testCanv.style.left="-"+screenWidth+"px";
   settingsUp=false;
   carsCanv.style.left="-"+screenHeight+"px";
   carsUp=false;
@@ -2125,7 +2123,7 @@ function changeView(caller){
   closeModals();
   if(viewportAspect>1){
     document.getElementById("navCanvas").style.display="none";
-    document.getElementById("testCanvas").style.display="none";
+    ////document.getElementById("testCanvas").style.display="none";
     document.getElementById("progressHolder").style.display="none";
     document.getElementById("prerails").style.display="none";
     //dbuga('changeView() updateColorsCanv')
@@ -5943,7 +5941,7 @@ function settingsDraw(){
   console.log('settingsDraw');
   //settingsCanv.style.zIndex=1;
   //settingsCanv.width=screenWidth;
-  testCanv.width=screenWidth;
+  //testCanv.width=screenWidth;
   var ctx=testCanv.getContext('2d');
   ////var ctx=settingsCanv.getContext('2d');
   var img=document.getElementById('defaultblack');
