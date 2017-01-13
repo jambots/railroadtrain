@@ -1212,13 +1212,13 @@ function initGeometry(){
   compCanv=document.getElementById("compCanvas");
   levelsCanv=document.getElementById("levelsCanvas");
   settingsCanv=document.getElementById("settingsCanvas");
+  navCanv=document.getElementById("navCanvas");
   carsCanv=document.getElementById("carsCanvas");
   graphicsCanv=document.getElementById("graphicsCanvas");
   cameraCanv=document.getElementById("cameraCanvas");
 
 
   colorsCanv=document.getElementById("colorsCanvas");
-  navCanv=document.getElementById("navCanvas");
   wrapper=document.getElementById("wrapper");
   screenWidth=screen.width;
   screenHeight=screen.height;
@@ -1290,7 +1290,7 @@ var boardPad=0;
 var space=0;
 
 function boardGeometry(){
-  //dbuga("boardGeometry() "+screenWidth+" x "+screenHeight);
+  dbuga("boardGeometry() "+screenWidth+" x "+screenHeight);
   var scale=settingsObject["Scale"]["value"];
   cellsAcross=returnCellsAcross(screenWidth, scale)
   cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
@@ -1325,10 +1325,15 @@ function boardGeometry(){
 
   settingsCanv.width=screenWidth;
   settingsCanv.height=screenHeight;
-
   settingsCanv.style.top=controlsPx+"px";
   settingsCanv.style.left=screenWidth+"px";
   //settingsCanv.style.backgroundColor=modalBg;
+
+  navCanv.width=screenWidth;
+  navCanv.height=controlsPx;
+  navCanv.style.top="0px";
+  navCanv.style.left=0+"px";
+  //navCanv.style.backgroundColor="rgba(33,33,255,"+bgAlpha+")";
 
   carsCanv.width=screenHeight;
   carsCanv.height=screenWidth-controlsPx;
@@ -1347,11 +1352,6 @@ function boardGeometry(){
   colorsCanv.style.top="0px";
   colorsCanv.style.left=0+"px";
 
-  navCanv.width=screenWidth;
-  navCanv.height=controlsPx;
-  navCanv.style.top="0px";
-  navCanv.style.left=0+"px";
-  //navCanv.style.backgroundColor="rgba(33,33,255,"+bgAlpha+")";
 
   cellSizeHalf=cellSize/2;
   centerSize=cellSize/4;
@@ -1692,7 +1692,6 @@ function populateSettings(){
   settingsButtons.push(returnModalButton("Done","right","portrait",false));
   }
 function drawSettingsButtons(){
-  return false;
   dbuga('drawSettingsButtons');
   var settingsCtx=settingsCanv.getContext('2d');
   for (var b=0; b<settingsButtons.length; b++){
@@ -2076,6 +2075,8 @@ function wrapText(context, text, x, y, maxWidth, lineHeight, stroke) {
         }
 
 var bgAlpha=.66;
+
+
 function closeModals(){
   console.log('closeModals initCompleted:'+initCompleted +' firstRun:'+firstRun );
   clearingAll=false;
@@ -2102,7 +2103,7 @@ function closeModals(){
   graphicsUp=false;
   updateColorsCanv('closeModals');
   graphicsEditing=false;
-  camera.style.webkitFilter="none";
+  ////camera.style.webkitFilter="none";
   for (var n=0; n<navButtons.length; n++){
     navButtons[n].selected=false;
     }
@@ -5928,12 +5929,12 @@ function settingsDraw(){
 
   dbug('settingsDraw');
   console.log('settingsDraw');
+  //settingsCanv.style.zIndex=1;
   settingsCanv.width=screenWidth;
-  var ctx=settingsCanv.getContext('2d');
   ////var ctx=navCanv.getContext('2d');
+  var ctx=settingsCanv.getContext('2d');
   var img=document.getElementById('defaultblack');
   ctx.drawImage(img, 0,0,400,400);  
-  settingsCanv.style.zIndex=1;
   var keys=Object.keys(settingsObject);
   var g=(screenHeight-controlsPx-controlsPx)/(keys.length*4+4);// availHeight/18
   var cx=.5*screenWidth/g;
