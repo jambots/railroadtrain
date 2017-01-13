@@ -1935,7 +1935,7 @@ function updateCompCanv(){
 
   
     ctx.globalCompositeOperation = "source-atop";
-    var img=document.getElementById(helps[0].img);
+    var img=document.getElementById("completedPreload");
     ctx.drawImage(img,squarePadLeft,squarePadTop,squarePx,squarePx);
     ctx.globalCompositeOperation = "source-over";
 
@@ -1967,7 +1967,7 @@ function updateCompCanv(){
   compButtons.push(returnModalButton("Restart","left",deviceOrient,false));
   drawCompButtons();
   }
-var modalBg="rgba(255,255,255,.45)";
+var modalBg="rgba(225,225,225,.75)";
 var modalText="rgba(70,70,70,1)";
 var modalStroke="rgba(180,180,180,1)";
 var modalFill="rgba(255,255,255,.75)";
@@ -3015,7 +3015,7 @@ function sourceTick(){
     checkSourceNum=0;
     }
   }
-var minFps=40;
+var minFps=25;
 function sourceAction(sourceNum){
 
   if ((sourceData[sourceNum].occupied==false)&&(sourceData[sourceNum].barrels>0)&&(avgFps>minFps)){
@@ -6268,6 +6268,8 @@ var maxHelp=helps.length-1;
 <img src="helps/helps3.png" id="helps3Preload"   style="display:none;" />
 <img src="helps/helps4.png" id="helps4Preload"   style="display:none;" />
 <img src="helps/helps5.png" id="helps5Preload"   style="display:none;" />
+<img src="helps/about.png" id="aboutPreload"   style="display:none;" />
+<img src="helps/completed.png" id="completedPreload"   style="display:none;" />
 <img src="trainicons/checked.png" id="checkedPreload"   style="display:none;" />
 <img src="trainicons/unchecked.png" id="uncheckedPreload"   style="display:none;" />
 <img src="trainicons/camera.png" id="cameraPreload"   style="display:none;" />
