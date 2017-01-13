@@ -1852,7 +1852,7 @@ var visHeight=100;
 function openModal(modal){
   console.log('openModal('+modal+')');
   closeModals();
-  ////camera.style.webkitFilter="blur(5px)";
+  camera.style.webkitFilter="blur(5px)";
   if(modal=="levels"){
     drawLevels();
     levelsCanv.style.left=0+"px";
@@ -2103,7 +2103,7 @@ function closeModals(){
   graphicsUp=false;
   updateColorsCanv('closeModals');
   graphicsEditing=false;
-  ////camera.style.webkitFilter="none";
+  camera.style.webkitFilter="none";
   for (var n=0; n<navButtons.length; n++){
     navButtons[n].selected=false;
     }
@@ -3093,7 +3093,7 @@ function tankObject(color, dir, x, y, oid){
     ctx.drawImage(imageObj, 0, 0, canv.width, canv.height);
     }
 
-  //dbuga(" - tankObject 9");
+  //dbuga(" - tankObject 9"); 
 
 
   var elementRef=document.getElementById(useCarId);
@@ -3894,7 +3894,8 @@ function createTrack(cellType, targetCell){
 
 var mouseDragging=false;
 function mouseDown(e){
-  
+  e.preventDefault();
+/*    
   mouseDragging=true;
  
   var tid = e.target.id
@@ -3904,9 +3905,11 @@ function mouseDown(e){
   var tArray=[{"pageX":x, "pageY":y, "target":{"id":tid}}];
   var event={"type":"touchstart", "touches":tArray};
   touchStart(event);
+*/
   }
 function mouseMove(e){
   e.preventDefault();
+/*
   if(mouseDragging){
     //dbug("mouseMove "+e.clientX+" "+e.clientY);
     var target = e.target;
@@ -3915,13 +3918,16 @@ function mouseMove(e){
     //console.log(event);
     touchMove(event);
     }// buzz off hover mouse.
+*/
   }
 function mouseUp(e){
   e.preventDefault();
+/*
   mouseDragging=false;
   //dbuga("mouseUp");
   var event={"type":"touchend", "touches":[]};
   touchEnd(event);
+*/
   }
 
 function touchCancel(event){ 
@@ -5933,8 +5939,6 @@ function settingsDraw(){
   //settingsCanv.style.zIndex=1;
   settingsCanv.width=screenWidth;
   var ctx=settingsCanv.getContext('2d');
-  var img=document.getElementById('defaultblack');
-  ctx.drawImage(img, 0,0,400,400);  
   var keys=Object.keys(settingsObject);
   var g=(screenHeight-controlsPx-controlsPx)/(keys.length*4+4);// availHeight/18
   var cx=.5*screenWidth/g;
@@ -5949,9 +5953,11 @@ function settingsDraw(){
     y0=cy+y;
 
 
+/*
     ctx.lineWidth=4;
     ctx.strokeStyle="blue";
     ctx.strokeRect(g*(x0-2), g*(y0-2),g*4,g*4);
+*/
 
     settingsObject[keys[k]]["t"]=g*(y0-2);
     settingsObject[keys[k]]["r"]=g*(x0+2);
