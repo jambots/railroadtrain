@@ -156,7 +156,7 @@ function oneShot(soundName){
   //dbuga("oneShot("+soundName+")");
   soundName=settingsObject.Sounds.value+"/"+soundName;
   if(settingsObject.Sounds.value != "Off"){
-    if(platform=="Zandroid"){
+    if(platform=="android"){
       if(soundRefByName.hasOwnProperty(soundName)){
         //dbuga(' - extant '+soundName);
         //soundRefByName[soundName].stop();
@@ -196,7 +196,7 @@ function oneShot(soundName){
 function loopStart(soundName){// soundName like "Classic/measure_loop_inst"
   //dbuga("loopStart("+soundName+") "+platform);
   if(persistenceObject.music=="on"){
-    if(platform=="Zandroid"){
+    if(platform=="android"){
       //dbuga('BOOYA!');
       if(soundRefByName.hasOwnProperty(soundName)){
         soundRefByName[soundName].play();
@@ -260,7 +260,7 @@ function successCallback(evt){
 
 
 function oneShotLoad(soundName){
-  if(platform=="Zandroid"){
+  if(platform=="android"){
     var newSound = new Media(filePath+"/"+soundName+".mp3");
     soundRefByName[soundName]=newSound;
     //dbuga('new Media '+soundName);
@@ -285,7 +285,7 @@ function oneShotLoad(soundName){
     }  
   }
 function loopStop(soundName){
-  if(platform=="Zandroid"){
+  if(platform=="android"){
     //dbuga('ANDROID loopStop');
     if(soundRefByName.hasOwnProperty(soundName)){
       //dbuga('extant '+soundName);
@@ -306,7 +306,7 @@ function loopStop(soundName){
   }
 var persistenceObject={"music":"on", "sfx":"on"};
 function loopLoad(soundName){
-  if(platform=="Zandroid"){
+  if(platform=="android"){
     if(soundRefByName.hasOwnProperty(soundName)){
       //dbuga(' - extant '+soundName);
       //soundRefByName[soundName].stop();
@@ -1126,7 +1126,7 @@ var boardWidth=100;
 
 var wrapper;
 function changeGeometry(){
-  dbuga('changeGeometry');
+  //dbuga('changeGeometry');
   viewportWidth = window.innerWidth;
   viewportHeight = window.innerHeight;
   screenWidth=viewportWidth;
@@ -2478,7 +2478,7 @@ var showQueue=[];
 var testStr="";
 var soundObject={};
 function initSound(){
-  return false;
+  //return false;
   //dbuga('initSound()');
   loopLoad("On/measure_loop_inst");
   oneShotLoad("On/laytrack");
@@ -2998,10 +2998,10 @@ function destObject(color, dir, x, y){
   }
 
 function destTick(){
-  dbug("destTick()");
+  //dbug("destTick()");
   if((viewportWidth != window.innerWidth)||(viewportHeight != window.innerHeight)){
-    dbuga("width viewport:"+viewportWidth+" window:"+window.innerWidth);
-    dbuga("height viewport:"+viewportHeight+" window:"+window.innerHeight);
+    //dbuga("width viewport:"+viewportWidth+" window:"+window.innerWidth);
+    //dbuga("height viewport:"+viewportHeight+" window:"+window.innerHeight);
     changeGeometry();
     }
   }
