@@ -724,8 +724,11 @@ function setupClasses(){
   addStyle('#progressDiv', 'position:absolute; display:block; overflow:hidden; width:' + progDivWidth + 'px; height:' + progDivHeight + 'px; position:absolute; top:' + progDivTop + 'px; left:' + progDivLeft + 'px; Zbackground-color:#fff;');
   addStyle('.grow', '  height:' + progDivHeight + 'px; width:' + p*100 + 'px; float:left;  Zwebkit-transition: width 1s ease;  ');
   addStyle('#helpCanvas', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px; background-color:rgba(0,0,255,.85);');
+  addStyle('#aboutCanvas', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px; background-color:rgba(0,0,255,.85);');
   document.getElementById('helpCanvas').width=screenWidth;
   document.getElementById('helpCanvas').height=screenWidth;
+  document.getElementById('aboutCanvas').width=screenWidth;
+  document.getElementById('aboutCanvas').height=screenWidth;
   addStyle('#compCanvas', 'position:absolute; top:' + squarePadTop + 'px; left:' + squarePadLeft + 'px; background-color:rgba(0,0,255,.85);');
   document.getElementById('compCanvas').width=screenWidth;
   document.getElementById('compCanvas').height=screenWidth;
@@ -1140,13 +1143,18 @@ var boardWidth=100;
 
 var wrapper;
 function changeGeometry(){
-  console.log('changeGeometry');
+  dbuga('changeGeometry');
   viewportWidth = window.innerWidth;
   viewportHeight = window.innerHeight;
+  screenWidth=screen.width;
+  screenHeight=screen.height;
+
   viewportAspect=viewportWidth/viewportHeight;
-  //dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
+  dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
+  dbuga("screenWidth="+screenWidth+" screenHeight="+screenHeight);
   changeView("changeGeometry");
     if(helpUp){updateHelpCanv();}
+    if(aboutUp){updateAboutCanv();}
     if(compUp){updateCompCanv();}
   }
 
@@ -1192,6 +1200,8 @@ var helpImages=["info0", "info1", "info2", "info3", "info4"];
 var atHelp=0;
 var helpCanv;
 var helpUp=true;
+var aboutCanv;
+var aboutUp=true;
 var compCanv;
 var compUp=false;
 
@@ -1209,6 +1219,7 @@ var cameraCanv;
 function initGeometry(){
   console.log("initGeometry()");
   helpCanv=document.getElementById("helpCanvas");
+  aboutCanv=document.getElementById("aboutCanvas");
   compCanv=document.getElementById("compCanvas");
   levelsCanv=document.getElementById("levelsCanvas");
   settingsCanv=document.getElementById("settingsCanvas");
@@ -1705,6 +1716,13 @@ function drawHelpButtons(){
     drawModalButton(helpCtx, helpButtons[b]);
     }
   }
+function drawAboutButtons(){
+  //dbuga('drawSettingsButtons');
+  var aboutCtx=aboutCanv.getContext('2d');
+  for (var b=0; b<aboutButtons.length; b++){
+    drawModalButton(aboutCtx, aboutButtons[b]);
+    }
+  }
 function drawCompButtons(){
   //dbuga('drawSettingsButtons');
   var compCtx=compCanv.getContext('2d');
@@ -1886,6 +1904,10 @@ function openModal(modal){
     helpUp=true;
     updateHelpCanv();
     }
+  if(modal=="about"){
+    aboutUp=true;
+    updateAboutCanv();
+    }
   if(modal=="comp"){
     compUp=true;
     updateCompCanv();
@@ -1915,7 +1937,7 @@ function updateCompCanv(){
     }
   else{//landscape
     deviceOrient="landscape";
-    squarePx=screenWidth-controlsPx;
+    squarePx=screenWidth-controlsPx*2;
     squarePadLeft=(screenHeight-squarePx)/2;
     console.log(squarePadLeft + '=('+screenHeight+'-'+squarePx+')/2');
     compCanv.width=screenHeight;
@@ -1944,13 +1966,13 @@ function updateCompCanv(){
   var cx=squarePadLeft+squarePx/2;
   var headingPx=modalHeading*squarePx;
   var bodyPx=modalBody*squarePx;
-  var atY=pad+squarePadTop+headingPx*2.5;
+  var atY=pad+squarePadTop+headingPx*2;
   ctx.textBaseline="middle";
   ctx.fillStyle=modalText;
   ctx.textAlign="center";
   ctx.font=headingPx+"px "+modalHeadingFont;
   
-  atY+=wrapText(ctx, "Completed!", cx, atY, squarePx-pad*2, headingPx, false)+squarePx/3;
+  atY+=wrapText(ctx, "Completed!", cx, atY, squarePx-pad*2, headingPx, false)+squarePx/2.25;
   ctx.font=bodyPx+"px "+modalBodyFont;
   var compBody=completedCars.length+" Total Cars<br>";
   var totalSec=totalMs/1000;
@@ -1958,7 +1980,7 @@ function updateCompCanv(){
   compBody+="Seconds per car: "+Math.floor(10*totalSec/completedCars.length)/10;
   var parts=compBody.split("<br>");
   for (var p=0; p<parts.length; p++){
-    atY+=bodyPx/6;
+    atY+=bodyPx/5;
     atY+=wrapText(ctx, parts[p], cx, atY, squarePx-pad*4, bodyPx, false);
     }
   compButtons=[];
@@ -1967,12 +1989,12 @@ function updateCompCanv(){
   compButtons.push(returnModalButton("Restart","left",deviceOrient,false));
   drawCompButtons();
   }
-var modalBg="rgba(225,225,225,.75)";
+var modalBg="rgba(245,245,245,.85)";
 var modalText="rgba(70,70,70,1)";
 var modalStroke="rgba(180,180,180,1)";
 var modalFill="rgba(255,255,255,.75)";
 var modalShrink=.95;
-var modalLine=.025;
+var modalLine=.015;
 var modalRadius=.1;
 var modalHeading=.08;
 var modalBody=.05;
@@ -2049,6 +2071,48 @@ function updateHelpCanv(){
     drawHelpButtons();
     }
   }
+function updateAboutCanv(){
+  console.log('updateABoutCanv initCompleted:'+initCompleted);
+  squarePadTop=0;
+  squarePadLeft=0;
+  squarePx=0;
+  if(viewportAspect<1){//portrait
+    deviceOrient="portrait";
+    squarePadTop=(screenHeight-controlsPx)/2-screenWidth/2;
+    aboutCanv.width=screenWidth;
+    squarePx=screenWidth;
+    aboutCanv.height=screenHeight-controlsPx;
+    }
+  else{//landscape
+    deviceOrient="landscape";
+    squarePx=screenWidth-controlsPx;
+    squarePadLeft=(screenHeight-squarePx)/2;
+    console.log(squarePadLeft + '=('+screenHeight+'-'+squarePx+')/2');
+    aboutCanv.width=screenHeight;
+    aboutCanv.height=screenWidth-controlsPx;
+    }
+  aboutCanv.style.top=controlsPx+"px";
+  aboutCanv.style.left=0+"px";
+  aboutCanv.style.zIndex=3;
+  aboutCanv.style.display="block";
+  aboutCanv.style.backgroundColor=modalBg;
+  var ctx=aboutCanv.getContext('2d');
+  ctx.fillStyle="white";
+  ctx.strokeStyle=modalStroke;
+  ctx.lineWidth=squarePx*modalLine;
+  var pad=squarePx*(1-modalShrink);
+  roundRect(ctx, pad+squarePadLeft, pad+squarePadTop, squarePx-pad*2, squarePx-pad*2, modalRadius*squarePx, true, true);
+
+
+    ctx.globalCompositeOperation = "source-atop";
+    var img=document.getElementById("aboutPreload");
+    ctx.drawImage(img,squarePadLeft,squarePadTop,squarePx,squarePx);
+    ctx.globalCompositeOperation = "source-over";
+  roundRect(ctx, pad+squarePadLeft, pad+squarePadTop, squarePx-pad*2, squarePx-pad*2, modalRadius*squarePx, false, true);
+  aboutButtons=[];
+  aboutButtons.push(returnModalButton("Done","right",deviceOrient,false));
+  drawAboutButtons();
+  }
 function wrapText(context, text, x, y, maxWidth, lineHeight, stroke) {
         //console.log('wrap ' +text+' '+y);
         var height = lineHeight;
@@ -2091,6 +2155,8 @@ function closeModals(){
       helpUp=false;
       }
     }
+  aboutUp=false;
+  aboutCanv.style.left=screenHeight+"px";
   compUp=false;
   compCanv.style.left=screenHeight+"px";
   levelsCanv.style.left=screenHeight+"px";
@@ -2243,6 +2309,8 @@ function initSession(){
   filePath= '' + path+'sounds';
   if(platform=="local"){filePath="sounds";}   
   if(platform=="web"){filePath="sounds";} 
+  if(platform=="android"){minFps=24;}
+
   //dbug(JSON.stringify(localStorage));  
   //debugStorage();
 
@@ -2335,7 +2403,7 @@ function populateModals(){
 var fpsArray=[60,60,60,60,60,60];
 var avgFps=0;
 function secondTick(){
-  if((carsUp==false)&&(graphicsUp==false)&&(settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
+  if((carsUp==false)&&(graphicsUp==false)&&(settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(aboutUp==false)&&(paused==false)){
     fpsArray.unshift(frames);
     var junk=fpsArray.pop();
     var totalFrames=0;
@@ -2353,7 +2421,7 @@ var nowMs=0;
 function rafTick(ms){
   nowMs=Math.floor(ms);
   if(focusTrain>=trainData.length){focusTrain=0;}
-  if((carsUp==false)&&(graphicsUp==false)&&(settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
+  if((carsUp==false)&&(graphicsUp==false)&&(settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(aboutUp==false)&&(paused==false)){
 
     turnFrames++;
     var framesPerTurn=turnMs/17;
@@ -2940,7 +3008,7 @@ function destObject(color, dir, x, y){
 
 function destTick(){
   
-  if((viewportWidth != window.innerWidth)||(viewportHeight != window.innerHeight)){
+  if((viewportWidth != window.innerWidth)||(viewportHeight != window.innerHeight)||(screenWidth != screen.width)||(screenHeight != screenHeight)){
     changeGeometry();
     }
   }
@@ -3015,7 +3083,8 @@ function sourceTick(){
     checkSourceNum=0;
     }
   }
-var minFps=25;
+var minFps=40;
+
 function sourceAction(sourceNum){
 
   if ((sourceData[sourceNum].occupied==false)&&(sourceData[sourceNum].barrels>0)&&(avgFps>minFps)){
@@ -3225,7 +3294,7 @@ function trainObject(color, x, y, dir){
   }
 
 function turnTick(){
-  if((settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(paused==false)){
+  if((settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(aboutUp==false)&&(paused==false)){
     var debugString="turnTick() checkTrainNum="+checkTrainNum;
     for (var t=0; t<trainData.length; t++){
     debugString+="<br>"+t+" prev "+trainData[t].prevX+" "+trainData[t].prevY+" next"+trainData[t].nextX+" "+trainData[t].nextY+" nextDir "+trainData[t].nextDir+" nextDeg "+trainData[t].nextDeg;
@@ -3895,7 +3964,7 @@ function createTrack(cellType, targetCell){
 var mouseDragging=false;
 function mouseDown(e){
   e.preventDefault();
-/*    
+  if(isMobile){return false;}    
   mouseDragging=true;
  
   var tid = e.target.id
@@ -3905,11 +3974,10 @@ function mouseDown(e){
   var tArray=[{"pageX":x, "pageY":y, "target":{"id":tid}}];
   var event={"type":"touchstart", "touches":tArray};
   touchStart(event);
-*/
   }
 function mouseMove(e){
   e.preventDefault();
-/*
+  if(isMobile){return false;}    
   if(mouseDragging){
     //dbug("mouseMove "+e.clientX+" "+e.clientY);
     var target = e.target;
@@ -3918,16 +3986,15 @@ function mouseMove(e){
     //console.log(event);
     touchMove(event);
     }// buzz off hover mouse.
-*/
+  if(isMobile){return false;}    
   }
 function mouseUp(e){
   e.preventDefault();
-/*
+  if(isMobile){return false;}    
   mouseDragging=false;
   //dbuga("mouseUp");
   var event={"type":"touchend", "touches":[]};
   touchEnd(event);
-*/
   }
 
 function touchCancel(event){ 
@@ -3991,6 +4058,7 @@ function touchEvent(event){
         if(levelsUp){handleEventLevels(event);}
         else if(settingsUp){handleEventSettings(event);}
         else if(helpUp){handleEventHelp(event);}
+        else if(aboutUp){handleEventAbout(event);}
         else if(compUp){handleEventComp(event);}
         else{handleEventDraw(event);}
         }
@@ -4512,6 +4580,12 @@ function saveComplete(){
 function closeLoading(){
   document.getElementById('loadingCanvas').style.display="none";
   }
+function closeAbout(){
+  console.log('closeAbout');
+  paused=false;
+  document.getElementById('aboutCanvas').style.display="none";
+  aboutUp=false;
+  }
 function closeHelp(){
   console.log('closeHelp');
   paused=false;
@@ -4901,6 +4975,33 @@ function handleEventHelp(e){
   if(e.type=="touchend"){
     }
   }
+function handleEventAbout(e){
+  console.log('handleEventAbout ');
+  if(e.type=="touchstart"){
+    var t=e.touches[0];
+    var found=false;
+    var x=t.pageX;
+    var y=t.pageY-controlsPx;
+    //dbuga('x:'+x+' y:'+y);
+    for (var hb=0; hb<aboutButtons.length; hb++){
+      var aboutButton=aboutButtons[hb];
+      if(xyInTrbl(x,y,aboutButton)){
+        if(aboutButton.label=="Done"){
+          closeAbout();
+          closeModals();
+          }
+        //dbug(atHelp);
+        }
+      }// hb loop
+    if(found){
+      updateAboutCanv();
+      }
+    }
+  if(e.type=="touchmove"){
+    }
+  if(e.type=="touchend"){
+    }
+  }
 function openBrowser(url){
   //dbuga(url);
   var ref=cordova.InAppBrowser.open(url, "_system");
@@ -4957,6 +5058,7 @@ function handleEventSettings(e){
         closeModals();
         }
       if(buttonLabel=="Help"){atHelp=1; openModal("help");}
+      if(buttonLabel=="About"){openModal("about");}
       }
     settingsTouchingId="";
     settingsButtonNum=-1;    
@@ -6243,6 +6345,7 @@ var maxHelp=helps.length-1;
 <canvas id="graphicsCanvas" style="position:absolute;"></canvas>
 <canvas id="cameraCanvas" style="position:absolute;" width="100" height="100"></canvas>
 <canvas id="helpCanvas" style="position:absolute;"></canvas>
+<canvas id="aboutCanvas" style="position:absolute;"></canvas>
 <canvas id="compCanvas" style="position:absolute;"></canvas>
 <canvas id="loadingCanvas"></canvas>
 
