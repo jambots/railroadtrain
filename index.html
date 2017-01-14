@@ -110,27 +110,6 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 
 
-function genericDefault(itemName, defaultValue){
-  if(platform=="android"){
-    if (localStorage.getItem(itemName) === null) {
-      localStorage.setItem(itemName, defaultValue);
-      }
-    }
-  }
-function genericSet(itemName, newValue){
-  if(platform=="android"){
-    localStorage.setItem(itemName, newValue);
-    }
-  }
-function genericGet(itemName){
-  var value="notSet";
-  if(platform=="android"){
-    value=localStorage.getItem(itemName);
-    }
-  return value;
-  }
-
-
 function rnd(range){
   return Math.floor(Math.random()*range);
   }
@@ -907,9 +886,9 @@ function createCanvasTrack(theType, cellX, cellY){
   var originX=cellX*cellSize;
   var originY=cellY*cellSize;
   var unit=cellSize/12;
-  var lUnit=5.25 * unit;
+  var lUnit=5.125 * unit;
   var cUnit=6 * unit;
-  var rUnit=6.75 * unit;
+  var rUnit=6.875 * unit;
   var lTie=4.75 * unit;
   var rTie=7.25 * unit;
   // all ties
@@ -1150,11 +1129,11 @@ function changeGeometry(){
   //dbuga('changeGeometry');
   viewportWidth = window.innerWidth;
   viewportHeight = window.innerHeight;
-  screenWidth=screen.width;
-  screenHeight=screen.height;
+  screenWidth=viewportWidth;
+  screenHeight=viewportHeight;
   if(screenWidth>screenHeight){
-    screenWidth=screen.height;
-    screenHeight=screen.width;
+    screenWidth=viewportHeight;
+    screenHeight=viewportWidth;
     }
   viewportAspect=viewportWidth/viewportHeight;
   //dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
