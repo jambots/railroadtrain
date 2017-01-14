@@ -547,7 +547,6 @@ function handleEventNav(e){// fubar but still in
     if(target == "levels"){
       if(levelsUp){
         closeModals();
-        minFramesPerSecond=-4;
         navButtons[buttNum].selected=false;
         }
       else{
@@ -558,7 +557,6 @@ function handleEventNav(e){// fubar but still in
     if(target == "settings"){
       if(settingsUp){
         closeModals();
-        minFramesPerSecond=-4;
         navButtons[buttNum].selected=false;
         }
       else{
@@ -1131,24 +1129,6 @@ var boardHeight=100;
 var boardWidth=100;
 
 var wrapper;
-function changeGeometry(){
-  //dbuga('changeGeometry');
-  viewportWidth = window.innerWidth;
-  viewportHeight = window.innerHeight;
-  screenWidth=viewportWidth;
-  screenHeight=viewportHeight;
-  if(screenWidth>screenHeight){
-    screenWidth=viewportHeight;
-    screenHeight=viewportWidth;
-    }
-  viewportAspect=viewportWidth/viewportHeight;
-  //dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
-  //dbuga("screenWidth="+screenWidth+" screenHeight="+screenHeight);
-  changeView("changeGeometry");
-    if(helpUp){updateHelpCanv();}
-    if(aboutUp){updateAboutCanv();}
-    if(compUp){updateCompCanv();}
-  }
 
 function mouseLevel(){
   if(platform=="android"){
@@ -1370,22 +1350,21 @@ function boardGeometry(){
   document.getElementById('gridCanvas').style.transform="translateZ(-"+cellSize/40+"px)"
   document.getElementById('fieldHolder').style.transform="translateZ(-"+cellSize/48+"px)"
   }
-var destMs;
+
 function restartIntervals(){ 
   fillGridCanvas();
   //dbuga('restartIntervals()');
-  minFramesPerSecond=-4;
   //window.clearInterval(turnInterval);
   window.clearInterval(sourceInterval);
   window.clearInterval(destInterval);
   turnMs=Math.floor(1000/trainData.length);
   sourceMs=Math.floor(10000/sourceCount);
-  destMs=Math.floor(1000/trainData.length);
+  destMs=100;
 
 
     //turnInterval=window.setInterval(turnTick, turnMs);
     sourceInterval=window.setInterval(sourceTick, sourceMs);
-    destInterval=window.setInterval(destTick, destMs);
+    geometryInterval=window.setInterval(geometryTick, geometryMs);
   }
 var platform="unknown";
 var filePath="";
@@ -1588,7 +1567,6 @@ function populateCars(){
   for(var cb=0; cb<carsButtons.length; cb++){
     drawModalButton(carsCtx, carsButtons[cb]);
     }
-  minFramesPerSecond=-4;
   }
 var clearingAll=false;
 var settingsButtons=[
@@ -3002,9 +2980,10 @@ function destObject(color, dir, x, y){
   createCanvasTrack(dir+"d", x, y);
   return d;
   }
-
-function destTick(){
-  //dbug("destTick()");
+var geometryMs;
+var geometryInterval;
+function geometryTick(){
+  //dbug("geometryTick()");
   if((viewportWidth != window.innerWidth)||(viewportHeight != window.innerHeight)){
     //dbuga("width viewport:"+viewportWidth+" window:"+window.innerWidth);
     //dbuga("height viewport:"+viewportHeight+" window:"+window.innerHeight);
@@ -3013,6 +2992,26 @@ function destTick(){
   testScroll('destTick');
 
   }
+
+function changeGeometry(){
+  //dbuga('changeGeometry');
+  viewportWidth = window.innerWidth;
+  viewportHeight = window.innerHeight;
+  screenWidth=viewportWidth;
+  screenHeight=viewportHeight;
+  if(screenWidth>screenHeight){
+    screenWidth=viewportHeight;
+    screenHeight=viewportWidth;
+    }
+  viewportAspect=viewportWidth/viewportHeight;
+  //dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
+  //dbuga("screenWidth="+screenWidth+" screenHeight="+screenHeight);
+  changeView("changeGeometry");
+    if(helpUp){updateHelpCanv();}
+    if(aboutUp){updateAboutCanv();}
+    if(compUp){updateCompCanv();}
+  }
+
 
 function zeroProgressBar(){
   for (c=0; c<colorList.length; c++){
@@ -3622,7 +3621,6 @@ trainHtmlByColor['orange']="<div id=\"trainId\" class=\"transit\" style><div cla
 trainHtmlByColor['black'] ="<div id=\"trainId\" class=\"transit\" style><div class=\"coupler\"></div><div class=\"blackTrainBody\"></div><div class=\"blackTrainCatcher\"></div><div class=\"blackTrainTank\"></div><div class=\"blackTrainRear\"></div></div>";
 
 var fullCellGlom=""; //needed for testing the path cells of tiles in viable code
-var destInterval;
 
 var dirList=new Array('t', 'b', 'r', 'l');
 var colorList=new Array('black', 'orange', 'blue', 'green');
@@ -4020,13 +4018,10 @@ function touchStart(event){
   touchEvent(event);
   }
 function touchMove(event){
-
   touchEvent(event);
-  testScroll('touchMove');
   }
 function touchEnd(event){
   touchEvent(event);
-  testScroll('touchEnd');
   }
 
 function touchEvent(event){
