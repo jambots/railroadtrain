@@ -1148,7 +1148,10 @@ function changeGeometry(){
   viewportHeight = window.innerHeight;
   screenWidth=screen.width;
   screenHeight=screen.height;
-
+  if(screenWidth>screenHeight){
+    screenWidth=screen.height;
+    screenHeight=screen.width;
+    }
   viewportAspect=viewportWidth/viewportHeight;
   dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
   dbuga("screenWidth="+screenWidth+" screenHeight="+screenHeight);
@@ -1233,6 +1236,11 @@ function initGeometry(){
   wrapper=document.getElementById("wrapper");
   screenWidth=screen.width;
   screenHeight=screen.height;
+  if(screenWidth>screenHeight){
+    screenWidth=screen.height;
+    screenHeight=screen.width;
+    }
+
   //dbuga("initGeometry() "+screenWidth+" x "+screenHeight);
 
   viewportWidth=window.innerWidth;
