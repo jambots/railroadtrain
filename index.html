@@ -3019,6 +3019,18 @@ function destTick(){
   if((viewportWidth != window.innerWidth)||(viewportHeight != window.innerHeight)){
     changeGeometry();
     }
+  else{
+    var testWidth=screen.width;
+    var testHeight=screen.height;
+    if(testWidth>testHeight){
+      testWidth=screen.height;
+      testHeight=screen.width;
+      }
+    if((testWidth != screenWidth)||(testHeight != screenHeight)){
+      dbuga(' !!!!!'); 
+      changeGeometry();
+      }
+    }
   }
 
 function zeroProgressBar(){
