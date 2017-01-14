@@ -237,7 +237,7 @@ function loopStart(soundName){// soundName like "Classic/measure_loop_inst"
 
 function statusCallback(theStatus){
   var statusArray=['MEDIA_NONE', 'MEDIA_STARTING', 'MEDIA_RUNNING', 'MEDIA_PAUSED', 'MEDIA_STOPPED'];
-  //dbuga('media status '+statusArray[theStatus]);
+  dbuga('media status '+statusArray[theStatus]);
   if(soundRefByName.hasOwnProperty("musicloop")){
     var loopRef=soundRefByName["musicloop"];
     loopRef.getCurrentPosition(
@@ -256,10 +256,10 @@ function statusCallback(theStatus){
     }
   }
 function errorCallback(er){
-  //dbuga("media error "+JSON.stringify(er))
+  dbuga("errorCallback "+JSON.stringify(er))
   }
 function successCallback(evt){
-  //dbuga("HEY ": + JSON.stringify(evt));
+  dbuga("successCallback ": + JSON.stringify(evt));
   //singMedia.play();
   }
 
@@ -311,17 +311,18 @@ function loopStop(soundName){
   }
 var persistenceObject={"music":"on", "sfx":"on"};
 function loopLoad(soundName){
+  dbuga('loopLoad('+soundName+')');
   if(platform=="android"){
     if(soundRefByName.hasOwnProperty(soundName)){
-      //dbuga(' - extant '+soundName);
+      dbuga(' - extant '+soundName);
       //soundRefByName[soundName].stop();
-      soundRefByName[soundName].play();
+      //soundRefByName[soundName].play();
       //dbuga(' - played');
       }
     else{
       var newSound = new Media(filePath+"/"+soundName+".mp3", successCallback, errorCallback, statusCallback);
       soundRefByName[soundName]=newSound;
-      //dbuga('new Media '+soundName);
+      dbuga('new Media '+soundName);
       }
     }
   if((platform=="web")||(platform=="local")){
@@ -2461,8 +2462,10 @@ var showQueue=[];
 var testStr="";
 var soundObject={};
 function initSound(){
-  //return false;
-  //dbuga('initSound()');
+  if(((platform=="web")||(platform=="local")){
+    return false;
+    }
+  dbuga('initSound()');
   loopLoad("On/measure_loop_inst");
   oneShotLoad("On/laytrack");
   oneShotLoad("On/carstart");
