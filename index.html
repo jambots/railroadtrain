@@ -3004,6 +3004,8 @@ function destTick(){
     //dbuga("height viewport:"+viewportHeight+" window:"+window.innerHeight);
     changeGeometry();
     }
+  testScroll('destTick');
+
   }
 
 function zeroProgressBar(){
@@ -3970,6 +3972,7 @@ function mouseDown(e){
   }
 function mouseMove(e){
   e.preventDefault();
+  testScroll('mouseMove');
   if(isMobile){return false;}    
   if(mouseDragging){
     //dbug("mouseMove "+e.clientX+" "+e.clientY);
@@ -3983,13 +3986,25 @@ function mouseMove(e){
   }
 function mouseUp(e){
   e.preventDefault();
+  testScroll('mouseUp');
   if(isMobile){return false;}    
   mouseDragging=false;
   //dbuga("mouseUp");
   var event={"type":"touchend", "touches":[]};
   touchEnd(event);
   }
+var scrollTimeout;
+function testScroll(source){
+  dbuga('testScroll '+source);
+  window.clearTimeout(testScroll);
+  scroillTimeout=window.setTimeout('scrollResult', 1000)
+  }
+function scrollResult(){
+  if(document.body.scrollLeft !=0){document.body.scrollLeft=0; dbuga('scrolled left')}
+  if(document.body.scrollTop !=0){document.body.scrollTop=0; dbuga('scrolled top')}
 
+
+  }
 function touchCancel(event){ 
   }
 function debugEvent(e){
@@ -3999,10 +4014,13 @@ function touchStart(event){
   touchEvent(event);
   }
 function touchMove(event){
+
   touchEvent(event);
+  testScroll('touchMove');
   }
 function touchEnd(event){
   touchEvent(event);
+  testScroll('touchEnd');
   }
 
 function touchEvent(event){
