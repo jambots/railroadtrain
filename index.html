@@ -4400,7 +4400,7 @@ function graphicsTake(){
   }
 function cameraTake(){
   shooting=true;
-  dbuga('cameraTake gscn'+  graphicsSelectedColorNum+' gsg='+graphicsSelectedGraphic);
+  //dbuga('cameraTake gscn'+  graphicsSelectedColorNum+' gsg='+graphicsSelectedGraphic);
   if(platform=="android"){
     navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
       destinationType: Camera.DestinationType.FILE_URI
@@ -4413,13 +4413,13 @@ function cameraTake(){
     }
   }
 function onFail(message) {
-  dbuga('onFail');
+  //dbuga('onFail '+message);
   shooting=false;
   graphicsEditing=false;
   populateGraphics();
   }
 function onSuccess(imageData) {
-    dbuga('success '+imageData.length);
+    //dbuga('success '+imageData.length);
 
     var image = document.getElementById('cameraImg');
     image.style.display="block";
@@ -4431,13 +4431,13 @@ function onSuccess(imageData) {
     }
     
 function cameraLoaded(){
-    dbuga('cameraLoaded()');
+    //dbuga('cameraLoaded()');
     graphicsEditing=true;
     var image = document.getElementById('cameraImg');
     graphicsScale=.9;
     graphicsOffsetX=0;
     graphicsOffsetY=0;
-    dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
+    //dbuga('image.naturalWidth: '+image.naturalWidth +' image.naturalHeight:'+image.naturalHeight);
     populateGraphics();
     previewGraphics();
     postviewGraphics();
