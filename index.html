@@ -139,7 +139,7 @@ function resumeGame(){
 
 function transmitBgMusicState(){
   //return false;////
-  dbuga("transmitBgMusicState()");
+  //dbuga("transmitBgMusicState()");
   //debugStorage();
   if(settingsObject.Music.value == "On"){
     loopStart("On/measure_loop_inst");
@@ -199,23 +199,23 @@ function oneShot(soundName){
   }
 var openedWithStupidLoop=false;
 function loopStart(soundName){// soundName like "Classic/measure_loop_inst"
-  dbuga("loopStart("+soundName+") "+platform);
+  //dbuga("loopStart("+soundName+") "+platform);
   if(persistenceObject.music=="on"){
     if(platform=="android"){
-      dbuga('BOOYA!');
+      //dbuga('BOOYA!');
       if(soundRefByName.hasOwnProperty(soundName)){
-        dbuga('hasOwnProperty!');
+        //dbuga('hasOwnProperty!');
         soundRefByName[soundName].play();
         }
       }
     if((platform=="web")||(platform=="local")){
       if(soundRefByName.hasOwnProperty(soundName)){
-        dbuga('openedWithStupidLoop: '+ openedWithStupidLoop);
+        //dbuga('openedWithStupidLoop: '+ openedWithStupidLoop);
         if(openedWithStupidLoop==false){
-          dbuga(' - extant '+soundName);
+          //dbuga(' - extant '+soundName);
           soundRefByName[soundName].stop();
           soundRefByName[soundName].play();
-          dbuga(' - played');
+          //dbuga(' - played');
           }
         }
       else{
@@ -229,7 +229,7 @@ function loopStart(soundName){// soundName like "Classic/measure_loop_inst"
             }
           });
         soundRefByName[soundName]=newSound;
-        dbuga('loop new howl '+soundName);
+        //dbuga('loop new howl '+soundName);
  
         }  
       }  
@@ -238,7 +238,7 @@ function loopStart(soundName){// soundName like "Classic/measure_loop_inst"
 
 function statusCallback(theStatus){
   var statusArray=['MEDIA_NONE', 'MEDIA_STARTING', 'MEDIA_RUNNING', 'MEDIA_PAUSED', 'MEDIA_STOPPED'];
-  dbuga('media status '+statusArray[theStatus]);
+  //dbuga('media status '+statusArray[theStatus]);
   if(soundRefByName.hasOwnProperty("musicloop")){
     var loopRef=soundRefByName["musicloop"];
     loopRef.getCurrentPosition(
@@ -257,10 +257,10 @@ function statusCallback(theStatus){
     }
   }
 function errorCallback(er){
-  dbuga("errorCallback "+JSON.stringify(er))
+  //dbuga("errorCallback "+JSON.stringify(er))
   }
 function successCallback(evt){
-  dbuga("successCallback " + JSON.stringify(evt));
+  //dbuga("successCallback " + JSON.stringify(evt));
   //singMedia.play();
   }
 
@@ -312,10 +312,10 @@ function loopStop(soundName){
   }
 var persistenceObject={"music":"on", "sfx":"on"};
 function loopLoad(soundName){
-  dbuga('loopLoad('+soundName+')');
+  //dbuga('loopLoad('+soundName+')');
   if(platform=="android"){
     if(soundRefByName.hasOwnProperty(soundName)){
-      dbuga(' - extant '+soundName);
+      //dbuga(' - extant '+soundName);
       //soundRefByName[soundName].stop();
       //soundRefByName[soundName].play();
       //dbuga(' - played');
@@ -323,7 +323,7 @@ function loopLoad(soundName){
     else{
       var newSound = new Media(filePath+"/"+soundName+".mp3", successCallback, errorCallback, statusCallback);
       soundRefByName[soundName]=newSound;
-      dbuga('new Media '+soundName);
+      //dbuga('new Media '+soundName);
       }
     }
   if((platform=="web")||(platform=="local")){
@@ -2466,7 +2466,7 @@ function initSound(){
   if((platform=="web")||(platform=="local")){
     return false;
     }
-  dbuga('initSound()');
+  //dbuga('initSound()');
   loopLoad("On/measure_loop_inst");
   oneShotLoad("On/laytrack");
   oneShotLoad("On/carstart");
