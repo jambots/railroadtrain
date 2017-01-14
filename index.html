@@ -15,7 +15,13 @@
 <script src="howler.min.js"></script>
 
 <style>
-
+html, body {
+  overflow: hidden;
+}
+body {
+  position: relative
+  background-color:#fff; width:100%; height:100%;
+}
 
 @font-face {
     font-family: akziLight;
@@ -3995,7 +4001,7 @@ function mouseUp(e){
   }
 var scrollTimeout;
 function testScroll(source){
-  dbug('testScroll '+source);
+  //dbug('testScroll '+source);
   window.clearTimeout(testScroll);
   scrollTimeout=window.setTimeout('scrollResult()', 1000)
   }
@@ -6310,7 +6316,7 @@ var maxHelp=helps.length-1;
 
 </script>
 </head>
-<body onload="init()" ontouchstart="event.preventDefault(); touchStart(event);" ontouchmove="event.preventDefault(); touchMove(event);" ontouchend="event.preventDefault(); touchEnd(event);" ontouchcancel="touchCancel(event);" style="background-color:#fff; width:100%; height:100%; overflow:hidden; ">
+<body onload="init()" ontouchstart="event.preventDefault(); touchStart(event);" ontouchmove="event.preventDefault(); touchMove(event);" ontouchend="event.preventDefault(); touchEnd(event);" ontouchcancel="touchCancel(event);">
 <div id="wrapper" style="display:block; position:absolute; top:0px; left:100px; overflow:hidden; Zbackground-color:white;">
   <div id="highlighter"></div>
   <div id="prerails">
