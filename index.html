@@ -1126,7 +1126,7 @@ var boardWidth=100;
 
 var wrapper;
 function changeGeometry(){
-  //dbuga('changeGeometry');
+  dbuga('changeGeometry');
   viewportWidth = window.innerWidth;
   viewportHeight = window.innerHeight;
   screenWidth=viewportWidth;
@@ -2998,21 +2998,11 @@ function destObject(color, dir, x, y){
   }
 
 function destTick(){
-  
+  dbug("destTick()");
   if((viewportWidth != window.innerWidth)||(viewportHeight != window.innerHeight)){
+    dbuga("width viewport:"+viewportWidth+" window:"+window.innerWidth);
+    dbuga("height viewport:"+viewportHeight+" window:"+window.innerHeight);
     changeGeometry();
-    }
-  else{
-    var testWidth=screen.width;
-    var testHeight=screen.height;
-    if(testWidth>testHeight){
-      testWidth=screen.height;
-      testHeight=screen.width;
-      }
-    if((testWidth != screenWidth)||(testHeight != screenHeight)){
-      //dbuga(' !!!!!'); 
-      changeGeometry();
-      }
     }
   }
 
