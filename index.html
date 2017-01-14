@@ -197,6 +197,7 @@ function oneShot(soundName){
       }  
     }  
   }
+var openedWithStupidLoop=false;
 function loopStart(soundName){// soundName like "Classic/measure_loop_inst"
   dbuga("loopStart("+soundName+") "+platform);
   if(persistenceObject.music=="on"){
@@ -259,7 +260,7 @@ function errorCallback(er){
   dbuga("errorCallback "+JSON.stringify(er))
   }
 function successCallback(evt){
-  dbuga("successCallback ": + JSON.stringify(evt));
+  dbuga("successCallback " + JSON.stringify(evt));
   //singMedia.play();
   }
 
