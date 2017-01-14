@@ -139,22 +139,20 @@ function resumeGame(){
 
 function transmitBgMusicState(){
   //return false;////
-  //dbuga("transmitBgMusicState()");
-  debugStorage();
+  dbuga("transmitBgMusicState()");
+  //debugStorage();
   if(settingsObject.Music.value == "On"){
-    loopStart("On/loop");
-    loopStop("Classic/loop");
+    loopStart("On/measure_loop_inst");
+    loopStop("Classic/measure_loop_inst");
     }
   else if(settingsObject.Music.value == "Classic"){
-    loopStop("On/loop");
-    loopStart("Classic/loop");
+    loopStop("On/measure_loop_inst");
+    loopStart("Classic/measure_loop_inst");
     }
   else{
-    loopStop("On/loop");
-    loopStop("Classic/loop");
+    loopStop("On/measure_loop_inst");
+    loopStop("Classic/measure_loop_inst");
     }
-  
-  
   }
 var soundCount=0;
 var soundRefByName={};
@@ -200,22 +198,23 @@ function oneShot(soundName){
     }  
   }
 function loopStart(soundName){// soundName like "Classic/measure_loop_inst"
-  //dbuga("loopStart("+soundName+") "+platform);
+  dbuga("loopStart("+soundName+") "+platform);
   if(persistenceObject.music=="on"){
     if(platform=="android"){
-      //dbuga('BOOYA!');
+      dbuga('BOOYA!');
       if(soundRefByName.hasOwnProperty(soundName)){
+        dbuga('hasOwnProperty!');
         soundRefByName[soundName].play();
         }
       }
     if((platform=="web")||(platform=="local")){
       if(soundRefByName.hasOwnProperty(soundName)){
-        //dbuga('openedWithStupidLoop: '+ openedWithStupidLoop);
+        dbuga('openedWithStupidLoop: '+ openedWithStupidLoop);
         if(openedWithStupidLoop==false){
-          //dbuga(' - extant '+soundName);
+          dbuga(' - extant '+soundName);
           soundRefByName[soundName].stop();
           soundRefByName[soundName].play();
-          //dbuga(' - played');
+          dbuga(' - played');
           }
         }
       else{
@@ -229,7 +228,7 @@ function loopStart(soundName){// soundName like "Classic/measure_loop_inst"
             }
           });
         soundRefByName[soundName]=newSound;
-        //dbuga('loop new howl '+soundName);
+        dbuga('loop new howl '+soundName);
  
         }  
       }  
@@ -4004,8 +4003,8 @@ function testScroll(source){
   scrollTimeout=window.setTimeout('scrollResult()', 1000)
   }
 function scrollResult(){
-  if(document.body.scrollLeft !=0){document.body.scrollLeft=0; dbuga('scrolled left')}
-  if(document.body.scrollTop !=0){document.body.scrollTop=0; dbuga('scrolled top')}
+  if(document.body.scrollLeft !=0){document.body.scrollLeft=0;}
+  if(document.body.scrollTop !=0){document.body.scrollTop=0;}
 
 
   }
