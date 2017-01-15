@@ -172,7 +172,7 @@ function oneShot(soundName){
         //dbuga('new Media '+soundName);
         }
       }
-    if((platform=="web")||(platform=="local")){
+    if((platform=="web")||(platform=="local")||(platform=="ios")){
       if(soundRefByName.hasOwnProperty(soundName)){
         //dbuga('oneShot - extant '+soundName);
         //soundRefByName[soundName].stop();
@@ -207,7 +207,7 @@ function loopStart(soundName){// soundName like "Classic/measure_loop_inst"
         soundRefByName[soundName].play();
         }
       }
-    if((platform=="web")||(platform=="local")){
+    if((platform=="web")||(platform=="local")||(platform=="ios")){
       if(soundRefByName.hasOwnProperty(soundName)){
         //dbuga('openedWithStupidLoop: '+ openedWithStupidLoop);
         if(openedWithStupidLoop==false){
@@ -270,7 +270,7 @@ function oneShotLoad(soundName){
     soundRefByName[soundName]=newSound;
     //dbuga('new Media '+soundName);
     }
-  if((platform=="web")||(platform=="local")){
+  if((platform=="web")||(platform=="local")||(platform=="ios")){
     if(soundRefByName.hasOwnProperty(soundName)){
       //dbuga('extant');
       }
@@ -298,7 +298,7 @@ function loopStop(soundName){
       soundRefByName[soundName].stop();
       }  
     }
-  if((platform=="web")||(platform=="local")){
+  if((platform=="web")||(platform=="local")||(platform=="ios")){
     openedWithStupidLoop=false;
     if(soundRefByName.hasOwnProperty(soundName)){
       //dbuga('extant '+soundName+' stop howl');
@@ -324,7 +324,7 @@ function loopLoad(soundName){
       //dbuga('new Media '+soundName);
       }
     }
-  if((platform=="web")||(platform=="local")){
+  if((platform=="web")||(platform=="local")||(platform=="ios")){
     if(soundRefByName.hasOwnProperty(soundName)){
       //dbuga(' - extant: '+ soundName);
       }
@@ -2273,7 +2273,7 @@ function initSession(){
   var wLoc=""+window.location+"";
   if(wLoc.indexOf("file:///")==0){
     platform="local";
-    if(wLoc.indexOf("file:///var/mobile")==0){platform="dreamfreeze";}
+    if(wLoc.indexOf("file:///var/")==0){platform="ios";}
     if(wLoc.indexOf("file:///android_asset")==0){platform="android";}
     }
   if(wLoc.indexOf("http://")==0){platform="web";}
@@ -2281,6 +2281,7 @@ function initSession(){
   var path = window.location.pathname;
   path = path.substr( path, path.length - 10 );
   filePath= '' + path+'sounds';
+  if(platform=="ios"){filePath="sounds";}   
   if(platform=="local"){filePath="sounds";}   
   if(platform=="web"){filePath="sounds";} 
   if(platform=="android"){minFps=24;}
@@ -2461,7 +2462,7 @@ var showQueue=[];
 var testStr="";
 var soundObject={};
 function initSound(){
-  if((platform=="web")||(platform=="local")){
+  if((platform=="web")||(platform=="local")||(platform=="ios")){
     return false;
     }
   //dbuga('initSound()');
@@ -3006,24 +3007,29 @@ function changeGeometry(){
     }
   rotating=true;
   window.clearTimeout(rotatingTimeout);
-  rotatingTimeout=window.setTimeout('calcGeometry()', 3000);
-  }  
+  rotatingTimeout=window.setTimeout('calcGeometry()', 2000);
+  }
+
 var rotating=false;
 var rotatingTimeout;
-
+var stopRotatingTimeout;
 function calcGeometry(){
-  rotating=false;
+
   window.clearTimeout(rotatingTimeout);
   
   viewportAspect=viewportWidth/viewportHeight;
   //dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
   //dbuga("screenWidth="+screenWidth+" screenHeight="+screenHeight);
   changeView("changeGeometry");
-    if(helpUp){updateHelpCanv();}
-    if(aboutUp){updateAboutCanv();}
-    if(compUp){updateCompCanv();}
+  if(helpUp){updateHelpCanv();}
+  if(aboutUp){updateAboutCanv();}
+  if(compUp){updateCompCanv();}
+  stopRotatingTimeout=window.setTimeout('stopRotatingTick()', 2000);
   }
-
+function stopRotatingTick(){
+  window.clearTimeout(stopRotatingTimeout);
+  rotating=false;
+  }
 
 function zeroProgressBar(){
   for (c=0; c<colorList.length; c++){
