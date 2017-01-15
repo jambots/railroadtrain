@@ -352,7 +352,7 @@ function loopLoad(soundName){
 
 function playSound(theSound){
   
-  if((settingsObject["Sounds"].value != "Off")&&(paused==false)){
+  if((settingsObject["Sounds"].value != "Off")&&(paused==false)&&(rotating==false)){
     oneShot(theSound);
     }
   }
@@ -2378,7 +2378,7 @@ function populateModals(){
 var fpsArray=[60,60,60,60,60,60];
 var avgFps=0;
 function secondTick(){
-  if((carsUp==false)&&(graphicsUp==false)&&(settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(aboutUp==false)&&(paused==false)){
+  if((carsUp==false)&&(graphicsUp==false)&&(settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(aboutUp==false)&&(paused==false)&&(rotating==false)){
     fpsArray.unshift(frames);
     var junk=fpsArray.pop();
     var totalFrames=0;
@@ -2394,6 +2394,7 @@ var turnFrames=0;
 var camPos={"x":0, "y":0, "d":0};
 var nowMs=0;
 function rafTick(ms){
+  if(rotating){return false;}
   nowMs=Math.floor(ms);
   if(focusTrain>=trainData.length){focusTrain=0;}
   if((carsUp==false)&&(graphicsUp==false)&&(settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(aboutUp==false)&&(paused==false)&&(rotating==false)){
@@ -2456,7 +2457,7 @@ function rafTick(ms){
       }
     }
   requestAnimationFrame(rafTick);
-}
+  }
 var hideQueue=[];
 var showQueue=[];
 var testStr="";
@@ -3029,6 +3030,7 @@ function calcGeometry(){
 function stopRotatingTick(){
   window.clearTimeout(stopRotatingTimeout);
   rotating=false;
+  requestAnimationFrame(rafTick);
   }
 
 function zeroProgressBar(){
