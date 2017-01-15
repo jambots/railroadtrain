@@ -599,7 +599,7 @@ function dbugBuildSequence(){
     }
   }
 function rebuildSequence(){
-  console.log('rebuildSequence()');
+  //console.log('rebuildSequence()');
   //dbugaObject(destData);
   for (var i in buildSequence){
     item=buildSequence[i];
@@ -1188,7 +1188,7 @@ var graphicsUp=false;
 var cameraCanv;
 
 function initGeometry(){
-  console.log("initGeometry()");
+  //console.log("initGeometry()");
   helpCanv=document.getElementById("helpCanvas");
   aboutCanv=document.getElementById("aboutCanvas");
   compCanv=document.getElementById("compCanvas");
@@ -1432,8 +1432,8 @@ var graphicsSelectedColorNum=0;
 var graphicsSelectedGraphic=0;
 var graphicsEditing=false;
 function openGraphics(carButton){
-  console.log('openGraphics(carButton)');
-  console.log(carButton);
+  //console.log('openGraphics(carButton)');
+  //console.log(carButton);
   graphicsSelectedColorNum=carButton.c;
   graphicsSelectedGraphic=carButton.g;
   populateGraphics();
@@ -1765,7 +1765,7 @@ function populateLevels(){
   }
 var highlighted="rgba(255,255,100,1)";
 function drawLevels(){
-  console.log('drawLevels');
+  //console.log('drawLevels');
   var levelsCtx=levelsCanv.getContext('2d');
   levelsCanv.width=screenWidth;
   levelsCanv.style.zIndex="1";
@@ -1837,12 +1837,12 @@ function drawLevels(){
     levelsCtx.textBaseline="middle";
     //levelsCtx.fillText(req+" "+levelData[dNum].space, cx,cy+fieldSpread*2);
     }
-  console.log('drawLevels completed');
+  //console.log('drawLevels completed');
   }
 
 var visHeight=100;
 function openModal(modal){
-  console.log('openModal('+modal+')');
+  //console.log('openModal('+modal+')');
   closeModals();
   camera.style.webkitFilter="blur(5px)";
   if(modal=="levels"){
@@ -1886,7 +1886,7 @@ function openModal(modal){
     compUp=true;
     updateCompCanv();
     }
-  console.log('openModal('+modal+') completed OKAY');
+  //console.log('openModal('+modal+') completed OKAY');
 
   }
 
@@ -1898,7 +1898,7 @@ function updateCompCanv(){
     totalMs+=completedCars[c].destroyed;
     totalMs-=completedCars[c].created;
     }
-  console.log('updateCompCanv initCompleted:'+initCompleted);
+  //console.log('updateCompCanv initCompleted:'+initCompleted);
   squarePadTop=0;
   squarePadLeft=0;
   squarePx=0;
@@ -1913,7 +1913,7 @@ function updateCompCanv(){
     deviceOrient="landscape";
     squarePx=screenWidth-controlsPx*2;
     squarePadLeft=(screenHeight-squarePx)/2;
-    console.log(squarePadLeft + '=('+screenHeight+'-'+squarePx+')/2');
+    //console.log(squarePadLeft + '=('+screenHeight+'-'+squarePx+')/2');
     compCanv.width=screenHeight;
     compCanv.height=screenWidth-controlsPx;
     }
@@ -1975,7 +1975,7 @@ var modalBody=.05;
 var modalHeadingFont="akziBold";
 var modalBodyFont="akzi";
 function updateHelpCanv(){
-  console.log('updateHelpCanv initCompleted:'+initCompleted);
+  //console.log('updateHelpCanv initCompleted:'+initCompleted);
   squarePadTop=0;
   squarePadLeft=0;
   squarePx=0;
@@ -1990,7 +1990,7 @@ function updateHelpCanv(){
     deviceOrient="landscape";
     squarePx=screenWidth-controlsPx;
     squarePadLeft=(screenHeight-squarePx)/2;
-    console.log(squarePadLeft + '=('+screenHeight+'-'+squarePx+')/2');
+    //console.log(squarePadLeft + '=('+screenHeight+'-'+squarePx+')/2');
     helpCanv.width=screenHeight;
     helpCanv.height=screenWidth-controlsPx;
     }
@@ -2046,7 +2046,7 @@ function updateHelpCanv(){
     }
   }
 function updateAboutCanv(){
-  console.log('updateABoutCanv initCompleted:'+initCompleted);
+  //console.log('updateABoutCanv initCompleted:'+initCompleted);
   squarePadTop=0;
   squarePadLeft=0;
   squarePx=0;
@@ -2061,7 +2061,7 @@ function updateAboutCanv(){
     deviceOrient="landscape";
     squarePx=screenWidth-controlsPx;
     squarePadLeft=(screenHeight-squarePx)/2;
-    console.log(squarePadLeft + '=('+screenHeight+'-'+squarePx+')/2');
+    //console.log(squarePadLeft + '=('+screenHeight+'-'+squarePx+')/2');
     aboutCanv.width=screenHeight;
     aboutCanv.height=screenWidth-controlsPx;
     }
@@ -2116,7 +2116,7 @@ var bgAlpha=.66;
 
 
 function closeModals(){
-  console.log('closeModals initCompleted:'+initCompleted +' firstRun:'+firstRun );
+  //console.log('closeModals initCompleted:'+initCompleted +' firstRun:'+firstRun );
   clearingAll=false;
   if(localStorage.getItem("Scale") != settingsObject["Scale"]["value"]){updateScaleSetting();}
   if(localStorage.getItem("Detail") != settingsObject["Detail"]["value"]){updateDetailSetting();}
@@ -2151,7 +2151,7 @@ function closeModals(){
   updateNavCanv();
   }
 function changeView(caller){
-  console.log("changeView in "+caller+" shooting="+shooting);
+  //console.log("changeView in "+caller+" shooting="+shooting);
   if(shooting){return false;}
   closeModals();
   if(viewportAspect>1){
@@ -2190,7 +2190,7 @@ function changeView(caller){
   adGeometry();
   }
 function init(){
-  console.log('init() '+screen.width);
+  //console.log('init() '+screen.width);
   document.body.addEventListener('mousedown', mouseDown, true); 
   document.body.addEventListener('mousemove', mouseMove, true); 
   document.body.addEventListener('mouseup', mouseUp, true); 
@@ -2211,7 +2211,7 @@ function onDeviceReady(){
   StatusBar.hide();
   }  
 function initStorage(){
-  console.log('initStorage();');
+  //console.log('initStorage();');
   localStorage.setItem("initialized", "true");
   localStorage.setItem("tutorialStep", 0);
   localStorage.setItem("Music", settingsObject["Music"]["value"]);
@@ -2254,7 +2254,7 @@ var settingsObject={
 var detailByValue={"Low":3, "Med":6, "High":9};
 var firstRun=false;
 function initSession(){
-  console.log('initSession()');
+  //console.log('initSession()');
   if (localStorage.getItem("initialized") === null) {
     firstRun=true;
     initStorage();
@@ -2324,7 +2324,7 @@ function measureLocalStorage(){
     }
   }
 function localStorageToImages(){
-  console.log('localStorageToImages()');
+  //console.log('localStorageToImages()');
   if(localStorage.getItem('graphicsByColor') != null){
     graphicsByColor=JSON.parse(localStorage.getItem('graphicsByColor'));
     }
@@ -2341,7 +2341,7 @@ var graphicsPerColor=9;
 var initCompleted=false;
 
 function resumeInit(){
-  console.log('resumeInit firstRun='+firstRun);
+  //console.log('resumeInit firstRun='+firstRun);
 
   changeView("resumeInit");
   resetBoardTimersObjects();
@@ -2351,15 +2351,15 @@ function resumeInit(){
 
   populateModals();
   initCompleted=true;
-  console.log('resume init happened....');
+  //console.log('resume init happened....');
   updateNavCanv();
   rebuildSequence();
   if(firstRun==false){
-    console.log('in resumeInit firstRun:'+firstRun+' so closeModals');
+    //console.log('in resumeInit firstRun:'+firstRun+' so closeModals');
     closeModals();
     }
   else{
-    console.log('in resumeInit firstRun:'+firstRun+' so updateHelpCanv');
+    //console.log('in resumeInit firstRun:'+firstRun+' so updateHelpCanv');
     updateHelpCanv();
     }
   transmitBgMusicState();
@@ -2992,8 +2992,9 @@ function geometryTick(){
     //dbuga("height viewport:"+viewportHeight+" window:"+window.innerHeight);
     changeGeometry();
     }
-  testScroll('destTick');
-
+  if(rotating==false){
+    testScroll('destTick');
+    }
   }
 
 function changeGeometry(){
@@ -3008,7 +3009,7 @@ function changeGeometry(){
     }
   rotating=true;
   window.clearTimeout(rotatingTimeout);
-  rotatingTimeout=window.setTimeout('calcGeometry()', 2000);
+  rotatingTimeout=window.setTimeout('calcGeometry()', 100);
   }
 
 var rotating=false;
@@ -3025,7 +3026,7 @@ function calcGeometry(){
   if(helpUp){updateHelpCanv();}
   if(aboutUp){updateAboutCanv();}
   if(compUp){updateCompCanv();}
-  stopRotatingTimeout=window.setTimeout('stopRotatingTick()', 2000);
+  stopRotatingTimeout=window.setTimeout('stopRotatingTick()', 100);
   }
 function stopRotatingTick(){
   window.clearTimeout(stopRotatingTimeout);
@@ -3996,7 +3997,6 @@ function mouseDown(e){
   }
 function mouseMove(e){
   e.preventDefault();
-  testScroll('mouseMove');
   if(isMobile){return false;}    
   if(mouseDragging){
     //dbug("mouseMove "+e.clientX+" "+e.clientY);
@@ -4010,7 +4010,6 @@ function mouseMove(e){
   }
 function mouseUp(e){
   e.preventDefault();
-  testScroll('mouseUp');
   if(isMobile){return false;}    
   mouseDragging=false;
   //dbuga("mouseUp");
@@ -4032,7 +4031,7 @@ function scrollResult(){
 function touchCancel(event){ 
   }
 function debugEvent(e){
-  console.log(e);
+  //console.log(e);
   }
 function touchStart(event){
   touchEvent(event);
@@ -4620,19 +4619,19 @@ function closeLoading(){
   document.getElementById('loadingCanvas').style.display="none";
   }
 function closeAbout(){
-  console.log('closeAbout');
+  //console.log('closeAbout');
   paused=false;
   document.getElementById('aboutCanvas').style.display="none";
   aboutUp=false;
   }
 function closeHelp(){
-  console.log('closeHelp');
+  //console.log('closeHelp');
   paused=false;
   document.getElementById('helpCanvas').style.display="none";
   helpUp=false;
   }
 function closeComp(){
-  console.log('closeComp');
+  //console.log('closeComp');
   paused=false;
   document.getElementById('compCanvas').style.display="none";
   compUp=false;
@@ -4948,7 +4947,7 @@ var helpButtons=[];
 var compButtons=[];
 
 function handleEventComp(e){
-  console.log('handleEventComp ');
+  //console.log('handleEventComp ');
   if(e.type=="touchstart"){
     var t=e.touches[0];
     var found=false;
@@ -4974,7 +4973,7 @@ function handleEventComp(e){
     }
   }
 function handleEventHelp(e){
-  console.log('handleEventHelp atHelp='+atHelp);
+  //console.log('handleEventHelp atHelp='+atHelp);
   if(e.type=="touchstart"){
     var t=e.touches[0];
     var found=false;
@@ -4992,7 +4991,7 @@ function handleEventHelp(e){
         if(helpButton.label=="Next"){
           found=true;
           atHelp++;
-          console.log(hb+' '+helpButton.label+' atHelp now '+atHelp);
+          //console.log(hb+' '+helpButton.label+' atHelp now '+atHelp);
           if(atHelp>maxHelp){atHelp=maxHelp;}
           }
         if(helpButton.label=="www"){
@@ -5015,7 +5014,7 @@ function handleEventHelp(e){
     }
   }
 function handleEventAbout(e){
-  console.log('handleEventAbout ');
+  //console.log('handleEventAbout ');
   if(e.type=="touchstart"){
     var t=e.touches[0];
     var found=false;
@@ -5225,7 +5224,7 @@ var navButtons=[
   ];
 var iconShrink=.9;
 function updateNavCanv(){
-  console.log('updateNavCanv() initCompleted:'+initCompleted);
+  //console.log('updateNavCanv() initCompleted:'+initCompleted);
   if(initCompleted==false){return false;}
   navCanv.width=screenWidth;
   navCanv.height=controlsPx;
@@ -5300,7 +5299,7 @@ function updateNavCanv(){
 function updateColorsCanv(caller){
   colorsButtons=[];
   //dbuga('updateColorsCanv('+caller+')');
-  console.log('updateColorsCanv('+caller+') initCompleted:'+initCompleted);
+  //console.log('updateColorsCanv('+caller+') initCompleted:'+initCompleted);
   if(initCompleted==false){return false;}
 
   colorsCanv.width=screenHeight;
@@ -6076,7 +6075,7 @@ var slot=1.5;
 function settingsDraw(){
 
   //dbuga('settingsDraw');
-  console.log('settingsDraw');
+  //console.log('settingsDraw');
   //settingsCanv.style.zIndex=1;
   settingsCanv.width=screenWidth;
   var ctx=settingsCanv.getContext('2d');
