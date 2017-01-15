@@ -2397,7 +2397,7 @@ var nowMs=0;
 function rafTick(ms){
   nowMs=Math.floor(ms);
   if(focusTrain>=trainData.length){focusTrain=0;}
-  if((carsUp==false)&&(graphicsUp==false)&&(settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(aboutUp==false)&&(paused==false)){
+  if((carsUp==false)&&(graphicsUp==false)&&(settingsUp==false)&&(levelsUp==false)&&(helpUp==false)&&(aboutUp==false)&&(paused==false)&&(rotating==false)){
 
     turnFrames++;
     var framesPerTurn=turnMs/17;
@@ -3006,6 +3006,17 @@ function changeGeometry(){
     screenWidth=viewportHeight;
     screenHeight=viewportWidth;
     }
+  rotating=true;
+  window.clearTimeout(rotatingTimeout);
+  rotatingTimeout=window.setTimeout('calcGeometry()', 3000);
+  }  
+var rotating=false;
+var rotatingTimeout;
+
+function calcGeometry(){
+  rotating=false;
+  window.clearTimeout(rotatingTimeout);
+  
   viewportAspect=viewportWidth/viewportHeight;
   //dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
   //dbuga("screenWidth="+screenWidth+" screenHeight="+screenHeight);
@@ -3077,7 +3088,7 @@ var sourceMs;
 var turnMs=1000;
 
 function sourceTick(){
-  if((settingsUp)||(levelsUp)){
+  if((settingsUp)||(levelsUp)||(carsUp)||(graphicsUp)||(rotating)){
     return false;
     }
   sourceAction(checkSourceNum);
