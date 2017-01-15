@@ -129,7 +129,6 @@ function pauseGame(){
   }
 function resumeGame(){
   // called by shell
-  //requestPersistenceData();
   //dbuga("resumeGame()");
   paused=false;
   transmitBgMusicState();
@@ -200,7 +199,7 @@ function oneShot(soundName){
 var openedWithStupidLoop=false;
 function loopStart(soundName){// soundName like "Classic/measure_loop_inst"
   //dbuga("loopStart("+soundName+") "+platform);
-  if(persistenceObject.music=="on"){
+  if(settingsObject.Sounds.value != "Off"){
     if(platform=="android"){
       //dbuga('BOOYA!');
       if(soundRefByName.hasOwnProperty(soundName)){
@@ -310,7 +309,6 @@ function loopStop(soundName){
       }
     }  
   }
-var persistenceObject={"music":"on", "sfx":"on"};
 function loopLoad(soundName){
   //dbuga('loopLoad('+soundName+')');
   if(platform=="android"){
