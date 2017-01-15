@@ -79,6 +79,9 @@
 <icon src="res/icon-72.png" gap:platform="ios" width="72" height="72" />
 <icon src="res/icon-72@2x.png" gap:platform="ios" width="144" height="144" />
 
+<!-- multitasking and settings iOS -->
+<icon src="res/icon-58.png" platform="ios" width="58" height="58" />
+<icon src="res/icon-87.png" platform="ios" width="87" height="87" />
 
 <!-- Define app splash screen for each platform. -->
 <!-- iPhone and iPod touch -->
