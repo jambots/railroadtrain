@@ -3,14 +3,22 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id        = "com.jambots.railroadtrain"
-        versionCode="4" 
-        version   = "2.01">
+        versionCode="5" 
+        version   = "2.02">
 
     <!-- versionCode is optional and Android only -->
 <preference name="phonegap-version" value="cli-6.3.0" />
     <name>Railroad Train</name>
     <description>Railroad Train is a casual puzzle game with multiple trains and track drawing.</description>
+<!-- 
 <gap:platform name="ios" />
+-->
+<gap:platform name="ios">
+    <allow-intent href="itms:*"/>
+    <allow-intent href="itms-apps:*"/>
+     <variable name="CAMERA_USAGE_DESCRIPTION" value="App would like to access the camera." />
+     <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="App would like to access the library." />
+</gap:platform>
 <gap:platform name="android" />
 <gap:config-file platform="android" parent="/manifest/application">
     <activity android:launchMode="singleInstance" />
@@ -18,6 +26,7 @@
 <gap:config-file platform="android" parent="/manifest">
      <application android:debuggable="true" />
 </gap:config-file>
+
 
 <preference name="fullscreen" value="true" />
 <preference name="orientation" value="default" />
@@ -40,7 +49,11 @@
 -->
 
 <!-- in testing plugins -->
-<gap:plugin name="cordova-plugin-camera" source="npm" />
+<gap:plugin name="cordova-plugin-camera" source="npm">
+    <variable name="CAMERA_USAGE_DESCRIPTION" value="App would like to access the camera." />
+    <variable name="MICROPHONE_USAGE_DESCRIPTION" value="App would like to access the microphone." />
+    <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="App would like to access the library." />
+</gap:plugin>
 <gap:plugin name="cordova-plugin-statusbar" source="npm" />
 <!-- known good plugins -->
 
