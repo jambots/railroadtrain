@@ -45,10 +45,10 @@
 -->
 <!-- maybe needed plugins
 <gap:plugin name="cordova-plugin-fullscreen" source="npm" />
-<gap:plugin name="cordova-plugin-media" source="npm" />
 -->
 
 <!-- in testing plugins -->
+<gap:plugin name="cordova-plugin-media" source="npm" />
 <gap:plugin name="cordova-plugin-camera" source="npm">
     <variable name="CAMERA_USAGE_DESCRIPTION" value="App would like to access the camera." />
     <variable name="MICROPHONE_USAGE_DESCRIPTION" value="App would like to access the microphone." />
