@@ -677,7 +677,7 @@ var uiTop=100;
 var squarePadLeft=0;
 
 function setupClasses(){
-  //dbuga("setupClasses()");
+  dbuga("setupClasses()");
   var p=cellSize/96
 
   var buttonsTop=30*p;
@@ -695,10 +695,10 @@ function setupClasses(){
   else{squarePadLeft=screenHeight/2-screenWidth/2;}//landscape
     
 
-  //dbuga('screenWidth='+screenWidth);
-  //dbuga('screenHeight='+screenHeight);
-  //dbuga('squarePadLeft='+squarePadLeft);
-  //dbuga('squarePadTop='+squarePadTop);
+  dbuga('screenWidth='+screenWidth);
+  dbuga('screenHeight='+screenHeight);
+  dbuga('squarePadLeft='+squarePadLeft);
+  dbuga('squarePadTop='+squarePadTop);
  
   
   uiTop=screenHeight-progDivHeight;
@@ -1212,7 +1212,7 @@ function initGeometry(){
     screenHeight=screen.width;
     }
 
-  //dbuga("initGeometry() "+screenWidth+" x "+screenHeight);
+  dbuga("initGeometry() "+screenWidth+" x "+screenHeight);
 
   viewportWidth=window.innerWidth;
   viewportHeight=window.innerHeight;
@@ -1687,21 +1687,21 @@ function drawSettingsButtons(){
     }
   }
 function drawHelpButtons(){
-  //dbuga('drawSettingsButtons');
+  //dbuga('drawHelpButtons');
   var helpCtx=helpCanv.getContext('2d');
   for (var b=0; b<helpButtons.length; b++){
     drawModalButton(helpCtx, helpButtons[b]);
     }
   }
 function drawAboutButtons(){
-  //dbuga('drawSettingsButtons');
+  //dbuga('drawAboutButtons');
   var aboutCtx=aboutCanv.getContext('2d');
   for (var b=0; b<aboutButtons.length; b++){
     drawModalButton(aboutCtx, aboutButtons[b]);
     }
   }
 function drawCompButtons(){
-  //dbuga('drawSettingsButtons');
+  //dbuga('drawCompButtons');
   var compCtx=compCanv.getContext('2d');
   for (var b=0; b<compButtons.length; b++){
     drawModalButton(compCtx, compButtons[b]);
@@ -1743,32 +1743,31 @@ function populateLevels(){
     levelsGridPx=screenWidth/gridAcross;
     levelsLeftPad=0;
     levelsTopPad=(screenHeight-levelsGridPx*gridDown)/2;
-    //dbuga(' - fit width');
+    dbuga(' - fit width');
     }
   else{
     levelsGridPx=screenHeight/gridDown;
     levelsTopPad=0;
     levelsLeftPad=(screenWidth-levelsGridPx*gridAcross)/2;
+    dbuga(' - fit height levelsLeftPad='+levelsLeftPad);
     }
   var buttonSize=levelsGridPx*2;
-  //dbuga('populateLevels() levelsTopPad='+levelsTopPad+' buttonsDown:'+buttonsDown+' gridAspect:'+gridAspect);
+  dbuga('populateLevels() gridAspect:'+gridAspect);
+  dbuga('levelsTopPad='+levelsTopPad+' levelsLeftPad:'+levelsLeftPad);
+  dbuga('buttonsAcross='+buttonsAcross+'<br>buttonsDown:'+buttonsDown+' gridAspect:'+gridAspect);
   for (var b=0; b<levelBoxes.length; b++){
     levelBoxes[b].l=b%buttonsAcross*buttonSize+levelsLeftPad+levelsGridPx;
     levelBoxes[b].r=b%buttonsAcross*buttonSize+levelsLeftPad+buttonSize+levelsGridPx;
     levelBoxes[b].t=Math.floor(b/buttonsAcross)*buttonSize+levelsTopPad+levelsGridPx;
     levelBoxes[b].b=Math.floor(b/buttonsAcross)*buttonSize+levelsTopPad+buttonSize+levelsGridPx;
     }
-/*////
-  var cancelButton={"num":levelBoxes.length, "l":levelsLeftPad+levelsGridPx, "r":screenWidth-levelsLeftPad-levelsGridPx, "t":levelsTopPad+buttonsDown*buttonSize+levelsGridPx, "b":levelsTopPad+buttonsDown*buttonSize+levelsGridPx*2};
-  levelBoxes.push(cancelButton);
-*/
   levelButtons=[];
   levelButtons.push(returnModalButton("Cancel","right","portrait",false));
 
   }
 var highlighted="rgba(255,255,100,1)";
 function drawLevels(){
-  //console.log('drawLevels');
+  dbuga('screenWidth='+screenWidth);
   var levelsCtx=levelsCanv.getContext('2d');
   levelsCanv.width=screenWidth;
   levelsCanv.style.zIndex="1";
@@ -3001,7 +3000,6 @@ function geometryTick(){
   }
 
 function changeGeometry(){
-  //dbuga('changeGeometry');
   viewportWidth = window.innerWidth;
   viewportHeight = window.innerHeight;
   screenWidth=viewportWidth;
@@ -3010,6 +3008,8 @@ function changeGeometry(){
     screenWidth=viewportHeight;
     screenHeight=viewportWidth;
     }
+  dbuga('changeGeometry '+screenWidth+'w x '+screenHeight+'h');
+  
   rotating=true;
   window.clearTimeout(rotatingTimeout);
   rotatingTimeout=window.setTimeout('calcGeometry()', 100);
@@ -3023,9 +3023,9 @@ function calcGeometry(){
   window.clearTimeout(rotatingTimeout);
   
   viewportAspect=viewportWidth/viewportHeight;
-  //dbuga("changeGeometry "+viewportWidth+" x "+viewportHeight+" viewportAspect:"+viewportAspect);
-  //dbuga("screenWidth="+screenWidth+" screenHeight="+screenHeight);
-  changeView("changeGeometry");
+  dbuga("calcGeometry v "+viewportWidth+"w x "+viewportHeight+"h");
+  dbuga("screenWidth="+screenWidth+" screenHeight="+screenHeight);
+  changeView("calcGeometry");
   if(helpUp){updateHelpCanv();}
   if(aboutUp){updateAboutCanv();}
   if(compUp){updateCompCanv();}
