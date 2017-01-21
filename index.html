@@ -1205,15 +1205,15 @@ function initGeometry(){
 
   colorsCanv=document.getElementById("colorsCanvas");
   wrapper=document.getElementById("wrapper");
-  screenWidth=screen.width;
-  screenHeight=screen.height;
-  if(screenWidth>screenHeight){
-    screenWidth=screen.height;
-    screenHeight=screen.width;
+  screenWidth=window.innerWidth;
+  screenHeight=window.innerHeight;
+  if(screenWidth>screenHeight){// screen is normalized to alwas be portrait dimensions
+    screenWidth=window.innerHeight;
+    screenHeight=window.innerWidth;
     }
-
-  dbuga("initGeometry()<br>  s "+screen.width+" x "+screen.height);
-  dbuga("  w "+window.innerWidth+" x "+window.innerHeight);
+  // screen.width is not scaled, but true pixel dimension in android only.
+  //dbuga("initGeometry()<br>  s "+screen.width+" x "+screen.height);
+  //dbuga("  w "+window.innerWidth+" x "+window.innerHeight);
 
   viewportWidth=window.innerWidth;
   viewportHeight=window.innerHeight;
@@ -3009,7 +3009,7 @@ function changeGeometry(){
   if(screenWidth>screenHeight){
     dbuga('reversed screen dimensions');
 
-    screenWidth=viewportHeight;
+    screenWidth=viewportHeight;// fixed to use scaled dimension for dumb droid.
     screenHeight=viewportWidth;
     }
   dbuga("initGeometry() s "+screen.width+" x "+screen.height);
