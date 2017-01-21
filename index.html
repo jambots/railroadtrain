@@ -5115,19 +5115,22 @@ function handleEventSettings(e){
   }
 function updateMusicSetting(){
   //dbuga("updateMusicSetting()");
-  saveStorage();
+  //saveStorage();
+  localStorage.setItem("Music", settingsObject["Music"]["value"]);
   transmitBgMusicState();
   }
 function updateSoundsSetting(){
   //dbuga("updateSoundsSetting()");
-  saveStorage();
+  //saveStorage();
+  localStorage.setItem("Sounds", settingsObject["Sounds"]["value"]);
   if(settingsObject.Sounds.value != "Off"){
     playSound("trainstart");
     }
   }
 function updateScaleSetting(){
   //dbuga("updateScaleSetting()");
-  saveStorage();
+  //saveStorage();
+  localStorage.setItem("Scale", settingsObject["Scale"]["value"]);
   updateScale();
   }
 function updateScale(){
@@ -5146,12 +5149,14 @@ function updateScale(){
   }
 function updateTilesSetting(){
   //dbuga("updateTilesSetting()");
-  saveStorage();
+  //saveStorage();
+  localStorage.setItem("Tiles", settingsObject["Tiles"]["value"]);
   fillGridCanvas();
   }
 function updateDetailSetting(){
   //dbuga("updateDetailSetting()");
-  saveStorage();
+  //saveStorage();
+  localStorage.setItem("Detail", settingsObject["Detail"]["value"]);
   updateDetail();
   resetBoardTimersObjects();
   rebuildSequence();
