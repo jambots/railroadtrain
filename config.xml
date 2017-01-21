@@ -23,9 +23,11 @@
 <gap:config-file platform="android" parent="/manifest/application">
     <activity android:launchMode="singleInstance" />
 </gap:config-file>
+<!--
 <gap:config-file platform="android" parent="/manifest">
      <application android:debuggable="true" />
 </gap:config-file>
+-->
 
 
 <preference name="fullscreen" value="true" />
