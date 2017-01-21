@@ -3,8 +3,8 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id        = "com.jambots.railroadtrain"
-        versionCode="5" 
-        version   = "2.02">
+        versionCode="6" 
+        version   = "2.03">
 
     <!-- versionCode is optional and Android only -->
 <preference name="phonegap-version" value="cli-6.3.0" />
@@ -34,23 +34,14 @@
 <preference name="orientation" value="default" />
 <gap:splash src="railroad_train.png" />
 <access origin="*" />
-<!-- old plugins
-<gap:plugin name="org.apache.cordova.network-information" />
-<gap:plugin name="de.appplant.cordova.plugin.hidden-statusbar-overlay" />
-<gap:plugin name="org.apache.cordova.media" version="0.2.8" />
-<gap:plugin name="com.modaltech.cordova.plugin.canvascamera" version="1.0" />
-<plugin name="cordova-plugin-camera" spec="1.2.0" source="pgb" />
-<feature name="http://api.phonegap.com/1.0/network"/>
-<feature name="http://api.phonegap.com/1.0/media"/>
-<gap:plugin name="io.litehelpers.cordova.sqlitestorage" version="0.7.5" />
-<gap:plugin name="io.litehelpers.cordova.sqlitestorage" version="0.7.5" />
+<!-- android only plugins
+<gap:plugin name="cordova-plugin-media" source="npm" />
 -->
 <!-- maybe needed plugins
 <gap:plugin name="cordova-plugin-fullscreen" source="npm" />
 -->
 
 <!-- in testing plugins -->
-<gap:plugin name="cordova-plugin-media" source="npm" />
 <gap:plugin name="cordova-plugin-camera" source="npm">
     <variable name="CAMERA_USAGE_DESCRIPTION" value="App would like to access the camera." />
     <variable name="MICROPHONE_USAGE_DESCRIPTION" value="App would like to access the microphone." />
