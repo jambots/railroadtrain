@@ -677,7 +677,7 @@ var uiTop=100;
 var squarePadLeft=0;
 
 function setupClasses(){
-  dbuga("setupClasses()");
+  //dbuga("setupClasses()");
   var p=cellSize/96
 
   var buttonsTop=30*p;
@@ -695,10 +695,10 @@ function setupClasses(){
   else{squarePadLeft=screenHeight/2-screenWidth/2;}//landscape
     
 
-  dbuga('screenWidth='+screenWidth);
-  dbuga('screenHeight='+screenHeight);
-  dbuga('squarePadLeft='+squarePadLeft);
-  dbuga('squarePadTop='+squarePadTop);
+  //dbuga('screenWidth='+screenWidth);
+  //dbuga('screenHeight='+screenHeight);
+  //dbuga('squarePadLeft='+squarePadLeft);
+  //dbuga('squarePadTop='+squarePadTop);
  
   
   uiTop=screenHeight-progDivHeight;
@@ -1255,8 +1255,8 @@ function initGeometry(){
   screenAspect=screenWidth/screenHeight;
   document.getElementById('debugDiv').style.width=screenWidth+"px";
   
-  dbuga("initGeometry screen: "+screenWidth+" x "+screenHeight+" ");
-  dbuga("initGeometry viewport: "+ viewportWidth+" x "+ viewportHeight+" "+viewportAspect);
+  //dbuga("initGeometry screen: "+screenWidth+" x "+screenHeight+" ");
+  //dbuga("initGeometry viewport: "+ viewportWidth+" x "+ viewportHeight+" "+viewportAspect);
 
   adGeometry();
   boardGeometry();
@@ -1744,18 +1744,18 @@ function populateLevels(){
     levelsGridPx=screenWidth/gridAcross;
     levelsLeftPad=0;
     levelsTopPad=(screenHeight-levelsGridPx*gridDown)/2;
-    dbuga(' - fit width');
+    //dbuga(' - fit width');
     }
   else{
     levelsGridPx=screenHeight/gridDown;
     levelsTopPad=0;
     levelsLeftPad=(screenWidth-levelsGridPx*gridAcross)/2;
-    dbuga(' - fit height levelsLeftPad='+levelsLeftPad);
+    //dbuga(' - fit height levelsLeftPad='+levelsLeftPad);
     }
   var buttonSize=levelsGridPx*2;
-  dbuga('populateLevels() gridAspect:'+gridAspect);
-  dbuga('levelsTopPad='+levelsTopPad+' levelsLeftPad:'+levelsLeftPad);
-  dbuga('buttonsAcross='+buttonsAcross+'<br>buttonsDown:'+buttonsDown+' gridAspect:'+gridAspect);
+  //dbuga('populateLevels() gridAspect:'+gridAspect);
+  //dbuga('levelsTopPad='+levelsTopPad+' levelsLeftPad:'+levelsLeftPad);
+  //dbuga('buttonsAcross='+buttonsAcross+'<br>buttonsDown:'+buttonsDown+' gridAspect:'+gridAspect);
   for (var b=0; b<levelBoxes.length; b++){
     levelBoxes[b].l=b%buttonsAcross*buttonSize+levelsLeftPad+levelsGridPx;
     levelBoxes[b].r=b%buttonsAcross*buttonSize+levelsLeftPad+buttonSize+levelsGridPx;
@@ -1768,7 +1768,7 @@ function populateLevels(){
   }
 var highlighted="rgba(255,255,100,1)";
 function drawLevels(){
-  dbuga('screenWidth='+screenWidth);
+  //dbuga('screenWidth='+screenWidth);
   var levelsCtx=levelsCanv.getContext('2d');
   levelsCanv.width=screenWidth;
   levelsCanv.style.zIndex="1";
@@ -3001,19 +3001,19 @@ function geometryTick(){
   }
 
 function changeGeometry(){
-  dbuga('changeGeometry');
+  //dbuga('changeGeometry');
   viewportWidth=window.innerWidth;
   viewportHeight=window.innerHeight;
   screenWidth=viewportWidth;
   screenHeight=viewportHeight;
   if(screenWidth>screenHeight){
-    dbuga('reversed screen dimensions');
+    //dbuga('reversed screen dimensions');
 
     screenWidth=viewportHeight;// fixed to use scaled dimension for dumb droid.
     screenHeight=viewportWidth;
     }
-  dbuga("initGeometry() s "+screen.width+" x "+screen.height);
-  dbuga("initGeometry() w "+window.innerWidth+" x "+window.innerHeight);
+  //dbuga("initGeometry() s "+screen.width+" x "+screen.height);
+  //dbuga("initGeometry() w "+window.innerWidth+" x "+window.innerHeight);
   
   rotating=true;
   window.clearTimeout(rotatingTimeout);
@@ -3028,8 +3028,8 @@ function calcGeometry(){
   window.clearTimeout(rotatingTimeout);
   
   viewportAspect=viewportWidth/viewportHeight;
-  dbuga("calcGeometry v "+viewportWidth+"w x "+viewportHeight+"h");
-  dbuga("screenWidth="+screenWidth+" screenHeight="+screenHeight);
+  //dbuga("calcGeometry v "+viewportWidth+"w x "+viewportHeight+"h");
+  //dbuga("screenWidth="+screenWidth+" screenHeight="+screenHeight);
   changeView("calcGeometry");
   if(helpUp){updateHelpCanv();}
   if(aboutUp){updateAboutCanv();}
@@ -4422,12 +4422,15 @@ function graphicsTake(){
               graphicsCtx.fillText("Loading Photo...", screenHeight/2, screenWidth/2-controlsPx/2);
               window.setTimeout('cameraTake()',50);              
   }
+//      destinationType: Camera.DestinationType.DATA_URL
+//      destinationType: Camera.DestinationType.FILE_URI
+
 function cameraTake(){
   shooting=true;
   //dbuga('cameraTake gscn'+  graphicsSelectedColorNum+' gsg='+graphicsSelectedGraphic);
   if(platform=="android"){
     navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-      destinationType: Camera.DestinationType.FILE_URI
+      destinationType: Camera.DestinationType.DATA_URL
       });
     }
   else{
