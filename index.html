@@ -2248,12 +2248,12 @@ function loadStorage(){
     }
   }
 var settingsObject={
+	"Mode":{"value":"Auto", "pos":0,  "values":["Dark", "Auto", "Light"], "t":0, "r":0, "b":0, "l":0},
   "Music":{"value":"On", "pos":0, "values":["Off", "On", "Classic"], "t":0, "r":0, "b":0, "l":0},
   "Sounds":{"value":"On", "pos":0,  "values":["Off", "On", "Classic"], "t":0, "r":0, "b":0, "l":0},
   "Scale":{"value":"HO", "pos":-1,  "values":["O", "HO", "N"], "t":0, "r":0, "b":0, "l":0},
   "Tiles":{"value":"Guides", "pos":1,  "values":["None", "Grid", "Guides"], "t":0, "r":0, "b":0, "l":0},
 	"Detail":{"value":"Low", "pos":-1,  "values":["Low", "Med", "High"], "t":0, "r":0, "b":0, "l":0},
-	"Mode":{"value":"Auto", "pos":0,  "values":["Dark", "Auto", "Light"], "t":0, "r":0, "b":0, "l":0},
 };
 var detailByValue={"Low":3, "Med":6, "High":9};
 var firstRun=false;
@@ -5086,6 +5086,8 @@ function handleEventSettings(e){
       if(prog>1){prog=1;}
       //dbug(prog);
       settingsObject[settingsTouchingId]["pos"]=prog*2-1;
+
+			if(localStorage.getItem("Mode") != settingsObject["Mode"]["value"]){updateModeSetting();}
       settingsDraw();
       }
     }
@@ -5098,7 +5100,8 @@ function handleEventSettings(e){
       settingsObject[settingsTouchingId]["pos"]=selection-1;
       // immediate sound response
       if(localStorage.getItem("Music") != settingsObject["Music"]["value"]){updateMusicSetting();}
-      if(localStorage.getItem("Sounds") != settingsObject["Sounds"]["value"]){updateSoundsSetting();}
+			if(localStorage.getItem("Sounds") != settingsObject["Sounds"]["value"]){updateSoundsSetting();}
+			if(localStorage.getItem("Mode") != settingsObject["Mode"]["value"]){updateModeSetting();}
       settingsDraw();
       }
     if(settingsButtonNum>-1){
@@ -5120,14 +5123,20 @@ function updateMusicSetting(){
   localStorage.setItem("Music", settingsObject["Music"]["value"]);
   transmitBgMusicState();
   }
-function updateSoundsSetting(){
-  //dbuga("updateSoundsSetting()");
-  //saveStorage();
-  localStorage.setItem("Sounds", settingsObject["Sounds"]["value"]);
-  if(settingsObject.Sounds.value != "Off"){
-    playSound("trainstart");
-    }
-  }
+	function updateSoundsSetting(){
+	  //dbuga("updateSoundsSetting()");
+	  //saveStorage();
+	  localStorage.setItem("Sounds", settingsObject["Sounds"]["value"]);
+	  if(settingsObject.Sounds.value != "Off"){
+	    playSound("trainstart");
+	    }
+	  }
+		function updateModeSetting(){
+		  //dbuga("updateSoundsSetting()");
+		  //saveStorage();
+		  localStorage.setItem("Mode", settingsObject["Mode"]["value"]);
+			updateNavCanv();
+		  }
 function updateScaleSetting(){
   //dbuga("updateScaleSetting()");
   //saveStorage();
@@ -5249,11 +5258,20 @@ function updateNavCanv(){
   var navCtx=navCanv.getContext("2d");
 
     var grad = navCtx.createLinearGradient(0, controlsPx, 0, 0);
-    grad.addColorStop(0, "rgba(225,225,225,.75)");
-    grad.addColorStop(0.2, "rgba(225,225,225,.90)");
-    grad.addColorStop(0.5, "rgba(255,255,255,.80)");
-    grad.addColorStop(0.8, "rgba(255,255,255,.90)");
-    grad.addColorStop(1, "rgba(255,255,255,.75)");
+		if(settingsObject['Mode'].value=="Dark"){
+			grad.addColorStop(0, "rgba(30,30,30,.75)");
+	    grad.addColorStop(0.2, "rgba(30,30,30,.90)");
+	    grad.addColorStop(0.5, "rgba(0,0,0,.80)");
+	    grad.addColorStop(0.8, "rgba(0,0,0,.90)");
+	    grad.addColorStop(1, "rgba(0,0,0,.75)");
+		}
+		if(settingsObject['Mode'].value=="Light"){
+			grad.addColorStop(0, "rgba(225,225,225,.75)");
+	    grad.addColorStop(0.2, "rgba(225,225,225,.90)");
+	    grad.addColorStop(0.5, "rgba(255,255,255,.80)");
+	    grad.addColorStop(0.8, "rgba(255,255,255,.90)");
+	    grad.addColorStop(1, "rgba(255,255,255,.75)");
+		}
     navCtx.fillStyle=grad;
     navCtx.fillRect(0,0,screenWidth, controlsPx);
 
@@ -6099,7 +6117,6 @@ function placeWithin(canvasRef, imageRef){
 var len=2;
 var slot=1.5;
 function settingsDraw(){
-
   //dbuga('settingsDraw');
   //console.log('settingsDraw');
   //settingsCanv.style.zIndex=1;
@@ -6113,7 +6130,7 @@ function settingsDraw(){
 
 
   for (var k=0; k<keys.length; k++){
-    var y=(k-2.25)*4;
+    var y=(k-2.75)*4;
     toggleSwitch(g, cx, cy, 0,y,"horizontal",settingsObject[keys[k]]['pos'], settingsObject[keys[k]]['values'], keys[k]);
     x0=cx;
     y0=cy+y;
@@ -6135,7 +6152,7 @@ function settingsDraw(){
   ctx.font=g/1.5+"px akzi";
   ctx.fillStyle="#333";
   ctx.textAlign="center";
-  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx, g*22);
+  ctx.fillText("AVERAGE FPS: "+avgFps,g*cx, g*26);
   //dbuga('settingsDraw completed');
 
   }
