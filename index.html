@@ -105,9 +105,9 @@ width:768px;
 }
 #wrapper{
   -webkit-transform-style: preserve-3d;
-  background-color:#fff;
-  background-image:url(res/sqsplash.jpg);
-background-size: cover;
+  background-color:#888;
+  Zbackground-image:url(res/sqsplash.jpg);
+  background-size: cover;
 }
 </style>
 
@@ -1191,7 +1191,7 @@ var graphicsUp=false;
 var cameraCanv;
 
 function initGeometry(){
-  //console.log("initGeometry()");
+  console.log("initGeometry()");
   helpCanv=document.getElementById("helpCanvas");
   aboutCanv=document.getElementById("aboutCanvas");
   compCanv=document.getElementById("compCanvas");
@@ -1638,6 +1638,9 @@ function updateColorVars(){
 		buttonFill=buttonFillDark;
 		buttonLabelStroke=buttonLabelStrokeDark;
 		buttonLabelFill=buttonLabelFillDark;
+		modalBg=modalTextDark;
+		modalText=modalTextLight
+
 		helpCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
 		aboutCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
 		compCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
@@ -1653,6 +1656,10 @@ function updateColorVars(){
 		buttonFill=buttonFillLight;
 		buttonLabelStroke=buttonLabelStrokeLight;
 		buttonLabelFill=buttonLabelFillLight;
+		modalText=modalTextDark;
+		modalBg=modalTextLight
+
+
 		helpCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
 		aboutCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
 		compCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
@@ -2399,6 +2406,7 @@ function resumeInit(){
   changeView("resumeInit");
   resetBoardTimersObjects();
   closeLoading();
+	updateColorVars();
   document.getElementById('debugDiv').style.width=screenWidth+"px";
   navButtons[4].label="Select a<br>new level";
 
