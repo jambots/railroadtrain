@@ -43,7 +43,7 @@ body {
   display: block;
   position: absolute;
   -webkit-backface-visibility: hidden;
-  opacity: 1; 
+  opacity: 1;
   -webkit-transform-style: preserve-3d;
   -webkit-transform-origin: 0 0 0;
 
@@ -194,10 +194,10 @@ function oneShot(soundName){
           });
         soundRefByName[soundName]=newSound;
         //dbuga('new howl in oneShot '+soundName);
- 
-        }  
-      }  
-    }  
+
+        }
+      }
+    }
   }
 var openedWithStupidLoop=false;
 function loopStart(soundName){// soundName like "Classic/measure_loop_inst"
@@ -232,10 +232,10 @@ function loopStart(soundName){// soundName like "Classic/measure_loop_inst"
           });
         soundRefByName[soundName]=newSound;
         //dbuga('loop new howl '+soundName);
- 
-        }  
-      }  
-    }  
+
+        }
+      }
+    }
   }
 
 function statusCallback(theStatus){
@@ -289,8 +289,8 @@ function oneShotLoad(soundName){
           }
         });
       soundRefByName[soundName]=newSound;
-      }  
-    }  
+      }
+    }
   }
 function loopStop(soundName){
   if(platform=="android"){
@@ -299,18 +299,18 @@ function loopStop(soundName){
       //dbuga('extant '+soundName);
       //dbuga('stop andriod');
       soundRefByName[soundName].stop();
-      }  
+      }
     }
   if((platform=="web")||(platform=="local")||(platform=="ios")){
     openedWithStupidLoop=false;
     if(soundRefByName.hasOwnProperty(soundName)){
       //dbuga('extant '+soundName+' stop howl');
       soundRefByName[soundName].stop();
-      }  
+      }
     else{
       //dbuga('non-extant '+soundName);
       }
-    }  
+    }
   }
 function loopLoad(soundName){
   //dbuga('loopLoad('+soundName+')');
@@ -348,13 +348,13 @@ function loopLoad(soundName){
           }
         });
       soundRefByName[soundName]=newSound;
-      }  
-    }  
+      }
+    }
   }
 
 
 function playSound(theSound){
-  
+
   if((settingsObject["Sounds"].value != "Off")&&(paused==false)&&(rotating==false)){
     oneShot(theSound);
     }
@@ -373,7 +373,7 @@ function saveImageData(key, data){
   }
 function saveImageDataLocalStorage(key, data){
   //dbuga("saveImageDataLocalStorage <br>"+key);
-  
+
   var purged=0;
   var nameStack=JSON.parse(localStorage.getItem("nameStack"));
   var currentName="not set";
@@ -403,9 +403,9 @@ function saveImageDataLocalStorage(key, data){
     }
   nameStack=normStack.concat(currentStack, favStack);
 
-  
+
   var saved=true;
-  
+
   try{
     localStorage.setItem(key, data);
     } catch(e) {
@@ -470,7 +470,7 @@ var faceData={};
 function setupFaceData(){
   //dbuga("setupFaceData() cubeSize="+cubeSize);
   var s=cubeSize;
-   
+
   faceData={
   "tank":[
     {"img":"tankbody", "width":1, "height":6/22, "trans":'translateZ(-'+ s*7/22+'px) translateY('+ -s*6/48+'px) translateX('+ -s*22/44+'px)'},
@@ -619,7 +619,7 @@ function rebuildSequence(){
       }
     if(type=="source"){
       sourceData.push(sourceObject(item.color, item.dir, item.x, item.y, item.barrels));
-      displayBarrels("grid_"+item.x+"_"+item.y, item.barrels); 
+      displayBarrels("grid_"+item.x+"_"+item.y, item.barrels);
       }
     if(type=="track"){
       createTrack(item.dir, "grid_"+item.x+"_"+item.y);
@@ -627,7 +627,7 @@ function rebuildSequence(){
       }
     }
   //dbuga(JSON.stringify(tilesByGridXY));
-  
+
 
   restartIntervals();
 
@@ -693,16 +693,16 @@ function setupClasses(){
   squarePadLeft=0;
   if(viewportAspect<1){squarePadTop=screenHeight/2-screenWidth/2;}//portrait
   else{squarePadLeft=screenHeight/2-screenWidth/2;}//landscape
-    
+
 
   //dbuga('screenWidth='+screenWidth);
   //dbuga('screenHeight='+screenHeight);
   //dbuga('squarePadLeft='+squarePadLeft);
   //dbuga('squarePadTop='+squarePadTop);
- 
-  
+
+
   uiTop=screenHeight-progDivHeight;
-  
+
   addStyle('#arrowCircle', 'position:absolute; left:' + p*12 + 'px; top:' + p*12 + 'px; border-color:#DA251C;  border-style:solid; border-width:' + p*12 + 'px;  width:' + p*40 + 'px;  height:' + p*40 + 'px; -webkit-border-radius:' + p*48 + 'px;');
   addStyle('#arrowPoint', 'position:absolute; left:' + p*36 + 'px; top:' + p*5 + 'px; border-color:#fff #DA251C #fff  #fff ;  border-style:solid ;  border-width:' + p*15 + 'px ' + p*15 + 'px ' + p*15 + 'px 0px ;  width:0;  height:0;');
   addStyle('#progressHolder', 'position:absolute; top:' + uiTop + 'px; left:0; width:' + screenWidth + 'px; height:' + uiDivHeight + 'px;');
@@ -831,7 +831,7 @@ function fillGridCanvas(){
   if(settingsObject["Tiles"].value=="Guides"){
     var joint=cellSize/30;
     //gridContext.strokeStyle = "rgb(180, 180, 180)";
-    gridContext.lineWidth= cellSize/15;  
+    gridContext.lineWidth= cellSize/15;
     gridContext.beginPath();
     for (x=0; x<cellsAcross; x++){
       for (y=0; y<cellsDown; y++){
@@ -853,7 +853,7 @@ function fillGridCanvas(){
       }
     }
   gridContext.stroke();
-  
+
   //gridContext.fillStyle = "rgba(0,0,255,.5)";
   //gridContext.beginPath();
   //gridContext.arc(boardWidth/2,boardHeight/2, cellSize/2 ,0,6.29,true);
@@ -882,7 +882,7 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
   }
   if (fill) {
     ctx.fill();
-  }        
+  }
 }
 
 
@@ -898,22 +898,22 @@ function createCanvasTrack(theType, cellX, cellY){
   var lTie=4.75 * unit;
   var rTie=7.25 * unit;
   // all ties
-  if((settingsObject["Scale"]["value"]=="O")||(settingsObject["Scale"]["value"]=="HO")||(settingsObject["Scale"]["value"]=="N")){    
+  if((settingsObject["Scale"]["value"]=="O")||(settingsObject["Scale"]["value"]=="HO")||(settingsObject["Scale"]["value"]=="N")){
     trackContext.globalCompositeOperation = "destination-over";
     // N default case
     var start=.05;
     var step=.1;
-    if(settingsObject["Scale"]["value"]=="N"){      
+    if(settingsObject["Scale"]["value"]=="N"){
       trackContext.strokeStyle = "rgb(76,92,81)";
       trackContext.lineWidth = ""+Math.floor(lUnit)/10;
       }
-    if(settingsObject["Scale"]["value"]=="HO"){      
+    if(settingsObject["Scale"]["value"]=="HO"){
       trackContext.strokeStyle = "rgb(88,89,57)";
       trackContext.lineWidth = ""+Math.floor(4*unit)/10;
       start=0.05;
       step=.09;
       }
-    if(settingsObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){
       trackContext.strokeStyle = "rgb(81,83,61)";
       trackContext.lineWidth = ""+Math.floor(7*unit)/10;
       start=.1;
@@ -991,13 +991,13 @@ function createCanvasTrack(theType, cellX, cellY){
   //normal two rails only
     trackContext.globalCompositeOperation = "source-over";
 
-    if(settingsObject["Scale"]["value"]=="N"){      
+    if(settingsObject["Scale"]["value"]=="N"){
       trackContext.strokeStyle = "rgb(199,185,172)";
       }
-    if(settingsObject["Scale"]["value"]=="HO"){      
+    if(settingsObject["Scale"]["value"]=="HO"){
       trackContext.strokeStyle = "rgb(180,154,93)";
       }
-    if(settingsObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){
       trackContext.strokeStyle = "rgb(113,103,101)";
       }
   trackContext.lineWidth = ""+Math.floor(3*unit)/10;
@@ -1007,7 +1007,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.lineTo(originX+lUnit, originY+cellSize/2);
     trackContext.moveTo(originX+rUnit, originY);
     trackContext.lineTo(originX+rUnit, originY+cellSize/2);
-    if(settingsObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){
       trackContext.moveTo(originX+cUnit, originY);
       trackContext.lineTo(originX+cUnit, originY+cellSize/2);
       }
@@ -1017,7 +1017,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.lineTo(originX+lUnit, originY+cellSize);
     trackContext.moveTo(originX+rUnit, originY+cellSize/2);
     trackContext.lineTo(originX+rUnit, originY+cellSize);
-    if(settingsObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){
       trackContext.moveTo(originX+cUnit, originY+cellSize/2);
       trackContext.lineTo(originX+cUnit, originY+cellSize);
       }
@@ -1027,7 +1027,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.lineTo(originX+cellSize/2, originY+lUnit);
     trackContext.moveTo(originX, originY+rUnit);
     trackContext.lineTo(originX+cellSize/2, originY+rUnit);
-    if(settingsObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){
       trackContext.moveTo(originX, originY+cUnit);
       trackContext.lineTo(originX+cellSize/2, originY+cUnit);
       }
@@ -1037,7 +1037,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.lineTo(originX+cellSize, originY+lUnit);
     trackContext.moveTo(originX+cellSize/2, originY+rUnit);
     trackContext.lineTo(originX+cellSize, originY+rUnit);
-    if(settingsObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){
       trackContext.moveTo(originX+cellSize/2, originY+cUnit);
       trackContext.lineTo(originX+cellSize, originY+cUnit);
       }
@@ -1047,7 +1047,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.lineTo(originX+cellSize, originY+lUnit);
     trackContext.moveTo(originX, originY+rUnit);
     trackContext.lineTo(originX+cellSize, originY+rUnit);
-    if(settingsObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){
       trackContext.moveTo(originX, originY+cUnit); //middle rail
       trackContext.lineTo(originX+cellSize, originY+cUnit);
       }
@@ -1057,7 +1057,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.lineTo(originX+lUnit, originY+cellSize);
     trackContext.moveTo(originX+rUnit, originY);
     trackContext.lineTo(originX+rUnit, originY+cellSize);
-    if(settingsObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){
       trackContext.moveTo(originX+cUnit, originY);  //center rail
       trackContext.lineTo(originX+cUnit, originY+cellSize);
       }
@@ -1066,7 +1066,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.arc(originX+cellSize, originY+cellSize, rUnit, 1 * Math.PI, 1.5 * Math.PI, false);
     trackContext.moveTo(originX+rUnit, originY+cellSize);
     trackContext.arc(originX+cellSize, originY+cellSize, lUnit, 1 * Math.PI, 1.5 * Math.PI, false);
-    if(settingsObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){
       trackContext.moveTo(originX+cUnit, originY+cellSize);
       trackContext.arc(originX+cellSize, originY+cellSize, cUnit, 1 * Math.PI, 1.5 * Math.PI, false);
       }
@@ -1075,7 +1075,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.arc(originX, originY+cellSize, rUnit, 0, 1.5 * Math.PI, true);
     trackContext.moveTo(originX+lUnit, originY+cellSize);
     trackContext.arc(originX, originY+cellSize, lUnit, 0, 1.5 * Math.PI, true);
-    if(settingsObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){
       trackContext.moveTo(originX+cUnit, originY+cellSize);
       trackContext.arc(originX, originY+cellSize, cUnit, 0, 1.5 * Math.PI, true);
       }
@@ -1084,7 +1084,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.arc(originX, originY, rUnit, 0, .5 * Math.PI, false);
     trackContext.moveTo(originX+lUnit, originY);
     trackContext.arc(originX, originY, lUnit, 0, .5 * Math.PI, false);
-    if(settingsObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){
       trackContext.moveTo(originX+cUnit, originY);
       trackContext.arc(originX, originY, cUnit, 0, .5 * Math.PI, false);
       }
@@ -1093,7 +1093,7 @@ function createCanvasTrack(theType, cellX, cellY){
     trackContext.arc(originX+cellSize, originY, rUnit, Math.PI, .5 * Math.PI, true);
     trackContext.moveTo(originX+rUnit, originY);
     trackContext.arc(originX+cellSize, originY, lUnit, Math.PI, .5 * Math.PI, true);
-    if(settingsObject["Scale"]["value"]=="O"){      
+    if(settingsObject["Scale"]["value"]=="O"){
       trackContext.moveTo(originX+cUnit, originY);
       trackContext.arc(originX+cellSize, originY, cUnit, Math.PI, .5 * Math.PI, true);
       }
@@ -1254,7 +1254,7 @@ function initGeometry(){
     }
   screenAspect=screenWidth/screenHeight;
   document.getElementById('debugDiv').style.width=screenWidth+"px";
-  
+
   //dbuga("initGeometry screen: "+screenWidth+" x "+screenHeight+" ");
   //dbuga("initGeometry viewport: "+ viewportWidth+" x "+ viewportHeight+" "+viewportAspect);
 
@@ -1298,7 +1298,7 @@ function boardGeometry(){
 
   boardWidth=screenWidth;
   boardHeight=cellsDown*cellSize;
-  
+
   camera.style.webkitPerspective=boardHeight;
   //dbuga(" - boardHeight="+boardHeight +" boardWidth="+boardWidth);
 
@@ -1348,13 +1348,13 @@ function boardGeometry(){
   centerSize=cellSize/4;
   createInitialBuildSequence();
   setupClasses();
-  setupCanvas();// maybe move to resetBoardTimersObjects() 
-  //fillGridCanvas();// di move there 
+  setupCanvas();// maybe move to resetBoardTimersObjects()
+  //fillGridCanvas();// di move there
   document.getElementById('gridCanvas').style.transform="translateZ(-"+cellSize/40+"px)"
   document.getElementById('fieldHolder').style.transform="translateZ(-"+cellSize/48+"px)"
   }
 
-function restartIntervals(){ 
+function restartIntervals(){
   fillGridCanvas();
   //dbuga('restartIntervals()');
   //window.clearInterval(turnInterval);
@@ -1388,7 +1388,7 @@ var levelData=[
     {"fields":[3,3,3], "space":48, "tank":false},
 
     {"fields":[3,3,3,3], "space":72, "tank":false},
-    
+
     {"fields":[4,4,4], "space":80, "tank":false},
     {"fields":[4,4,4,4], "space":80, "tank":false},
     {"fields":[19], "space":80, "tank":true},
@@ -1406,23 +1406,23 @@ Small 6 or 8 levels iPhone 4
 
 medium 8 or 10 iphone 5/6
 medium 6 or 10 iphone 6+
-5   54  60  
+5   54  60
 6   54  60
 6+  48  60
- 
+
 large ipad 9 or 12
 P   72  80
 
 
 mp  70  77
 
-42 
-48 
-54 
+42
+48
+54
 60
 72 iPad banner
-70 
-77  
+70
+77
 80 iPad
 
     {"fields":[1,1,1], "space":24, "tank":false},
@@ -1529,7 +1529,7 @@ function populateCars(){
   carsCtx.lineWidth=buttonHeight/12;
   for (var i=0; i<graphicsByColor[colorArray[focusCars]].length; i++){
     var graphic=graphicsByColor[colorArray[focusCars]][i];
-    
+
     var carThumb={"buttonId":"car_"+focusCars+"-"+i};
     //dbuga(carThumb.buttonId);
     carThumb.c=focusCars;
@@ -1549,11 +1549,11 @@ function populateCars(){
     carsCtx.strokeStyle="rgba(42,42,42,.25)";
     carsCtx.fillStyle="rgba(255,255,255,.9)";
     //roundRect(carsCtx, carThumb.l, carThumb.t, buttonWidth, buttonHeight, radius, true, false);
-    
-   
+
+
     var imageObj = imgRefs["boxside"+colorArray[carThumb.c]];
     carsCtx.drawImage(imageObj, carThumb.l, carThumb.t, buttonWidth, buttonHeight);
-    
+
 
     carsCtx.drawImage(carThumb.ref, carThumb.l, carThumb.t, buttonWidth, buttonHeight);
     }
@@ -1663,7 +1663,7 @@ function drawModalButton(ctx, modalButton){
     if(graphicsByColor[colorArray[graphicsSelectedColorNum]][graphicsSelectedGraphic].blackTrans){
       ref=document.getElementById("checkedPreload");
       }
-    ctx.drawImage(ref,modalButton.l,modalButton.t+buttonHeight/4,buttonHeight/2,buttonHeight/2); 
+    ctx.drawImage(ref,modalButton.l,modalButton.t+buttonHeight/4,buttonHeight/2,buttonHeight/2);
     ctx.globalAlpha=1;
     }
   }
@@ -1780,7 +1780,7 @@ function drawLevels(){
   var buttonSize=levelsGridPx*2;
   var fieldsAcross=4;
   var offset=1.5;
-  
+
   for (var b=0; b<levelBoxes.length; b++){
     var dNum=levelBoxes[b].num;
     //dbuga(dNum+" fields[0]="+levelData[dNum].fields[0]);
@@ -1790,7 +1790,7 @@ function drawLevels(){
       }
     }
   //dbuga('fieldsAcross '+fieldsAcross);
-  
+
   var pad=buttonSize/16;
   var radius=buttonSize/12;
   var fieldRad=buttonSize/(3.2*fieldsAcross);
@@ -1814,9 +1814,9 @@ function drawLevels(){
     var cy=levelBoxes[b].t/2+levelBoxes[b].b/2;
     var dNum=levelBoxes[b].num;
     var req=0;
-    for(var c=0;c<levelData[dNum].fields.length;c++){      
+    for(var c=0;c<levelData[dNum].fields.length;c++){
       var color=rgbArray[c];
-      levelsCtx.fillStyle=color;    
+      levelsCtx.fillStyle=color;
       for(var f=0; f<=levelData[dNum].fields[c]; f++){
         req++;
         var useF=f%fieldsAcross;
@@ -1932,7 +1932,7 @@ function updateCompCanv(){
   var pad=squarePx*(1-modalShrink);
   roundRect(ctx, pad+squarePadLeft, pad+squarePadTop, squarePx-pad*2, squarePx-pad*2, modalRadius*squarePx, true, true);
 
-  
+
     ctx.globalCompositeOperation = "source-atop";
     var img=document.getElementById("completedPreload");
     ctx.drawImage(img,squarePadLeft,squarePadTop,squarePx,squarePx);
@@ -1948,7 +1948,7 @@ function updateCompCanv(){
   ctx.fillStyle=modalText;
   ctx.textAlign="center";
   ctx.font=headingPx+"px "+modalHeadingFont;
-  
+
   atY+=wrapText(ctx, "Completed!", cx, atY, squarePx-pad*2, headingPx, false)+squarePx/2.25;
   ctx.font=bodyPx+"px "+modalBodyFont;
   var compBody=completedCars.length+" Total Cars<br>";
@@ -2025,7 +2025,7 @@ function updateHelpCanv(){
   ctx.fillStyle=modalText;
   ctx.textAlign="center";
   ctx.font=headingPx+"px "+modalHeadingFont;
-  
+
   atY+=wrapText(ctx, helps[atHelp].heading, cx, atY, squarePx-pad*2, headingPx, false);
   ctx.font=bodyPx+"px "+modalBodyFont;
   var parts=helps[atHelp].body.split("<br>");
@@ -2194,9 +2194,9 @@ function changeView(caller){
   }
 function init(){
   //console.log('init() '+screen.width);
-  document.body.addEventListener('mousedown', mouseDown, true); 
-  document.body.addEventListener('mousemove', mouseMove, true); 
-  document.body.addEventListener('mouseup', mouseUp, true); 
+  document.body.addEventListener('mousedown', mouseDown, true);
+  document.body.addEventListener('mousemove', mouseMove, true);
+  document.body.addEventListener('mouseup', mouseUp, true);
   if(screen.width==1680){
     //dbuga('local init()');
     initSession();
@@ -2212,7 +2212,7 @@ function onDeviceReady(){
   // dependant on <gap:plugin name="cordova-plugin-statusbar" source="npm" />
   StatusBar.overlaysWebView(true);
   StatusBar.hide();
-  }  
+  }
 function initStorage(){
   //console.log('initStorage();');
   localStorage.setItem("initialized", "true");
@@ -2252,7 +2252,8 @@ var settingsObject={
   "Sounds":{"value":"On", "pos":0,  "values":["Off", "On", "Classic"], "t":0, "r":0, "b":0, "l":0},
   "Scale":{"value":"HO", "pos":-1,  "values":["O", "HO", "N"], "t":0, "r":0, "b":0, "l":0},
   "Tiles":{"value":"Guides", "pos":1,  "values":["None", "Grid", "Guides"], "t":0, "r":0, "b":0, "l":0},
-  "Detail":{"value":"Low", "pos":-1,  "values":["Low", "Med", "High"], "t":0, "r":0, "b":0, "l":0}
+	"Detail":{"value":"Low", "pos":-1,  "values":["Low", "Med", "High"], "t":0, "r":0, "b":0, "l":0},
+	"Mode":{"value":"Auto", "pos":0,  "values":["Dark", "Auto", "Light"], "t":0, "r":0, "b":0, "l":0},
 };
 var detailByValue={"Low":3, "Med":6, "High":9};
 var firstRun=false;
@@ -2263,7 +2264,7 @@ function initSession(){
     initStorage();
     }
   loadStorage();
-  
+
   initGraphicsByColor();
   camera=document.getElementById("cameraDiv");
   table=document.getElementById("tableDiv");
@@ -2272,7 +2273,7 @@ function initSession(){
   //dbuga('init()');
   document.addEventListener("pause", pauseGame, false);
   document.addEventListener("resume", resumeGame, false);
-  //debugStorage(); 
+  //debugStorage();
   var wLoc=""+window.location+"";
   if(wLoc.indexOf("file:///")==0){
     platform="local";
@@ -2284,12 +2285,12 @@ function initSession(){
   var path = window.location.pathname;
   path = path.substr( path, path.length - 10 );
   filePath= '' + path+'sounds';
-  if(platform=="ios"){filePath="sounds";}   
-  if(platform=="local"){filePath="sounds";}   
-  if(platform=="web"){filePath="sounds";} 
+  if(platform=="ios"){filePath="sounds";}
+  if(platform=="local"){filePath="sounds";}
+  if(platform=="web"){filePath="sounds";}
   if(platform=="android"){minFps=24;}
 
-  //dbug(JSON.stringify(localStorage));  
+  //dbug(JSON.stringify(localStorage));
   //debugStorage();
 
   //dbuga('initSound()');
@@ -2309,13 +2310,13 @@ function initSession(){
   imgRefs["tankendblack"]=document.getElementById('tankendblack');
 
   localStorageToImages();
-  
+
   document.addEventListener('deviceready', function () {
-    
+
     ////window.plugin.CanvasCamera.initialize(cameraCanv);
     }, false);
 
-  //dbuga('end of initSession so start preloading');        
+  //dbuga('end of initSession so start preloading');
   //updateHelpCanv();
   openModal('help');
   wrapper.style.background="white";
@@ -2442,7 +2443,7 @@ function rafTick(ms){
     showQueue=[];
 
     if(combinedZoom.length>0){
-      //ported 
+      //ported
       if(combinedZoom[focusTrain]>100){
         combinedZoom[focusTrain]=100;
         }
@@ -2489,7 +2490,7 @@ function initSound(){
 function setupNav(){
   }
 function restart(){
-  //dbuga('restart()'); 
+  //dbuga('restart()');
   resetBoardTimersObjects();
   rebuildSequence();
   }
@@ -2516,7 +2517,7 @@ function resetBoardTimersObjects(){
   sourceCount=0;
   destCount=0;
   carData=[];
-  completedCars=[]; 
+  completedCars=[];
   trainData=[];
   sourceData=[];
   destData=[];
@@ -2538,7 +2539,7 @@ function addColor(fields, barrels){
   colorCycle+=1;
   if(colorCycle>=4){
     colorCycle=0;
-    } 
+    }
   var fails=randomTileGroup(color, fields, barrels);
   return fails;
   }
@@ -2579,7 +2580,7 @@ function createInitialBuildSequence(){
     }
 
   //buildSequence.push(new buildObject("track", "", "bl", 2, 3, 0));
-  
+
   //if(cellsAcross==8){createInitialBuildSequence768();}
   //else{createInitialBuildSequence320();}
   }
@@ -2614,7 +2615,7 @@ function createInitialBuildSequence768(){
   buildSequence.push(new buildObject("track", "", "tb", 1, 2, 0));
   buildSequence.push(new buildObject("track", "", "br", 1, 1, 0));
   }
-  
+
 function createInitialBuildSequence320(){
   buildSequence=[];
   buildSequence.push(new buildObject("dest", "orange", "t", 1, 4, 0));
@@ -2681,7 +2682,7 @@ function randomTileGroup(color, fields, barrels){
   else{
     fails++;
     }
-  for (f=0; f<fields; f++){  
+  for (f=0; f<fields; f++){
     posObject=viableRandomPosition();
     if(posObject.success==true){
       var buildItem=new Object();
@@ -2693,7 +2694,7 @@ function randomTileGroup(color, fields, barrels){
       buildItem.barrels=barrels;
       buildSequence.push(buildItem);
       sourceData.push(sourceObject(color, posObject.dir, posObject.x, posObject.y, barrels));
-      displayBarrels("grid_"+posObject.x+"_"+posObject.y, barrels); 
+      displayBarrels("grid_"+posObject.x+"_"+posObject.y, barrels);
       }
     else{
       fails++;
@@ -2704,7 +2705,7 @@ function randomTileGroup(color, fields, barrels){
 function displayBarrels(examineCell, howMany){
   //debugString=examineCell+", "+howMany+"<br>";
   var cn=document.getElementById(examineCell).childNodes;
-  var cnl=cn.length;  
+  var cnl=cn.length;
   for (var n=0; n<cnl; n++){
     var thisClass=cn[n].className;
     if (thisClass.indexOf('tile')>-1){
@@ -2716,7 +2717,7 @@ function displayBarrels(examineCell, howMany){
           }
         else{
           barrelNodes[b].style.opacity="0";
-          }        
+          }
         }
       }
     }
@@ -2767,8 +2768,8 @@ function viableRandomPosition(){
       y=Number(cellParts[2]);
       }
 
-    var nextX=xDeltaByDir[dir]+x;  
-    var nextY=yDeltaByDir[dir]+y;  
+    var nextX=xDeltaByDir[dir]+x;
+    var nextY=yDeltaByDir[dir]+y;
     var thisCell="grid_"+x+"_"+y;
     var adjCell="grid_"+nextX+"_"+nextY;
     if (fullCellGlom.indexOf(thisCell)>-1){
@@ -2782,7 +2783,7 @@ function viableRandomPosition(){
     if((nextY<0)||(nextY>=cellsDown)){
       thisFail=true;
       }
- 
+
     if((isTiled(nextX, nextY)==true)||(isTiled(x, y)==true)){
       thisFail=true;
       }
@@ -2964,7 +2965,7 @@ function debugCell(message, cellX,cellY){
 function destObject(color, dir, x, y){
   var deg=degByDir[dir];
   var d={};
-  d.color=color; 
+  d.color=color;
   var carsArray=new Array();
   d.carsArray=carsArray;
   d.barrels=0;
@@ -3014,7 +3015,7 @@ function changeGeometry(){
     }
   //dbuga("initGeometry() s "+screen.width+" x "+screen.height);
   //dbuga("initGeometry() w "+window.innerWidth+" x "+window.innerHeight);
-  
+
   rotating=true;
   window.clearTimeout(rotatingTimeout);
   rotatingTimeout=window.setTimeout('calcGeometry()', 100);
@@ -3026,7 +3027,7 @@ var stopRotatingTimeout;
 function calcGeometry(){
 
   window.clearTimeout(rotatingTimeout);
-  
+
   viewportAspect=viewportWidth/viewportHeight;
   //dbuga("calcGeometry v "+viewportWidth+"w x "+viewportHeight+"h");
   //dbuga("screenWidth="+screenWidth+" screenHeight="+screenHeight);
@@ -3086,7 +3087,7 @@ function sourceObject(color, dir, x, y, barrels){
   deg=degByDir[dir];
   var s=new Object();
   s.barrels=barrels;
-  s.color=color; 
+  s.color=color;
   s.occupied=false;
   s.deg=deg;
   s.dir=dir;
@@ -3123,7 +3124,7 @@ function sourceAction(sourceNum){
     sourceData[sourceNum].barrels--;
     displayBarrels("grid_"+sourceData[sourceNum].x+"_"+sourceData[sourceNum].y, sourceData[sourceNum].barrels);
     useColor=sourceData[sourceNum].color;
-     
+
     var newCar;
     if(levelData[levelBoxes[atLevel].num].tank){
       newCar=tankObject(useColor, sourceData[sourceNum].dir, sourceData[sourceNum].x, sourceData[sourceNum].y, sourceNum);
@@ -3191,7 +3192,7 @@ function tankObject(color, dir, x, y, oid){
     ctx.drawImage(imageObj, 0, 0, canv.width, canv.height);
     }
 
-  //dbuga(" - tankObject 9"); 
+  //dbuga(" - tankObject 9");
 
 
   var elementRef=document.getElementById(useCarId);
@@ -3202,7 +3203,7 @@ function tankObject(color, dir, x, y, oid){
 var lastByColor={"black":-1, "orange":-1, "blue":-1, "green":-1}
 function carObject(color, dir, x, y, oid){
   var detail=detailByValue[settingsObject["Detail"]["value"]];
-  
+
   //dbuga("color:"+color+" dir:"+dir+" x:"+x+" y:"+y+" oid:"+oid);
   deg=degByDir[dir];
   var c={};
@@ -3251,7 +3252,7 @@ function carObject(color, dir, x, y, oid){
     //if((faceData.box[f].img=="boxside")&&(rnd(10)<7)){
     if(faceData.box[f].img=="boxside"){
       //dbuga('boxside');
-      var graphicRef=graphicsByColor[color][graphicNum].ref; 
+      var graphicRef=graphicsByColor[color][graphicNum].ref;
       var g=shrink*detail*cellSize/24;
       ctx.drawImage(graphicRef, 0,0, g*24,g*8);
       }
@@ -3269,12 +3270,12 @@ function carObject(color, dir, x, y, oid){
 
 function trainObject(color, x, y, dir){
   var detail=detailByValue[settingsObject["Detail"]["value"]];
-  
+
   var deg=degByDir[dir];
   var t={};
 
-  t.prog=0, 
-  t.color=color, 
+  t.prog=0,
+  t.color=color,
   t.moving=false;
   t.started=false;
   t.carsArray=new Array();
@@ -3390,7 +3391,7 @@ function trainAction(trainNum){
   // 2 - detach -
   //check for destination adjacent to train next cell
   if (trainData[trainNum].carsArray.length>0){
-    if(trainNum==0){  
+    if(trainNum==0){
      //dbuga("detach? prev "+trainData[trainNum].prevX+" "+trainData[trainNum].prevY+" "+carData[trainData[trainNum].carsArray[0]].nextDir+" "+trainData[trainNum].color);
      }
 
@@ -3399,7 +3400,7 @@ function trainAction(trainNum){
     if (foundDest >-1){
       var tempCarsArray=trainData[trainNum].carsArray;
       destData[foundDest].carsArray=tempCarsArray;
-      
+
       trainData[trainNum].carsArray=[];
       }
     }
@@ -3418,7 +3419,7 @@ function trainAction(trainNum){
         thisTrack=tracksInCell[t];
         if ((thisTrack.indexOf(trainOppDir)>-1)&&(thisTrack.indexOf(destOppDir)>-1)){
           tracksArray=[thisTrack];// remove non winners from list
-          thisConnection=thisTrack.replace(trainOppDir, "");          
+          thisConnection=thisTrack.replace(trainOppDir, "");
           connectionsArray=[thisConnection];
 
           // complete game if last engine docking
@@ -3467,7 +3468,7 @@ function trainAction(trainNum){
         sourceData[carData[foundCar].originId].occupied=false;
         thisCarDiv="car"+foundCar;
         var thisRef=carData[foundCar].ref;
-        showQueue.push(thisRef); 
+        showQueue.push(thisRef);
         playSound("carstart");
         }
       else{
@@ -3475,7 +3476,7 @@ function trainAction(trainNum){
         //alert('not linked');
         }
       }
-    
+
     // 5 - attach to engine ?
     if (trainData[trainNum].carsArray.length==0){
       foundCar=findCar(trainData[trainNum].prevX, trainData[trainNum].prevY, trainData[trainNum].nextDir, trainData[trainNum].color);
@@ -3483,9 +3484,9 @@ function trainAction(trainNum){
         trainData[trainNum].carsArray.push(foundCar);
         carData[foundCar].attached=true;
         carData[foundCar].trainNum=trainNum;
-        sourceData[carData[foundCar].originId].occupied=false;  
+        sourceData[carData[foundCar].originId].occupied=false;
         var thisRef=carData[foundCar].ref;
-        showQueue.push(thisRef); 
+        showQueue.push(thisRef);
         playSound("carstart");
         }
       }
@@ -3505,7 +3506,7 @@ function trainAction(trainNum){
           carData[thisCarId]=followObject(carData[parentCarId], carData[thisCarId]);
           }
         collisionData['car'+thisCarId]=lineStringFromXYD(carData[thisCarId].prevX, carData[thisCarId].prevY, carData[thisCarId].nextDir);
-        } 
+        }
       }//end of cars array length>0
 
     }// end of if moving
@@ -3538,8 +3539,8 @@ function trainAction(trainNum){
           carData[thisCarId]=followObject(carData[parentCarId], carData[thisCarId]);
           collisionData['car'+thisCarId]=lineStringFromXYD(carData[thisCarId].prevX, carData[thisCarId].prevY, carData[thisCarId].nextDir);
           }
-        
-        } 
+
+        }
       }//end of cars array length>0
 
 
@@ -3555,7 +3556,7 @@ function trainAction(trainNum){
       selNum=0;
       //dbuga('starting');
       }
-     
+
     var selTrack=tracksArray[selNum];
     trainData[trainNum].track=selTrack;
     trainData[trainNum].nextDir=connectionsArray[selNum];
@@ -3677,7 +3678,7 @@ function dbug(theString){
 function dbuga(theString){
 
 
-  document.getElementById("debugDiv").style.display="block";  
+  document.getElementById("debugDiv").style.display="block";
   document.getElementById("debugDiv").innerHTML+=theString+"<br>";
   }
 function dbugc(theString){
@@ -3689,7 +3690,7 @@ function dbugaObject(caption, theObject){
   theString=parts.join(", ");
   parts=theString.split("}");
   theString=parts.join("}<br> ");
-  document.getElementById("debugDiv").style.display="block";  
+  document.getElementById("debugDiv").style.display="block";
   document.getElementById("debugDiv").innerHTML+=caption+"="+theString+"<br>";
   }
 
@@ -3798,14 +3799,14 @@ function returnProgPos(anim, prog){
       if(anim.nextDir=="l"){rads=pi*(90-sumDeg+90)/180;}
       if(anim.nextDir=="r"){rads=pi*(90-sumDeg-90)/180;}
       }
- 
+
     sumX=centerX+.5*Math.cos(rads);
     sumY=centerY-.5*Math.sin(rads);
     }
 
-  var transformString=" translate("+sumX+"px, "+sumY+"px) rotate("+sumDeg+"deg)"; 
+  var transformString=" translate("+sumX+"px, "+sumY+"px) rotate("+sumDeg+"deg)";
   //dbuga('progTransform completed ');
-    
+
   var newPos={"x":sumX, "y":sumY, "d":sumDeg};
   return newPos;
 
@@ -3874,14 +3875,14 @@ function returnProgTransform(anim, prog){
       if(anim.nextDir=="l"){rads=pi*(90-sumDeg+90)/180;}
       if(anim.nextDir=="r"){rads=pi*(90-sumDeg-90)/180;}
       }
- 
+
     //var rads=pi*2*((sumDeg)/360);
     sumX=centerX+cellSizeHalf*Math.cos(rads);
     sumY=centerY-cellSizeHalf*Math.sin(rads);
     //dbuga(Math.floor(sumDeg)+" frac:"+Math.floor((rads/6.28)*100)/100+" cos:"+Math.floor(Math.cos(rads)*100)/100+" sin:"+Math.floor(Math.sin(rads)*-100)/100);
     }
 
-  //var transformString=" translate("+sumX+"px, "+sumY+"px) rotate("+sumDeg+"deg)"; 
+  //var transformString=" translate("+sumX+"px, "+sumY+"px) rotate("+sumDeg+"deg)";
   //return transformString;
   //dbuga('progTransform completed ');
     var z=cubeSize/2;
@@ -3890,8 +3891,8 @@ function returnProgTransform(anim, prog){
     trans+="translateX("+sumX+"px) ";
     trans+="translateY("+sumY+"px) ";
     trans+=" rotateZ("+sumDeg+"deg) ";
-    trans+=" translateZ("+z+"px)";  
-  
+    trans+=" translateZ("+z+"px)";
+
   return trans;
   }
 
@@ -3911,7 +3912,7 @@ function returnTracksInCell(x,y){
   var examineCell="grid_"+x+"_"+y;
   //var cn=document.getElementById(examineCell).childNodes;
   var cn=tilesByGridXY[examineCell];
-  var cnl=cn.length;  
+  var cnl=cn.length;
   for (var n=0; n<cnl; n++){
     var thisClass=cn[n];
     if (thisClass.indexOf('tile')==-1){
@@ -3939,7 +3940,7 @@ function findDest(x, y, dir, color){
   for (var d=0; d<destCount; d++){
     if ((destData[d].xIntake==x)&&(destData[d].yIntake==y)&&(destData[d].color==color)){
       destOppDir=reverseObject[destData[d].dir];
-      // check for compatable tracks... 
+      // check for compatable tracks...
       for(var t=0; t<tracksInCell.length; t++){
         thisTrack=tracksInCell[t];
         if ((thisTrack.indexOf(carOppDir)>-1)&&(thisTrack.indexOf(destOppDir)>-1)){
@@ -3992,20 +3993,20 @@ function createTrack(cellType, targetCell){
 var mouseDragging=false;
 function mouseDown(e){
   e.preventDefault();
-  if(isMobile){return false;}    
+  if(isMobile){return false;}
   mouseDragging=true;
- 
+
   var tid = e.target.id
   var x=e.clientX;
   var y=e.clientY;
-  
+
   var tArray=[{"pageX":x, "pageY":y, "target":{"id":tid}}];
   var event={"type":"touchstart", "touches":tArray};
   touchStart(event);
   }
 function mouseMove(e){
   e.preventDefault();
-  if(isMobile){return false;}    
+  if(isMobile){return false;}
   if(mouseDragging){
     //dbug("mouseMove "+e.clientX+" "+e.clientY);
     var target = e.target;
@@ -4014,11 +4015,11 @@ function mouseMove(e){
     //console.log(event);
     touchMove(event);
     }// buzz off hover mouse.
-  if(isMobile){return false;}    
+  if(isMobile){return false;}
   }
 function mouseUp(e){
   e.preventDefault();
-  if(isMobile){return false;}    
+  if(isMobile){return false;}
   mouseDragging=false;
   //dbuga("mouseUp");
   var event={"type":"touchend", "touches":[]};
@@ -4036,7 +4037,7 @@ function scrollResult(){
 
 
   }
-function touchCancel(event){ 
+function touchCancel(event){
   }
 function debugEvent(e){
   //console.log(e);
@@ -4054,7 +4055,7 @@ function touchEnd(event){
 function touchEvent(event){
   //dbug('touchEvent('+event.type+')');
   if(event.touches.length==0){//touchend
-    if(viewportAspect<1){//portrait 
+    if(viewportAspect<1){//portrait
       if(levelsUp){
         return false;
         }
@@ -4089,7 +4090,7 @@ function touchEvent(event){
         else if(graphicsUp){handleEventGraphics(event);}
         else if(helpUp){handleEventHelp(event);}
         else if(compUp){handleEventComp(event);}
-        else{handleEventDolly(event);}      
+        else{handleEventDolly(event);}
         }
       }
     else{//portraits
@@ -4111,7 +4112,7 @@ function clearAllGraphics(){
   //dbuga('clearAllGraphics()');
   var atDefault=0;
   var color=colorArray[focusCars];
-  var x=0; 
+  var x=0;
   var y=0;
   for (var i=0; i<graphicsPerColor; i++){
     //dbuga('clear all i='+i);
@@ -4144,7 +4145,7 @@ function graphicsTick(){
     }
   }
 */
- 
+
 function handleEventCars(e){
   if(e.type=="touchstart"){
     var t=e.touches[0];
@@ -4171,7 +4172,7 @@ function handleEventCars(e){
           }
         populateCars();
         }
-      } 
+      }
     }
   if(e.type=="touchmove"){
     return false;
@@ -4219,15 +4220,15 @@ function handleEventGraphics(e){
               //dbuga('cancel');
               processGraphic(graphicsSelectedColorNum, graphicsSelectedGraphic, false, false);
               populateCars();
-              
+
               }
             if(graphicsButton.label=="Retake"){
-              graphicsTake();              
+              graphicsTake();
               }
             found=true;// because xyInTrbl
             if(graphicsButton.label=="car"){
               //dbuga('car touchstart');
-              found=false;              
+              found=false;
               }
             }
           }
@@ -4236,7 +4237,7 @@ function handleEventGraphics(e){
           if(graphicsEditing==false){
             //closeModals(); // tap closed on background touch
             }
-          else{            
+          else{
             graphicsEvent=e;
             graphicsTouching=true;
             startMoveGraphics();
@@ -4244,7 +4245,7 @@ function handleEventGraphics(e){
             }
           }
         else{// found == true
-          //populateGraphics(); 
+          //populateGraphics();
           //this may be needed elsewhere. Trans?
           }
 
@@ -4335,8 +4336,8 @@ function handleEventColors(event){
             focusTrain=c;
             focusCars=c;
             if(graphicsUp){openModal("cars");}
-            }    
-          }      
+            }
+          }
         }
       }
     }
@@ -4359,7 +4360,7 @@ function handleEventColors(event){
           //focusCars=tryFocus;
           //updateColorsCanv('carsUp');
           //populateCars();
-        
+
           }
       }
       else{//train focus
@@ -4388,7 +4389,7 @@ function handleEventColors(event){
         }
       }
     }
-  }  
+  }
 */
 // ported code
 var camera;
@@ -4418,9 +4419,9 @@ function graphicsTake(){
               graphicsCtx.fillStyle="black";
               graphicsCtx.font=screenWidth/10+"px akzi";
               graphicsCtx.textAlign="center";
-              
+
               graphicsCtx.fillText("Loading Photo...", screenHeight/2, screenWidth/2-controlsPx/2);
-              window.setTimeout('cameraTake()',50);              
+              window.setTimeout('cameraTake()',50);
   }
 //      destinationType: Camera.DestinationType.DATA_URL
 //      destinationType: Camera.DestinationType.FILE_URI
@@ -4456,7 +4457,7 @@ function onSuccess(imageData) {
     image.src = "data:image/jpeg;base64," + imageData;
     shooting=false;
     }
-    
+
 function cameraLoaded(){
     //dbuga('cameraLoaded()');
     graphicsEditing=true;
@@ -4488,7 +4489,7 @@ function postviewGraphics(){
   var radius=cellSize/8;
   var pad=cellSize/10;
   var topPad=(screenWidth-controlsPx-buttonHeight*4)/2;
-  var leftPad=(screenHeight-buttonWidth*3)/2;  
+  var leftPad=(screenHeight-buttonWidth*3)/2;
   var carButton={"label":"car"}
 
   carButton.sampleWidth=image.naturalWidth*graphicsScale;
@@ -4507,7 +4508,7 @@ function postviewGraphics(){
   var cameraCtx=cameraCanv.getContext('2d');
   cameraCtx.drawImage(carButton.ref, carButton.sampleLeft, carButton.sampleTop, carButton.sampleWidth, carButton.sampleHeight, 0,0,800,200);
   //console.log(carButton);
-  
+
   }
 var groupGridPad=.25;
 function gtlInWh(w,h){
@@ -4569,7 +4570,7 @@ function previewGraphics(){
   carButton.w=carGrid*20;
 
   carButton.ref=image;
-  
+
   var imageObj = imgRefs["boxside"+colorArray[carButton.c]];
   graphicsCtx.drawImage(imageObj, leftPad, topPad, buttonWidth, buttonHeight);
   graphicsCtx.drawImage(carButton.ref, carButton.sampleLeft, carButton.sampleTop, carButton.sampleWidth, carButton.sampleHeight, carButton.l, carButton.t, carButton.w, carButton.h);
@@ -4580,7 +4581,7 @@ function previewGraphics(){
   graphicsCtx.strokeRect(leftPad, topPad, buttonWidth, buttonHeight);
   graphicsCtx.strokeStyle="green";
   graphicsCtx.strokeRect(leftPad+carGrid, topPad+carGrid, carGrid*20, carGrid*5);
-*/  
+*/
   }
 function safeImageSample(image, scale, offsetX, offsetY){
 
@@ -4753,7 +4754,7 @@ function moveGraphics(){
       graphicsScale=tryScale;
       graphicsOffsetX=tryX;
       graphicsStartY=graphicsAtY;
-      graphicsStartOffsetY=graphicsOffsetY;      
+      graphicsStartOffsetY=graphicsOffsetY;
       moved=true;
       //dbuga('omit Y');
       }
@@ -4777,8 +4778,8 @@ function fixCamera(){
   //transformString+='translateY(0) ';
   //dbug(transformString);
   table.style.webkitTransform=transformString;
-  
-  
+
+
   transformString='translateZ('+((100-100)*boardHeight/100)+'px) translateY('+(0*boardWidth/100)+'px)';
   zoom.style.webkitTransform=transformString;
 
@@ -4801,7 +4802,7 @@ function locateCamera(){
   var landscapePx=Math.abs(cellsAcross-cellsDown)*cellSize;
   useX=cameraXpercent-xMod;
   useY=cameraYpercent-yMod;
-  
+
   var useDeg=cameraRotationDegrees[focusTrain];
   if(combinedZoom[focusTrain]>95){
     useDeg=cameraRotationDegrees[focusTrain]-camPos.d;
@@ -4833,7 +4834,7 @@ function locateCamera(){
   //dbuga("cameraDistancePercent="+cameraDistancePercent);
   //dbuga("cameraDistancePx="+cameraDistancePx);
   //dbuga("cabViewForward:"+ cabViewForward);
-  
+
   transformString='translateZ('+(cameraDistancePx+cabViewForward)+'px) translateY('+cabViewDown+'px) translateX(0px)';
   zoom.style.webkitTransform=transformString;
   //dbuga(transformString);
@@ -5073,7 +5074,7 @@ function handleEventSettings(e){
         settingsButtonNum=b;
         }
       }
-    
+
     }
   if((typ=="touchstart")||(typ=="touchmove")){
     if(settingsTouchingId !=""){
@@ -5110,7 +5111,7 @@ function handleEventSettings(e){
       if(buttonLabel=="About"){openModal("about");}
       }
     settingsTouchingId="";
-    settingsButtonNum=-1;    
+    settingsButtonNum=-1;
     }// end of touchend
   }
 function updateMusicSetting(){
@@ -5171,22 +5172,22 @@ function updateDetail(){
     var color=colorList[c];
     for(var f=0; f<faceData.engine.length; f++){
       style.innerHTML += '.'+color+'engine' + f + '{-webkit-transform: ' + faceData.engine[f].trans + ' '+scaleString+';}';
-      }  
+      }
 
     for(var f=0; f<faceData.box.length; f++){
       style.innerHTML += '.'+color+'box' + f + '{-webkit-transform: ' + faceData.box[f].trans + ' '+ scaleString +';}';
-      }  
-    }  
+      }
+    }
   for(var f=0; f<faceData.tank.length; f++){
     style.innerHTML += '.blacktank' + f + '{-webkit-backface-visibility:visible; -webkit-transform: ' + faceData.tank[f].trans + ' '+ scaleString +';}';
-    }  
+    }
   document.getElementsByTagName('head')[0].appendChild(style);
   //resetBoardTimersObjects();
   //rebuildSequence();
   }
 function createLevel(){
 
-  
+
   //dbuga('createLevel()');
           var fails=-1;
           var boost=1;
@@ -5298,7 +5299,7 @@ function updateNavCanv(){
       navCtx.textBaseline="middle";
       for (var p=0; p<parts.length; p++){
         navCtx.fillText(parts[p], x,y+step*p);
-        
+
         }
       }
     else{
@@ -5307,7 +5308,7 @@ function updateNavCanv(){
       var pad=controlsPx/2-controlsPx*iconShrink/2;
       if(navButtons[n].selected){navCtx.globalAlpha=.5;}
       else{navCtx.globalAlpha=.75;}
-      navCtx.drawImage(ref,navButtons[n].l+pad,navButtons[n].t+pad,controlsPx-pad*2,controlsPx-pad*2); 
+      navCtx.drawImage(ref,navButtons[n].l+pad,navButtons[n].t+pad,controlsPx-pad*2,controlsPx-pad*2);
       navCtx.globalAlpha=1;
       }
     }
@@ -5322,7 +5323,7 @@ function updateColorsCanv(caller){
   colorsCanv.height=controlsPx;
   colorsCanv.style.top="0px";
   var pad=controlsPx/2-controlsPx*iconShrink/2;
-  
+
   var h=controlsPx;
   var colorsCtx=colorsCanv.getContext("2d");
   if(colorsUp){
@@ -5339,9 +5340,9 @@ function updateColorsCanv(caller){
       }
     colorsButtons.push({"label":"camera", "t":0, "r":screenHeight-h, "b":controlsPx, "l":screenHeight-h*2});
     var ref=document.getElementById("cameraPreload");
-    colorsCtx.drawImage(ref,screenHeight-h*2+pad,0, controlsPx-pad*2+pad, controlsPx-pad*2); 
+    colorsCtx.drawImage(ref,screenHeight-h*2+pad,0, controlsPx-pad*2+pad, controlsPx-pad*2);
     colorsCtx.globalAlpha=1;
-//navCtx.drawImage(ref,navButtons[n].l+pad,navButtons[n].t+pad,controlsPx-pad*2,controlsPx-pad*2); 
+//navCtx.drawImage(ref,navButtons[n].l+pad,navButtons[n].t+pad,controlsPx-pad*2,controlsPx-pad*2);
 
     var colorLimit=-1;
     var selected=focusTrain;
@@ -5392,18 +5393,18 @@ function updateColorsCanv(caller){
         colorsCtx.fillText("Modify", screenHeight/2,h/4);
         colorsCtx.fillText("Boxcar", screenHeight/2,3*h/4);
         }
-      }  
+      }
     else{
       colorsCtx.fillText("Drag to zoom", screenHeight/2,h/4);
       colorsCtx.fillText("Rotate to play", screenHeight/2,3*h/4);
-      }  
+      }
     var ref=document.getElementById("hidePreload");
-    colorsCtx.drawImage(ref,screenHeight-h,0, controlsPx, controlsPx); 
+    colorsCtx.drawImage(ref,screenHeight-h,0, controlsPx, controlsPx);
     }
   else{
     var ref=document.getElementById("showPreload");
     colorsCtx.globalAlpha=.5;
-    colorsCtx.drawImage(ref,screenHeight-h,0, controlsPx, controlsPx); 
+    colorsCtx.drawImage(ref,screenHeight-h,0, controlsPx, controlsPx);
     colorsCtx.globalAlpha=.5;
     }
   colorsButtons.push({"label":"showHide", "t":0, "r":screenHeight, "b":h, "l":screenHeight-h});
@@ -5419,7 +5420,7 @@ function handleEventDraw(e){
 
   //dbuga("handleEventDraw:"+typ);
   attemptDraw=false;
-  if ((typ == "touchstart")||(typ == "touchmove")){  
+  if ((typ == "touchstart")||(typ == "touchmove")){
     target=e.touches[0].target.id;
     xydir=xydirFromTouch(e.touches[0]);
     }
@@ -5541,10 +5542,10 @@ function attemptDrawTrack(){
   if((startDir=="l")&&(lastDir=="b")){cellType="bl";}//cw
   if((startDir=="b")&&(lastDir=="r")){cellType="br";}//ccw
   if((startDir=="r")&&(lastDir=="b")){cellType="br";}//cw
-  
+
   if (isTiled(squareX, squareY)==true){cellType="error";}// can't track on a tiled cell
 //dbug("isTiled("+squareX+", "+squareY+")="+isTiled(squareX, squareY));
-  // source hookups pass at this point... 
+  // source hookups pass at this point...
   if (cellType != "error"){
     passSourceTests=true;
     var dirsArray=cellType.split("");
@@ -5581,7 +5582,7 @@ function attemptDrawTrack(){
       lastLastDir=lastDir;
       ////lastDir="";// try to fix pretack
       hidePretracks();
-      } 
+      }
     }
   if(navButtons[4].label != ""){
     navButtons[4].label="";
@@ -5622,7 +5623,7 @@ function isTiled(x,y){
   if((x<0)||(x>=cellsAcross)||(y<0)||(y>=cellsDown)||(isNaN(x))||(Object.keys(tilesByGridXY).length==0)){
     //out of bounds, call it tiled
     //dbuga('<br>out of bounds, call it tiled'+x+" "+y);
- 
+
     tiled=true;
     }
   else{
@@ -5716,7 +5717,7 @@ function initGraphicsByColor(){
   for (var c=0; c<colorArray.length; c++){
     var color=colorArray[c];
     graphicsByColor[color]=[];
-    var x=0; 
+    var x=0;
     var y=0;
     for (var i=0; i<graphicsPerColor; i++){
 
@@ -5724,14 +5725,14 @@ function initGraphicsByColor(){
         "imageId":"default"+atDefault,
         "blackTrans":isMobile,
         "x":x,
-        "y":y        
+        "y":y
         }
 /*    jambots only graphics
       var imageObj={
         "imageId":"default"+18,
         "blackTrans":isMobile,
         "x":x,
-        "y":y        
+        "y":y
         }
 */
       graphicsByColor[color].push(imageObj);
@@ -5837,7 +5838,7 @@ function updateLoading(){
 
 function processGraphic(colorNum, graphicNum, blacken, cache){
   var color=colorArray[colorNum];
-  
+
   var imageId= graphicsByColor[color][graphicNum].imageId;
   var cached=false;
   var keys=Object.keys(localStorage);
@@ -5872,7 +5873,7 @@ function processGraphic(colorNum, graphicNum, blacken, cache){
     var flatSourceRef=document.getElementById(imageId);
     var flatRef=returnCanvas(textureSourceRef.width, textureSourceRef.height);
     //dbuga("blackTrans=false "+imageId);
-    placeWithin(flatRef, flatSourceRef); 
+    placeWithin(flatRef, flatSourceRef);
     var flatOutputRef=returnCanvas(textureSourceRef.width, textureSourceRef.height);
     colorizeCanvas(flatOutputRef, textureRef, alphaRef, [127,127,127]);
     overlayCanvas(flatOutputRef, flatRef);
@@ -5885,12 +5886,12 @@ function processGraphic(colorNum, graphicNum, blacken, cache){
     //document.body.appendChild(logoRef);
     //dbuga("blackTrans=true "+imageId);
     placeWithin(logoRef, logoSourceRef);
-     
+
     //make texture logo
     var logoTextureRef=returnCanvas(textureSourceRef.width, textureSourceRef.height);
     colorizeCanvas(logoTextureRef, textureRef, alphaRef, [127,127,127]);
     overlayCanvas(logoTextureRef, logoRef);
-    trimBox(logoTextureRef);  
+    trimBox(logoTextureRef);
     blackToTrans(logoTextureRef);
     graphicsByColor[color][graphicNum].ref= logoTextureRef;
 
@@ -5911,7 +5912,7 @@ function trimBox(canv){
   ctx.clearRect(0,0,g*22,g);//top
   ctx.clearRect(0,0,g,g*7.5);//left
   ctx.clearRect(0,g*6,g*22,g*1.5);//bottom
-  ctx.clearRect(g*21,0,g,g*7.5);//right 
+  ctx.clearRect(g*21,0,g,g*7.5);//right
 /*
   ctx.strokeStyle="blue";
   ctx.lineWidth=2;
@@ -6020,7 +6021,7 @@ function blackToTrans(transCanvas){
     var br=Math.abs(b-r);
     var sat=(rg+gb+br)/510; // 0-1
     var alpha=Math.floor((avg-transLimit)*transRange);
-    
+
     if(alpha<0){alpha=0;}
     if(alpha>255){alpha=255;}
     else{
@@ -6043,7 +6044,7 @@ function colorizeCanvas(colorizedCanvas, transRef, shapeRef, rgb){
 
   var transCtx=transRef.getContext('2d');
   var shapeCtx=shapeRef.getContext('2d');
-  
+
   var image = colorizedCtx.getImageData(0, 0, transRef.width, transRef.height);
   var shape = shapeCtx.getImageData(0, 0, transRef.width, transRef.height);
   var shapeData = shape.data
@@ -6072,23 +6073,23 @@ function colorizeCanvas(colorizedCanvas, transRef, shapeRef, rgb){
 function imageCanvas(canvasRef, imageRef){
   var ctx=canvasRef.getContext("2d");
   ctx.drawImage(imageRef, 0, 0);
-  } 
+  }
 function overlayCanvas(canvasRef, imageRef){
   var ctx=canvasRef.getContext("2d");
   ctx.globalCompositeOperation = "overlay";
   ctx.drawImage(imageRef, 0, 0);
-  } 
+  }
 function multiplyCanvas(canvasRef, imageRef){
   var ctx=canvasRef.getContext("2d");
   ctx.globalCompositeOperation = "multiply";
   ctx.drawImage(imageRef, 0, 0);
-  } 
+  }
 function placeWithin(canvasRef, imageRef){
   //dbuga('placeWithin');
   var g= canvasRef.width/22;
   var ctx=canvasRef.getContext("2d");
   ctx.drawImage(imageRef, g,g, g*20,g*5);
-  } 
+  }
 
 
 
@@ -6136,9 +6137,9 @@ function settingsDraw(){
   ctx.textAlign="center";
   ctx.fillText("AVERAGE FPS: "+avgFps,g*cx, g*22);
   //dbuga('settingsDraw completed');
-  
+
   }
-     
+
 function toggleSwitch(g, cx,cy, x0,y0,orient,pos, tics, label){//returns path
 
 
@@ -6156,18 +6157,18 @@ function toggleSwitch(g, cx,cy, x0,y0,orient,pos, tics, label){//returns path
 
 
   ctx.fillStyle="#444";
-  
+
   if(orient=="horizontal"){
     var min=(x0-len)*g;
     var max=(x0+len)*g;
-    
+
     var range=max-min;
     var step=range/(tics.length-1);
-   
+
     ctx.strokeStyle="#444";
     ctx.textAlign="center";
     ctx.textBaseline="middle";
- 
+
     ctx.font=g/1.5+"px akzi";
     for (var t=0; t<tics.length; t++){
       ctx.fillText(tics[t], min+t*step, y0*g+g*1.25);
@@ -6185,7 +6186,7 @@ function toggleSwitch(g, cx,cy, x0,y0,orient,pos, tics, label){//returns path
     ctx.strokeStyle="#444";
     ctx.textAlign="left";
     ctx.textBaseline="middle";
- 
+
     ctx.fillText(label, x0*g-g*.5 ,y0*g+g*2);
     for (var t=0; t<tics.length; t++){
       ctx.fillText(tics[t], x0*g+g*1, min+t*step);
@@ -6208,7 +6209,7 @@ function toggleSwitch(g, cx,cy, x0,y0,orient,pos, tics, label){//returns path
     ctx.arc((x0)*g,(y0-slot)*g, 2+g/2,pi*1,pi*0,false);
     ctx.arc((x0)*g,(y0+slot)*g, 2+g/2,pi*0,pi*1,false);
     }
-  
+
   ctx.closePath();
   ctx.fill();
 
@@ -6223,7 +6224,7 @@ function toggleSwitch(g, cx,cy, x0,y0,orient,pos, tics, label){//returns path
     y1=y0+len*pos;
     }
   var x2=x0;
-  var y2=y0;  
+  var y2=y0;
   if(orient=="horizontal"){
     x2+=len*pos/2;
     }
@@ -6260,10 +6261,10 @@ function toggleSwitch(g, cx,cy, x0,y0,orient,pos, tics, label){//returns path
   ctx.beginPath();
   oval(ctx,mx1*g,my1*g,g/2,squeeze*g/2,vec+pi/2,false);
   ctx.stroke();
-  
+
   }
 function oval(ctx, x,y,r0,r1,radians,counter){
-  
+
   var x0=x+r0*Math.cos(radians);
   var y0=y+r0*Math.sin(radians);
   var x1=x+r1*Math.cos(radians+pi/2);
@@ -6299,10 +6300,10 @@ function oval(ctx, x,y,r0,r1,radians,counter){
   ctx.stroke();
   //moveTo beginning
   //bez to perp
-  //bez to end 
+  //bez to end
   }
 
-//util.js 
+//util.js
 function bez(ctx,x0,y0,deg0,dist0,x1,y1,deg1,dist1){
   var cp0x=x0+dist0*Math.cos(deg0/180 * Math.PI);
   var cp0y=y0+dist0*Math.sin(deg0/180 * Math.PI);
@@ -6391,7 +6392,7 @@ var maxHelp=helps.length-1;
 
 
   <div id="progressHolder" class="">
-    <div id="progressDiv" >  
+    <div id="progressDiv" >
       <div id="blackProgressDiv" class="darkblack grow" ></div>
       <div id="orangeProgressDiv" class="darkorange grow" ></div>
       <div id="blueProgressDiv" class="darkblue grow" ></div>
@@ -6578,7 +6579,7 @@ var maxHelp=helps.length-1;
 
 
 
-<!-- 
+<!--
 Who else but Jambots.com could create a train puzzle you solve using multiple engines each pulling multiple cars on tracks that YOU draw? Play endless procedurally genrated challenges in three different model scales. Put your photos on the box cars and watch your game play out from a 3d chase or in-cab view. Now with no ad banners, this is a free upgrade for anyone who already had the previous ad-supported version. This is a puzzle, not a simulation of real or toy trains.
 
 
@@ -6589,19 +6590,19 @@ Tracks will only be placed crossing a tile from one edge to another connecting t
 Scale
 Levels of differing complexity will be available depending on the Scale setting and your device's size.
 
-The default scale, "HO" provides a balance of complexity and useablity. The largest scale, "O" is much easier to draw tracks and simpler to solve. The smallest scale, "N" gives you the most track space and complexity but it can be difficult to draw accurately without a stylus. 
-Guides are the two spots on the edge of a tile. If you are having trouble getting the tracks to go where you want, try starting at one guide and drag slowly across the cell to another guide. Keep dragging across multiple cells to lay continuous track. 
+The default scale, "HO" provides a balance of complexity and useablity. The largest scale, "O" is much easier to draw tracks and simpler to solve. The smallest scale, "N" gives you the most track space and complexity but it can be difficult to draw accurately without a stylus.
+Guides are the two spots on the edge of a tile. If you are having trouble getting the tracks to go where you want, try starting at one guide and drag slowly across the cell to another guide. Keep dragging across multiple cells to lay continuous track.
 At any given scale setting a tablet will have more cells available for tracks than a phone. Device size and aspect ratios vary so the grid will adapt to the best fit for each scale. The number of levels also varies with the grid space available.
 
 Detail
 Your most recent average Frames Per Second is displayed at the bottom of Settings. When AVERAGE FPS falls below 40 cars will stop spawning temporarily. Faster devices will allow more cars but running too many cars can cause congestion or result in the app closing. Set Detail to "Low" to improve performance. Try "High" Detail if you have a very fast device or want the best looking close-ups in video capture. If you have macOS and an iOS device with Lightning cable you can use QuickTime to capture video of your game. Rotating the device will stop the recording!
 
 Graphics
-A set of 36 graphics are loaded randomly when you first open the app. You can replace these with your own graphics using the camera button. Use the Clear button to make all the graphics for the selected color blank. The random graphics will change out each time you open the game but user created or cleared graphics will persist. You can remove any user generated graphics and restore the random feed. Go to your device's settings, under Apps, and clear  data for Railroad Train. Transparent makes dark areas into the car color and works best with white graphics and text on black. 
+A set of 36 graphics are loaded randomly when you first open the app. You can replace these with your own graphics using the camera button. Use the Clear button to make all the graphics for the selected color blank. The random graphics will change out each time you open the game but user created or cleared graphics will persist. You can remove any user generated graphics and restore the random feed. Go to your device's settings, under Apps, and clear  data for Railroad Train. Transparent makes dark areas into the car color and works best with white graphics and text on black.
 -->
   </div>
 <span style="font-family:akziLight; position:absolute; top:-100px;">akziLight</span>
 <span style="font-family:akzi; position:absolute; top:-100px;">akzi</span>
 <span style="font-family:akziBold; position:absolute; top:-100px;">akziBold</span>
 </body>
-</html>  
+</html>
