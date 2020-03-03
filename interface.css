@@ -1,6 +1,5 @@
 body{font-family:Thonburi-Bold, Arial; font-size:16px;}
-background-image: url('images/tabbar.png');
-   }
+
 .faded{opacity:.5;}
 .whiteText{color:#fff;}
 .buttonBackgroundSmall {position:absolute;}
