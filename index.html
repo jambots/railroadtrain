@@ -817,7 +817,7 @@ function setupGridData(){
 
 function fillGridCanvas(){
   //dbuga('fillGridCanvas');
-  document.getElementById('gridCanvas').width=boardWidth;
+  gridCanv.width=boardWidth;
   if((settingsObject["Tiles"].value=="Grid")||(settingsObject["Tiles"].value=="Guides")){
     gridContext.lineWidth= cellSize/60;
 		if(settingsObject["Mode"].value=="light"){
@@ -1657,7 +1657,7 @@ function updateColorVars(){
 		//cameraCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
 		colorsCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
 		wrapper.style.backgroundColor="rgba(10, 10, 10, 0.85)";
-		gridCanvas.style.backgroundColor="rgba(10, 10, 10, 0.85)";
+		gridCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
 	}else{
 		buttonStroke=buttonStrokeLight;
 		buttonFill=buttonFillLight;
