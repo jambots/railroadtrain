@@ -5396,11 +5396,20 @@ function updateColorsCanv(caller){
   var colorsCtx=colorsCanv.getContext("2d");
   if(colorsUp){
     var grad = colorsCtx.createLinearGradient(0, h, 0, 0);
-    grad.addColorStop(0, "rgba(225,225,225,.75)");
-    grad.addColorStop(0.2, "rgba(225,225,225,.90)");
-    grad.addColorStop(0.5, "rgba(255,255,255,.80)");
-    grad.addColorStop(0.8, "rgba(255,255,255,.90)");
-    grad.addColorStop(1, "rgba(255,255,255,.75)");
+		if(settingsObject['Mode'].value=="Dark"){
+			grad.addColorStop(1, "rgba(30,30,30,.75)");
+	    grad.addColorStop(0.8, "rgba(30,30,30,.90)");
+	    grad.addColorStop(0.5, "rgba(0,0,0,.80)");
+	    grad.addColorStop(0.2, "rgba(0,0,0,.90)");
+	    grad.addColorStop(0, "rgba(0,0,0,.75)");
+		}
+		if(settingsObject['Mode'].value=="Light"){
+			grad.addColorStop(0, "rgba(225,225,225,.75)");
+	    grad.addColorStop(0.2, "rgba(225,225,225,.90)");
+	    grad.addColorStop(0.5, "rgba(255,255,255,.80)");
+	    grad.addColorStop(0.8, "rgba(255,255,255,.90)");
+	    grad.addColorStop(1, "rgba(255,255,255,.75)");
+		}
     colorsCtx.fillStyle=grad;
     colorsCtx.fillRect(0,0,screenHeight, h);
     if((carsUp)||(graphicsUp)){
@@ -6200,7 +6209,7 @@ function settingsDraw(){
   populateSettings();
   drawSettingsButtons();
   ctx.font=g/1.5+"px akzi";
-  ctx.fillStyle="#333";
+  ctx.fillStyle=buttonFill;
   ctx.textAlign="center";
   ctx.fillText("AVERAGE FPS: "+avgFps,g*cx, g*26);
   //dbuga('settingsDraw completed');
