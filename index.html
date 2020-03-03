@@ -1631,7 +1631,7 @@ function returnModalButton(label,align,orient,selected){
 	var buttonLabelStrokeLight="rgba(0,0,0,0)";
 	var buttonLabelFillLight="#fff";
 function updateColorVars(){
-	//dbuga('updateColorVars()');
+	dbuga('updateColorVars()');
 	if(settingsObject["Mode"]["value"]=="Dark"){
 		buttonStroke=buttonStrokeDark;
 		buttonFill=buttonFillDark;
@@ -5453,7 +5453,7 @@ function updateColorsCanv(caller){
       }
 
     var fontPx=h/2.5;
-    colorsCtx.fillStyle="black";
+    colorsCtx.fillStyle=buttonFill;
     colorsCtx.font=fontPx+"px akzi";
     colorsCtx.textAlign="center";
     colorsCtx.textBaseline="middle";
@@ -5786,7 +5786,7 @@ var folderArray=["grey","green","blue","orange","black"];
 var imgRefs={};
 var colorArray=["black","orange","blue","green"];
 var rgbValArray=[[30,30,30],[218,37,28],[0,91,161],[63,179,160]];
-var rgbArray=["rgb(30,30,30)","rgb(218,37,28)","rgb(0,91,161)","rgb(63,179,160)"];
+var rgbArray=["rgb(80,80,80)","rgb(218,37,28)","rgb(0,91,161)","rgb(63,179,160)"];
 
 var graphicsByColor={};
 function initGraphicsByColor(){
