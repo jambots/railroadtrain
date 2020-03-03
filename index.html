@@ -820,7 +820,12 @@ function fillGridCanvas(){
   document.getElementById('gridCanvas').width=boardWidth;
   if((settingsObject["Tiles"].value=="Grid")||(settingsObject["Tiles"].value=="Guides")){
     gridContext.lineWidth= cellSize/60;
-    gridContext.strokeStyle = "rgb(220, 220, 220)";
+		if(settingsObject["Mode"].value=="light"){
+      gridContext.strokeStyle = "rgb(25, 25, 25)";
+		}else{
+      gridContext.strokeStyle = "rgb(80, 80, 80)";
+    }
+
     radius=20*cellSize/96;
     for (x=0; x<cellsAcross; x++){
       for (y=0; y<cellsDown; y++){
@@ -1189,7 +1194,7 @@ var carsUp=false;
 var graphicsCanv;
 var graphicsUp=false;
 var cameraCanv;
-
+var gridCanv;
 function initGeometry(){
   console.log("initGeometry()");
   helpCanv=document.getElementById("helpCanvas");
@@ -1203,7 +1208,8 @@ function initGeometry(){
   cameraCanv=document.getElementById("cameraCanvas");
 
 
-  colorsCanv=document.getElementById("colorsCanvas");
+	colorsCanv=document.getElementById("colorsCanvas");
+	gridCanv=document.getElementById("gridCanvas");
   wrapper=document.getElementById("wrapper");
 	updateColorVars();
 
@@ -1632,7 +1638,7 @@ function returnModalButton(label,align,orient,selected){
 	var buttonLabelStrokeLight="rgba(0,0,0,0)";
 	var buttonLabelFillLight="#fff";
 function updateColorVars(){
-	dbuga('updateColorVars()');
+	//dbuga('updateColorVars()');
 	if(settingsObject["Mode"]["value"]=="Dark"){
 		buttonStroke=buttonStrokeDark;
 		buttonFill=buttonFillDark;
@@ -1651,6 +1657,7 @@ function updateColorVars(){
 		//cameraCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
 		colorsCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
 		wrapper.style.backgroundColor="rgba(10, 10, 10, 0.85)";
+		gridCanvas.style.backgroundColor="rgba(10, 10, 10, 0.85)";
 	}else{
 		buttonStroke=buttonStrokeLight;
 		buttonFill=buttonFillLight;
@@ -1669,6 +1676,7 @@ function updateColorVars(){
 		graphicsCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
 		//cameraCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
 		colorsCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
+		gridCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
 		wrapper.style.backgroundColor="rgba(245, 245, 245, 0.85)";
 	}
 
