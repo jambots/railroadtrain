@@ -1205,6 +1205,8 @@ function initGeometry(){
 
   colorsCanv=document.getElementById("colorsCanvas");
   wrapper=document.getElementById("wrapper");
+	updateColorVars();
+
   screenWidth=window.innerWidth;
   screenHeight=window.innerHeight;
   if(screenWidth>screenHeight){// screen is normalized to alwas be portrait dimensions
@@ -1257,7 +1259,6 @@ function initGeometry(){
 
   //dbuga("initGeometry screen: "+screenWidth+" x "+screenHeight+" ");
   //dbuga("initGeometry viewport: "+ viewportWidth+" x "+ viewportHeight+" "+viewportAspect);
-  updateColorVars();
   adGeometry();
   boardGeometry();
   }
@@ -2368,7 +2369,6 @@ function initSession(){
   //dbuga('end of initSession so start preloading');
   //updateHelpCanv();
   openModal('help');
-  wrapper.style.background="white";
   window.setTimeout('preloadTick()',10);
   }
 function measureLocalStorage(){
