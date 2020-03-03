@@ -2242,21 +2242,24 @@ function initStorage(){
   //console.log('initStorage();');
   localStorage.setItem("initialized", "true");
   localStorage.setItem("tutorialStep", 0);
-  localStorage.setItem("Music", settingsObject["Music"]["value"]);
+	localStorage.setItem("Mode", settingsObject["Mode"]["value"]);
+	localStorage.setItem("Music", settingsObject["Music"]["value"]);
   localStorage.setItem("Sounds", settingsObject["Sounds"]["value"]);
   localStorage.setItem("Scale", settingsObject["Scale"]["value"]);
   localStorage.setItem("Detail", settingsObject["Detail"]["value"]);
   localStorage.setItem("Tiles", settingsObject["Tiles"]["value"]);
   }
 function saveStorage(){
-  localStorage.setItem("Music", settingsObject["Music"]["value"]);
+	localStorage.setItem("Mode", settingsObject["Mode"]["value"]);
+	localStorage.setItem("Music", settingsObject["Music"]["value"]);
   localStorage.setItem("Sounds", settingsObject["Sounds"]["value"]);
   localStorage.setItem("Scale", settingsObject["Scale"]["value"]);
   localStorage.setItem("Detail", settingsObject["Detail"]["value"]);
   localStorage.setItem("Tiles", settingsObject["Tiles"]["value"]);
   }
 function loadStorage(){
-  settingsObject["Music"]["value"]=localStorage.getItem("Music");
+	settingsObject["Mode"]["value"]=localStorage.getItem("Mode");
+	settingsObject["Music"]["value"]=localStorage.getItem("Music");
   settingsObject["Sounds"]["value"]=localStorage.getItem("Sounds");
   settingsObject["Scale"]["value"]=localStorage.getItem("Scale");
   settingsObject["Detail"]["value"]=localStorage.getItem("Detail");
@@ -2289,7 +2292,7 @@ function initSession(){
     initStorage();
     }
   loadStorage();
-  
+
   initGraphicsByColor();
   camera=document.getElementById("cameraDiv");
   table=document.getElementById("tableDiv");
