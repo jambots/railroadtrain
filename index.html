@@ -1631,20 +1631,37 @@ function returnModalButton(label,align,orient,selected){
 	var buttonLabelStrokeLight="rgba(0,0,0,0)";
 	var buttonLabelFillLight="#fff";
 function updateColorVars(){
-	dbuga('updateColorVars()');
+	//dbuga('updateColorVars()');
 	if(settingsObject["Mode"]["value"]=="Dark"){
 		buttonStroke=buttonStrokeDark;
 		buttonFill=buttonFillDark;
 		buttonLabelStroke=buttonLabelStrokeDark;
 		buttonLabelFill=buttonLabelFillDark;
+		helpCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
+		aboutCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
+		compCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
+		levelsCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
 		settingsCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
-
+		carsCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
+		graphicsCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
+		cameraCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
+		colorsCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
+		wrapper.style.backgroundColor="rgba(10, 10, 10, 0.85)";
 	}else{
 		buttonStroke=buttonStrokeLight;
 		buttonFill=buttonFillLight;
 		buttonLabelStroke=buttonLabelStrokeLight;
 		buttonLabelFill=buttonLabelFillLight;
+		helpCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
+		aboutCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
+		compCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
+		levelsCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
 		settingsCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
+		carsCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
+		graphicsCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
+		cameraCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
+		colorsCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
+		wrapper.style.backgroundColor="rgba(245, 245, 245, 0.85)";
 	}
 
 }
@@ -1995,6 +2012,9 @@ function updateCompCanv(){
   }
 var modalBg="rgba(245,245,245,.85)";
 var modalText="rgba(70,70,70,1)";
+var modalTextDark="rgba(185,185,185,1)";
+var modalTextLight="rgba(70,70,70,1)";
+
 var modalStroke="rgba(180,180,180,1)";
 var modalFill="rgba(255,255,255,.75)";
 var modalShrink=.95;
@@ -5341,7 +5361,7 @@ function updateNavCanv(){
       //console.log(x+" "+step);
 
       navCtx.textBaseline="middle";
-      navCtx.fillStyle="black";
+      navCtx.fillStyle="yellow";
       navCtx.font=controlsPx/3+"px akzi";
       navCtx.textAlign="center";
       navCtx.textBaseline="middle";
@@ -6199,11 +6219,11 @@ function toggleSwitch(g, cx,cy, x0,y0,orient,pos, tics, label){//returns path
 
   ctx.clearRect(g*(x0-2), g*(y0-2),g*4,g*4);
 
-  ctx.strokeStyle="#444";
+  ctx.strokeStyle=buttonStroke;
   if(orient=="vertical"){x0--;}
 
 
-  ctx.fillStyle="#444";
+  ctx.fillStyle=buttonFill;
 
   if(orient=="horizontal"){
     var min=(x0-len)*g;
@@ -6212,7 +6232,6 @@ function toggleSwitch(g, cx,cy, x0,y0,orient,pos, tics, label){//returns path
     var range=max-min;
     var step=range/(tics.length-1);
 
-    ctx.strokeStyle="#444";
     ctx.textAlign="center";
     ctx.textBaseline="middle";
 
