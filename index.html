@@ -1257,7 +1257,7 @@ function initGeometry(){
 
   //dbuga("initGeometry screen: "+screenWidth+" x "+screenHeight+" ");
   //dbuga("initGeometry viewport: "+ viewportWidth+" x "+ viewportHeight+" "+viewportAspect);
-
+  updateColorVars();
   adGeometry();
   boardGeometry();
   }
@@ -2289,8 +2289,7 @@ function initSession(){
     initStorage();
     }
   loadStorage();
-	updateColorVars();
-
+  
   initGraphicsByColor();
   camera=document.getElementById("cameraDiv");
   table=document.getElementById("tableDiv");
