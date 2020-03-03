@@ -1616,11 +1616,37 @@ function returnModalButton(label,align,orient,selected){
   }
 
 
-var buttonStroke="rgba(60,60,60,0)";
-var buttonFill="rgba(60,60,60,1)";
+	var buttonStroke="rgba(60,60,60,0)";
+	var buttonFill="rgba(60,60,60,1)";
+	var buttonLabelStroke="rgba(0,0,0,0)";
+	var buttonLabelFill="#fff";
 
-var buttonLabelStroke="rgba(0,0,0,0)";
-var buttonLabelFill="#fff";
+	var buttonStrokeDark="rgba(195,195,195,0)";
+	var buttonFillDark="rgba(195,195,195,1)";
+	var buttonLabelStrokeDark="rgba(255,255,255,0)";
+	var buttonLabelFillDark="#000";
+
+	var buttonStrokeLight="rgba(60,60,60,0)";
+	var buttonFillLight="rgba(60,60,60,1)";
+	var buttonLabelStrokeLight="rgba(0,0,0,0)";
+	var buttonLabelFillLight="#fff";
+function updateColorVars(){
+	if(settingsObject["Mode"]["value"]=="Dark"){
+		buttonStroke=buttonStrokeDark;
+		buttonFill=buttonFillDark;
+		buttonLabelStroke=buttonLabelStrokeDark;
+		buttonLabelFill=buttonLabelFillDark;
+		settingsCanv.style.backgroundColor="rgba(10, 10, 10, 0.85)";
+
+	}else{
+		buttonStroke=buttonStrokeLight;
+		buttonFill=buttonFillLight;
+		buttonLabelStroke=buttonLabelStrokeLight;
+		buttonLabelFill=buttonLabelFillLight;
+		settingsCanv.style.backgroundColor="rgba(245, 245, 245, 0.85)";
+	}
+
+}
 
 
 function drawModalButton(ctx, modalButton){
@@ -2208,7 +2234,6 @@ function onDeviceReady(){
   //dbuga('onDeviceReady() so initSession');
   isMobile=true;
   initSession();
-
   // dependant on <gap:plugin name="cordova-plugin-statusbar" source="npm" />
   StatusBar.overlaysWebView(true);
   StatusBar.hide();
@@ -2264,6 +2289,7 @@ function initSession(){
     initStorage();
     }
   loadStorage();
+	updateColorVars();
 
   initGraphicsByColor();
   camera=document.getElementById("cameraDiv");
@@ -5135,6 +5161,7 @@ function updateMusicSetting(){
 		  //dbuga("updateSoundsSetting()");
 		  //saveStorage();
 		  localStorage.setItem("Mode", settingsObject["Mode"]["value"]);
+      updateColorVars();
 			updateNavCanv();
 		  }
 function updateScaleSetting(){
@@ -5259,11 +5286,11 @@ function updateNavCanv(){
 
     var grad = navCtx.createLinearGradient(0, controlsPx, 0, 0);
 		if(settingsObject['Mode'].value=="Dark"){
-			grad.addColorStop(0, "rgba(30,30,30,.75)");
-	    grad.addColorStop(0.2, "rgba(30,30,30,.90)");
+			grad.addColorStop(1, "rgba(30,30,30,.75)");
+	    grad.addColorStop(0.8, "rgba(30,30,30,.90)");
 	    grad.addColorStop(0.5, "rgba(0,0,0,.80)");
-	    grad.addColorStop(0.8, "rgba(0,0,0,.90)");
-	    grad.addColorStop(1, "rgba(0,0,0,.75)");
+	    grad.addColorStop(0.2, "rgba(0,0,0,.90)");
+	    grad.addColorStop(0, "rgba(0,0,0,.75)");
 		}
 		if(settingsObject['Mode'].value=="Light"){
 			grad.addColorStop(0, "rgba(225,225,225,.75)");
@@ -5324,8 +5351,8 @@ function updateNavCanv(){
       //console.log(navButtons[n].label+"Preload");
       var ref=document.getElementById(navButtons[n].label+"Preload");
       var pad=controlsPx/2-controlsPx*iconShrink/2;
-      if(navButtons[n].selected){navCtx.globalAlpha=.5;}
-      else{navCtx.globalAlpha=.75;}
+      if(navButtons[n].selected){navCtx.globalAlpha=.65;}
+      else{navCtx.globalAlpha=1;}
       navCtx.drawImage(ref,navButtons[n].l+pad,navButtons[n].t+pad,controlsPx-pad*2,controlsPx-pad*2);
       navCtx.globalAlpha=1;
       }
