@@ -3761,6 +3761,7 @@ function dbuga(theString){
 	if(platform=="unknown"){
 		console.log(theString);
 	}else{
+		return false;
 		document.getElementById("debugDiv").style.display="block";
 		document.getElementById("debugDiv").innerHTML+=""+theString+"<br>";
 	}
