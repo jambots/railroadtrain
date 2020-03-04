@@ -1108,16 +1108,12 @@ function createCanvasTrack(theType, cellX, cellY){
   trackContext.stroke();
   }
 function setupCanvas(){
-  //dbuga('setupCanvas()');
+  dbuga('setupCanvas()');
   //dbuga(" - boardHeight:"+boardHeight);
-
-
   htmlBlock="<canvas id=\"gridCanvas\" width=\""+boardWidth+"\" height=\""+boardHeight+"\" style=\"position:absolute;\"></canvas>";
   htmlBlock+="<canvas id=\"trackCanvas\" width=\""+boardWidth+"\" height=\""+boardHeight+"\" style=\"position:absolute;\"></canvas>";
   document.getElementById('canvasHolder').innerHTML=htmlBlock;
-  gridContext = document.getElementById("gridCanvas").getContext("2d");
-  trackContext = document.getElementById("trackCanvas").getContext("2d");
-
+  defineRefs();
   }
 
 function addStyle(styleName, styleCode){
@@ -1195,8 +1191,11 @@ var graphicsCanv;
 var graphicsUp=false;
 var cameraCanv;
 var gridCanv;
-function initGeometry(){
-  console.log("initGeometry()");
+function defineRefs(){
+  dbuga("defineRefs()");
+	camera=document.getElementById("cameraDiv");
+  table=document.getElementById("tableDiv");
+  zoom=document.getElementById("zoomDiv");
   helpCanv=document.getElementById("helpCanvas");
   aboutCanv=document.getElementById("aboutCanvas");
   compCanv=document.getElementById("compCanvas");
@@ -1210,7 +1209,11 @@ function initGeometry(){
 
 	colorsCanv=document.getElementById("colorsCanvas");
 	gridCanv=document.getElementById("gridCanvas");
+	gridContext = document.getElementById("gridCanvas").getContext("2d");
+  trackContext = document.getElementById("trackCanvas").getContext("2d");
   wrapper=document.getElementById("wrapper");
+}
+function initGeometry(){
 	updateColorVars();
 
   screenWidth=window.innerWidth;
@@ -1288,7 +1291,7 @@ var boardPad=0;
 var space=0;
 
 function boardGeometry(){
-  //dbuga("boardGeometry() "+screenWidth+" x "+screenHeight);
+  dbuga("boardGeometry() "+screenWidth+" x "+screenHeight);
   var scale=settingsObject["Scale"]["value"];
   cellsAcross=returnCellsAcross(screenWidth, scale)
   cellSize=Math.floor(10*screenWidth/cellsAcross)/10;
@@ -1356,6 +1359,7 @@ function boardGeometry(){
   createInitialBuildSequence();
   setupClasses();
   setupCanvas();// maybe move to resetBoardTimersObjects()
+	initGraphicsByColor()
   //fillGridCanvas();// di move there
   document.getElementById('gridCanvas').style.transform="translateZ(-"+cellSize/40+"px)"
   document.getElementById('fieldHolder').style.transform="translateZ(-"+cellSize/48+"px)"
@@ -1363,7 +1367,7 @@ function boardGeometry(){
 
 function restartIntervals(){
   fillGridCanvas();
-  //dbuga('restartIntervals()');
+  dbuga('restartIntervals()');
   //window.clearInterval(turnInterval);
   window.clearInterval(sourceInterval);
   window.clearInterval(geometryInterval);
@@ -1518,66 +1522,68 @@ function populateGraphics(){
   //dbuga('populateGraphics 10');
 
   }
-
+var carsPopulated=false;
 function populateCars(){
-  carsCanv.width=carsCanv.width;
+	if(initCompleted){
+		carsPopulated=true;
+    carsCanv.width=carsCanv.width;
+		var gtl=gtlInWh(screenHeight, screenWidth-controlsPx-controlsPx-20);
+	  var g=gtl.g;
+	  var topPad=gtl.t;
+	  var leftPad=gtl.l;
 
-  var gtl=gtlInWh(screenHeight, screenWidth-controlsPx-controlsPx-20);
-  var g=gtl.g;
-  var topPad=gtl.t;
-  var leftPad=gtl.l;
+	  carsThumbs=[];
+	  var buttonWidth=g*3;
+	  var buttonHeight=g*1;
+	  //dbuga("populateCars topPad="+topPad);
+	  //dbuga("leftPad="+leftPad);
+	  var carsCtx=carsCanv.getContext('2d');
+	  carsCtx.lineWidth=buttonHeight/12;
+	  for (var i=0; i<graphicsByColor[colorArray[focusCars]].length; i++){
+	    var graphic=graphicsByColor[colorArray[focusCars]][i];
 
-  carsThumbs=[];
-  var buttonWidth=g*3;
-  var buttonHeight=g*1;
-  //dbuga("populateCars topPad="+topPad);
-  //dbuga("leftPad="+leftPad);
-  var carsCtx=carsCanv.getContext('2d');
-  carsCtx.lineWidth=buttonHeight/12;
-  for (var i=0; i<graphicsByColor[colorArray[focusCars]].length; i++){
-    var graphic=graphicsByColor[colorArray[focusCars]][i];
-
-    var carThumb={"buttonId":"car_"+focusCars+"-"+i};
-    //dbuga(carThumb.buttonId);
-    carThumb.c=focusCars;
-    carThumb.g=i;
-    carThumb.l=leftPad+buttonWidth*graphic.x;
-    carThumb.r=leftPad+buttonWidth*graphic.x+buttonWidth;
-    carThumb.t=topPad+buttonHeight*graphic.y;
-    carThumb.b=topPad+buttonHeight*graphic.y+buttonHeight;
-    carThumb.ref=graphic.ref;
-    carsThumbs.push(carThumb);
-    }
-
-
-  for (var ct=0; ct<carsThumbs.length; ct++){
-    var carThumb=carsThumbs[ct];
-
-    carsCtx.strokeStyle="rgba(42,42,42,.25)";
-    carsCtx.fillStyle="rgba(255,255,255,.9)";
-    //roundRect(carsCtx, carThumb.l, carThumb.t, buttonWidth, buttonHeight, radius, true, false);
+	    var carThumb={"buttonId":"car_"+focusCars+"-"+i};
+	    //dbuga(carThumb.buttonId);
+	    carThumb.c=focusCars;
+	    carThumb.g=i;
+	    carThumb.l=leftPad+buttonWidth*graphic.x;
+	    carThumb.r=leftPad+buttonWidth*graphic.x+buttonWidth;
+	    carThumb.t=topPad+buttonHeight*graphic.y;
+	    carThumb.b=topPad+buttonHeight*graphic.y+buttonHeight;
+	    carThumb.ref=graphic.ref;
+	    carsThumbs.push(carThumb);
+	  }
 
 
-    var imageObj = imgRefs["boxside"+colorArray[carThumb.c]];
-    carsCtx.drawImage(imageObj, carThumb.l, carThumb.t, buttonWidth, buttonHeight);
+	  for (var ct=0; ct<carsThumbs.length; ct++){
+	    var carThumb=carsThumbs[ct];
+
+	    carsCtx.strokeStyle="rgba(42,42,42,.25)";
+	    carsCtx.fillStyle="rgba(255,255,255,.9)";
+	    //roundRect(carsCtx, carThumb.l, carThumb.t, buttonWidth, buttonHeight, radius, true, false);
 
 
-    carsCtx.drawImage(carThumb.ref, carThumb.l, carThumb.t, buttonWidth, buttonHeight);
-    }
-  carsButtons=[];
-  if(clearingAll){
-    carsButtons.push(returnModalButton("Sure?","center","landscape",false));
-    carsButtons.push(returnModalButton("Cancel","right","landscape",false));
-    }
-  else{
-    carsButtons.push(returnModalButton("Clear","left","landscape",false));
-    carsButtons.push(returnModalButton("Done","right","landscape",false));
-    }
+	    var imageObj = imgRefs["boxside"+colorArray[carThumb.c]];
+	    carsCtx.drawImage(imageObj, carThumb.l, carThumb.t, buttonWidth, buttonHeight);
 
-  for(var cb=0; cb<carsButtons.length; cb++){
-    drawModalButton(carsCtx, carsButtons[cb]);
-    }
+
+	    carsCtx.drawImage(carThumb.ref, carThumb.l, carThumb.t, buttonWidth, buttonHeight);
+	  }
+	  carsButtons=[];
+	  if(clearingAll){
+	    carsButtons.push(returnModalButton("Sure?","center","landscape",false));
+	    carsButtons.push(returnModalButton("Cancel","right","landscape",false));
+	  }
+	  else{
+	    carsButtons.push(returnModalButton("Clear","left","landscape",false));
+	    carsButtons.push(returnModalButton("Done","right","landscape",false));
+	  }
+
+	  for(var cb=0; cb<carsButtons.length; cb++){
+	    drawModalButton(carsCtx, carsButtons[cb]);
+	  }
   }
+}
 var clearingAll=false;
 var settingsButtons=[
 ];
@@ -2217,9 +2223,9 @@ function closeModals(){
   updateNavCanv();
   }
 function changeView(caller){
-  //console.log("changeView in "+caller+" shooting="+shooting);
+  dbuga("changeView in "+caller+" shooting="+shooting +" initCompleted "+initCompleted);
   if(shooting){return false;}
-  closeModals();
+  if(initCompleted){closeModals();}
   if(viewportAspect>1){
     navCanv.style.display="none";
     document.getElementById("progressHolder").style.display="none";
@@ -2256,7 +2262,9 @@ function changeView(caller){
   adGeometry();
   }
 function init(){
-  //console.log('init() '+screen.width);
+	console.log('init() '+screen.width);
+
+	setupCanvas();
   document.body.addEventListener('mousedown', mouseDown, true);
   document.body.addEventListener('mousemove', mouseMove, true);
   document.body.addEventListener('mouseup', mouseUp, true);
@@ -2270,7 +2278,11 @@ var isMobile=false;
 function onDeviceReady(){
   //dbuga('onDeviceReady() so initSession');
   isMobile=true;
-  initSession();
+	try{
+    initSession();
+	} catch(er){
+		alert(er.message);
+	}
   // dependant on <gap:plugin name="cordova-plugin-statusbar" source="npm" />
   StatusBar.overlaysWebView(true);
   StatusBar.hide();
@@ -2295,6 +2307,7 @@ function saveStorage(){
   localStorage.setItem("Tiles", settingsObject["Tiles"]["value"]);
   }
 function loadStorage(){
+	console.log('loadStorage');
 	settingsObject["Mode"]["value"]=localStorage.getItem("Mode");
 	settingsObject["Music"]["value"]=localStorage.getItem("Music");
   settingsObject["Sounds"]["value"]=localStorage.getItem("Sounds");
@@ -2323,7 +2336,7 @@ var settingsObject={
 var detailByValue={"Low":3, "Med":6, "High":9};
 var firstRun=false;
 function initSession(){
-  //console.log('initSession()');
+  dbuga('initSession()');
   if (localStorage.getItem("initialized") === null) {
     firstRun=true;
     initStorage();
@@ -2331,9 +2344,6 @@ function initSession(){
   loadStorage();
 
   initGraphicsByColor();
-  camera=document.getElementById("cameraDiv");
-  table=document.getElementById("tableDiv");
-  zoom=document.getElementById("zoomDiv");
 
   //dbuga('init()');
   document.addEventListener("pause", pauseGame, false);
@@ -2367,7 +2377,6 @@ function initSession(){
   //dbuga('controlsPx='+controlsPx);
   setupNav();//moved updateNavCanv to resumeInit
   setupFaceData();
-  updateDetail();
   imgRefs["tanksideblack"]=document.getElementById('tanksideblack');
   imgRefs["tankbodyblack"]=document.getElementById('tankbodyblack');
   imgRefs["tankfloorblack"]=document.getElementById('tankfloorblack');
@@ -2383,6 +2392,7 @@ function initSession(){
 
   //dbuga('end of initSession so start preloading');
   //updateHelpCanv();
+	updateDetail();
   openModal('help');
   window.setTimeout('preloadTick()',10);
   }
@@ -2432,7 +2442,7 @@ function resumeInit(){
     updateHelpCanv();
     }
   transmitBgMusicState();
-  requestAnimationFrame(rafTick);
+  ////requestAnimationFrame(rafTick);
   }
 var frames=0;
 var secondInterval;
@@ -3169,10 +3179,17 @@ var sourceMs;
 var turnMs=1000;
 
 function sourceTick(){
+	dbuga('sourceTick initCompleted='+initCompleted);
   if((settingsUp)||(levelsUp)||(carsUp)||(graphicsUp)||(rotating)){
     return false;
     }
-  sourceAction(checkSourceNum);
+  try{
+    sourceAction(checkSourceNum);
+	}
+	catch(er){
+		window.clearInterval(sourceInterval);
+		dbuga('sourceAction error:'+er.message);
+	}
   checkSourceNum++;
   if (checkSourceNum>=sourceCount){
     checkSourceNum=0;
@@ -3734,17 +3751,20 @@ function dbug(theString){
   if(theString==""){
     document.getElementById("debugDiv").style.display="none";
     document.getElementById("debugDiv").innerHTML="";
-    }
+  }
   else{
     document.getElementById("debugDiv").style.display="block";
     document.getElementById("debugDiv").innerHTML=""+theString+"<br>";
-    }
   }
+}
 function dbuga(theString){
+	if(platform=="unknown"){
+		console.log(theString);
+	}else{
+		document.getElementById("debugDiv").style.display="block";
+		document.getElementById("debugDiv").innerHTML+=""+theString+"<br>";
+	}
 
-
-  document.getElementById("debugDiv").style.display="block";
-  document.getElementById("debugDiv").innerHTML+=theString+"<br>";
   }
 function dbugc(theString){
   document.getElementById("debugDiv").innerHTML+=theString+" ";
@@ -5227,7 +5247,7 @@ function updateTilesSetting(){
   //dbuga("updateTilesSetting()");
   //saveStorage();
   localStorage.setItem("Tiles", settingsObject["Tiles"]["value"]);
-  fillGridCanvas();
+  if(initCompleted){fillGridCanvas();}
   }
 function updateDetailSetting(){
   //dbuga("updateDetailSetting()");
@@ -5806,6 +5826,7 @@ var rgbArray=["rgb(80,80,80)","rgb(218,37,28)","rgb(0,91,161)","rgb(63,179,160)"
 
 var graphicsByColor={};
 function initGraphicsByColor(){
+	dbuga('initGraphicsByColor()');
   var atDefault=0;
   for (var c=0; c<colorArray.length; c++){
     var color=colorArray[c];

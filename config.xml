@@ -4,7 +4,7 @@
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id        = "com.jambots.railroadtrain"
         versionCode="7"
-        version   = "2.21">
+        version   = "2.22">
 
     <!-- versionCode is optional and Android only -->
     <preference name="phonegap-version" value="cli-9.0.0" />
